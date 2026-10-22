@@ -2,6 +2,8 @@
 
 An interactive prerequisite map of USC's **Quantitative Biology (BS)**, built for QBA members planning their course order.
 
+**Live:** https://richardshizhang.github.io/QBA/course-dependency-graph/
+
 - **Columns are prerequisite steps.** Every course sits to the right of all its prerequisites, so working left to right is a safe order.
 - **Click a course** to highlight what it needs (orange) and what it unlocks (blue). The side panel shows the exact prerequisite logic, corequisites, restrictions, a description, and which terms it actually ran.
 - **Tick the circles** next to courses you've taken. The map then shows what you can take next, and the requirements panel tracks rough progress. Ticks are saved in the browser only.
@@ -66,4 +68,4 @@ This is an unofficial planning aid. Students should confirm their plan with a QB
 
 ## Hosting
 
-Any static host works: GitHub Pages, Netlify, or a club website. Upload `index.html` and `graph-data.js` side by side.
+The map is hosted with GitHub Pages from the `main` branch of [richardshizhang/QBA](https://github.com/richardshizhang/QBA). Pushing to `main` republishes it, usually within a minute or two. Any other static host works too: serve `index.html` and `graph-data.js` side by side.
