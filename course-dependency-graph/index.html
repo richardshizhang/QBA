@@ -1,0 +1,1560 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>QBIO Course Map</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Prerequisite map of USC's Quantitative Biology (BS) for planning course order. Unofficial, made by QBA.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,400..800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root {
+  /* Layout: full-height workbench. Header strip, pannable prerequisite map (graph-paper ground), detail rail on the right. */
+  --bg: #edf1f0;
+  --surface: #ffffff;
+  --sunk: #e2e9e7;
+  --ink: #132120;
+  --muted: #536563;
+  --faint: #8a9b98;
+  --line: #c8d3d1;
+  --edge: #93a4a1;
+  --pre: #c2410c;
+  --post: #0b7285;
+  --ok: #2b8a3e;
+  --focus: #1c64d8;
+  --c-core: #2a68a8;
+  --c-computing: #6f45b8;
+  --c-specialization: #0b7f72;
+  --c-capstone: #b0570f;
+  --c-research: #a8366d;
+  --c-electives: #5c6c22;
+  --c-outside: #74817f;
+  --font-ui: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-code: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --r: 6px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d1514; --surface: #142020; --sunk: #1d2b2a; --ink: #e1eae8; --muted: #9aaca9; --faint: #6c7e7b;
+    --line: #2a3a38; --edge: #5b6e6b; --pre: #fb8c4c; --post: #3cc6dc; --ok: #5ccf74; --focus: #8ab4ff;
+    --c-core: #74a9e6; --c-computing: #ad94ef; --c-specialization: #3fc0ae; --c-capstone: #eb9a52;
+    --c-research: #e57fb1; --c-electives: #aabd5d; --c-outside: #8d9a98;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d1514; --surface: #142020; --sunk: #1d2b2a; --ink: #e1eae8; --muted: #9aaca9; --faint: #6c7e7b;
+  --line: #2a3a38; --edge: #5b6e6b; --pre: #fb8c4c; --post: #3cc6dc; --ok: #5ccf74; --focus: #8ab4ff;
+  --c-core: #74a9e6; --c-computing: #ad94ef; --c-specialization: #3fc0ae; --c-capstone: #eb9a52;
+  --c-research: #e57fb1; --c-electives: #aabd5d; --c-outside: #8d9a98;
+  color-scheme: dark;
+}
+
+html, body { height: 100%; }
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--ink);
+  font: 14px/1.45 var(--font-ui);
+}
+button, input, select { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+.cat-core { --cat: var(--c-core); }
+.cat-computing { --cat: var(--c-computing); }
+.cat-specialization { --cat: var(--c-specialization); }
+.cat-capstone { --cat: var(--c-capstone); }
+.cat-research { --cat: var(--c-research); }
+.cat-electives { --cat: var(--c-electives); }
+.cat-outside { --cat: var(--c-outside); }
+
+/* ---------- header ---------- */
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  padding-block: 12px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+.brand { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.brand h1 {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.1;
+  font-weight: 800;
+  font-stretch: 78%;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+.brand p { margin: 0; color: var(--muted); font-size: 12.5px; }
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+.search { position: relative; }
+.search input {
+  width: 15.5rem;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--bg);
+}
+.search input::placeholder { color: var(--faint); }
+.toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer; user-select: none; }
+.toggle input { width: 15px; height: 15px; margin: 0; accent-color: var(--ink); }
+.toggle .n { color: var(--faint); font-variant-numeric: tabular-nums; }
+.btn {
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--surface);
+  cursor: pointer;
+  font-size: 13px;
+}
+.btn:hover { border-color: var(--faint); }
+.btn.danger { border-color: var(--pre); color: var(--pre); }
+.clear-wrap { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; }
+
+/* ---------- main layout ---------- */
+.app {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+}
+.canvas { position: relative; display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+.bar {
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+  font-size: 11.5px;
+  color: var(--muted);
+}
+.legend { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin: 0; padding: 0; list-style: none; }
+.legend li { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+.sw { width: 10px; height: 10px; border-radius: 3px; background: var(--cat); }
+.sw.out { background: none; border: 1.5px dashed var(--cat); width: 7px; height: 7px; }
+.ln { width: 22px; height: 0; border-top: 1.6px solid var(--edge); }
+.ln.dash { border-top-style: dashed; }
+.lg-tick { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid var(--ok); }
+.lg-tick.on { background: var(--ok); }
+.zoom {
+  position: absolute;
+  right: calc(14px + env(safe-area-inset-right, 0px));
+  bottom: 14px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--ink) 12%, transparent);
+  font-size: 12px;
+  color: var(--muted);
+}
+.zoom button { width: 28px; height: 26px; padding: 0; border: 0; border-radius: 5px; background: none; cursor: pointer; font-size: 15px; }
+.zoom button:hover { background: var(--sunk); }
+.zoom .fit { width: auto; padding: 0 8px; font-size: 12px; }
+.zoom output { min-width: 3.2em; text-align: center; font-variant-numeric: tabular-nums; }
+
+#viewport {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  background-color: var(--bg);
+  background-image: radial-gradient(circle, var(--line) 1px, transparent 1.3px);
+  background-size: 22px 22px;
+  cursor: grab;
+}
+#viewport.panning { cursor: grabbing; user-select: none; }
+#sizer { position: relative; }
+#stage { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+#edges { position: absolute; left: 0; top: 0; overflow: visible; }
+#nodes { position: absolute; left: 0; top: 0; }
+
+.colhead {
+  position: absolute;
+  top: 12px;
+  font: 600 11px/1 var(--font-code);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--faint);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 6px;
+}
+
+/* ---------- nodes ---------- */
+.node {
+  position: absolute;
+  box-sizing: border-box;
+  border: 1.5px solid color-mix(in srgb, var(--cat) 55%, var(--line));
+  border-radius: var(--r);
+  background: color-mix(in srgb, var(--cat) 7%, var(--surface));
+  transition: opacity 0.15s ease, border-color 0.15s ease;
+  cursor: default;
+}
+.node.outside { border-style: dashed; background: var(--surface); }
+.node.done { background: color-mix(in srgb, var(--ok) 11%, var(--surface)); }
+.node.done.waived { background: var(--sunk); }
+.node .head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  height: 28px;
+  box-sizing: border-box;
+  padding: 0 10px;
+  border: 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--cat) 22%, transparent);
+  background: none;
+  color: var(--cat);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: left;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.node .head::before { content: ""; flex: none; width: 7px; height: 7px; border-radius: 2px; background: var(--cat); }
+.chip { display: flex; align-items: center; gap: 7px; height: 26px; padding: 0 8px 0 9px; box-sizing: border-box; border-radius: 4px; }
+.node:not(.multi) .chip { height: 100%; align-items: flex-start; padding: 9px 9px 0 10px; }
+.tick {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 15px;
+  height: 15px;
+  padding: 0;
+  border: 1.5px solid var(--faint);
+  border-radius: 50%;
+  background: var(--surface);
+  cursor: pointer;
+}
+.tick::after {
+  content: "";
+  width: 6px;
+  height: 3px;
+  border-left: 2px solid var(--surface);
+  border-bottom: 2px solid var(--surface);
+  transform: translateY(-1px) rotate(-45deg);
+  opacity: 0;
+}
+.chip[data-status="ready"] .tick { border-color: var(--ok); }
+.chip[data-status="taken"] .tick { border-color: var(--ok); background: var(--ok); }
+.chip[data-status="taken"] .tick::after { opacity: 1; }
+.chip[data-status="unknown"] .tick { border-style: dotted; }
+.chip[data-status="waived"] .tick { border-color: var(--muted); background: var(--muted); }
+.chip[data-status="waived"] .tick::after { opacity: 1; width: 7px; height: 0; border-left: 0; transform: none; }
+.chip[data-status="waived"] .code { color: var(--muted); }
+.chip[data-status="credit"] .tick { border-color: var(--ok); background: var(--ok); }
+.chip[data-status="credit"] .tick::after { opacity: 1; }
+.ssn i.ap { background: none; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ok) 55%, var(--line)); color: var(--ok); font-weight: 600; }
+.chip[data-status="credit"] .ssn i.ap { background: var(--ok); color: var(--surface); box-shadow: none; }
+.main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+.line { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+.code { font: 600 12.5px/1.2 var(--font-code); white-space: nowrap; }
+.ssn { display: flex; gap: 2px; }
+.ssn i {
+  font: 500 9.5px/1 var(--font-code);
+  font-style: normal;
+  padding: 2px 3px;
+  border-radius: 3px;
+  background: var(--sunk);
+  color: var(--muted);
+}
+.ssn i.none { background: none; color: var(--faint); }
+.title {
+  font-size: 12px;
+  line-height: 1.28;
+  color: var(--muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.main:hover .code { text-decoration: underline; text-underline-offset: 2px; }
+
+/* focus / highlight */
+.focusing .node.dim { opacity: 0.22; }
+.focusing .edge.dim { opacity: 0.12; }
+.node.self { border-color: var(--ink); box-shadow: 0 0 0 2px var(--ink); }
+.node.pre { border-color: var(--pre); }
+.node.post { border-color: var(--post); }
+.chip.hit-self { background: color-mix(in srgb, var(--ink) 10%, transparent); }
+.chip.hit-pre { background: color-mix(in srgb, var(--pre) 14%, transparent); }
+.chip.hit-post { background: color-mix(in srgb, var(--post) 14%, transparent); }
+.chip.hit-pre .code { color: var(--pre); }
+.chip.hit-post .code { color: var(--post); }
+.chip.match { background: color-mix(in srgb, var(--focus) 18%, transparent); }
+
+.edge { fill: none; stroke: var(--edge); stroke-width: 1.4; transition: opacity 0.15s ease; }
+.edge.dashed { stroke-dasharray: 5 4; }
+.edge.pre { stroke: var(--pre); stroke-width: 2.2; }
+.edge.post { stroke: var(--post); stroke-width: 2.2; }
+.arrow { fill: var(--edge); }
+.arrow.pre { fill: var(--pre); }
+.arrow.post { fill: var(--post); }
+
+/* ---------- panel ---------- */
+#panel {
+  min-width: 0;
+  overflow: auto;
+  border-left: 1px solid var(--line);
+  background: var(--surface);
+  padding-block: 18px 28px;
+  padding-inline: 20px;
+}
+#panel h2 { margin: 0; font-size: 19px; line-height: 1.2; font-weight: 750; font-stretch: 85%; text-wrap: balance; }
+#panel h3 {
+  margin: 0 0 6px;
+  font: 600 11px/1.2 var(--font-code);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+#panel p { margin: 0; }
+.stack { display: flex; flex-direction: column; gap: 18px; }
+.back {
+  align-self: flex-start;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font-size: 13px;
+  cursor: pointer;
+}
+.back:hover { color: var(--ink); }
+.kicker { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--cat, var(--faint)) 13%, transparent);
+  color: var(--cat, var(--muted));
+  font-size: 11.5px;
+  font-weight: 600;
+}
+.bigcode { font: 600 15px/1.2 var(--font-code); color: var(--muted); }
+.meta { color: var(--muted); font-size: 13px; }
+.take {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border: 1.5px solid var(--ok);
+  border-radius: var(--r);
+  background: var(--surface);
+  color: var(--ok);
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+}
+.take[aria-pressed="true"] { background: var(--ok); color: var(--surface); }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.waive {
+  padding: 7px 12px;
+  border: 1.5px dashed var(--muted);
+  border-radius: var(--r);
+  background: var(--surface);
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+}
+.waive[aria-pressed="true"] { border-style: solid; background: var(--muted); color: var(--surface); }
+.status { font-size: 13px; padding: 8px 10px; border-radius: var(--r); background: var(--sunk); }
+.status.ready { background: color-mix(in srgb, var(--ok) 13%, transparent); }
+.status.waived { border: 1px dashed var(--muted); background: none; }
+.reqs { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.reqs li { display: flex; gap: 8px; align-items: baseline; line-height: 1.5; }
+.reqs .mark { flex: none; width: 14px; color: var(--ok); font-weight: 700; }
+.reqs .and { color: var(--faint); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+.cref {
+  padding: 0 1px;
+  border: 0;
+  background: none;
+  font: 500 13px/1.4 var(--font-code);
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 3px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.cref:hover { text-decoration-color: var(--ink); }
+.cref.plain { text-decoration: none; cursor: help; color: var(--muted); }
+.cref.met { color: var(--ok); }
+.note { color: var(--faint); font-size: 12px; }
+.prose { font-size: 13.5px; line-height: 1.55; color: var(--ink); max-width: 62ch; }
+.prose.muted { color: var(--muted); }
+.terms { display: grid; grid-template-columns: repeat(auto-fill, minmax(38px, 1fr)); gap: 3px; margin: 0; padding: 0; list-style: none; }
+.terms li {
+  padding: 4px 0;
+  border-radius: 3px;
+  background: var(--sunk);
+  color: var(--faint);
+  font: 500 10.5px/1 var(--font-code);
+  text-align: center;
+}
+.terms li.on { background: color-mix(in srgb, var(--c-core) 22%, transparent); color: var(--ink); font-weight: 600; }
+.links { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; }
+.links a { color: var(--focus); }
+.option {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--surface);
+  text-align: left;
+  cursor: pointer;
+}
+.option:hover { border-color: var(--faint); }
+.option .row { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+
+.sec { display: flex; flex-direction: column; gap: 8px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+.sec:last-of-type { border-bottom: 0; }
+.sec-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.sec-head strong { font-size: 14px; font-weight: 700; }
+.prog { font: 600 12px/1 var(--font-code); color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.prog.full { color: var(--ok); }
+.rule { font-size: 12.5px; color: var(--muted); }
+.pills { display: flex; flex-wrap: wrap; gap: 5px; }
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border: 1px solid color-mix(in srgb, var(--cat) 40%, var(--line));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--cat) 6%, var(--surface));
+  font-size: 12px;
+  cursor: pointer;
+}
+.pill.done { border-color: var(--ok); background: color-mix(in srgb, var(--ok) 14%, var(--surface)); }
+.pill.done::before { content: "✓"; color: var(--ok); font-weight: 700; }
+.pill.credit::before { content: "AP"; font: 600 9.5px/1 var(--font-code); }
+.pill.waived { border-style: dashed; border-color: var(--muted); background: var(--sunk); }
+.pill.waived::after { content: "waived"; font-size: 10.5px; color: var(--muted); }
+.lg-tick.waived { background: var(--muted); border-color: var(--muted); }
+.aptag {
+  display: inline-block;
+  margin-left: 2px;
+  padding: 1px 3px;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ok) 55%, var(--line));
+  color: var(--ok);
+  font: 600 9px/1.2 var(--font-code);
+  vertical-align: 2px;
+  cursor: help;
+}
+.credit { padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--r); }
+.credit summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+.credit summary::-webkit-details-marker { display: none; }
+.credit summary > span:first-child::before { content: "▸"; display: inline-block; width: 1em; color: var(--faint); transition: transform 0.15s ease; }
+.credit[open] summary > span:first-child::before { transform: rotate(90deg); }
+.credit-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.credit-row label { display: flex; flex-direction: column; min-width: 0; font-size: 13px; line-height: 1.35; }
+.credit-row select {
+  flex: none;
+  max-width: 50%;
+  padding: 4px 6px;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--surface);
+  font-size: 12.5px;
+}
+.note a { color: var(--focus); }
+.track { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; font-size: 12px; }
+.track b { font-weight: 600; color: var(--muted); min-width: 4.2em; }
+.track .plus { color: var(--faint); }
+.hint { font-size: 13px; color: var(--muted); padding: 10px 12px; border: 1px dashed var(--line); border-radius: var(--r); }
+.about { font-size: 12.5px; color: var(--muted); display: flex; flex-direction: column; gap: 8px; line-height: 1.5; }
+.about a { color: var(--focus); }
+.about strong { color: var(--ink); font-weight: 600; }
+
+@media (max-width: 860px) {
+  html, body { height: auto; }
+  .app { display: block; }
+  .canvas { height: 68vh; height: 68svh; }
+  #panel { border-left: 0; border-top: 1px solid var(--line); padding-inline: max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px)); }
+  .search input { width: 100%; }
+  .search { flex: 1 1 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .node, .edge { transition: none; }
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <h1>QBIO Course Map</h1>
+    <p id="subtitle">USC Quantitative Biology (BS) prerequisites · unofficial, made by QBA</p>
+  </div>
+  <div class="controls">
+    <div class="search">
+      <input id="search" type="search" list="course-list" placeholder="Find a course, e.g. QBIO 401" autocomplete="off" aria-label="Find a course">
+      <datalist id="course-list"></datalist>
+    </div>
+    <label class="toggle"><input id="opt-electives" type="checkbox"> Electives <span class="n" id="elective-count"></span></label>
+    <label class="toggle"><input id="opt-outside" type="checkbox"> Outside prerequisites</label>
+    <span class="clear-wrap" id="clear-wrap"></span>
+  </div>
+</header>
+
+<main class="app">
+  <section class="canvas" aria-label="Prerequisite map">
+    <div class="bar">
+      <ul class="legend">
+        <li class="cat-core"><span class="sw"></span>Core science</li>
+        <li class="cat-computing"><span class="sw"></span>Computing</li>
+        <li class="cat-specialization"><span class="sw"></span>Specialization</li>
+        <li class="cat-capstone"><span class="sw"></span>Capstone</li>
+        <li class="cat-research"><span class="sw"></span>Research</li>
+        <li class="cat-electives"><span class="sw"></span>Elective</li>
+        <li class="cat-outside"><span class="sw out"></span>Outside major</li>
+        <li><span class="ln"></span>required</li>
+        <li><span class="ln dash"></span>one of several / some options</li>
+        <li><span class="lg-tick"></span>can take now</li>
+        <li><span class="lg-tick on"></span>taken or AP credit</li>
+        <li><span class="lg-tick waived"></span>waived</li>
+        <li><span class="aptag" style="cursor:default">AP</span>AP can waive it</li>
+      </ul>
+    </div>
+    <div class="zoom">
+      <button type="button" id="zoom-out" aria-label="Zoom out">−</button>
+      <output id="zoom-level">100%</output>
+      <button type="button" id="zoom-in" aria-label="Zoom in">+</button>
+      <button type="button" id="zoom-fit" class="fit">Fit</button>
+    </div>
+    <div id="viewport">
+      <div id="sizer">
+        <div id="stage">
+          <svg id="edges" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
+          <div id="nodes"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <aside id="panel" aria-live="polite"></aside>
+</main>
+
+<script src="graph-data.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  const D = window.QBIO_DATA;
+  const panel = document.getElementById("panel");
+  if (!D) {
+    panel.textContent = "graph-data.js is missing. Run python3 scripts/update_data.py to generate it.";
+    return;
+  }
+  const R = D.requirements;
+  const C = D.courses;
+  const PLACEMENT = new Set(R.placement.courses);
+  const OUTSIDE = new Set(D.outside);
+  // AP and other exam credit: USC waives prerequisites/requirements rather than granting the course.
+  const EXAMS = (R.examCredit && R.examCredit.exams) || [];
+  const WAIVERS = {};
+  EXAMS.forEach(ex => ex.options.forEach(o => o.waives.forEach(c => {
+    WAIVERS[c] = WAIVERS[c] || [];
+    if (!WAIVERS[c].includes(ex)) WAIVERS[c].push(ex);
+  })));
+
+  const SECTION_CAT = { intro: "core", science: "core", computing: "computing", specialization: "specialization", capstone: "capstone", electives: "electives", research: "research" };
+  const CAT_ORDER = ["core", "computing", "specialization", "capstone", "research", "electives", "outside"];
+  const SEASON_SHORT = { 3: "F", 1: "Sp", 2: "Su" };
+
+  // Box geometry (px, before zoom). Node heights are fixed so layout can run before render.
+  const W = 196, GAP_X = 70, PAD = 22, TOP = 44, VGAP = 12, ROW = 26, HEAD = 28, PADB = 6, SINGLE_H = 66, DUMMY_H = 4;
+
+  // ---------- course helpers ----------
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[ch]);
+  const disp = code => code.replace(/^([A-Z]+) (\d+)([A-Z]?)$/, (m, p, n, s) => p + " " + n + s.toLowerCase());
+  const smashed = code => code.replace(/\s+/g, "");
+  const titleOf = code => (R.courses[code] && R.courses[code].title) || (C[code] && C[code].t) || D.titles[code] || "";
+  const unitsOf = code => (R.courses[code] && R.courses[code].units) || (C[code] && C[code].u) || "";
+  const catalogCode = code => (R.courses[code] && R.courses[code].catalog) || disp(code);
+  const groupsOf = (code, key) => (C[code] && C[code][key || "pre"]) || [];
+  const hasData = code => !!(C[code] && C[code].src);
+  const known = code => !!(R.courses[code] || C[code]);
+  const termName = t => D.seasons[t % 10] + " " + Math.floor(t / 10);
+  const termShort = t => SEASON_SHORT[t % 10] + String(Math.floor(t / 10)).slice(2);
+  const parseCode = text => {
+    const m = String(text).toUpperCase().match(/([A-Z]{2,5})\s*-?\s*(\d{3})([A-Z]?)/);
+    return m ? m[1] + " " + m[2] + m[3] : null;
+  };
+
+  // Which requirement sections each slot belongs to.
+  const slotRoles = {}, courseSlot = {}, slotOrder = {};
+  Object.entries(R.slots).forEach(([id, s]) => { slotRoles[id] = []; s.courses.forEach(c => { courseSlot[c] = id; }); });
+  let order = 0;
+  R.sections.forEach(sec => {
+    const ids = sec.rule === "track" ? sec.tracks.flatMap(t => t.lines.flat()) : sec.slots;
+    ids.forEach(id => {
+      if (!slotRoles[id].includes(sec.id)) slotRoles[id].push(sec.id);
+      if (!(id in slotOrder)) slotOrder[id] = order++;
+    });
+  });
+  const slotCat = id => SECTION_CAT[slotRoles[id][0]];
+  const electiveOnly = id => slotRoles[id].every(s => s === "electives");
+  const slotName = id => R.slots[id].label || disp(R.slots[id].courses[0]);
+  const electiveCount = Object.keys(R.slots).filter(electiveOnly).length;
+
+  // Reverse index: course -> courses that list it as a prerequisite.
+  const unlocks = {};
+  Object.entries(C).forEach(([code, rec]) => (rec.pre || []).forEach(g => g.o.flat().forEach(x => {
+    (unlocks[x] = unlocks[x] || new Set()).add(code);
+  })));
+
+  // ---------- state ----------
+  const STORE = "qbio-course-map:v1";
+  // waived: requirement lines (slot ids) or outside-the-major courses an advisor has waived.
+  const state = { taken: new Set(), waived: new Set(), credit: {}, creditOpen: null, electives: false, outside: true, zoom: 1, focus: null };
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORE) || "null");
+    if (saved) {
+      state.taken = new Set((saved.taken || []).filter(known));
+      state.waived = new Set((saved.waived || []).filter(id => R.slots[id] || OUTSIDE.has(id)));
+      if (typeof saved.electives === "boolean") state.electives = saved.electives;
+      if (typeof saved.outside === "boolean") state.outside = saved.outside;
+      Object.entries(saved.credit || {}).forEach(([id, v]) => {
+        const ex = EXAMS.find(e => e.id === id);
+        if (ex && ex.options.some(o => o.value === v)) state.credit[id] = v;
+      });
+    }
+  } catch (e) { /* storage unavailable: start fresh */ }
+  function save() {
+    try {
+      localStorage.setItem(STORE, JSON.stringify({ taken: [...state.taken], waived: [...state.waived], credit: state.credit, electives: state.electives, outside: state.outside }));
+    } catch (e) { /* ignore */ }
+  }
+
+  // course -> labels of the exams the student entered that waive it
+  let CREDIT = new Map();
+  function computeCredit() {
+    CREDIT = new Map();
+    EXAMS.forEach(ex => {
+      const opt = ex.options.find(o => o.value === state.credit[ex.id]);
+      if (!opt) return;
+      const label = opt.value === "pass" ? ex.name : ex.name + " (" + opt.label.split(",")[0] + ")";
+      opt.waives.forEach(c => { if (!CREDIT.has(c)) CREDIT.set(c, []); CREDIT.get(c).push(label); });
+    });
+  }
+  computeCredit();
+
+  const waiveKey = code => courseSlot[code] || code;
+  const isWaived = code => state.waived.has(waiveKey(code));
+  const done = code => PLACEMENT.has(code) || state.taken.has(code) || CREDIT.has(code) || isWaived(code);
+  const groupMet = g => g.o.filter(b => b.every(done)).length >= g.n;
+  function statusOf(code) {
+    if (state.taken.has(code)) return "taken";
+    if (CREDIT.has(code)) return "credit";
+    if (isWaived(code)) return "waived";
+    if (!hasData(code)) return "unknown";
+    return groupsOf(code).every(groupMet) ? "ready" : "locked";
+  }
+
+  // ---------- graph ----------
+  // Nodes are requirement "slots" (a catalogue line such as "PHYS 135a or 151 or 161 or 171")
+  // plus prerequisites from outside the major. Edges come from each course's prerequisite
+  // groups; an OR group is reduced to its earliest options (Calc I covers "Calc I, II or III").
+  let G = null;
+
+  function buildGraph() {
+    const nodes = new Map(), nodeOf = new Map();
+    Object.keys(R.slots).forEach(id => {
+      if (!state.electives && electiveOnly(id)) return;
+      const n = { id: "s:" + id, kind: "slot", slot: id, courses: R.slots[id].courses.slice(), cat: slotCat(id) };
+      nodes.set(n.id, n);
+      n.courses.forEach(c => nodeOf.set(c, n.id));
+    });
+    const resolve = code => nodeOf.get(code) || (state.outside && OUTSIDE.has(code) ? "o:" + code : null);
+
+    const raw = [];
+    [...nodes.values()].forEach(n => n.courses.forEach(course => {
+      groupsOf(course).forEach(g => {
+        if (g.o.some(b => b.every(x => PLACEMENT.has(x)))) return; // met by placement
+        const srcs = new Set();
+        g.o.forEach(b => {
+          const ids = b.map(resolve);
+          if (!ids.includes(null)) ids.forEach(i => srcs.add(i));
+        });
+        srcs.delete(n.id);
+        if (srcs.size) raw.push({ to: n.id, course, srcs, codes: new Set(g.o.flat()) });
+      });
+    }));
+    raw.forEach(r => r.srcs.forEach(s => {
+      if (s.startsWith("o:") && !nodes.has(s)) {
+        const code = s.slice(2);
+        nodes.set(s, { id: s, kind: "outside", courses: [code], cat: "outside" });
+        nodeOf.set(code, s);
+      }
+    }));
+
+    // Ancestry over the unreduced graph, used to drop OR options implied by another option.
+    const preds = new Map();
+    raw.forEach(r => r.srcs.forEach(s => { if (!preds.has(r.to)) preds.set(r.to, new Set()); preds.get(r.to).add(s); }));
+    const ancMemo = new Map();
+    const anc = (id, stack) => {
+      if (ancMemo.has(id)) return ancMemo.get(id);
+      const out = new Set();
+      stack = stack || new Set();
+      if (stack.has(id)) return out;
+      stack.add(id);
+      (preds.get(id) || []).forEach(p => { out.add(p); anc(p, stack).forEach(x => out.add(x)); });
+      stack.delete(id);
+      ancMemo.set(id, out);
+      return out;
+    };
+    raw.forEach(r => {
+      const s = [...r.srcs];
+      r.srcs = new Set(s.filter(x => !s.some(y => y !== x && anc(x).has(y))));
+      // Alternatives that are not on the map (e.g. CHEM 107 for chemistry majors) don't make
+      // an arrow optional for QBIO students; the panel still lists them.
+      r.solid = r.srcs.size === 1;
+    });
+
+    const emap = new Map();
+    raw.forEach(r => r.srcs.forEach(s => {
+      const k = s + ">" + r.to;
+      if (!emap.has(k)) emap.set(k, { from: s, to: r.to, recs: [] });
+      emap.get(k).recs.push(r);
+    }));
+    const edges = [...emap.values()];
+    edges.forEach(e => {
+      const withData = nodes.get(e.to).courses.filter(hasData);
+      e.courses = new Set(e.recs.map(r => r.course));
+      e.solid = withData.every(c => e.recs.some(r => r.course === c && r.solid));
+      e.partial = withData.some(c => !e.courses.has(c));
+    });
+
+    const inE = new Map(), outE = new Map();
+    nodes.forEach((n, id) => { inE.set(id, []); outE.set(id, []); });
+    edges.forEach(e => { inE.get(e.to).push(e); outE.get(e.from).push(e); });
+
+    // Column = longest prerequisite chain, so every arrow points right.
+    const tier = new Map();
+    const tierOf = (id, stack) => {
+      if (tier.has(id)) return tier.get(id);
+      stack = stack || new Set();
+      if (stack.has(id)) return 1;
+      stack.add(id);
+      let t = 1;
+      inE.get(id).forEach(e => { t = Math.max(t, tierOf(e.from, stack) + 1); });
+      stack.delete(id);
+      tier.set(id, t);
+      return t;
+    };
+    nodes.forEach((n, id) => { n.tier = tierOf(id); });
+    // Outside prerequisites sit just left of the first course that needs them.
+    nodes.forEach(n => {
+      if (n.kind === "outside" && outE.get(n.id).length) {
+        n.tier = Math.max(1, Math.min(...outE.get(n.id).map(e => nodes.get(e.to).tier)) - 1);
+      }
+    });
+    nodes.forEach(n => {
+      n.h = n.courses.length > 1 ? HEAD + ROW * n.courses.length + PADB : SINGLE_H;
+    });
+
+    layout(nodes, edges, inE, outE);
+    return { nodes, edges, inE, outE, nodeOf };
+  }
+
+  function layout(nodes, edges, inE, outE) {
+    const L = Math.max(1, ...[...nodes.values()].map(n => n.tier));
+    const layers = Array.from({ length: L + 1 }, () => []);
+    const rank = n => n.kind === "outside" ? 900 : CAT_ORDER.indexOf(n.cat) * 100 + (slotOrder[n.slot] || 0);
+    [...nodes.values()].sort((a, b) => rank(a) - rank(b)).forEach(n => layers[n.tier].push(n));
+
+    // Long edges get one dummy per column they cross, so they reserve a lane.
+    const up = new Map(), down = new Map();
+    const link = (u, v) => {
+      if (!down.has(u)) down.set(u, []);
+      if (!up.has(v)) up.set(v, []);
+      down.get(u).push(v);
+      up.get(v).push(u);
+    };
+    edges.forEach(e => {
+      const a = nodes.get(e.from), b = nodes.get(e.to);
+      e.chain = [a];
+      for (let t = a.tier + 1; t < b.tier; t++) {
+        const d = { kind: "dummy", tier: t, h: DUMMY_H };
+        layers[t].push(d);
+        e.chain.push(d);
+      }
+      e.chain.push(b);
+      for (let i = 0; i + 1 < e.chain.length; i++) link(e.chain[i], e.chain[i + 1]);
+    });
+
+    // Barycenter ordering to reduce crossings; keep the best ordering seen.
+    const pos = new Map();
+    const setPos = () => layers.forEach(l => l.forEach((n, i) => pos.set(n, i)));
+    setPos();
+    const sortLayer = (l, nb) => {
+      const keyed = l.map((n, i) => {
+        const ns = nb.get(n);
+        return { n, i, k: ns && ns.length ? ns.reduce((s, m) => s + pos.get(m), 0) / ns.length : i };
+      });
+      keyed.sort((a, b) => a.k - b.k || a.i - b.i);
+      l.splice(0, l.length, ...keyed.map(o => o.n));
+      l.forEach((n, i) => pos.set(n, i));
+    };
+    const crossings = () => {
+      let c = 0;
+      for (let t = 1; t < L; t++) {
+        const segs = [];
+        layers[t].forEach(u => (down.get(u) || []).forEach(v => segs.push([pos.get(u), pos.get(v)])));
+        for (let i = 0; i < segs.length; i++) for (let j = i + 1; j < segs.length; j++) {
+          if ((segs[i][0] - segs[j][0]) * (segs[i][1] - segs[j][1]) < 0) c++;
+        }
+      }
+      return c;
+    };
+    let best = layers.map(l => l.slice()), bestC = crossings();
+    for (let it = 0; it < 24; it++) {
+      if (it % 2 === 0) for (let t = 2; t <= L; t++) sortLayer(layers[t], up);
+      else for (let t = L - 1; t >= 1; t--) sortLayer(layers[t], down);
+      const c = crossings();
+      if (c < bestC) { bestC = c; best = layers.map(l => l.slice()); }
+    }
+    best.forEach((l, t) => { layers[t] = l; });
+    setPos();
+
+    // Vertical placement: pull each box toward its neighbours, without overlaps
+    // (isotonic regression over the ordered column).
+    const y = new Map();
+    const gap = (a, b) => (a.kind === "dummy" || b.kind === "dummy") ? 6 : VGAP;
+    layers.forEach(l => { let cur = 0; l.forEach((n, i) => { y.set(n, cur); cur += n.h + (i + 1 < l.length ? gap(n, l[i + 1]) : 0); }); });
+    const center = n => y.get(n) + n.h / 2;
+    const pav = vals => {
+      const blocks = [];
+      vals.forEach(v => {
+        blocks.push({ sum: v, n: 1 });
+        while (blocks.length > 1) {
+          const a = blocks[blocks.length - 2], b = blocks[blocks.length - 1];
+          if (a.sum / a.n <= b.sum / b.n) break;
+          a.sum += b.sum; a.n += b.n; blocks.pop();
+        }
+      });
+      const out = [];
+      blocks.forEach(b => { for (let i = 0; i < b.n; i++) out.push(b.sum / b.n); });
+      return out;
+    };
+    const place = l => {
+      if (!l.length) return;
+      const off = [0];
+      for (let i = 1; i < l.length; i++) off[i] = off[i - 1] + l[i - 1].h + gap(l[i - 1], l[i]);
+      const want = l.map((n, i) => {
+        const ns = (up.get(n) || []).concat(down.get(n) || []);
+        const d = ns.length ? ns.reduce((s, m) => s + center(m), 0) / ns.length - n.h / 2 : y.get(n);
+        return d - off[i];
+      });
+      pav(want).forEach((z, i) => y.set(l[i], z + off[i]));
+    };
+    for (let it = 0; it < 8; it++) {
+      for (let t = 1; t <= L; t++) place(layers[t]);
+      for (let t = L; t >= 1; t--) place(layers[t]);
+    }
+    const minY = Math.min(...[...y.values()]);
+    const colX = t => PAD + (t - 1) * (W + GAP_X);
+    let maxY = 0;
+    layers.forEach((l, t) => l.forEach(n => {
+      n.x = colX(t);
+      n.y = TOP + y.get(n) - minY;
+      maxY = Math.max(maxY, n.y + n.h);
+    }));
+    G_SIZE.w = PAD * 2 + L * W + (L - 1) * GAP_X;
+    G_SIZE.h = maxY + PAD;
+    G_SIZE.L = L;
+
+    // Ports: spread arrows along box sides; an arrow that applies to only some options in a
+    // box points at those rows.
+    const rowY = (n, code) => n.courses.length > 1 ? n.y + HEAD + ROW * n.courses.indexOf(code) + ROW / 2 : n.y + n.h / 2;
+    const cy = n => n.y + n.h / 2;
+    nodes.forEach(n => {
+      const outs = outE.get(n.id).slice().sort((a, b) => cy(a.chain[1]) - cy(b.chain[1]));
+      const span = n.courses.length > 1 ? [n.y + HEAD, n.y + n.h] : [n.y, n.y + n.h];
+      outs.forEach((e, i) => { e.y0 = span[0] + (span[1] - span[0]) * (i + 1) / (outs.length + 1); });
+      const ins = inE.get(n.id).slice().sort((a, b) => cy(a.chain[a.chain.length - 2]) - cy(b.chain[b.chain.length - 2]));
+      ins.forEach((e, i) => {
+        if (n.courses.length > 1 && e.partial) {
+          const ys = [...e.courses].map(c => rowY(n, c));
+          e.y1 = ys.reduce((s, v) => s + v, 0) / ys.length + (i % 2 ? 3 : -3);
+        } else {
+          e.y1 = span[0] + (span[1] - span[0]) * (i + 1) / (ins.length + 1);
+        }
+      });
+    });
+  }
+  const G_SIZE = { w: 0, h: 0, L: 1 };
+
+  function edgePath(e) {
+    const pts = [[e.chain[0].x + W, e.y0]];
+    for (let i = 1; i < e.chain.length - 1; i++) {
+      const d = e.chain[i], yy = d.y + d.h / 2;
+      pts.push([d.x, yy], [d.x + W, yy]);
+    }
+    const last = e.chain[e.chain.length - 1];
+    pts.push([last.x - 1, e.y1]);
+    let s = "M" + pts[0][0] + "," + pts[0][1].toFixed(1);
+    for (let i = 1; i < pts.length; i++) {
+      const [x0, y0] = pts[i - 1], [x1, y1] = pts[i];
+      if (Math.abs(y1 - y0) < 0.5) { s += " L" + x1 + "," + y1.toFixed(1); continue; }
+      const dx = (x1 - x0) / 2;
+      s += " C" + (x0 + dx) + "," + y0.toFixed(1) + " " + (x1 - dx) + "," + y1.toFixed(1) + " " + x1 + "," + y1.toFixed(1);
+    }
+    return s;
+  }
+
+  // ---------- render ----------
+  const viewport = document.getElementById("viewport");
+  const sizer = document.getElementById("sizer");
+  const stage = document.getElementById("stage");
+  const svg = document.getElementById("edges");
+  const nodesEl = document.getElementById("nodes");
+  const nodeEls = new Map();
+  const edgeEls = new Map();
+
+  function seasonsHTML(code) {
+    if (!hasData(code)) return '<i class="none" title="No Schedule of Classes data in recent terms">?</i>';
+    const s = new Set((C[code].off || []).map(t => t % 10));
+    const out = [3, 1, 2].filter(x => s.has(x)).map(x => '<i title="Offered in ' + D.seasons[x] + '">' + SEASON_SHORT[x] + "</i>").join("");
+    return out || '<i class="none" title="Not offered in the terms scanned">—</i>';
+  }
+
+  const waiverTitle = code => "Can be waived with " + WAIVERS[code].map(ex => ex.name).join(" or ");
+  function chipHTML(code, single) {
+    const ap = WAIVERS[code] ? '<i class="ap" title="' + esc(waiverTitle(code)) + '">AP</i>' : "";
+    return '<div class="chip" data-code="' + esc(code) + '">' +
+      '<button type="button" class="tick" data-tick="' + esc(code) + '" aria-pressed="false" aria-label="Mark ' + esc(disp(code)) + ' as taken"></button>' +
+      '<button type="button" class="main" data-course="' + esc(code) + '" title="' + esc(disp(code) + " · " + titleOf(code)) + '">' +
+      '<span class="line"><span class="code">' + esc(disp(code)) + '</span><span class="ssn">' + ap + seasonsHTML(code) + "</span></span>" +
+      (single ? '<span class="title">' + esc(titleOf(code)) + "</span>" : "") +
+      "</button></div>";
+  }
+
+  function render() {
+    G = buildGraph();
+    const { w, h, L } = G_SIZE;
+    stage.style.width = w + "px";
+    stage.style.height = h + "px";
+    svg.setAttribute("width", w);
+    svg.setAttribute("height", h);
+    svg.setAttribute("viewBox", "0 0 " + w + " " + h);
+
+    const marker = (id, cls) => '<marker id="' + id + '" viewBox="0 0 8 8" refX="7.5" refY="4" markerWidth="7" markerHeight="7" orient="auto" markerUnits="userSpaceOnUse"><path class="' + cls + '" d="M0,0.5 L8,4 L0,7.5 z"/></marker>';
+    let s = "<defs>" + marker("ar", "arrow") + marker("ar-pre", "arrow pre") + marker("ar-post", "arrow post") + "</defs>";
+    G.edges.forEach((e, i) => {
+      e.idx = i;
+      s += '<path class="edge ' + (e.solid ? "solid" : "dashed") + '" data-i="' + i + '" marker-end="url(#ar)" d="' + edgePath(e) + '"/>';
+    });
+    svg.innerHTML = s;
+    edgeEls.clear();
+    svg.querySelectorAll(".edge").forEach(p => edgeEls.set(G.edges[+p.dataset.i], p));
+
+    let html = "";
+    for (let t = 1; t <= L; t++) {
+      html += '<div class="colhead" style="left:' + (PAD + (t - 1) * (W + GAP_X)) + "px;width:" + W + 'px">Step ' + t + "</div>";
+    }
+    G.nodes.forEach(n => {
+      const multi = n.courses.length > 1;
+      html += '<div class="node ' + n.kind + " cat-" + n.cat + (multi ? " multi" : "") + '" data-node="' + esc(n.id) + '" style="left:' + n.x + "px;top:" + n.y + "px;width:" + W + "px;height:" + n.h + 'px">';
+      if (multi) {
+        html += '<button type="button" class="head" data-slot="' + esc(n.slot) + '">' + esc(slotName(n.slot)) + "</button>";
+        n.courses.forEach(c => { html += chipHTML(c, false); });
+      } else {
+        html += chipHTML(n.courses[0], true);
+      }
+      html += "</div>";
+    });
+    nodesEl.innerHTML = html;
+    nodeEls.clear();
+    nodesEl.querySelectorAll(".node").forEach(el => nodeEls.set(el.dataset.node, el));
+    applyZoom();
+    refresh();
+  }
+
+  function refresh() {
+    nodesEl.querySelectorAll(".chip").forEach(ch => {
+      const code = ch.dataset.code, st = statusOf(code);
+      ch.dataset.status = st;
+      const tick = ch.querySelector(".tick");
+      tick.setAttribute("aria-pressed", st === "taken" || st === "credit" || st === "waived" ? "true" : "false");
+      tick.setAttribute("aria-label", st === "credit" ? disp(code) + " waived by " + CREDIT.get(code).join(" and ")
+        : st === "waived" ? disp(code) + ": requirement waived"
+        : (st === "taken" ? "Unmark " : "Mark ") + disp(code) + " as taken");
+    });
+    G.nodes.forEach(n => {
+      const el = nodeEls.get(n.id);
+      const earned = n.courses.some(c => state.taken.has(c) || CREDIT.has(c));
+      el.classList.toggle("done", earned || n.courses.some(isWaived));
+      el.classList.toggle("waived", !earned && n.courses.some(isWaived));
+    });
+    highlight();
+    renderPanel();
+    renderClear();
+    save();
+  }
+
+  // ---------- highlight the selected course's chain ----------
+  function focusCourses() {
+    if (!state.focus) return null;
+    return state.focus.kind === "slot" ? R.slots[state.focus.id].courses.slice() : [state.focus.id];
+  }
+
+  function highlight() {
+    const f = focusCourses();
+    stage.classList.toggle("focusing", !!f);
+    nodeEls.forEach(el => el.classList.remove("self", "pre", "post", "dim"));
+    nodesEl.querySelectorAll(".chip").forEach(ch => ch.classList.remove("hit-self", "hit-pre", "hit-post"));
+    edgeEls.forEach(p => { p.classList.remove("pre", "post", "dim"); p.setAttribute("marker-end", "url(#ar)"); });
+    if (!f) return;
+
+    const fset = new Set(f);
+    const selfNodes = new Set(f.map(c => G.nodeOf.get(c)).filter(Boolean));
+    const preNodes = new Set(), preEdges = new Set(), postNodes = new Set(), postEdges = new Set();
+    let queue = [];
+    G.edges.forEach(e => {
+      if (selfNodes.has(e.to) && e.recs.some(r => fset.has(r.course))) {
+        preEdges.add(e);
+        if (!preNodes.has(e.from)) { preNodes.add(e.from); queue.push(e.from); }
+      }
+    });
+    while (queue.length) {
+      const id = queue.pop();
+      G.inE.get(id).forEach(e => { preEdges.add(e); if (!preNodes.has(e.from)) { preNodes.add(e.from); queue.push(e.from); } });
+    }
+    G.edges.forEach(e => {
+      if (selfNodes.has(e.from) && e.recs.some(r => f.some(c => r.codes.has(c)))) {
+        postEdges.add(e);
+        if (!postNodes.has(e.to)) { postNodes.add(e.to); queue.push(e.to); }
+      }
+    });
+    while (queue.length) {
+      const id = queue.pop();
+      G.outE.get(id).forEach(e => { postEdges.add(e); if (!postNodes.has(e.to)) { postNodes.add(e.to); queue.push(e.to); } });
+    }
+
+    nodeEls.forEach((el, id) => {
+      if (selfNodes.has(id)) el.classList.add("self");
+      else if (preNodes.has(id)) el.classList.add("pre");
+      else if (postNodes.has(id)) el.classList.add("post");
+      else el.classList.add("dim");
+    });
+    edgeEls.forEach((p, e) => {
+      if (preEdges.has(e)) { p.classList.add("pre"); p.setAttribute("marker-end", "url(#ar-pre)"); }
+      else if (postEdges.has(e)) { p.classList.add("post"); p.setAttribute("marker-end", "url(#ar-post)"); }
+      else p.classList.add("dim");
+    });
+    // Bring highlighted edges to the front.
+    [...preEdges, ...postEdges].forEach(e => { const p = edgeEls.get(e); if (p) svg.appendChild(p); });
+
+    const directPre = new Set(), directPost = new Set();
+    f.forEach(c => {
+      groupsOf(c).forEach(g => g.o.flat().forEach(x => directPre.add(x)));
+      (unlocks[c] || []).forEach(x => directPost.add(x));
+    });
+    nodesEl.querySelectorAll(".chip").forEach(ch => {
+      const code = ch.dataset.code;
+      if (fset.has(code)) ch.classList.add("hit-self");
+      else if (directPre.has(code)) ch.classList.add("hit-pre");
+      else if (directPost.has(code)) ch.classList.add("hit-post");
+    });
+  }
+
+  // ---------- panel ----------
+  function roleTags(code) {
+    const slot = courseSlot[code];
+    if (!slot) return OUTSIDE.has(code) ? ['<span class="tag cat-outside">Outside the major</span>'] : [];
+    return slotRoles[slot].map(sec => {
+      const cat = SECTION_CAT[sec];
+      let label = R.sections.find(s => s.id === sec).title.replace(/^Required /, "").replace(/ Courses?$/, "");
+      if (sec === "computing") {
+        const tracks = R.sections.find(s => s.id === "computing").tracks.filter(t => t.lines.some(l => l.includes(code))).map(t => t.name.replace("Track ", ""));
+        label = "Computing, track " + tracks.join(" & ");
+      }
+      if (sec === "electives") label = "Upper-division elective";
+      return '<span class="tag cat-' + cat + '">' + esc(label) + "</span>";
+    });
+  }
+
+  function crefHTML(code) {
+    const met = state.taken.has(code) || CREDIT.has(code);
+    const ap = WAIVERS[code] ? '<span class="aptag" title="' + esc(waiverTitle(code)) + '">AP</span>' : "";
+    if (known(code)) {
+      return '<button type="button" class="cref' + (met ? " met" : "") + '" data-goto-course="' + esc(code) + '" title="' + esc(titleOf(code)) + '">' + esc(disp(code)) + "</button>" + ap;
+    }
+    return '<span class="cref plain" title="' + esc(titleOf(code) || "Not part of this map") + '">' + esc(disp(code)) + "</span>" +
+      (PLACEMENT.has(code) ? ' <span class="note">(or placement)</span>' : "");
+  }
+
+  function groupLine(g, joinWord) {
+    const opts = g.o.map(b => b.map(crefHTML).join(' <span class="and">and</span> '));
+    let body;
+    if (opts.length === 1) body = opts[0];
+    else body = (g.n > 1 ? g.n + " of: " : "") + opts.slice(0, -1).join(", ") + " " + joinWord + " " + opts[opts.length - 1];
+    const met = groupMet(g);
+    return '<li><span class="mark" aria-label="' + (met ? "met" : "not met") + '">' + (met ? "✓" : "·") + "</span><span>" + body + "</span></li>";
+  }
+
+  function termsHTML(code) {
+    const off = new Set((C[code] && C[code].off) || []);
+    return '<ol class="terms">' + D.terms.slice().reverse().map(t =>
+      '<li class="' + (off.has(t) ? "on" : "") + '" title="' + termName(t) + (off.has(t) ? ": offered" : ": not offered") + '">' + termShort(t) + "</li>"
+    ).join("") + "</ol>";
+  }
+
+  function courseView(code) {
+    const rec = C[code] || {};
+    const st = statusOf(code);
+    const pre = groupsOf(code), co = groupsOf(code, "co");
+    const parts = [];
+    parts.push('<button type="button" class="back" data-home>← All requirements</button>');
+    const tags = roleTags(code);
+    parts.push("<div class=\"stack\" style=\"gap:8px\">" + (tags.length ? '<div class="kicker">' + tags.join("") + "</div>" : "") +
+      '<div class="bigcode">' + esc(catalogCode(code)) + (unitsOf(code) ? " · " + esc(unitsOf(code)) + " units" : "") + "</div>" +
+      "<h2>" + esc(titleOf(code) || disp(code)) + "</h2></div>");
+    if (known(code) && !PLACEMENT.has(code)) {
+      parts.push('<div class="actions"><button type="button" class="take" data-tick="' + esc(code) + '" aria-pressed="' + (st === "taken") + '">' + (st === "taken" ? "✓ Taken" : "Mark as taken") + "</button>" +
+        (courseSlot[code] || OUTSIDE.has(code) ? waiveButton(waiveKey(code)) : "") + "</div>");
+    }
+
+    if (PLACEMENT.has(code)) {
+      parts.push('<p class="prose muted">' + esc(R.placement.text) + "</p>");
+    } else if (!hasData(code)) {
+      parts.push('<p class="status">Not in the USC Schedule of Classes for any of the last ' + D.terms.length + " terms, so its prerequisites aren't shown here. Check the course listing in the catalogue.</p>");
+    } else if (st === "taken") {
+      parts.push('<p class="status ready">Marked as taken.</p>');
+    } else if (st === "credit") {
+      parts.push('<p class="status ready">Waived by ' + esc(CREDIT.get(code).join(" and ")) + ". For the major, it counts once your advisor applies the substitution on STARS.</p>");
+    } else if (st === "waived") {
+      parts.push('<p class="status waived">' + waivedText(waiveKey(code)) + "</p>");
+    } else if (!pre.length) {
+      parts.push('<p class="status ready">No prerequisites listed.</p>');
+    } else if (st === "ready") {
+      parts.push('<p class="status ready">You can take this now: every prerequisite is met.</p>');
+    } else {
+      const left = pre.filter(g => !groupMet(g)).length;
+      parts.push('<p class="status">' + left + " prerequisite" + (left > 1 ? "s" : "") + " still to go. Mark courses as taken to track this.</p>");
+    }
+
+    if (pre.length) {
+      parts.push("<div><h3>Prerequisites</h3><ul class=\"reqs\">" + pre.map(g => groupLine(g, "or")).join("") + "</ul>" +
+        (pre.length > 1 ? '<p class="note" style="margin-top:6px">You need every line above.</p>' : "") + "</div>");
+    }
+    if (co.length) {
+      parts.push("<div><h3>Corequisites · before or alongside</h3><ul class=\"reqs\">" + co.map(g => groupLine(g, "or")).join("") + "</ul></div>");
+    }
+    if (WAIVERS[code]) {
+      const rows = WAIVERS[code].map(ex => {
+        const scores = ex.options.filter(o => o.waives.includes(code)).map(o => o.label.split(",")[0]);
+        const opt = ex.options.find(o => o.value === state.credit[ex.id]);
+        const has = !!(opt && opt.waives.includes(code));
+        return '<li><span class="mark">' + (has ? "✓" : "·") + "</span><span><strong>" + esc(ex.name) + "</strong> " + esc(scores.join(" or ")) +
+          (ex.stars ? ' <span class="note">shows on STARS as ' + esc(ex.stars) + ":COMP</span>" : "") +
+          (ex.note ? '<br><span class="note">' + esc(ex.note) + "</span>" : "") + "</span></li>";
+      });
+      parts.push('<div><h3>Exam credit that waives it</h3><ul class="reqs">' + rows.join("") + "</ul>" +
+        '<p class="note" style="margin-top:6px">Enter your scores under AP &amp; placement credit on the requirements page. ' + esc(R.examCredit.stars) + "</p></div>");
+    }
+    if (rec.rec) parts.push("<div><h3>Recommended preparation</h3><p class=\"prose\">" + esc(rec.rec) + "</p></div>");
+    if (rec.restr) parts.push("<div><h3>Registration restrictions</h3><p class=\"prose\">" + esc(rec.restr) + "</p></div>");
+
+    const opens = [...(unlocks[code] || [])].filter(known).sort();
+    if (opens.length) {
+      parts.push("<div><h3>Unlocks</h3><div class=\"pills\" style=\"gap:4px 10px\">" + opens.map(crefHTML).join("") + "</div></div>");
+    }
+    if (hasData(code)) {
+      parts.push("<div><h3>Offered · " + termShort(D.terms[D.terms.length - 1]) + " to " + termShort(D.terms[0]) + "</h3>" + termsHTML(code) + "</div>");
+    }
+    if (rec.d) parts.push("<div><h3>Description</h3><p class=\"prose\">" + esc(rec.d) + "</p></div>");
+    if (rec.dup) parts.push('<p class="note">Duplicate credit: ' + esc(rec.dup) + "</p>");
+    if (hasData(code)) {
+      parts.push('<div class="links"><a href="https://classes.usc.edu/term/' + rec.src + "/catalogue/course/" + smashed(code) + '" target="_blank" rel="noopener">Schedule of Classes, ' + termName(rec.src) + " ↗</a></div>");
+      parts.push('<p class="note">Prerequisites as listed in the ' + termName(rec.src) + " Schedule of Classes. Confirm with the catalogue and your advisor.</p>");
+    }
+    return '<div class="stack">' + parts.join("") + "</div>";
+  }
+
+  // Waivers apply to a whole requirement line, so "PHYS 151" waives Physics I.
+  function waiveButton(key) {
+    const on = state.waived.has(key);
+    const multi = R.slots[key] && R.slots[key].courses.length > 1;
+    const label = on ? (multi ? "✓ " + slotName(key) + " waived" : "✓ Waived")
+      : multi ? "Waive " + slotName(key) + " requirement" : "Mark as waived";
+    return '<button type="button" class="waive" data-waive="' + esc(key) + '" aria-pressed="' + on + '">' + esc(label) + "</button>";
+  }
+  function waivedText(key) {
+    const what = R.slots[key] && R.slots[key].courses.length > 1 ? "The " + esc(slotName(key)) + " requirement is" : "Marked as";
+    return what + " waived. Check that STARS shows it as a course or requirement waiver (CW or RW). Courses that list it as a prerequisite show as unlocked here, but their department may still have to approve you.";
+  }
+
+  function slotView(id) {
+    const s = R.slots[id];
+    const tags = roleTags(s.courses[0]);
+    const parts = ['<button type="button" class="back" data-home>← All requirements</button>',
+      '<div class="stack" style="gap:8px"><div class="kicker">' + tags.join("") + "</div><h2>" + esc(slotName(id)) + "</h2>" +
+      '<p class="meta">Take one of these ' + s.courses.length + " options. They count the same for the major.</p></div>",
+      '<div class="actions">' + waiveButton(id) + "</div>"];
+    if (state.waived.has(id)) parts.push('<p class="status waived">' + waivedText(id) + "</p>");
+    parts.push('<div class="stack" style="gap:8px">' + s.courses.map(c => {
+      const pre = groupsOf(c);
+      const preText = !hasData(c) ? "No recent schedule data" : pre.length ? "Needs " + pre.map(g => g.o.map(b => b.map(disp).join(" + ")).join(" / ")).join("; ") : "No prerequisites listed";
+      return '<button type="button" class="option" data-goto-course="' + esc(c) + '"><span class="row"><span class="code">' + esc(catalogCode(c)) + '</span><span class="ssn">' + seasonsHTML(c) + "</span></span>" +
+        '<span style="font-weight:600">' + esc(titleOf(c)) + "</span>" +
+        '<span class="note">' + esc(preText) + (state.taken.has(c) ? " · ✓ taken" : "") + "</span></button>";
+    }).join("") + "</div>");
+    return '<div class="stack">' + parts.join("") + "</div>";
+  }
+
+  function pill(id) {
+    const s = R.slots[id];
+    const isTaken = s.courses.some(c => state.taken.has(c));
+    const isCredit = !isTaken && s.courses.some(c => CREDIT.has(c));
+    const isWaivedSlot = !isTaken && !isCredit && state.waived.has(id);
+    const target = s.courses.length > 1 ? 'data-goto-slot="' + esc(id) + '"' : 'data-goto-course="' + esc(s.courses[0]) + '"';
+    return '<button type="button" class="pill cat-' + slotCat(id) + (isTaken ? " done" : isCredit ? " done credit" : isWaivedSlot ? " waived" : "") + '" ' + target + ' title="' + esc(s.courses.map(disp).join(" / ")) + '">' + esc(slotName(id)) + "</button>";
+  }
+
+  function creditSection() {
+    if (!EXAMS.length) return "";
+    const n = Object.keys(state.credit).length;
+    const open = state.creditOpen !== null ? state.creditOpen : n > 0;
+    const rows = EXAMS.map(ex => {
+      const id = "credit-" + ex.id;
+      const none = ex.options[0].value === "pass" ? "Not taken" : "No credit";
+      const opts = '<option value="">' + none + "</option>" + ex.options.map(o =>
+        '<option value="' + esc(o.value) + '"' + (state.credit[ex.id] === o.value ? " selected" : "") + ">" + esc(o.label) + "</option>").join("");
+      const waives = [...new Set(ex.options.flatMap(o => o.waives))].map(disp).join(" or ");
+      return '<div class="credit-row"><label for="' + id + '"><span>' + esc(ex.name) + '</span><span class="note">waives ' + esc(waives) +
+        (ex.stars ? " · STARS " + esc(ex.stars) : "") + "</span></label>" +
+        '<select id="' + id + '" data-exam="' + esc(ex.id) + '">' + opts + "</select></div>";
+    }).join("");
+    return '<details class="credit" id="credit-box"' + (open ? " open" : "") + "><summary><span>AP &amp; placement credit</span>" +
+      '<span class="prog' + (n ? " full" : "") + '">' + (n ? n + " applied" : "optional") + "</span></summary>" +
+      '<div class="stack" style="gap:10px;margin-top:12px">' + rows +
+      '<p class="note">' + esc(R.examCredit.summary) + ' <a href="' + esc(R.examCredit.source) + '" target="_blank" rel="noopener">USC AP credit chart ↗</a></p>' +
+      '<p class="note">' + esc(R.examCredit.stars) + "</p>" +
+      '<p class="note">' + esc(R.examCredit.noWaiver) + "</p></div></details>";
+  }
+
+  function homeView() {
+    const parts = [];
+    const doneSlot = id => state.waived.has(id) || R.slots[id].courses.some(c => state.taken.has(c) || CREDIT.has(c));
+
+    // What can I take next?
+    const visible = new Set(G ? [...G.nodes.values()].filter(n => n.kind === "slot").flatMap(n => n.courses) : []);
+    if (state.taken.size || CREDIT.size || state.waived.size) {
+      const ready = [...visible].filter(c => statusOf(c) === "ready" && !doneSlot(courseSlot[c]))
+        .sort((a, b) => (G.nodes.get(G.nodeOf.get(a)).tier - G.nodes.get(G.nodeOf.get(b)).tier) || a.localeCompare(b));
+      parts.push('<div class="stack" style="gap:8px"><h3>You can take next</h3>' +
+        (ready.length ? '<div class="pills">' + ready.map(c => '<button type="button" class="pill cat-' + slotCat(courseSlot[c]) + '" data-goto-course="' + esc(c) + '">' + esc(disp(c)) + "</button>").join("") + "</div>"
+          : '<p class="meta">Nothing new is unlocked among the courses shown.</p>') + "</div>");
+    } else {
+      parts.push('<p class="hint">Click a course to see what it needs and what it unlocks. Tick the circle next to courses you have taken, add any AP credit below, and mark advisor waivers from a course\'s details to see what you can take next. Everything is saved in this browser only.</p>');
+    }
+    parts.push(creditSection());
+
+    parts.push("<h3 style=\"margin-bottom:-8px\">Major requirements · " + esc(R.catalogue.replace("USC Catalogue ", "")) + " catalogue</h3>");
+    R.sections.forEach(sec => {
+      let prog = "", body = "";
+      if (sec.rule === "all") {
+        const n = sec.slots.filter(doneSlot).length;
+        prog = n + " / " + sec.slots.length;
+        body = '<div class="pills">' + sec.slots.map(pill).join("") + "</div>";
+        if (sec.slots.length === n) prog += " ✓";
+      } else if (sec.rule === "track") {
+        const scores = sec.tracks.map(t => t.lines.filter(l => l.some(doneSlot)).length);
+        const bestScore = Math.max(...scores);
+        prog = "best track " + bestScore + " / 3" + (bestScore === 3 ? " ✓" : "");
+        body = '<p class="rule">' + esc(sec.text) + "</p>" + sec.tracks.map(t =>
+          '<div class="track"><b>' + esc(t.name) + "</b>" + t.lines.map(l => l.length === 1 ? pill(l[0]) : '<span class="note">one of</span> ' + l.map(pill).join(" ")).join('<span class="plus">+</span>') + "</div>"
+        ).join("");
+      } else if (sec.rule === "choose") {
+        const n = sec.slots.filter(doneSlot).length;
+        prog = Math.min(n, sec.choose) + " / " + sec.choose + (n >= sec.choose ? " ✓" : "");
+        const shown = sec.id === "electives" && !state.electives
+          ? '<p class="rule">' + esc(sec.text) + '</p><button type="button" class="btn" data-show-electives>Show all ' + sec.slots.length + " elective options on the map</button>"
+          : '<p class="rule">' + esc(sec.text) + "</p>" + '<div class="pills">' + sec.slots.map(pill).join("") + "</div>";
+        body = shown;
+      } else {
+        prog = "6 units";
+        body = '<p class="rule">' + esc(sec.text) + '</p><div class="pills">' + sec.slots.map(pill).join("") + "</div>";
+      }
+      parts.push('<section class="sec"><div class="sec-head"><strong>' + esc(sec.title) + ' <span class="note">' + esc(sec.units) + ' units</span></strong><span class="prog' + (prog.includes("✓") ? " full" : "") + '">' + esc(prog) + "</span></div>" + body + "</section>");
+    });
+
+    const missing = Object.keys(R.courses).filter(c => !hasData(c)).map(disp);
+    parts.push('<div class="about"><h3 style="margin:6px 0 0">How to read the map</h3>' +
+      "<p><strong>Columns</strong> are prerequisite steps: every course sits to the right of all its prerequisites, so working left to right is always a safe order. A course with an \"either/or\" prerequisite is placed after its latest option, so it may be takeable earlier than its column suggests.</p>" +
+      "<p><strong>Boxes with several codes</strong> are one requirement line from the catalogue (for example Physics I: PHYS 135a, 151, 161 or 171). Each option can have different prerequisites; click it to see them.</p>" +
+      "<p><strong>F / Sp / Su</strong> show which terms the course actually ran between " + termName(D.terms[D.terms.length - 1]) + " and " + termName(D.terms[0]) + ".</p>" +
+      '<h3 style="margin:6px 0 0">About the data</h3>' +
+      "<p>Requirements are transcribed from the <a href=\"" + esc(R.source) + "\" target=\"_blank\" rel=\"noopener\">" + esc(R.catalogue) + "</a>. Prerequisites, descriptions and offering history come from the USC Schedule of Classes (updated " + esc(D.generated) + "). Entry-level prerequisites such as MATH 108 and CHEM 050 are treated as met, since most students place out of them. AP waivers follow the <a href=\"" + esc(R.examCredit.source) + "\" target=\"_blank\" rel=\"noopener\">Registrar's AP chart</a>, plus Viterbi's rule that AP Computer Science A or the CSCI 102 challenge exam lets you skip CSCI 102.</p>" +
+      (missing.length ? "<p>No recent schedule data for " + esc(missing.join(", ")) + ", so their prerequisites are unknown here.</p>" : "") +
+      "<p>This is an unofficial planning aid from QBA, the Quantitative Biology Association. Always confirm your plan with your QBIO advisor and your STARS report.</p></div>");
+    return '<div class="stack">' + parts.join("") + "</div>";
+  }
+
+  function renderPanel() {
+    const keep = panel.scrollTop;
+    const f = state.focus;
+    const active = panel.contains(document.activeElement) ? document.activeElement.id : "";
+    panel.innerHTML = !f ? homeView() : f.kind === "slot" ? slotView(f.id) : courseView(f.id);
+    if (panel.dataset.view === (f ? f.kind + f.id : "home")) panel.scrollTop = keep;
+    else panel.scrollTop = 0;
+    panel.dataset.view = f ? f.kind + f.id : "home";
+    const again = active && document.getElementById(active);
+    if (again) again.focus({ preventScroll: true });
+  }
+
+  // ---------- clear marks (two-step, no confirm()) ----------
+  const clearWrap = document.getElementById("clear-wrap");
+  let confirmClear = false;
+  function renderClear() {
+    const n = state.taken.size + state.waived.size;
+    if (!n) { clearWrap.innerHTML = ""; confirmClear = false; return; }
+    clearWrap.innerHTML = confirmClear
+      ? "Clear " + n + ' taken and waived marks? <button type="button" class="btn danger" data-clear-yes>Clear</button><button type="button" class="btn" data-clear-no>Keep</button>'
+      : '<button type="button" class="btn" data-clear>Clear marks (' + n + ")</button>";
+  }
+  clearWrap.addEventListener("click", ev => {
+    const b = ev.target.closest("button");
+    if (!b) return;
+    if (b.hasAttribute("data-clear")) confirmClear = true;
+    if (b.hasAttribute("data-clear-no")) confirmClear = false;
+    if (b.hasAttribute("data-clear-yes")) { state.taken.clear(); state.waived.clear(); confirmClear = false; }
+    refresh();
+  });
+
+  // ---------- selection & navigation ----------
+  function select(focus, reveal) {
+    if (focus && focus.kind === "course") {
+      const slot = courseSlot[focus.id];
+      if (slot && electiveOnly(slot) && !state.electives) { state.electives = true; optElectives.checked = true; state.focus = focus; render(); }
+    }
+    if (focus && focus.kind === "slot" && electiveOnly(focus.id) && !state.electives) {
+      state.electives = true; optElectives.checked = true; state.focus = focus; render();
+    }
+    state.focus = focus;
+    refresh();
+    if (reveal && focus) {
+      const id = focus.kind === "slot" ? "s:" + focus.id : G.nodeOf.get(focus.id);
+      revealNode(id);
+    }
+    if (window.matchMedia("(max-width: 860px)").matches && focus && !reveal) {
+      panel.scrollIntoView({ behavior: reduceMotion() ? "auto" : "smooth", block: "start" });
+    }
+  }
+  const reduceMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function revealNode(id) {
+    const n = id && G.nodes.get(id);
+    if (!n) return;
+    const z = state.zoom;
+    viewport.scrollTo({
+      left: Math.max(0, (n.x + W / 2) * z - viewport.clientWidth / 2),
+      top: Math.max(0, (n.y + n.h / 2) * z - viewport.clientHeight / 2),
+      behavior: reduceMotion() ? "auto" : "smooth"
+    });
+  }
+
+  function toggleTaken(code) {
+    if (state.taken.has(code)) state.taken.delete(code); else state.taken.add(code);
+    refresh();
+  }
+
+  nodesEl.addEventListener("click", ev => {
+    const tick = ev.target.closest("[data-tick]");
+    if (tick) {
+      const c = tick.dataset.tick;
+      // Exam credit and waivers are set in the panel, so those courses open their details instead.
+      if ((CREDIT.has(c) || isWaived(c)) && !state.taken.has(c)) select({ kind: "course", id: c }, false);
+      else toggleTaken(c);
+      return;
+    }
+    const main = ev.target.closest("[data-course]");
+    if (main) { const c = main.dataset.course; select(state.focus && state.focus.kind === "course" && state.focus.id === c ? null : { kind: "course", id: c }, false); return; }
+    const head = ev.target.closest("[data-slot]");
+    if (head) { const s = head.dataset.slot; select(state.focus && state.focus.kind === "slot" && state.focus.id === s ? null : { kind: "slot", id: s }, false); }
+  });
+
+  panel.addEventListener("click", ev => {
+    const b = ev.target.closest("button, a");
+    if (!b || b.tagName === "A") return;
+    if (b.hasAttribute("data-home")) select(null);
+    else if (b.dataset.gotoCourse) select({ kind: "course", id: b.dataset.gotoCourse }, true);
+    else if (b.dataset.gotoSlot) select({ kind: "slot", id: b.dataset.gotoSlot }, true);
+    else if (b.dataset.tick) toggleTaken(b.dataset.tick);
+    else if (b.dataset.waive) {
+      const k = b.dataset.waive;
+      if (state.waived.has(k)) state.waived.delete(k); else state.waived.add(k);
+      refresh();
+    }
+    else if (b.hasAttribute("data-show-electives")) { optElectives.checked = true; setElectives(true); }
+  });
+  panel.addEventListener("change", ev => {
+    const sel = ev.target.closest("select[data-exam]");
+    if (!sel) return;
+    if (sel.value) state.credit[sel.dataset.exam] = sel.value;
+    else delete state.credit[sel.dataset.exam];
+    computeCredit();
+    refresh();
+  });
+  // <details> toggle events don't bubble, so listen in the capture phase.
+  panel.addEventListener("toggle", ev => {
+    if (ev.target.id === "credit-box") state.creditOpen = ev.target.open;
+  }, true);
+
+  // Click on empty canvas clears the selection; drag pans (mouse only, touch scrolls natively).
+  let drag = null;
+  viewport.addEventListener("pointerdown", ev => {
+    if (ev.pointerType !== "mouse" || ev.button !== 0 || ev.target.closest("button")) return;
+    drag = { x: ev.clientX, y: ev.clientY, sl: viewport.scrollLeft, st: viewport.scrollTop, moved: false };
+  });
+  window.addEventListener("pointermove", ev => {
+    if (!drag) return;
+    const dx = ev.clientX - drag.x, dy = ev.clientY - drag.y;
+    if (!drag.moved && Math.hypot(dx, dy) < 4) return;
+    drag.moved = true;
+    viewport.classList.add("panning");
+    viewport.scrollLeft = drag.sl - dx;
+    viewport.scrollTop = drag.st - dy;
+  });
+  window.addEventListener("pointerup", ev => {
+    if (!drag) return;
+    const wasClick = !drag.moved;
+    drag = null;
+    viewport.classList.remove("panning");
+    if (wasClick && !ev.target.closest(".node") && state.focus) select(null);
+  });
+  document.addEventListener("keydown", ev => {
+    if (ev.key === "Escape" && state.focus && document.activeElement !== searchInput) select(null);
+  });
+
+  // ---------- zoom ----------
+  const zoomLevel = document.getElementById("zoom-level");
+  function applyZoom() {
+    stage.style.transform = "scale(" + state.zoom + ")";
+    sizer.style.width = G_SIZE.w * state.zoom + "px";
+    sizer.style.height = G_SIZE.h * state.zoom + "px";
+    zoomLevel.textContent = Math.round(state.zoom * 100) + "%";
+  }
+  function setZoom(z) {
+    const cx = (viewport.scrollLeft + viewport.clientWidth / 2) / state.zoom;
+    const cy = (viewport.scrollTop + viewport.clientHeight / 2) / state.zoom;
+    state.zoom = Math.min(1.6, Math.max(0.3, z));
+    applyZoom();
+    viewport.scrollLeft = cx * state.zoom - viewport.clientWidth / 2;
+    viewport.scrollTop = cy * state.zoom - viewport.clientHeight / 2;
+  }
+  const fitZoom = () => Math.min(1, Math.max(0.3, Math.min(viewport.clientWidth / G_SIZE.w, viewport.clientHeight / G_SIZE.h)));
+  document.getElementById("zoom-in").addEventListener("click", () => setZoom(state.zoom * 1.2));
+  document.getElementById("zoom-out").addEventListener("click", () => setZoom(state.zoom / 1.2));
+  document.getElementById("zoom-fit").addEventListener("click", () => { setZoom(fitZoom()); viewport.scrollTo(0, 0); });
+
+  // ---------- toggles & search ----------
+  const optElectives = document.getElementById("opt-electives");
+  const optOutside = document.getElementById("opt-outside");
+  document.getElementById("elective-count").textContent = "(" + electiveCount + ")";
+  optElectives.checked = state.electives;
+  optOutside.checked = state.outside;
+  function setElectives(on) {
+    state.electives = on;
+    if (!on && state.focus) {
+      const slot = state.focus.kind === "slot" ? state.focus.id : courseSlot[state.focus.id];
+      if (slot && electiveOnly(slot)) state.focus = null;
+    }
+    render();
+  }
+  optElectives.addEventListener("change", () => setElectives(optElectives.checked));
+  optOutside.addEventListener("change", () => { state.outside = optOutside.checked; render(); });
+
+  const searchInput = document.getElementById("search");
+  const searchable = [...new Set(Object.keys(R.courses).concat(D.outside))].sort();
+  document.getElementById("course-list").innerHTML = searchable.map(c => '<option value="' + esc(disp(c) + " · " + titleOf(c)) + '"></option>').join("");
+  function findCourse(text) {
+    const code = parseCode(text);
+    if (code && known(code)) return code;
+    const q = String(text).toLowerCase().trim();
+    if (q.length < 3) return null;
+    return searchable.find(c => titleOf(c).toLowerCase().includes(q)) || null;
+  }
+  function markMatches() {
+    const q = searchInput.value.trim().toLowerCase();
+    nodesEl.querySelectorAll(".chip").forEach(ch => {
+      const c = ch.dataset.code;
+      const hit = q.length >= 2 && (disp(c).toLowerCase().includes(q) || smashed(c).toLowerCase().includes(q.replace(/\s+/g, "")) || titleOf(c).toLowerCase().includes(q));
+      ch.classList.toggle("match", hit);
+    });
+  }
+  searchInput.addEventListener("input", () => {
+    markMatches();
+    // Picking a datalist suggestion fills the full "CODE · Title" value.
+    if (searchInput.value.includes(" · ")) {
+      const c = findCourse(searchInput.value);
+      if (c) { select({ kind: "course", id: c }, true); }
+    }
+  });
+  searchInput.addEventListener("keydown", ev => {
+    if (ev.key === "Enter") {
+      const c = findCourse(searchInput.value);
+      if (c) select({ kind: "course", id: c }, true);
+    } else if (ev.key === "Escape") {
+      searchInput.value = "";
+      markMatches();
+    }
+  });
+
+  // ---------- boot ----------
+  const termsLine = document.getElementById("subtitle");
+  termsLine.textContent = "USC Quantitative Biology (BS) · " + R.catalogue.replace("USC Catalogue ", "") + " catalogue · unofficial, made by QBA";
+  render();
+  if (viewport.clientWidth < G_SIZE.w) setZoom(Math.max(0.7, Math.min(1, viewport.clientWidth / G_SIZE.w)));
+  const fromHash = parseCode(decodeURIComponent(location.hash.slice(1)));
+  if (fromHash && known(fromHash)) select({ kind: "course", id: fromHash }, true);
+  window.addEventListener("resize", () => applyZoom());
+})();
+</script>
+</body>
+</html>

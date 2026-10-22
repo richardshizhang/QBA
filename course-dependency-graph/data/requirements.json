@@ -1,0 +1,272 @@
+{
+  "program": "Quantitative Biology (BS)",
+  "catalogue": "USC Catalogue 2026-2027",
+  "source": "https://catalogue.usc.edu/preview_program.php?catoid=22&poid=32504",
+  "notes": [
+    "The general education, writing, language and diversity requirements for a USC Dornsife College of Letters, Arts and Sciences degree are applicable."
+  ],
+
+  "courses": {
+    "QBIO 105":  { "catalog": "QBIO 105",   "title": "Introduction to Quantitative Biology Seminar", "units": "2" },
+    "BISC 120":  { "catalog": "BISC 120Lg", "title": "General Biology: Organismal Biology and Evolution", "units": "4" },
+    "BISC 121":  { "catalog": "BISC 121Lg", "title": "Advanced General Biology: Organismal Biology and Evolution", "units": "4" },
+    "BISC 220":  { "catalog": "BISC 220Lg", "title": "General Biology: Cell Biology and Physiology", "units": "4" },
+    "BISC 221":  { "catalog": "BISC 221Lg", "title": "Advanced General Biology: Cell Biology and Physiology", "units": "4" },
+    "CHEM 105A": { "catalog": "CHEM 105aLg", "title": "General Chemistry", "units": "4" },
+    "CHEM 115A": { "catalog": "CHEM 115aLg", "title": "Advanced General Chemistry", "units": "4" },
+    "MATH 125":  { "catalog": "MATH 125g",  "title": "Calculus I", "units": "4" },
+    "PHYS 135A": { "catalog": "PHYS 135aLg", "title": "Physics for the Life Sciences", "units": "4" },
+    "PHYS 151":  { "catalog": "PHYS 151Lg", "title": "Fundamentals of Physics I: Mechanics, Oscillations and Waves", "units": "4" },
+    "PHYS 161":  { "catalog": "PHYS 161Lg", "title": "Advanced Principles of Physics I", "units": "4" },
+    "PHYS 171":  { "catalog": "PHYS 171Lg", "title": "Applied Physics I: Mechanics", "units": "4" },
+    "QBIO 310":  { "catalog": "QBIO 310",   "title": "Statistical Thinking for Quantitative Biology", "units": "4" },
+    "MATH 307":  { "catalog": "MATH 307",   "title": "Statistical Inference and Data Analysis I", "units": "4" },
+
+    "CSCI 103":  { "catalog": "CSCI 103L",  "title": "Object Oriented Programming", "units": "4" },
+    "CSCI 104":  { "catalog": "CSCI 104L",  "title": "Data Structures", "units": "4" },
+    "CSCI 170":  { "catalog": "CSCI 170",   "title": "Discrete Methods in Computer Science", "units": "4" },
+    "CSCI 113":  { "catalog": "CSCI 113x",  "title": "Programming Fundamentals for Computing", "units": "4" },
+    "CSCI 114":  { "catalog": "CSCI 114x",  "title": "Programming for Applications of Computing", "units": "4" },
+    "QBIO 401":  { "catalog": "QBIO 401",   "title": "Introduction to Computational Analysis of Biological Data", "units": "4" },
+    "QBIO 460":  { "catalog": "QBIO 460",   "title": "Introduction to Machine Learning in Biology", "units": "4" },
+    "QBIO 465":  { "catalog": "QBIO 465",   "title": "Artificial Intelligence in Biology and Medicine", "units": "4" },
+
+    "CHEM 105B": { "catalog": "CHEM 105bL", "title": "General Chemistry", "units": "4" },
+    "CHEM 115B": { "catalog": "CHEM 115bL", "title": "Advanced General Chemistry", "units": "4" },
+    "CHEM 322A": { "catalog": "CHEM 322aL", "title": "Organic Chemistry", "units": "4" },
+    "CHEM 322B": { "catalog": "CHEM 322bL", "title": "Organic Chemistry", "units": "4" },
+    "CSCI 270":  { "catalog": "CSCI 270",   "title": "Introduction to Algorithms and Theory of Computing", "units": "4" },
+    "MATH 126":  { "catalog": "MATH 126g",  "title": "Calculus II", "units": "4" },
+    "MATH 127":  { "catalog": "MATH 127",   "title": "Enhanced Calculus II", "units": "4" },
+    "MATH 129":  { "catalog": "MATH 129",   "title": "Calculus II for Engineers and Scientists", "units": "4" },
+    "MATH 225":  { "catalog": "MATH 225",   "title": "Linear Algebra and Linear Differential Equations", "units": "4" },
+    "MATH 245":  { "catalog": "MATH 245",   "title": "Mathematics of Physics and Engineering I", "units": "4" },
+    "MATH 226":  { "catalog": "MATH 226g",  "title": "Calculus III", "units": "4" },
+    "MATH 227":  { "catalog": "MATH 227",   "title": "Enhanced Calculus III", "units": "4" },
+    "MATH 229":  { "catalog": "MATH 229",   "title": "Calculus III for Engineers and Scientists", "units": "4" },
+    "MATH 407":  { "catalog": "MATH 407",   "title": "Probability Theory", "units": "4" },
+    "MATH 308":  { "catalog": "MATH 308",   "title": "Statistical Inference and Data Analysis II", "units": "4" },
+    "MATH 408":  { "catalog": "MATH 408",   "title": "Mathematical Statistics", "units": "4" },
+    "PHYS 135B": { "catalog": "PHYS 135bL", "title": "Physics for the Life Sciences", "units": "4" },
+    "PHYS 152":  { "catalog": "PHYS 152L",  "title": "Fundamentals of Physics II: Electricity and Magnetism", "units": "4" },
+    "PHYS 162":  { "catalog": "PHYS 162L",  "title": "Advanced Principles of Physics II", "units": "4" },
+    "PHYS 172":  { "catalog": "PHYS 172L",  "title": "Applied Physics II: Electricity, Magnetism and Optics", "units": "4" },
+
+    "QBIO 475":  { "catalog": "QBIO 475",   "title": "Statistical and Evolutionary Genetics", "units": "4" },
+    "QBIO 478":  { "catalog": "QBIO 478",   "title": "Computational Genome Analysis", "units": "4" },
+    "QBIO 481":  { "catalog": "QBIO 481",   "title": "Structural Bioinformatics: From Atoms to Cells", "units": "4" },
+    "QBIO 482":  { "catalog": "QBIO 482",   "title": "Systems Biology: Modeling the Dynamics of Life", "units": "4" },
+
+    "BISC 300":  { "catalog": "BISC 300L",  "title": "Microbiology", "units": "4" },
+    "BISC 307":  { "catalog": "BISC 307L",  "title": "General Physiology", "units": "4" },
+    "BISC 313":  { "catalog": "BISC 313L",  "title": "Evolution and Population Genetics", "units": "4" },
+    "BISC 315":  { "catalog": "BISC 315L",  "title": "Introduction to Ecology", "units": "4" },
+    "BISC 320":  { "catalog": "BISC 320Lg", "title": "Molecular Biology", "units": "4" },
+    "BISC 325":  { "catalog": "BISC 325",   "title": "Genetics", "units": "4" },
+    "BISC 330":  { "catalog": "BISC 330L",  "title": "Biochemistry", "units": "4" },
+    "BISC 312":  { "catalog": "BISC 312x",  "title": "Molecular Biochemistry", "units": "4" },
+    "CHEM 350":  { "catalog": "CHEM 350",   "title": "Molecular Principles of Biochemistry", "units": "4" },
+    "BISC 403":  { "catalog": "BISC 403",   "title": "Advanced Molecular Biology", "units": "4" },
+    "BISC 406":  { "catalog": "BISC 406L",  "title": "Biotechnology", "units": "4" },
+    "BISC 407":  { "catalog": "BISC 407",   "title": "Cellular and Molecular Neuroscience", "units": "4" },
+    "BISC 408":  { "catalog": "BISC 408",   "title": "Systems Neuroscience: From Synapses to Perception", "units": "4" },
+    "BISC 410":  { "catalog": "BISC 410",   "title": "Applications of Molecular Biology to Medicine", "units": "4" },
+    "BISC 411":  { "catalog": "BISC 411",   "title": "Advanced Cell Biology", "units": "4" },
+    "BISC 421":  { "catalog": "BISC 421",   "title": "Neurobiology", "units": "4" },
+    "BISC 423":  { "catalog": "BISC 423",   "title": "Epilepsy to Ecstasy: Biological Basis of Neurological Disorders", "units": "4" },
+    "BISC 424":  { "catalog": "BISC 424",   "title": "Brain Architecture", "units": "4" },
+    "BISC 434":  { "catalog": "BISC 434",   "title": "Introduction to Genome Science", "units": "4" },
+    "BISC 435":  { "catalog": "BISC 435",   "title": "Advanced Biochemistry", "units": "4" },
+    "BISC 450":  { "catalog": "BISC 450L",  "title": "Principles of Immunology", "units": "4" },
+    "BISC 473":  { "catalog": "BISC 473L",  "title": "Biological Oceanography", "units": "4" },
+    "BME 430":   { "catalog": "BME 430",    "title": "Principles and Applications of Systems Biology", "units": "4" },
+    "CSCI 360":  { "catalog": "CSCI 360",   "title": "Artificial Intelligence: Principles and Foundations", "units": "4" },
+    "CSCI 467":  { "catalog": "CSCI 467",   "title": "Foundations of Machine Learning", "units": "4" },
+    "ECON 460":  { "catalog": "ECON 460",   "title": "Economic Applications of Machine Learning", "units": "4" },
+    "LING 486":  { "catalog": "LING 486",   "title": "Natural Language Processing", "units": "4" },
+    "LING 487":  { "catalog": "LING 487",   "title": "Speech Synthesis and Recognition", "units": "4" },
+    "MATH 447":  { "catalog": "MATH 447",   "title": "Mathematics of Machine Learning", "units": "4" },
+    "MATH 466":  { "catalog": "MATH 466",   "title": "Dynamic Modeling", "units": "4" },
+    "MATH 467":  { "catalog": "MATH 467",   "title": "Theory and Computational Methods for Optimization", "units": "4" },
+    "PHYS 444":  { "catalog": "PHYS 444",   "title": "Physical Biology: From Molecules to Cells", "units": "4" },
+    "PSYC 450":  { "catalog": "PSYC 450",   "title": "Neural Network Models of Social and Cognitive Processes", "units": "4" },
+    "QBIO 479":  { "catalog": "QBIO 479L",  "title": "Computational Genome Analysis Laboratory", "units": "4" },
+    "QBIO 499":  { "catalog": "QBIO 499",   "title": "Special Topics", "units": "1-8" },
+    "SCRM 487":  { "catalog": "SCRM 487",   "title": "Regenerative Medicine: Principles, Paradigms and Practice", "units": "4" },
+
+    "QBIO 490":  { "catalog": "QBIO 490x",  "title": "Directed Research", "units": "1-8" },
+    "QBIO 493":  { "catalog": "QBIO 493",   "title": "Quantitative Biology Honors Seminar", "units": "1" },
+    "QBIO 494":  { "catalog": "QBIO 494",   "title": "Quantitative Biology Honors Thesis", "units": "1" }
+  },
+
+  "slots": {
+    "QBIO 105":  { "courses": ["QBIO 105"] },
+    "bio1":      { "label": "General Biology I", "courses": ["BISC 120", "BISC 121"] },
+    "bio2":      { "label": "General Biology II", "courses": ["BISC 220", "BISC 221"] },
+    "chem1":     { "label": "General Chemistry I", "courses": ["CHEM 105A", "CHEM 115A"] },
+    "MATH 125":  { "courses": ["MATH 125"] },
+    "phys1":     { "label": "Physics I", "courses": ["PHYS 135A", "PHYS 151", "PHYS 161", "PHYS 171"] },
+    "stats":     { "label": "Statistics", "courses": ["QBIO 310", "MATH 307"] },
+
+    "CSCI 103":  { "courses": ["CSCI 103"] },
+    "CSCI 104":  { "courses": ["CSCI 104"] },
+    "CSCI 170":  { "courses": ["CSCI 170"] },
+    "CSCI 113":  { "courses": ["CSCI 113"] },
+    "CSCI 114":  { "courses": ["CSCI 114"] },
+    "QBIO 401":  { "courses": ["QBIO 401"] },
+    "QBIO 460":  { "courses": ["QBIO 460"] },
+    "QBIO 465":  { "courses": ["QBIO 465"] },
+
+    "chem2":     { "label": "General Chemistry II", "courses": ["CHEM 105B", "CHEM 115B"] },
+    "CHEM 322A": { "label": "Organic Chemistry I", "courses": ["CHEM 322A"] },
+    "CHEM 322B": { "label": "Organic Chemistry II", "courses": ["CHEM 322B"] },
+    "CSCI 270":  { "courses": ["CSCI 270"] },
+    "calc2":     { "label": "Calculus II", "courses": ["MATH 126", "MATH 127", "MATH 129"] },
+    "linalg":    { "label": "Linear Algebra / Diff. Eq.", "courses": ["MATH 225", "MATH 245"] },
+    "calc3":     { "label": "Calculus III", "courses": ["MATH 226", "MATH 227", "MATH 229"] },
+    "MATH 407":  { "courses": ["MATH 407"] },
+    "stats2":    { "label": "Statistics II", "courses": ["MATH 308", "MATH 408"] },
+    "phys2":     { "label": "Physics II", "courses": ["PHYS 135B", "PHYS 152", "PHYS 162", "PHYS 172"] },
+
+    "QBIO 475":  { "courses": ["QBIO 475"] },
+    "QBIO 478":  { "courses": ["QBIO 478"] },
+    "QBIO 481":  { "courses": ["QBIO 481"] },
+    "QBIO 482":  { "courses": ["QBIO 482"] },
+
+    "BISC 300":  { "courses": ["BISC 300"] },
+    "BISC 307":  { "courses": ["BISC 307"] },
+    "BISC 313":  { "courses": ["BISC 313"] },
+    "BISC 315":  { "courses": ["BISC 315"] },
+    "BISC 320":  { "courses": ["BISC 320"] },
+    "BISC 325":  { "courses": ["BISC 325"] },
+    "biochem":   { "label": "Biochemistry", "courses": ["BISC 330", "BISC 312", "CHEM 350"] },
+    "BISC 403":  { "courses": ["BISC 403"] },
+    "BISC 406":  { "courses": ["BISC 406"] },
+    "BISC 407":  { "courses": ["BISC 407"] },
+    "BISC 408":  { "courses": ["BISC 408"] },
+    "BISC 410":  { "courses": ["BISC 410"] },
+    "BISC 411":  { "courses": ["BISC 411"] },
+    "BISC 421":  { "courses": ["BISC 421"] },
+    "BISC 423":  { "courses": ["BISC 423"] },
+    "BISC 424":  { "courses": ["BISC 424"] },
+    "BISC 434":  { "courses": ["BISC 434"] },
+    "BISC 435":  { "courses": ["BISC 435"] },
+    "BISC 450":  { "courses": ["BISC 450"] },
+    "BISC 473":  { "courses": ["BISC 473"] },
+    "BME 430":   { "courses": ["BME 430"] },
+    "CSCI 360":  { "courses": ["CSCI 360"] },
+    "CSCI 467":  { "courses": ["CSCI 467"] },
+    "ECON 460":  { "courses": ["ECON 460"] },
+    "LING 486":  { "courses": ["LING 486"] },
+    "LING 487":  { "courses": ["LING 487"] },
+    "MATH 447":  { "courses": ["MATH 447"] },
+    "MATH 466":  { "courses": ["MATH 466"] },
+    "MATH 467":  { "courses": ["MATH 467"] },
+    "PHYS 444":  { "courses": ["PHYS 444"] },
+    "PSYC 450":  { "courses": ["PSYC 450"] },
+    "QBIO 479":  { "courses": ["QBIO 479"] },
+    "QBIO 499":  { "courses": ["QBIO 499"] },
+    "SCRM 487":  { "courses": ["SCRM 487"] },
+
+    "QBIO 490":  { "courses": ["QBIO 490"] },
+    "QBIO 493":  { "courses": ["QBIO 493"] },
+    "QBIO 494":  { "courses": ["QBIO 494"] }
+  },
+
+  "sections": [
+    {
+      "id": "intro", "title": "Required Introductory Course", "units": "2",
+      "rule": "all", "slots": ["QBIO 105"]
+    },
+    {
+      "id": "science", "title": "Required Foundational Science Courses", "units": "24",
+      "rule": "all", "slots": ["bio1", "bio2", "chem1", "MATH 125", "phys1", "stats"]
+    },
+    {
+      "id": "computing", "title": "Required Foundational Computing Courses", "units": "12",
+      "rule": "track", "text": "Choose one of the following tracks, with three courses in each.",
+      "tracks": [
+        { "name": "Track 1", "lines": [["CSCI 103"], ["CSCI 104"], ["CSCI 170"]] },
+        { "name": "Track 2", "lines": [["CSCI 113"], ["CSCI 114"], ["QBIO 401", "QBIO 460", "QBIO 465"]] },
+        { "name": "Track 3", "lines": [["CSCI 103"], ["CSCI 114"], ["QBIO 401", "QBIO 460", "QBIO 465"]] }
+      ]
+    },
+    {
+      "id": "specialization", "title": "Specialization Courses", "units": "12",
+      "rule": "choose", "choose": 3,
+      "text": "Choose three of the following courses. Courses taken to satisfy the Foundational Computing Course requirement may not be used as Specialization Courses.",
+      "slots": ["chem2", "CHEM 322A", "CHEM 322B", "CSCI 270", "calc2", "linalg", "calc3", "MATH 407", "stats2", "phys2", "QBIO 401", "QBIO 460", "QBIO 465"]
+    },
+    {
+      "id": "capstone", "title": "Capstone Courses", "units": "8",
+      "rule": "choose", "choose": 2,
+      "text": "Choose two of the following four capstone courses.",
+      "slots": ["QBIO 475", "QBIO 478", "QBIO 481", "QBIO 482"]
+    },
+    {
+      "id": "electives", "title": "Upper-Division Electives", "units": "8+",
+      "rule": "choose", "choose": 2,
+      "text": "Choose two to three of the following courses (minimum 8 units). Courses taken to satisfy the Foundational Computing, Specialization or Capstone requirements may not double-count toward upper-division electives.",
+      "slots": ["BISC 300", "BISC 307", "BISC 313", "BISC 315", "BISC 320", "BISC 325", "biochem", "BISC 403", "BISC 406", "BISC 407", "BISC 408", "BISC 410", "BISC 411", "BISC 421", "BISC 423", "BISC 424", "BISC 434", "BISC 435", "BISC 450", "BISC 473", "BME 430", "CSCI 360", "CSCI 467", "ECON 460", "LING 486", "LING 487", "MATH 447", "MATH 466", "MATH 467", "PHYS 444", "PSYC 450", "QBIO 401", "QBIO 460", "QBIO 465", "QBIO 475", "QBIO 478", "QBIO 479", "QBIO 481", "QBIO 482", "QBIO 499", "SCRM 487"]
+    },
+    {
+      "id": "research", "title": "Research Experience", "units": "6",
+      "rule": "research",
+      "text": "Students are required to enroll in a total of 6 units of directed research in a lab approved by the Quantitative Biology Executive Committee or assigned faculty adviser. Students in the honors program will enroll in both QBIO 493 and QBIO 494.",
+      "slots": ["QBIO 490", "QBIO 493", "QBIO 494"]
+    }
+  ],
+
+  "placement": {
+    "courses": ["MATH 040", "MATH 108", "CHEM 050"],
+    "text": "Entry-level prerequisite. Most QBIO students meet it through a placement exam or AP credit (AP Precalculus 4 or 5 waives MATH 108) instead of taking the course. Check your placement results with your advisor."
+  },
+
+  "examCredit": {
+    "source": "https://arr.usc.edu/ap-exam-credit-at-usc/",
+    "summary": "USC gives 4 units of elective credit for every AP score of 4 or 5, but AP scores don't earn USC course equivalence. Instead, the department that teaches a course can waive it as a prerequisite, and your major advisor can apply it to a degree requirement.",
+    "stars": "On STARS, AP credit appears as AP plus the College Board exam number, for example \"AP68:COMP 4.0 TR AP CALCULUS BC\". It counts toward a major requirement only after your advisor adds a substitution, which STARS shows as a note such as \"RE - SUB AP68:COMP FOR MATH125\" (RE = requirement exchange).",
+    "noWaiver": "AP Physics and AP Statistics count for elective units and GE, but aren't on USC's list of prerequisite waivers, so they don't replace PHYS courses, QBIO 310 or MATH 307.",
+    "exams": [
+      {
+        "id": "calc-ab", "name": "AP Calculus AB", "short": "AP Calc AB", "stars": "AP66",
+        "options": [{ "value": "45", "label": "4 or 5", "waives": ["MATH 125"] }],
+        "note": "The AB subscore from the BC exam doesn't count."
+      },
+      {
+        "id": "calc-bc", "name": "AP Calculus BC", "short": "AP Calc BC", "stars": "AP68",
+        "options": [
+          { "value": "4", "label": "4", "waives": ["MATH 125"] },
+          { "value": "5", "label": "5", "waives": ["MATH 125", "MATH 126"] }
+        ]
+      },
+      {
+        "id": "cs-a", "name": "AP Computer Science A", "short": "AP CS A", "stars": "AP31",
+        "options": [{ "value": "45", "label": "4 or 5", "waives": ["CSCI 102"] }],
+        "source": "https://viterbiadmission.usc.edu/wp-content/uploads/2026/06/CS_Curriculum_2026.pdf"
+      },
+      {
+        "id": "csci102-challenge", "name": "CSCI 102 Challenge Exam", "short": "CSCI 102 challenge exam",
+        "options": [{ "value": "pass", "label": "Passed", "waives": ["CSCI 102"] }],
+        "source": "https://viterbiadmission.usc.edu/wp-content/uploads/2026/06/CS_Curriculum_2026.pdf"
+      },
+      {
+        "id": "chem", "name": "AP Chemistry", "short": "AP Chem", "stars": "AP25",
+        "options": [{ "value": "45", "label": "4 or 5", "waives": ["CHEM 105A"] }],
+        "note": "You'd start with CHEM 105b. Many medical schools don't accept AP credit in place of college chemistry or biology."
+      },
+      {
+        "id": "bio", "name": "AP Biology", "short": "AP Bio", "stars": "AP20",
+        "options": [
+          { "value": "120", "label": "4 or 5, BISC 120", "waives": ["BISC 120"] },
+          { "value": "220", "label": "4 or 5, BISC 220", "waives": ["BISC 220"] }
+        ],
+        "note": "Waives either BISC 120 or BISC 220; a Biological Sciences advisor decides which."
+      },
+      {
+        "id": "psych", "name": "AP Psychology", "short": "AP Psych", "stars": "AP85",
+        "options": [{ "value": "45", "label": "4 or 5", "waives": ["PSYC 100"] }]
+      }
+    ]
+  }
+}
