@@ -62,6 +62,7 @@ body {
   font: 14px/1.45 var(--font-ui);
 }
 button, input, select { font: inherit; color: inherit; }
+[hidden] { display: none !important; } /* el.hidden must beat display rules like .toggle's */
 :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 
 .cat-core { --cat: var(--c-core); }
@@ -280,8 +281,6 @@ button, input, select { font: inherit; color: inherit; }
 }
 .chip[data-status="ready"] .tick { border-color: var(--ok); border-width: 2px; }
 /* The "can take now" frontier, shown once something is marked */
-.marks:not(.focusing) .chip[data-status="ready"] { background: color-mix(in srgb, var(--ok) 14%, transparent); }
-.marks:not(.focusing) .chip[data-status="ready"] .code { color: color-mix(in srgb, var(--ok) 75%, var(--ink)); }
 .marks:not(.focusing) .node.ready { border-color: var(--ok); box-shadow: 0 0 0 2px color-mix(in srgb, var(--ok) 28%, transparent); }
 .chip[data-status="taken"] .tick { border-color: var(--ok); background: var(--ok); }
 .chip[data-status="taken"] .tick::after { opacity: 1; }
@@ -764,7 +763,13 @@ button, input, select { font: inherit; color: inherit; }
   function buildGraph() {
     const visibleSlots = Object.keys(R.slots).filter(id => (state.electives || !electiveOnly(id)) && R.slots[id].courses.some(c => !HIDDEN.has(c)));
     const shown = id => R.slots[id].courses.filter(c => !HIDDEN.has(c));
-    const slotCourses = new Set(visibleSlots.flatMap(shown));
+    const slotCourses = new Set(visibleSlots.flatMap(shown)); // every option still counts for steps
+    // Once one option is taken or credited, the requirement shows just that course.
+    const displayed = id => {
+      const all = shown(id);
+      const chosen = all.filter(c => state.taken.has(c) || CREDIT.has(c));
+      return chosen.length ? chosen : all;
+    };
     const outsideCodes = new Set();
     if (state.outside) {
       slotCourses.forEach(c => mapGroups(c).forEach(g => {
@@ -798,7 +803,7 @@ button, input, select { font: inherit; color: inherit; }
     // already met by AP credit or a waiver collapses into a single box before step 1.
     const nodes = new Map(), nodeOf = new Map();
     visibleSlots.forEach(id => {
-      const courses = shown(id);
+      const courses = displayed(id);
       const byStep = new Map();
       const met = state.waived.has(id) || courses.some(c => CREDIT.has(c));
       courses.forEach(c => {
@@ -810,7 +815,7 @@ button, input, select { font: inherit; color: inherit; }
       steps.forEach(t => {
         const nid = "s:" + id + (steps.length > 1 ? "@" + t : "");
         nodes.set(nid, { id: nid, kind: "slot", slot: id, courses: byStep.get(t), tier: t, cat: slotCat(id),
-          multi: courses.length > 1, otherSteps: steps.filter(s => s !== t) });
+          multi: shown(id).length > 1, otherSteps: steps.filter(s => s !== t) });
         byStep.get(t).forEach(c => nodeOf.set(c, nid));
       });
     });
@@ -1464,8 +1469,8 @@ button, input, select { font: inherit; color: inherit; }
     const missing = Object.keys(R.courses).filter(c => !hasData(c)).map(disp);
     parts.push('<div class="about"><h3 style="margin:6px 0 0">How to read the map</h3>' +
       "<p><strong>Columns</strong> show the earliest step you could take each course, one step after its prerequisites. When a prerequisite can be met several ways, the column follows the fastest one; arrows show those fastest routes, and selecting a course also lights up its slower alternatives (such as MATH 407 for QBIO 475).</p>" +
-      "<p><strong>Boxes with several codes</strong> are one requirement line from the catalogue (for example Physics I: PHYS 135a, 151, 161 or 171). If its options open up at different steps, the requirement appears once per step, with a note pointing to the other step.</p>" +
-      "<p><strong>AP credit and waivers</strong> move the courses they cover into an \"AP &amp; waived\" column before step 1, and everything that depends on them shifts left. Ticking courses as taken doesn't move anything.</p>" +
+      "<p><strong>Boxes with several codes</strong> are one requirement line from the catalogue (for example Physics I: PHYS 135a, 151, 161 or 171). If its options open up at different steps, the requirement appears once per step, with a note pointing to the other step. Once you tick or get AP credit for one option, the others are hidden.</p>" +
+      "<p><strong>AP credit and waivers</strong> move the courses they cover into an \"AP &amp; waived\" column before step 1, and everything that depends on them shifts left. Ticking a course as taken doesn't shift anything; it only hides the other options of its requirement.</p>" +
       (HIDDEN.size ? "<p><strong>Left off the map:</strong> " + esc([...HIDDEN].map(disp).join(", ")) + ", which QBIO students rarely take. They still count for their requirements.</p>" : "") +
       Object.keys(TYPICAL).map(c => "<p>" + esc(TYPICAL[c].note) + "</p>").join("") +
       "<p><strong>F / Sp / Su</strong> show which terms the course actually ran between " + termName(D.terms[D.terms.length - 1]) + " and " + termName(D.terms[0]) + ".</p>" +
@@ -1547,7 +1552,7 @@ button, input, select { font: inherit; color: inherit; }
 
   function toggleTaken(code) {
     if (state.taken.has(code)) state.taken.delete(code); else state.taken.add(code);
-    refresh();
+    render(); // the other options of a requirement are hidden once one is taken
   }
 
   nodesEl.addEventListener("click", ev => {
