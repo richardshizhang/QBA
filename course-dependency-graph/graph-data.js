@@ -907,6 +907,7 @@ window.QBIO_DATA = {
     "units": "12",
     "rule": "choose",
     "choose": 3,
+    "note": "Study-abroad courses can also count toward this requirement; check with your advisor how yours transfer.",
     "text": "Choose three of the following courses. Courses taken to satisfy the Foundational Computing Course requirement may not be used as Specialization Courses.",
     "slots": [
      "chem2",
@@ -944,6 +945,8 @@ window.QBIO_DATA = {
     "units": "8+",
     "rule": "choose",
     "choose": 2,
+    "minUnits": 8,
+    "note": "Study-abroad courses can also count toward this requirement; check with your advisor how yours transfer.",
     "text": "Choose two to three of the following courses (minimum 8 units). Courses taken to satisfy the Foundational Computing, Specialization or Capstone requirements may not double-count toward upper-division electives.",
     "slots": [
      "BISC 300",
@@ -1010,6 +1013,20 @@ window.QBIO_DATA = {
      "MATH 245"
     ],
     "note": "Rarely taken by QBIO students, so it's left off the map to keep it readable. It still counts for the requirement."
+   },
+   "hideWhenTaken": {
+    "rules": {
+     "CSCI 103": [
+      "CSCI 113"
+     ],
+     "CSCI 113": [
+      "CSCI 103"
+     ],
+     "CSCI 104": [
+      "CSCI 114"
+     ]
+    },
+    "note": "Once you take one, the map hides the course it replaces: CSCI 103 and CSCI 113 are alternative first CS courses, and CSCI 104 replaces CSCI 114."
    },
    "typicalPrereqs": {
     "CSCI 270": {

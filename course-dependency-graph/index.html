@@ -471,10 +471,14 @@ button, input, select { font: inherit; color: inherit; }
 .option:hover { border-color: var(--faint); }
 .option .row { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
 
-.sec { display: flex; flex-direction: column; gap: 8px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+.sec { padding-bottom: 14px; border-bottom: 1px solid var(--line); }
 .sec:last-of-type { border-bottom: 0; }
-.sec-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.sec-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; cursor: pointer; list-style: none; }
+.sec-head::-webkit-details-marker { display: none; }
 .sec-head strong { font-size: 14px; font-weight: 700; }
+.sec-head strong::before { content: "▾"; display: inline-block; width: 1em; color: var(--faint); transition: transform 0.15s ease; }
+.sec:not([open]) .sec-head strong::before { transform: rotate(-90deg); }
+.sec-body { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
 .prog { font: 600 12px/1 var(--font-code); color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .prog.full { color: var(--ok); }
 .rule { font-size: 12.5px; color: var(--muted); }
@@ -495,6 +499,9 @@ button, input, select { font: inherit; color: inherit; }
 .pill.credit::before { content: "AP"; font: 600 9.5px/1 var(--font-code); }
 .pill.waived { border-style: dashed; border-color: var(--muted); background: var(--sunk); }
 .pill.waived::after { content: "waived"; font-size: 10.5px; color: var(--muted); }
+/* Met, but counted toward another requirement (or not needed here) */
+.pill.elsewhere { border-style: dashed; background: var(--surface); color: var(--muted); }
+.pill .where { font-size: 10.5px; color: var(--faint); }
 .lg-tick.waived { background: var(--muted); border-color: var(--muted); }
 .aptag {
   display: inline-block;
@@ -686,7 +693,7 @@ button, input, select { font: inherit; color: inherit; }
   // ---------- state ----------
   const STORE = "qbio-course-map:v1";
   // waived: requirement lines (slot ids) or outside-the-major courses an advisor has waived.
-  const state = { taken: new Set(), waived: new Set(), credit: {}, creditOpen: null, electives: false, outside: true, showCredit: true, zoom: 1, focus: null };
+  const state = { taken: new Set(), waived: new Set(), credit: {}, creditOpen: null, collapsed: new Set(), electives: false, outside: true, showCredit: true, zoom: 1, focus: null };
   try {
     const saved = JSON.parse(localStorage.getItem(STORE) || "null");
     if (saved) {
@@ -695,6 +702,7 @@ button, input, select { font: inherit; color: inherit; }
       if (typeof saved.electives === "boolean") state.electives = saved.electives;
       if (typeof saved.outside === "boolean") state.outside = saved.outside;
       if (typeof saved.showCredit === "boolean") state.showCredit = saved.showCredit;
+      state.collapsed = new Set((saved.collapsed || []).filter(id => R.sections.some(s => s.id === id)));
       Object.entries(saved.credit || {}).forEach(([id, v]) => {
         const ex = EXAMS.find(e => e.id === id);
         if (ex && ex.options.some(o => o.value === v)) state.credit[id] = v;
@@ -703,7 +711,7 @@ button, input, select { font: inherit; color: inherit; }
   } catch (e) { /* storage unavailable: start fresh */ }
   function save() {
     try {
-      localStorage.setItem(STORE, JSON.stringify({ taken: [...state.taken], waived: [...state.waived], credit: state.credit, electives: state.electives, outside: state.outside, showCredit: state.showCredit }));
+      localStorage.setItem(STORE, JSON.stringify({ taken: [...state.taken], waived: [...state.waived], credit: state.credit, electives: state.electives, outside: state.outside, showCredit: state.showCredit, collapsed: [...state.collapsed] }));
     } catch (e) { /* ignore */ }
   }
 
@@ -764,11 +772,17 @@ button, input, select { font: inherit; color: inherit; }
     const visibleSlots = Object.keys(R.slots).filter(id => (state.electives || !electiveOnly(id)) && R.slots[id].courses.some(c => !HIDDEN.has(c)));
     const shown = id => R.slots[id].courses.filter(c => !HIDDEN.has(c));
     const slotCourses = new Set(visibleSlots.flatMap(shown)); // every option still counts for steps
-    // Once one option is taken or credited, the requirement shows just that course.
+    // Once one option is taken or credited, the requirement shows just that course, and
+    // courses it replaces elsewhere are hidden (taking CSCI 103 hides CSCI 113).
+    const chosen = c => state.taken.has(c) || CREDIT.has(c);
+    const replaced = new Set();
+    Object.entries((ADJ.hideWhenTaken && ADJ.hideWhenTaken.rules) || {}).forEach(([key, list]) => {
+      if (chosen(key)) list.forEach(c => { if (!chosen(c)) replaced.add(c); });
+    });
     const displayed = id => {
-      const all = shown(id);
-      const chosen = all.filter(c => state.taken.has(c) || CREDIT.has(c));
-      return chosen.length ? chosen : all;
+      const all = shown(id).filter(c => !replaced.has(c));
+      const picked = all.filter(chosen);
+      return picked.length ? picked : all;
     };
     const outsideCodes = new Set();
     if (state.outside) {
@@ -804,6 +818,7 @@ button, input, select { font: inherit; color: inherit; }
     const nodes = new Map(), nodeOf = new Map();
     visibleSlots.forEach(id => {
       const courses = displayed(id);
+      if (!courses.length) return; // replaced by a course you've taken
       const byStep = new Map();
       const met = state.waived.has(id) || courses.some(c => CREDIT.has(c));
       courses.forEach(c => {
@@ -919,13 +934,24 @@ button, input, select { font: inherit; color: inherit; }
       for (let i = 0; i + 1 < e.chain.length; i++) link(e.chain[i], e.chain[i + 1]);
     });
 
+    // A box with no arrows, or only arrows to the "AP & waived" column, has nothing to pull
+    // it into place and drifts to the bottom; anchor it to same-category boxes in the
+    // neighbouring columns instead (QBIO 481 next to the other capstones under AP Calc).
+    const realNb = n => (up.get(n) || []).concat(down.get(n) || []);
+    const peers = n => [n.tier - 1, n.tier + 1].flatMap(t => layers[t] || []).filter(m => m.kind !== "dummy" && m.cat === n.cat);
+    const loose = n => n.kind !== "dummy" && realNb(n).every(m => m.tier === 0 && n.tier > 0);
+    const anchors = (n, map) => {
+      if (loose(n)) { const p = peers(n); if (p.length) return p; }
+      return map ? map.get(n) || [] : realNb(n);
+    };
+
     // Barycenter ordering to reduce crossings; keep the best ordering seen.
     const pos = new Map();
     const setPos = () => layers.forEach(l => l.forEach((n, i) => pos.set(n, i)));
     setPos();
     const sortLayer = (l, nb) => {
       const keyed = l.map((n, i) => {
-        const ns = nb.get(n);
+        const ns = anchors(n, nb);
         return { n, i, k: ns && ns.length ? ns.reduce((s, m) => s + pos.get(m), 0) / ns.length : i };
       });
       keyed.sort((a, b) => a.k - b.k || a.i - b.i);
@@ -959,35 +985,66 @@ button, input, select { font: inherit; color: inherit; }
     const gap = (a, b) => (a.kind === "dummy" || b.kind === "dummy") ? 6 : VGAP;
     layers.forEach(l => { let cur = 0; l.forEach((n, i) => { y.set(n, cur); cur += n.h + (i + 1 < l.length ? gap(n, l[i + 1]) : 0); }); });
     const center = n => y.get(n) + n.h / 2;
-    const pav = vals => {
+    // Weighted pool-adjacent-violators: a heavier box holds its spot and its neighbours move.
+    const pav = (vals, weights) => {
       const blocks = [];
-      vals.forEach(v => {
-        blocks.push({ sum: v, n: 1 });
+      vals.forEach((v, i) => {
+        const w = weights ? weights[i] : 1;
+        blocks.push({ sum: v * w, w, n: 1 });
         while (blocks.length > 1) {
           const a = blocks[blocks.length - 2], b = blocks[blocks.length - 1];
-          if (a.sum / a.n <= b.sum / b.n) break;
-          a.sum += b.sum; a.n += b.n; blocks.pop();
+          if (a.sum / a.w <= b.sum / b.w) break;
+          a.sum += b.sum; a.w += b.w; a.n += b.n; blocks.pop();
         }
       });
       const out = [];
-      blocks.forEach(b => { for (let i = 0; i < b.n; i++) out.push(b.sum / b.n); });
+      blocks.forEach(b => { for (let i = 0; i < b.n; i++) out.push(b.sum / b.w); });
       return out;
     };
+    const LOOSE_WEIGHT = 6;
     const place = l => {
       if (!l.length) return;
       const off = [0];
       for (let i = 1; i < l.length; i++) off[i] = off[i - 1] + l[i - 1].h + gap(l[i - 1], l[i]);
       const want = l.map((n, i) => {
-        const ns = (up.get(n) || []).concat(down.get(n) || []);
+        const ns = anchors(n);
         const d = ns.length ? ns.reduce((s, m) => s + center(m), 0) / ns.length - n.h / 2 : y.get(n);
         return d - off[i];
       });
-      pav(want).forEach((z, i) => y.set(l[i], z + off[i]));
+      const weights = l.map(n => loose(n) && peers(n).length ? LOOSE_WEIGHT : 1);
+      pav(want, weights).forEach((z, i) => y.set(l[i], z + off[i]));
     };
     for (let it = 0; it < 8; it++) {
       for (let t = T0; t <= L; t++) place(layers[t]);
       for (let t = L; t >= T0; t--) place(layers[t]);
     }
+    // Close holes inside a column (everything below moves up together). Long arrows passing
+    // through reserve thin lanes; keep the space around those tight too.
+    const MAX_GAP = 48, LANE_GAP = 14;
+    const closeGaps = () => layers.forEach(l => {
+      for (let i = 1; i < l.length; i++) {
+        const limit = l[i].kind === "dummy" || l[i - 1].kind === "dummy" ? LANE_GAP : MAX_GAP;
+        const extra = y.get(l[i]) - (y.get(l[i - 1]) + l[i - 1].h) - limit;
+        if (extra > 0) for (let j = i; j < l.length; j++) y.set(l[j], y.get(l[j]) - extra);
+      }
+    });
+    closeGaps();
+    // Loose boxes don't affect crossings, so the ordering above never moved them. Now that
+    // their peers have final heights, slot each one in beside them while holding the other
+    // boxes nearly still, then close any holes that opened.
+    layers.forEach(l => {
+      const want = new Map(l.filter(n => loose(n) && peers(n).length)
+        .map(n => [n, peers(n).reduce((s, m) => s + center(m), 0) / peers(n).length - n.h / 2]));
+      if (!want.size) return;
+      // Other boxes keep their order (their tops already increase down the column).
+      l.sort((a, b) => (want.has(a) ? want.get(a) : y.get(a)) - (want.has(b) ? want.get(b) : y.get(b)));
+      const off = [0];
+      for (let i = 1; i < l.length; i++) off[i] = off[i - 1] + l[i - 1].h + gap(l[i - 1], l[i]);
+      const target = l.map((n, i) => (want.has(n) ? want.get(n) : y.get(n)) - off[i]);
+      pav(target, l.map(n => want.has(n) ? 1 : 50)).forEach((z, i) => y.set(l[i], z + off[i]));
+    });
+    setPos();
+    closeGaps();
     const minY = Math.min(...[...y.values()]);
     const colX = t => PAD + (t - T0) * (W + GAP_X);
     let maxY = 0;
@@ -1389,13 +1446,69 @@ button, input, select { font: inherit; color: inherit; }
     return '<div class="stack">' + parts.join("") + "</div>";
   }
 
-  function pill(id) {
+  // ---------- requirement progress without double counting ----------
+  // The catalogue doesn't let one course count twice: computing courses can't also be
+  // Specialization, and nothing used for Computing, Specialization or Capstone can be an
+  // upper-division elective. Sections claim satisfied requirement lines in catalogue order;
+  // Specialization prefers lines that can't be electives, and Electives take what's left.
+  const SECTION_SHORT = { intro: "Intro", science: "Science", computing: "Computing", specialization: "Specialization", capstone: "Capstone", electives: "Electives", research: "Research" };
+  const slotSatisfied = id => state.waived.has(id) || R.slots[id].courses.some(c => state.taken.has(c) || CREDIT.has(c));
+  const slotUnits = id => {
     const s = R.slots[id];
-    const isTaken = s.courses.some(c => state.taken.has(c));
-    const isCredit = !isTaken && s.courses.some(c => CREDIT.has(c));
-    const isWaivedSlot = !isTaken && !isCredit && state.waived.has(id);
+    const c = s.courses.find(x => state.taken.has(x) || CREDIT.has(x)) || s.courses[0];
+    return parseFloat(unitsOf(c)) || 0;
+  };
+  function allocate() {
+    const usedBy = new Map(), counted = {}, info = {};
+    const claim = (sec, id) => { usedBy.set(id, sec.id); counted[sec.id].push(id); };
+    const free = id => slotSatisfied(id) && !usedBy.has(id);
+    const laterUses = (id, i) => R.sections.slice(i + 1).filter(s => (s.slots || []).includes(id)).length;
+    R.sections.forEach((sec, i) => {
+      counted[sec.id] = [];
+      if (sec.rule === "track") {
+        // Best track: most lines met; on a tie, spend the fewest QBIO courses (they can
+        // still count as Specialization or electives).
+        let best = null;
+        sec.tracks.forEach((t, ti) => {
+          const use = [];
+          t.lines.forEach(line => { const id = line.find(x => free(x) && !use.includes(x)); if (id) use.push(id); });
+          const qbio = use.filter(id => id.startsWith("QBIO")).length;
+          if (!best || use.length > best.use.length || (use.length === best.use.length && qbio < best.qbio)) best = { ti, use, qbio };
+        });
+        // A track only claims its QBIO course once you've started its CS courses; otherwise
+        // the QBIO course is free for Specialization or electives.
+        const started = best.use.some(id => !id.startsWith("QBIO"));
+        if (started) best.use.forEach(id => claim(sec, id));
+        info[sec.id] = { track: best.ti, met: started ? best.use.length : 0, of: 3 };
+      } else if (sec.rule === "choose") {
+        const cands = sec.slots.filter(free).sort((a, b) => laterUses(a, i) - laterUses(b, i));
+        (sec.minUnits ? cands : cands.slice(0, sec.choose)).forEach(id => claim(sec, id));
+      } else {
+        sec.slots.filter(free).forEach(id => claim(sec, id));
+      }
+    });
+    return { usedBy, counted, info };
+  }
+
+  // A requirement line as a pill: counted here, counted in another section, or not needed.
+  function pill(id, secId, alloc) {
+    const s = R.slots[id];
     const target = s.courses.length > 1 ? 'data-goto-slot="' + esc(id) + '"' : 'data-goto-course="' + esc(s.courses[0]) + '"';
-    return '<button type="button" class="pill cat-' + slotCat(id) + (isTaken ? " done" : isCredit ? " done credit" : isWaivedSlot ? " waived" : "") + '" ' + target + ' title="' + esc(s.courses.map(disp).join(" / ")) + '">' + esc(slotName(id)) + "</button>";
+    let cls = "", where = "";
+    if (slotSatisfied(id)) {
+      const owner = alloc && alloc.usedBy.get(id);
+      if (alloc && owner !== secId) {
+        cls = " elsewhere";
+        where = owner ? "in " + SECTION_SHORT[owner] : "extra";
+      } else {
+        const isTaken = s.courses.some(c => state.taken.has(c));
+        const isCredit = !isTaken && s.courses.some(c => CREDIT.has(c));
+        cls = isTaken ? " done" : isCredit ? " done credit" : " waived";
+      }
+    }
+    const tip = s.courses.map(disp).join(" / ") + (where ? (where === "extra" ? " (not needed here)" : " (counted " + where + ")") : "");
+    return '<button type="button" class="pill cat-' + slotCat(id) + cls + '" ' + target + ' title="' + esc(tip) + '">' + esc(slotName(id)) +
+      (where ? '<span class="where">' + esc(where) + "</span>" : "") + "</button>";
   }
 
   function creditSection() {
@@ -1438,33 +1551,47 @@ button, input, select { font: inherit; color: inherit; }
     parts.push(creditSection());
 
     parts.push("<h3 style=\"margin-bottom:-8px\">Major requirements · " + esc(R.catalogue.replace("USC Catalogue ", "")) + " catalogue</h3>");
+    const alloc = allocate();
+    const pills = (ids, sec) => '<div class="pills">' + ids.map(id => pill(id, sec.id, alloc)).join("") + "</div>";
     R.sections.forEach(sec => {
-      let prog = "", body = "";
+      const mine = alloc.counted[sec.id];
+      let prog = "", done = false, body = sec.text ? '<p class="rule">' + esc(sec.text) + "</p>" : "";
       if (sec.rule === "all") {
-        const n = sec.slots.filter(doneSlot).length;
-        prog = n + " / " + sec.slots.length;
-        body = '<div class="pills">' + sec.slots.map(pill).join("") + "</div>";
-        if (sec.slots.length === n) prog += " ✓";
+        done = mine.length === sec.slots.length;
+        prog = mine.length + " / " + sec.slots.length;
+        body += pills(sec.slots, sec);
       } else if (sec.rule === "track") {
-        const scores = sec.tracks.map(t => t.lines.filter(l => l.some(doneSlot)).length);
-        const bestScore = Math.max(...scores);
-        prog = "best track " + bestScore + " / 3" + (bestScore === 3 ? " ✓" : "");
-        body = '<p class="rule">' + esc(sec.text) + "</p>" + sec.tracks.map(t =>
-          '<div class="track"><b>' + esc(t.name) + "</b>" + t.lines.map(l => l.length === 1 ? pill(l[0]) : '<span class="note">one of</span> ' + l.map(pill).join(" ")).join('<span class="plus">+</span>') + "</div>"
+        const t = alloc.info[sec.id];
+        done = t.met === t.of;
+        prog = (t.met ? sec.tracks[t.track].name + " · " : "") + t.met + " / " + t.of;
+        body += sec.tracks.map(tr =>
+          '<div class="track"><b>' + esc(tr.name) + "</b>" + tr.lines.map(l => l.length === 1 ? pill(l[0], sec.id, alloc)
+            : '<span class="note">one of</span> ' + l.map(x => pill(x, sec.id, alloc)).join(" ")).join('<span class="plus">+</span>') + "</div>"
         ).join("");
+      } else if (sec.rule === "choose" && sec.minUnits) {
+        const units = mine.reduce((s, id) => s + slotUnits(id), 0);
+        done = units >= sec.minUnits && mine.length >= sec.choose;
+        prog = units + " / " + sec.minUnits + " units";
+        if (state.electives) body += pills(sec.slots, sec);
+        else body += (mine.length ? pills(mine, sec) : "") +
+          '<button type="button" class="btn" data-show-electives>Show all ' + sec.slots.length + " elective options on the map</button>";
       } else if (sec.rule === "choose") {
-        const n = sec.slots.filter(doneSlot).length;
-        prog = Math.min(n, sec.choose) + " / " + sec.choose + (n >= sec.choose ? " ✓" : "");
-        const shown = sec.id === "electives" && !state.electives
-          ? '<p class="rule">' + esc(sec.text) + '</p><button type="button" class="btn" data-show-electives>Show all ' + sec.slots.length + " elective options on the map</button>"
-          : '<p class="rule">' + esc(sec.text) + "</p>" + '<div class="pills">' + sec.slots.map(pill).join("") + "</div>";
-        body = shown;
+        done = mine.length >= sec.choose;
+        prog = Math.min(mine.length, sec.choose) + " / " + sec.choose;
+        body += pills(sec.slots, sec);
       } else {
-        prog = "6 units";
-        body = '<p class="rule">' + esc(sec.text) + '</p><div class="pills">' + sec.slots.map(pill).join("") + "</div>";
+        prog = sec.units + " units";
+        body += pills(sec.slots, sec);
       }
-      parts.push('<section class="sec"><div class="sec-head"><strong>' + esc(sec.title) + ' <span class="note">' + esc(sec.units) + ' units</span></strong><span class="prog' + (prog.includes("✓") ? " full" : "") + '">' + esc(prog) + "</span></div>" + body + "</section>");
+      if (sec.note) body += '<p class="note">' + esc(sec.note) + "</p>";
+      const open = !state.collapsed.has(sec.id);
+      parts.push('<details class="sec" data-sec="' + esc(sec.id) + '"' + (open ? " open" : "") + '><summary class="sec-head"><strong>' + esc(sec.title) +
+        ' <span class="note">' + esc(sec.units) + ' units</span></strong><span class="prog' + (done ? " full" : "") + '">' + esc(prog + (done ? " ✓" : "")) + "</span></summary>" +
+        '<div class="sec-body">' + body + "</div></details>");
     });
+    if (R.sections.some(s => s.rule !== "all")) {
+      parts.push('<p class="note" style="margin-top:-6px">Each course counts toward one requirement only, as the catalogue requires; a course already used elsewhere is marked "in Computing", "in Specialization" and so on.</p>');
+    }
 
     const missing = Object.keys(R.courses).filter(c => !hasData(c)).map(disp);
     parts.push('<div class="about"><h3 style="margin:6px 0 0">How to read the map</h3>' +
@@ -1473,6 +1600,7 @@ button, input, select { font: inherit; color: inherit; }
       "<p><strong>AP credit and waivers</strong> move the courses they cover into an \"AP &amp; waived\" column before step 1, and everything that depends on them shifts left. Ticking a course as taken doesn't shift anything; it only hides the other options of its requirement.</p>" +
       (HIDDEN.size ? "<p><strong>Left off the map:</strong> " + esc([...HIDDEN].map(disp).join(", ")) + ", which QBIO students rarely take. They still count for their requirements.</p>" : "") +
       Object.keys(TYPICAL).map(c => "<p>" + esc(TYPICAL[c].note) + "</p>").join("") +
+      (ADJ.hideWhenTaken ? "<p>" + esc(ADJ.hideWhenTaken.note) + "</p>" : "") +
       "<p><strong>F / Sp / Su</strong> show which terms the course actually ran between " + termName(D.terms[D.terms.length - 1]) + " and " + termName(D.terms[0]) + ".</p>" +
       '<h3 style="margin:6px 0 0">About the data</h3>' +
       "<p>Requirements are transcribed from the <a href=\"" + esc(R.source) + "\" target=\"_blank\" rel=\"noopener\">" + esc(R.catalogue) + "</a>. " + (D.catalogueExport
@@ -1601,6 +1729,11 @@ button, input, select { font: inherit; color: inherit; }
   // <details> toggle events don't bubble, so listen in the capture phase.
   panel.addEventListener("toggle", ev => {
     if (ev.target.id === "credit-box") state.creditOpen = ev.target.open;
+    const sec = ev.target.dataset && ev.target.dataset.sec;
+    if (sec) {
+      if (ev.target.open) state.collapsed.delete(sec); else state.collapsed.add(sec);
+      save();
+    }
   }, true);
 
   // Click on empty canvas clears the selection; drag pans (mouse only, touch scrolls natively).

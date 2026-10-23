@@ -6,7 +6,8 @@ An interactive prerequisite map of USC's **Quantitative Biology (BS)**, built fo
 
 - **Columns are the earliest step you could take each course**, one step after its prerequisites. When a prerequisite can be met several ways, the column follows the fastest option (QBIO 475 sits right after QBIO 310, not after MATH 407).
 - **Click a course** to highlight what it needs (orange) and what it unlocks (blue). The side panel shows the exact prerequisite logic, corequisites, restrictions, a description, and which terms it actually ran.
-- **Tick the circles** next to courses you've taken. The map then shows what you can take next: those courses get a green outline, and thick green arrows run from what you've marked into them. Ticking one option of a requirement hides its alternatives (taking PHYS 135a hides 151/161/171; BISC 221 hides 220); unticking brings them back. The requirements panel tracks rough progress. Ticks are saved in the browser only.
+- **Tick the circles** next to courses you've taken. The map then shows what you can take next: those courses get a green outline, and thick green arrows run from what you've marked into them. Ticking one option of a requirement hides its alternatives (taking PHYS 135a hides 151/161/171; BISC 221 hides 220); unticking brings them back. The requirements panel tracks progress without double counting, as the catalogue requires: each course counts toward one requirement (Computing first, then Specialization, Capstone, and Electives last), and a course used elsewhere is marked "in Computing", "in Specialization" or "extra". Sections can be collapsed. Ticks are saved in the browser only.
+- Specialization and Upper-Division Electives can also be satisfied with study-abroad credit; the panel notes this, though the map can't track those courses.
 - **Enter AP and placement credit** under "AP & placement credit" (e.g. AP Calc BC 5 waives MATH 125 and 126; AP CS A waives CSCI 102). Courses that an exam can waive carry an `AP` badge. Credited and waived courses move into an "AP & waived" column before step 1, and everything that depends on them shifts left; a requirement split across steps merges back into one box (e.g. with AP Calc, PHYS 151/161/171 join PHYS 135a at step 1). The column's **Hide** button (or the "AP & waived" checkbox in the header) removes it while keeping the shifted layout.
 - **Mark advisor waivers** with the "Waive" button in a course's or requirement box's details. A waiver covers the whole requirement line, e.g. all of Physics I, and STARS shows it as CW (course waiver) or RW (requirement waiver). Waived requirements count toward progress and unlock the courses that need them, with a note that those departments may still have to approve.
 - **Boxes with several codes** are one catalogue requirement line with alternatives (e.g. Physics I = PHYS 135a / 151 / 161 / 171). If the options open up at different steps, the requirement appears once per step, marked "also step N".
@@ -53,6 +54,7 @@ It's a static page with no build step and no dependencies beyond two Google Font
 `mapAdjustments` in `data/requirements.json` holds advice from QBIO students that changes only how the map is drawn:
 
 - `hide.courses`: options QBIO students rarely take (MATH 127, 227 and 245). They're left off the map but still listed in the requirement's details.
+- `hideWhenTaken`: once you take a course, hide the separate course it replaces. CSCI 103 and 113 hide each other, and CSCI 104 hides CSCI 114. (Options within one requirement line, like PHYS 135a vs 151, collapse automatically.)
 - `typicalPrereqs`: draw a course after its usual prerequisite. CSCI 270 follows CSCI 104 rather than CSCI 114, because CSCI 113/114 is the lighter CS path. "Can take now" still uses the catalogue's full prerequisites.
 
 ## AP and exam credit
@@ -77,7 +79,7 @@ AP Physics and AP Statistics earn elective and GE credit but aren't on the waive
 - MATH 127, MATH 227, BISC 434 and QBIO 479 haven't run in any scanned term, so they have catalogue prerequisites but no offering history.
 - Catalogue wording that isn't a course, such as "or math placement exam" or "departmental approval", is left off the map. The details panel quotes the full sentence instead.
 - Entry-level prerequisites that most students place out of (MATH 108, CHEM 050) are treated as met.
-- Progress tracking doesn't enforce the no-double-counting rules between Computing, Specialization and Electives, and it can't count research units.
+- Progress tracking can't count research units or study-abroad credit, and elective units use each course's catalogue units (QBIO 499 counts as 1).
 
 This is an unofficial planning aid. Students should confirm their plan with a QBIO advisor and their STARS report.
 

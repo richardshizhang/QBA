@@ -194,6 +194,7 @@
     {
       "id": "specialization", "title": "Specialization Courses", "units": "12",
       "rule": "choose", "choose": 3,
+      "note": "Study-abroad courses can also count toward this requirement; check with your advisor how yours transfer.",
       "text": "Choose three of the following courses. Courses taken to satisfy the Foundational Computing Course requirement may not be used as Specialization Courses.",
       "slots": ["chem2", "CHEM 322A", "CHEM 322B", "CSCI 270", "calc2", "linalg", "calc3", "MATH 407", "stats2", "phys2", "QBIO 401", "QBIO 460", "QBIO 465"]
     },
@@ -205,7 +206,8 @@
     },
     {
       "id": "electives", "title": "Upper-Division Electives", "units": "8+",
-      "rule": "choose", "choose": 2,
+      "rule": "choose", "choose": 2, "minUnits": 8,
+      "note": "Study-abroad courses can also count toward this requirement; check with your advisor how yours transfer.",
       "text": "Choose two to three of the following courses (minimum 8 units). Courses taken to satisfy the Foundational Computing, Specialization or Capstone requirements may not double-count toward upper-division electives.",
       "slots": ["BISC 300", "BISC 307", "BISC 313", "BISC 315", "BISC 320", "BISC 325", "biochem", "BISC 403", "BISC 406", "BISC 407", "BISC 408", "BISC 410", "BISC 411", "BISC 421", "BISC 423", "BISC 424", "BISC 434", "BISC 435", "BISC 450", "BISC 473", "BME 430", "CSCI 360", "CSCI 467", "ECON 460", "LING 486", "LING 487", "MATH 447", "MATH 466", "MATH 467", "PHYS 444", "PSYC 450", "QBIO 401", "QBIO 460", "QBIO 465", "QBIO 475", "QBIO 478", "QBIO 479", "QBIO 481", "QBIO 482", "QBIO 499", "SCRM 487"]
     },
@@ -221,6 +223,14 @@
     "hide": {
       "courses": ["MATH 127", "MATH 227", "MATH 245"],
       "note": "Rarely taken by QBIO students, so it's left off the map to keep it readable. It still counts for the requirement."
+    },
+    "hideWhenTaken": {
+      "rules": {
+        "CSCI 103": ["CSCI 113"],
+        "CSCI 113": ["CSCI 103"],
+        "CSCI 104": ["CSCI 114"]
+      },
+      "note": "Once you take one, the map hides the course it replaces: CSCI 103 and CSCI 113 are alternative first CS courses, and CSCI 104 replaces CSCI 114."
     },
     "typicalPrereqs": {
       "CSCI 270": {
