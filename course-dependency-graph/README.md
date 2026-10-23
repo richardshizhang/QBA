@@ -4,13 +4,13 @@ An interactive prerequisite map of USC's **Quantitative Biology (BS)**, built fo
 
 **Live:** https://richardshizhang.github.io/QBA/course-dependency-graph/
 
-- **Columns are prerequisite steps.** Every course sits to the right of all its prerequisites, so working left to right is a safe order.
+- **Columns are the earliest step you could take each course**, one step after its prerequisites. When a prerequisite can be met several ways, the column follows the fastest option (QBIO 475 sits right after QBIO 310, not after MATH 407).
 - **Click a course** to highlight what it needs (orange) and what it unlocks (blue). The side panel shows the exact prerequisite logic, corequisites, restrictions, a description, and which terms it actually ran.
 - **Tick the circles** next to courses you've taken. The map then shows what you can take next, and the requirements panel tracks rough progress. Ticks are saved in the browser only.
 - **Enter AP and placement credit** under "AP & placement credit" (e.g. AP Calc BC 5 waives MATH 125 and 126; AP CS A waives CSCI 102). Courses that an exam can waive carry an `AP` badge.
 - **Mark advisor waivers** with the "Waive" button in a course's or requirement box's details. A waiver covers the whole requirement line, e.g. all of Physics I, and STARS shows it as CW (course waiver) or RW (requirement waiver). Waived requirements count toward progress and unlock the courses that need them, with a note that those departments may still have to approve.
-- **Boxes with several codes** are one catalogue requirement line with alternatives (e.g. Physics I = PHYS 135a / 151 / 161 / 171).
-- Solid arrow = required. Dashed arrow = one of several options, or needed by only some of the alternatives in the box.
+- **Boxes with several codes** are one catalogue requirement line with alternatives (e.g. Physics I = PHYS 135a / 151 / 161 / 171). If the options open up at different steps, the requirement appears once per step, marked "also step N".
+- Solid arrow = required. Dashed arrow = one of several options, or needed by only some of the alternatives in the box. Arrows show the fastest routes; selecting a course also highlights its slower alternatives.
 
 It's a static page with no build step and no dependencies beyond two Google Fonts.
 

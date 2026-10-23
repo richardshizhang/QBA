@@ -230,6 +230,13 @@ button, input, select { font: inherit; color: inherit; }
   text-overflow: ellipsis;
 }
 .node .head::before { content: ""; flex: none; width: 7px; height: 7px; border-radius: 2px; background: var(--cat); }
+.node .head-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.node .also {
+  padding: 0 10px;
+  font: 500 10px/14px var(--font-code);
+  color: var(--faint);
+  text-align: right;
+}
 .chip { display: flex; align-items: center; gap: 7px; height: 26px; padding: 0 8px 0 9px; box-sizing: border-box; border-radius: 4px; }
 .node:not(.multi) .chip { height: 100%; align-items: flex-start; padding: 9px 9px 0 10px; }
 .tick {
@@ -605,7 +612,7 @@ button, input, select { font: inherit; color: inherit; }
   const SEASON_SHORT = { 3: "F", 1: "Sp", 2: "Su" };
 
   // Box geometry (px, before zoom). Node heights are fixed so layout can run before render.
-  const W = 196, GAP_X = 70, PAD = 22, TOP = 44, VGAP = 12, ROW = 26, HEAD = 28, PADB = 6, SINGLE_H = 66, DUMMY_H = 4;
+  const W = 196, GAP_X = 70, PAD = 22, TOP = 44, VGAP = 12, ROW = 26, HEAD = 28, PADB = 6, ALSO_H = 14, SINGLE_H = 66, DUMMY_H = 4;
 
   // ---------- course helpers ----------
   const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[ch]);
@@ -700,40 +707,77 @@ button, input, select { font: inherit; color: inherit; }
   }
 
   // ---------- graph ----------
-  // Nodes are requirement "slots" (a catalogue line such as "PHYS 135a or 151 or 161 or 171")
-  // plus prerequisites from outside the major. Edges come from each course's prerequisite
-  // groups; an OR group is reduced to its earliest options (Calc I covers "Calc I, II or III").
+  // Each course sits at its earliest step: one after the slowest prerequisite group it needs,
+  // where an either/or group counts its fastest option. Nodes are requirement "slots" (a
+  // catalogue line such as "PHYS 135a or 151 or 161 or 171") split by step, plus prerequisites
+  // from outside the major. Arrows show the fastest routes; slower alternatives (MATH 407 for
+  // QBIO 475) appear when a course is selected.
   let G = null;
+  const placementMet = g => g.o.some(b => b.every(x => PLACEMENT.has(x)));
 
   function buildGraph() {
+    const visibleSlots = Object.keys(R.slots).filter(id => state.electives || !electiveOnly(id));
+    const slotCourses = new Set(visibleSlots.flatMap(id => R.slots[id].courses));
+    const outsideCodes = new Set();
+    if (state.outside) {
+      slotCourses.forEach(c => groupsOf(c).forEach(g => {
+        if (!placementMet(g)) g.o.flat().forEach(x => { if (OUTSIDE.has(x) && !slotCourses.has(x)) outsideCodes.add(x); });
+      }));
+    }
+    const onMap = x => slotCourses.has(x) || outsideCodes.has(x);
+    const usable = b => b.every(x => onMap(x) || PLACEMENT.has(x));
+
+    // Earliest step for each course on the map.
+    const memo = new Map();
+    const stepOf = (code, stack) => {
+      if (memo.has(code)) return memo.get(code);
+      stack = stack || new Set();
+      if (stack.has(code)) return 1;
+      stack.add(code);
+      let t = 1;
+      groupsOf(code).forEach(g => {
+        if (placementMet(g)) return;
+        const ready = g.o.filter(usable).map(b => Math.max(0, ...b.filter(x => !PLACEMENT.has(x)).map(x => stepOf(x, stack))))
+          .sort((a, b) => a - b);
+        if (ready.length) t = Math.max(t, ready[Math.min(g.n, ready.length) - 1] + 1);
+      });
+      stack.delete(code);
+      memo.set(code, t);
+      return t;
+    };
+
+    // A requirement whose options open up at different steps becomes one box per step.
     const nodes = new Map(), nodeOf = new Map();
-    Object.keys(R.slots).forEach(id => {
-      if (!state.electives && electiveOnly(id)) return;
-      const n = { id: "s:" + id, kind: "slot", slot: id, courses: R.slots[id].courses.slice(), cat: slotCat(id) };
-      nodes.set(n.id, n);
-      n.courses.forEach(c => nodeOf.set(c, n.id));
+    visibleSlots.forEach(id => {
+      const byStep = new Map();
+      R.slots[id].courses.forEach(c => {
+        const t = stepOf(c);
+        if (!byStep.has(t)) byStep.set(t, []);
+        byStep.get(t).push(c);
+      });
+      const steps = [...byStep.keys()].sort((a, b) => a - b);
+      steps.forEach(t => {
+        const nid = "s:" + id + (steps.length > 1 ? "@" + t : "");
+        nodes.set(nid, { id: nid, kind: "slot", slot: id, courses: byStep.get(t), tier: t, cat: slotCat(id),
+          multi: R.slots[id].courses.length > 1, otherSteps: steps.filter(s => s !== t) });
+        byStep.get(t).forEach(c => nodeOf.set(c, nid));
+      });
     });
-    const resolve = code => nodeOf.get(code) || (state.outside && OUTSIDE.has(code) ? "o:" + code : null);
+    outsideCodes.forEach(c => {
+      const nid = "o:" + c;
+      nodes.set(nid, { id: nid, kind: "outside", courses: [c], tier: stepOf(c), cat: "outside", multi: false, otherSteps: [] });
+      nodeOf.set(c, nid);
+    });
 
     const raw = [];
-    [...nodes.values()].forEach(n => n.courses.forEach(course => {
+    nodes.forEach(n => n.courses.forEach(course => {
       groupsOf(course).forEach(g => {
-        if (g.o.some(b => b.every(x => PLACEMENT.has(x)))) return; // met by placement
+        if (placementMet(g)) return;
         const srcs = new Set();
-        g.o.forEach(b => {
-          const ids = b.map(resolve);
-          if (!ids.includes(null)) ids.forEach(i => srcs.add(i));
-        });
+        g.o.filter(usable).forEach(b => b.forEach(x => { if (nodeOf.has(x)) srcs.add(nodeOf.get(x)); }));
         srcs.delete(n.id);
         if (srcs.size) raw.push({ to: n.id, course, srcs, codes: new Set(g.o.flat()) });
       });
-    }));
-    raw.forEach(r => r.srcs.forEach(s => {
-      if (s.startsWith("o:") && !nodes.has(s)) {
-        const code = s.slice(2);
-        nodes.set(s, { id: s, kind: "outside", courses: [code], cat: "outside" });
-        nodeOf.set(code, s);
-      }
     }));
 
     // Ancestry over the unreduced graph, used to drop OR options implied by another option.
@@ -753,10 +797,12 @@ button, input, select { font: inherit; color: inherit; }
     };
     raw.forEach(r => {
       const s = [...r.srcs];
-      r.srcs = new Set(s.filter(x => !s.some(y => y !== x && anc(x).has(y))));
+      const reduced = s.filter(x => !s.some(y => y !== x && anc(x).has(y)));
       // Alternatives that are not on the map (e.g. CHEM 107 for chemistry majors) don't make
       // an arrow optional for QBIO students; the panel still lists them.
-      r.solid = r.srcs.size === 1;
+      r.solid = reduced.length === 1;
+      // Only draw arrows that point forward; slower options sit in the same or a later column.
+      r.srcs = new Set(reduced.filter(x => nodes.get(x).tier < nodes.get(r.to).tier));
     });
 
     const emap = new Map();
@@ -776,29 +822,8 @@ button, input, select { font: inherit; color: inherit; }
     const inE = new Map(), outE = new Map();
     nodes.forEach((n, id) => { inE.set(id, []); outE.set(id, []); });
     edges.forEach(e => { inE.get(e.to).push(e); outE.get(e.from).push(e); });
-
-    // Column = longest prerequisite chain, so every arrow points right.
-    const tier = new Map();
-    const tierOf = (id, stack) => {
-      if (tier.has(id)) return tier.get(id);
-      stack = stack || new Set();
-      if (stack.has(id)) return 1;
-      stack.add(id);
-      let t = 1;
-      inE.get(id).forEach(e => { t = Math.max(t, tierOf(e.from, stack) + 1); });
-      stack.delete(id);
-      tier.set(id, t);
-      return t;
-    };
-    nodes.forEach((n, id) => { n.tier = tierOf(id); });
-    // Outside prerequisites sit just left of the first course that needs them.
     nodes.forEach(n => {
-      if (n.kind === "outside" && outE.get(n.id).length) {
-        n.tier = Math.max(1, Math.min(...outE.get(n.id).map(e => nodes.get(e.to).tier)) - 1);
-      }
-    });
-    nodes.forEach(n => {
-      n.h = n.courses.length > 1 ? HEAD + ROW * n.courses.length + PADB : SINGLE_H;
+      n.h = n.multi ? HEAD + ROW * n.courses.length + PADB + (n.otherSteps.length ? ALSO_H : 0) : SINGLE_H;
     });
 
     layout(nodes, edges, inE, outE);
@@ -914,15 +939,15 @@ button, input, select { font: inherit; color: inherit; }
 
     // Ports: spread arrows along box sides; an arrow that applies to only some options in a
     // box points at those rows.
-    const rowY = (n, code) => n.courses.length > 1 ? n.y + HEAD + ROW * n.courses.indexOf(code) + ROW / 2 : n.y + n.h / 2;
+    const rowY = (n, code) => n.multi ? n.y + HEAD + ROW * n.courses.indexOf(code) + ROW / 2 : n.y + n.h / 2;
     const cy = n => n.y + n.h / 2;
     nodes.forEach(n => {
       const outs = outE.get(n.id).slice().sort((a, b) => cy(a.chain[1]) - cy(b.chain[1]));
-      const span = n.courses.length > 1 ? [n.y + HEAD, n.y + n.h] : [n.y, n.y + n.h];
+      const span = n.multi ? [n.y + HEAD, n.y + n.h] : [n.y, n.y + n.h];
       outs.forEach((e, i) => { e.y0 = span[0] + (span[1] - span[0]) * (i + 1) / (outs.length + 1); });
       const ins = inE.get(n.id).slice().sort((a, b) => cy(a.chain[a.chain.length - 2]) - cy(b.chain[b.chain.length - 2]));
       ins.forEach((e, i) => {
-        if (n.courses.length > 1 && e.partial) {
+        if (n.multi && e.partial) {
           const ys = [...e.courses].map(c => rowY(n, c));
           e.y1 = ys.reduce((s, v) => s + v, 0) / ys.length + (i % 2 ? 3 : -3);
         } else {
@@ -1005,11 +1030,14 @@ button, input, select { font: inherit; color: inherit; }
       html += '<div class="colhead" style="left:' + (PAD + (t - 1) * (W + GAP_X)) + "px;width:" + W + 'px">Step ' + t + "</div>";
     }
     G.nodes.forEach(n => {
-      const multi = n.courses.length > 1;
+      const multi = n.multi;
       html += '<div class="node ' + n.kind + " cat-" + n.cat + (multi ? " multi" : "") + '" data-node="' + esc(n.id) + '" style="left:' + n.x + "px;top:" + n.y + "px;width:" + W + "px;height:" + n.h + 'px">';
       if (multi) {
-        html += '<button type="button" class="head" data-slot="' + esc(n.slot) + '">' + esc(slotName(n.slot)) + "</button>";
+        html += '<button type="button" class="head" data-slot="' + esc(n.slot) + '" title="' + esc(slotName(n.slot)) + '">' +
+          '<span class="head-label">' + esc(slotName(n.slot)) + "</span></button>";
         n.courses.forEach(c => { html += chipHTML(c, false); });
+        // A requirement split across steps names the other step(s) it also appears in.
+        if (n.otherSteps.length) html += '<div class="also">Other options at step ' + n.otherSteps.join(", ") + "</div>";
       } else {
         html += chipHTML(n.courses[0], true);
       }
@@ -1083,6 +1111,16 @@ button, input, select { font: inherit; color: inherit; }
       G.outE.get(id).forEach(e => { postEdges.add(e); if (!postNodes.has(e.to)) { postNodes.add(e.to); queue.push(e.to); } });
     }
 
+    // Direct prerequisites and unlocks, including slower alternatives that have no arrow
+    // (MATH 407 for QBIO 475), so their boxes stay lit too.
+    const directPre = new Set(), directPost = new Set();
+    f.forEach(c => {
+      groupsOf(c).forEach(g => g.o.flat().forEach(x => directPre.add(x)));
+      (unlocks[c] || []).forEach(x => directPost.add(x));
+    });
+    directPre.forEach(x => { const id = G.nodeOf.get(x); if (id && !selfNodes.has(id)) preNodes.add(id); });
+    directPost.forEach(x => { const id = G.nodeOf.get(x); if (id && !selfNodes.has(id) && !preNodes.has(id)) postNodes.add(id); });
+
     nodeEls.forEach((el, id) => {
       if (selfNodes.has(id)) el.classList.add("self");
       else if (preNodes.has(id)) el.classList.add("pre");
@@ -1096,12 +1134,6 @@ button, input, select { font: inherit; color: inherit; }
     });
     // Bring highlighted edges to the front.
     [...preEdges, ...postEdges].forEach(e => { const p = edgeEls.get(e); if (p) svg.appendChild(p); });
-
-    const directPre = new Set(), directPost = new Set();
-    f.forEach(c => {
-      groupsOf(c).forEach(g => g.o.flat().forEach(x => directPre.add(x)));
-      (unlocks[c] || []).forEach(x => directPost.add(x));
-    });
     nodesEl.querySelectorAll(".chip").forEach(ch => {
       const code = ch.dataset.code;
       if (fset.has(code)) ch.classList.add("hit-self");
@@ -1350,8 +1382,8 @@ button, input, select { font: inherit; color: inherit; }
 
     const missing = Object.keys(R.courses).filter(c => !hasData(c)).map(disp);
     parts.push('<div class="about"><h3 style="margin:6px 0 0">How to read the map</h3>' +
-      "<p><strong>Columns</strong> are prerequisite steps: every course sits to the right of all its prerequisites, so working left to right is always a safe order. A course with an \"either/or\" prerequisite is placed after its latest option, so it may be takeable earlier than its column suggests.</p>" +
-      "<p><strong>Boxes with several codes</strong> are one requirement line from the catalogue (for example Physics I: PHYS 135a, 151, 161 or 171). Each option can have different prerequisites; click it to see them.</p>" +
+      "<p><strong>Columns</strong> show the earliest step you could take each course, one step after its prerequisites. When a prerequisite can be met several ways, the column follows the fastest one; arrows show those fastest routes, and selecting a course also lights up its slower alternatives (such as MATH 407 for QBIO 475).</p>" +
+      "<p><strong>Boxes with several codes</strong> are one requirement line from the catalogue (for example Physics I: PHYS 135a, 151, 161 or 171). If its options open up at different steps, the requirement appears once per step, marked \"also step N\".</p>" +
       "<p><strong>F / Sp / Su</strong> show which terms the course actually ran between " + termName(D.terms[D.terms.length - 1]) + " and " + termName(D.terms[0]) + ".</p>" +
       '<h3 style="margin:6px 0 0">About the data</h3>' +
       "<p>Requirements are transcribed from the <a href=\"" + esc(R.source) + "\" target=\"_blank\" rel=\"noopener\">" + esc(R.catalogue) + "</a>. " + (D.catalogueExport
@@ -1405,7 +1437,11 @@ button, input, select { font: inherit; color: inherit; }
     state.focus = focus;
     refresh();
     if (reveal && focus) {
-      const id = focus.kind === "slot" ? "s:" + focus.id : G.nodeOf.get(focus.id);
+      // A split requirement reveals its earliest box.
+      const id = focus.kind === "slot" ? G.nodeOf.get(R.slots[focus.id].courses.slice().sort((a, b) => {
+        const na = G.nodes.get(G.nodeOf.get(a)), nb = G.nodes.get(G.nodeOf.get(b));
+        return (na ? na.tier : 99) - (nb ? nb.tier : 99);
+      })[0]) : G.nodeOf.get(focus.id);
       revealNode(id);
     }
     if (window.matchMedia("(max-width: 860px)").matches && focus && !reveal) {

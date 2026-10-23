@@ -578,7 +578,7 @@ window.QBIO_DATA = {
     ]
    },
    "linalg": {
-    "label": "Linear Algebra / Diff. Eq.",
+    "label": "Linear Algebra",
     "courses": [
      "MATH 225",
      "MATH 245"

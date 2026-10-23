@@ -122,7 +122,7 @@
     "CHEM 322B": { "label": "Organic Chemistry II", "courses": ["CHEM 322B"] },
     "CSCI 270":  { "courses": ["CSCI 270"] },
     "calc2":     { "label": "Calculus II", "courses": ["MATH 126", "MATH 127", "MATH 129"] },
-    "linalg":    { "label": "Linear Algebra / Diff. Eq.", "courses": ["MATH 225", "MATH 245"] },
+    "linalg":    { "label": "Linear Algebra", "courses": ["MATH 225", "MATH 245"] },
     "calc3":     { "label": "Calculus III", "courses": ["MATH 226", "MATH 227", "MATH 229"] },
     "MATH 407":  { "courses": ["MATH 407"] },
     "stats2":    { "label": "Statistics II", "courses": ["MATH 308", "MATH 408"] },
