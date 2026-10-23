@@ -144,7 +144,8 @@ button, input, select { font: inherit; color: inherit; }
 .sw.out { background: none; border: 1.5px dashed var(--cat); width: 7px; height: 7px; }
 .ln { width: 22px; height: 0; border-top: 1.6px solid var(--edge); }
 .ln.dash { border-top-style: dashed; }
-.lg-tick { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid var(--ok); }
+.ln.live { border-top: 2.6px solid var(--ok); }
+.lg-tick { width: 9px; height: 9px; border-radius: 50%; border: 2px solid var(--ok); }
 .lg-tick.on { background: var(--ok); }
 .zoom {
   position: absolute;
@@ -186,6 +187,10 @@ button, input, select { font: inherit; color: inherit; }
 .colhead {
   position: absolute;
   top: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
   font: 600 11px/1 var(--font-code);
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -193,6 +198,19 @@ button, input, select { font: inherit; color: inherit; }
   border-bottom: 1px solid var(--line);
   padding-bottom: 6px;
 }
+
+.colbtn {
+  margin-top: -4px;
+  padding: 2px 7px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--muted);
+  font: inherit;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+.colbtn:hover { border-color: var(--faint); color: var(--ink); }
 
 /* ---------- nodes ---------- */
 .node {
@@ -260,7 +278,11 @@ button, input, select { font: inherit; color: inherit; }
   transform: translateY(-1px) rotate(-45deg);
   opacity: 0;
 }
-.chip[data-status="ready"] .tick { border-color: var(--ok); }
+.chip[data-status="ready"] .tick { border-color: var(--ok); border-width: 2px; }
+/* The "can take now" frontier, shown once something is marked */
+.marks:not(.focusing) .chip[data-status="ready"] { background: color-mix(in srgb, var(--ok) 14%, transparent); }
+.marks:not(.focusing) .chip[data-status="ready"] .code { color: color-mix(in srgb, var(--ok) 75%, var(--ink)); }
+.marks:not(.focusing) .node.ready { border-color: var(--ok); box-shadow: 0 0 0 2px color-mix(in srgb, var(--ok) 28%, transparent); }
 .chip[data-status="taken"] .tick { border-color: var(--ok); background: var(--ok); }
 .chip[data-status="taken"] .tick::after { opacity: 1; }
 .chip[data-status="unknown"] .tick { border-style: dotted; }
@@ -323,7 +345,9 @@ button, input, select { font: inherit; color: inherit; }
 .edge.dashed { stroke-dasharray: 5 4; }
 .edge.pre { stroke: var(--pre); stroke-width: 2.2; }
 .edge.post { stroke: var(--post); stroke-width: 2.2; }
+.edge.live { stroke: var(--ok); stroke-width: 2.6; stroke-dasharray: none; }
 .arrow { fill: var(--edge); }
+.arrow.live { fill: var(--ok); }
 .arrow.pre { fill: var(--pre); }
 .arrow.post { fill: var(--post); }
 
@@ -543,6 +567,7 @@ button, input, select { font: inherit; color: inherit; }
     </div>
     <label class="toggle"><input id="opt-electives" type="checkbox"> Electives <span class="n" id="elective-count"></span></label>
     <label class="toggle"><input id="opt-outside" type="checkbox"> Outside prerequisites</label>
+    <label class="toggle" id="credit-toggle" hidden><input id="opt-credit" type="checkbox"> AP &amp; waived <span class="n" id="credit-count"></span></label>
     <span class="clear-wrap" id="clear-wrap"></span>
   </div>
 </header>
@@ -561,6 +586,7 @@ button, input, select { font: inherit; color: inherit; }
         <li><span class="ln"></span>required</li>
         <li><span class="ln dash"></span>one of several / some options</li>
         <li><span class="lg-tick"></span>can take now</li>
+        <li><span class="ln live"></span>unlocked by what you've marked</li>
         <li><span class="lg-tick on"></span>taken or AP credit</li>
         <li><span class="lg-tick waived"></span>waived</li>
         <li><span class="aptag" style="cursor:default">AP</span>AP can waive it</li>
@@ -661,7 +687,7 @@ button, input, select { font: inherit; color: inherit; }
   // ---------- state ----------
   const STORE = "qbio-course-map:v1";
   // waived: requirement lines (slot ids) or outside-the-major courses an advisor has waived.
-  const state = { taken: new Set(), waived: new Set(), credit: {}, creditOpen: null, electives: false, outside: true, zoom: 1, focus: null };
+  const state = { taken: new Set(), waived: new Set(), credit: {}, creditOpen: null, electives: false, outside: true, showCredit: true, zoom: 1, focus: null };
   try {
     const saved = JSON.parse(localStorage.getItem(STORE) || "null");
     if (saved) {
@@ -669,6 +695,7 @@ button, input, select { font: inherit; color: inherit; }
       state.waived = new Set((saved.waived || []).filter(id => R.slots[id] || OUTSIDE.has(id)));
       if (typeof saved.electives === "boolean") state.electives = saved.electives;
       if (typeof saved.outside === "boolean") state.outside = saved.outside;
+      if (typeof saved.showCredit === "boolean") state.showCredit = saved.showCredit;
       Object.entries(saved.credit || {}).forEach(([id, v]) => {
         const ex = EXAMS.find(e => e.id === id);
         if (ex && ex.options.some(o => o.value === v)) state.credit[id] = v;
@@ -677,7 +704,7 @@ button, input, select { font: inherit; color: inherit; }
   } catch (e) { /* storage unavailable: start fresh */ }
   function save() {
     try {
-      localStorage.setItem(STORE, JSON.stringify({ taken: [...state.taken], waived: [...state.waived], credit: state.credit, electives: state.electives, outside: state.outside }));
+      localStorage.setItem(STORE, JSON.stringify({ taken: [...state.taken], waived: [...state.waived], credit: state.credit, electives: state.electives, outside: state.outside, showCredit: state.showCredit }));
     } catch (e) { /* ignore */ }
   }
 
@@ -713,6 +740,7 @@ button, input, select { font: inherit; color: inherit; }
   // from outside the major. Arrows show the fastest routes; slower alternatives (MATH 407 for
   // QBIO 475) appear when a course is selected.
   let G = null;
+  let liveEdges = new Set(); // arrows from something done into a course you can take now
   const placementMet = g => g.o.some(b => b.every(x => PLACEMENT.has(x)));
 
   // Map-only adjustments from requirements.json: rarely taken options are hidden, and some
@@ -791,6 +819,12 @@ button, input, select { font: inherit; color: inherit; }
       nodes.set(nid, { id: nid, kind: "outside", courses: [c], tier: stepOf(c), cat: "outside", multi: false, otherSteps: [] });
       nodeOf.set(c, nid);
     });
+
+    // Hiding the "AP & waived" column drops those boxes; their courses still count as done,
+    // so everything after them stays shifted left.
+    if (!state.showCredit) {
+      [...nodes.values()].filter(n => n.tier === 0).forEach(n => { nodes.delete(n.id); n.courses.forEach(c => nodeOf.delete(c)); });
+    }
 
     const raw = [];
     nodes.forEach(n => n.courses.forEach(course => {
@@ -1042,7 +1076,7 @@ button, input, select { font: inherit; color: inherit; }
     svg.setAttribute("viewBox", "0 0 " + w + " " + h);
 
     const marker = (id, cls) => '<marker id="' + id + '" viewBox="0 0 8 8" refX="7.5" refY="4" markerWidth="7" markerHeight="7" orient="auto" markerUnits="userSpaceOnUse"><path class="' + cls + '" d="M0,0.5 L8,4 L0,7.5 z"/></marker>';
-    let s = "<defs>" + marker("ar", "arrow") + marker("ar-pre", "arrow pre") + marker("ar-post", "arrow post") + "</defs>";
+    let s = "<defs>" + marker("ar", "arrow") + marker("ar-pre", "arrow pre") + marker("ar-post", "arrow post") + marker("ar-live", "arrow live") + "</defs>";
     G.edges.forEach((e, i) => {
       e.idx = i;
       s += '<path class="edge ' + (e.solid ? "solid" : "dashed") + '" data-i="' + i + '" marker-end="url(#ar)" d="' + edgePath(e) + '"/>';
@@ -1053,7 +1087,8 @@ button, input, select { font: inherit; color: inherit; }
 
     let html = "";
     for (let t = T0; t <= L; t++) {
-      html += '<div class="colhead" style="left:' + (PAD + (t - T0) * (W + GAP_X)) + "px;width:" + W + 'px">' + (t === 0 ? "AP &amp; waived" : "Step " + t) + "</div>";
+      html += '<div class="colhead" style="left:' + (PAD + (t - T0) * (W + GAP_X)) + "px;width:" + W + 'px">' +
+        (t === 0 ? '<span>AP &amp; waived</span><button type="button" class="colbtn" data-hide-credit>Hide</button>' : "Step " + t) + "</div>";
     }
     G.nodes.forEach(n => {
       const multi = n.multi;
@@ -1086,12 +1121,23 @@ button, input, select { font: inherit; color: inherit; }
         : st === "waived" ? disp(code) + ": requirement waived"
         : (st === "taken" ? "Unmark " : "Mark ") + disp(code) + " as taken");
     });
+    // Once anything is marked, emphasise the frontier: courses you can take now, and the
+    // arrows from what you've done into them. With nothing marked all of step 1 would light up.
+    const anyMarks = state.taken.size + CREDIT.size + state.waived.size > 0;
+    const doneCourse = c => state.taken.has(c) || CREDIT.has(c) || isWaived(c);
+    stage.classList.toggle("marks", anyMarks);
     G.nodes.forEach(n => {
       const el = nodeEls.get(n.id);
       const earned = n.courses.some(c => state.taken.has(c) || CREDIT.has(c));
       el.classList.toggle("done", earned || n.courses.some(isWaived));
       el.classList.toggle("waived", !earned && n.courses.some(isWaived));
+      el.classList.toggle("ready", !n.courses.some(doneCourse) && n.courses.some(c => statusOf(c) === "ready"));
     });
+    liveEdges = new Set(anyMarks ? G.edges.filter(e =>
+      G.nodes.get(e.from).courses.some(doneCourse) && [...e.courses].some(c => statusOf(c) === "ready")) : []);
+    const creditMarks = CREDIT.size + state.waived.size;
+    document.getElementById("credit-toggle").hidden = !creditMarks;
+    document.getElementById("credit-count").textContent = "(" + creditMarks + ")";
     highlight();
     renderPanel();
     renderClear();
@@ -1109,7 +1155,13 @@ button, input, select { font: inherit; color: inherit; }
     stage.classList.toggle("focusing", !!f);
     nodeEls.forEach(el => el.classList.remove("self", "pre", "post", "dim"));
     nodesEl.querySelectorAll(".chip").forEach(ch => ch.classList.remove("hit-self", "hit-pre", "hit-post"));
-    edgeEls.forEach(p => { p.classList.remove("pre", "post", "dim"); p.setAttribute("marker-end", "url(#ar)"); });
+    edgeEls.forEach((p, e) => {
+      const live = liveEdges.has(e);
+      p.classList.remove("pre", "post", "dim");
+      p.classList.toggle("live", live);
+      p.setAttribute("marker-end", live ? "url(#ar-live)" : "url(#ar)");
+      if (live) svg.appendChild(p); // keep green arrows on top
+    });
     if (!f) return;
 
     const fset = new Set(f);
@@ -1154,8 +1206,9 @@ button, input, select { font: inherit; color: inherit; }
       else el.classList.add("dim");
     });
     edgeEls.forEach((p, e) => {
-      if (preEdges.has(e)) { p.classList.add("pre"); p.setAttribute("marker-end", "url(#ar-pre)"); }
-      else if (postEdges.has(e)) { p.classList.add("post"); p.setAttribute("marker-end", "url(#ar-post)"); }
+      // The selected course's chain takes over from the green frontier.
+      if (preEdges.has(e)) { p.classList.remove("live"); p.classList.add("pre"); p.setAttribute("marker-end", "url(#ar-pre)"); }
+      else if (postEdges.has(e)) { p.classList.remove("live"); p.classList.add("post"); p.setAttribute("marker-end", "url(#ar-post)"); }
       else p.classList.add("dim");
     });
     // Bring highlighted edges to the front.
@@ -1498,6 +1551,12 @@ button, input, select { font: inherit; color: inherit; }
   }
 
   nodesEl.addEventListener("click", ev => {
+    if (ev.target.closest("[data-hide-credit]")) {
+      state.showCredit = false;
+      optCredit.checked = false;
+      render();
+      return;
+    }
     const tick = ev.target.closest("[data-tick]");
     if (tick) {
       const c = tick.dataset.tick;
@@ -1602,6 +1661,9 @@ button, input, select { font: inherit; color: inherit; }
   }
   optElectives.addEventListener("change", () => setElectives(optElectives.checked));
   optOutside.addEventListener("change", () => { state.outside = optOutside.checked; render(); });
+  const optCredit = document.getElementById("opt-credit");
+  optCredit.checked = state.showCredit;
+  optCredit.addEventListener("change", () => { state.showCredit = optCredit.checked; render(); });
 
   const searchInput = document.getElementById("search");
   const searchable = [...new Set(Object.keys(R.courses).concat(D.outside))].sort();
