@@ -615,7 +615,12 @@ button, input, select { font: inherit; color: inherit; }
   const unitsOf = code => (R.courses[code] && R.courses[code].units) || (C[code] && C[code].u) || "";
   const catalogCode = code => (R.courses[code] && R.courses[code].catalog) || disp(code);
   const groupsOf = (code, key) => (C[code] && C[code][key || "pre"]) || [];
-  const hasData = code => !!(C[code] && C[code].src);
+  const hasData = code => !!(C[code] && (C[code].src || C[code].cat));
+  // Catalogue "Terms Offered" text such as "Sp", "FaSp" or "Fa, Sp" -> term digits.
+  const catalogueSeasons = code => {
+    const t = (C[code] && C[code].cterms) || "";
+    return [[/Fa/i, 3], [/Sp/i, 1], [/Su|Sm/i, 2]].filter(([re]) => re.test(t)).map(([, s]) => s);
+  };
   const known = code => !!(R.courses[code] || C[code]);
   const termName = t => D.seasons[t % 10] + " " + Math.floor(t / 10);
   const termShort = t => SEASON_SHORT[t % 10] + String(Math.floor(t / 10)).slice(2);
@@ -956,9 +961,12 @@ button, input, select { font: inherit; color: inherit; }
   const edgeEls = new Map();
 
   function seasonsHTML(code) {
-    if (!hasData(code)) return '<i class="none" title="No Schedule of Classes data in recent terms">?</i>';
-    const s = new Set((C[code].off || []).map(t => t % 10));
-    const out = [3, 1, 2].filter(x => s.has(x)).map(x => '<i title="Offered in ' + D.seasons[x] + '">' + SEASON_SHORT[x] + "</i>").join("");
+    if (!hasData(code)) return '<i class="none" title="No catalogue or Schedule of Classes data">?</i>';
+    const ran = (C[code].off || []).map(t => t % 10);
+    // Prefer what actually ran; fall back to the catalogue's "Terms Offered".
+    const s = new Set(ran.length ? ran : catalogueSeasons(code));
+    const how = ran.length ? "Ran in " : "Catalogue lists ";
+    const out = [3, 1, 2].filter(x => s.has(x)).map(x => '<i title="' + how + D.seasons[x] + '">' + SEASON_SHORT[x] + "</i>").join("");
     return out || '<i class="none" title="Not offered in the terms scanned">—</i>';
   }
 
@@ -1162,7 +1170,7 @@ button, input, select { font: inherit; color: inherit; }
     if (PLACEMENT.has(code)) {
       parts.push('<p class="prose muted">' + esc(R.placement.text) + "</p>");
     } else if (!hasData(code)) {
-      parts.push('<p class="status">Not in the USC Schedule of Classes for any of the last ' + D.terms.length + " terms, so its prerequisites aren't shown here. Check the course listing in the catalogue.</p>");
+      parts.push('<p class="status">There\'s no catalogue entry or recent Schedule of Classes listing for this course, so its prerequisites aren\'t shown here. Check the catalogue.</p>');
     } else if (st === "taken") {
       parts.push('<p class="status ready">Marked as taken.</p>');
     } else if (st === "credit") {
@@ -1178,13 +1186,22 @@ button, input, select { font: inherit; color: inherit; }
       parts.push('<p class="status">' + left + " prerequisite" + (left > 1 ? "s" : "") + " still to go. Mark courses as taken to track this.</p>");
     }
 
-    if (pre.length) {
-      parts.push("<div><h3>Prerequisites</h3><ul class=\"reqs\">" + pre.map(g => groupLine(g, "or")).join("") + "</ul>" +
-        (pre.length > 1 ? '<p class="note" style="margin-top:6px">You need every line above.</p>' : "") + "</div>");
-    }
-    if (co.length) {
-      parts.push("<div><h3>Corequisites · before or alongside</h3><ul class=\"reqs\">" + co.map(g => groupLine(g, "or")).join("") + "</ul></div>");
-    }
+    // Show the catalogue's own sentence under the parsed list, so odd wording is visible.
+    const reqBlock = (key, title, list) => {
+      const text = rec[key + "Text"];
+      if (!list.length && !text) return "";
+      let note = "";
+      if (text && rec[key + "Partial"]) {
+        const caveat = !rec[key + "Partial"] ? ""
+          : rec[key + "Src"] === "schedule" ? " This couldn't be read as course codes, so the list above is from the Schedule of Classes."
+          : " Only the course codes in it are used on the map.";
+        note = '<p class="note" style="margin-top:6px">Catalogue wording: “' + esc(text) + "”." + caveat + "</p>";
+      }
+      return "<div><h3>" + title + "</h3>" + (list.length ? '<ul class="reqs">' + list.map(g => groupLine(g, "or")).join("") + "</ul>" : "") +
+        (key === "pre" && list.length > 1 ? '<p class="note" style="margin-top:6px">You need every line above.</p>' : "") + note + "</div>";
+    };
+    parts.push(reqBlock("pre", "Prerequisites", pre));
+    parts.push(reqBlock("co", "Corequisites · before or alongside", co));
     if (WAIVERS[code]) {
       const rows = WAIVERS[code].map(ex => {
         const scores = ex.options.filter(o => o.waives.includes(code)).map(o => o.label.split(",")[0]);
@@ -1205,13 +1222,20 @@ button, input, select { font: inherit; color: inherit; }
       parts.push("<div><h3>Unlocks</h3><div class=\"pills\" style=\"gap:4px 10px\">" + opens.map(crefHTML).join("") + "</div></div>");
     }
     if (hasData(code)) {
-      parts.push("<div><h3>Offered · " + termShort(D.terms[D.terms.length - 1]) + " to " + termShort(D.terms[0]) + "</h3>" + termsHTML(code) + "</div>");
+      const listed = catalogueSeasons(code).map(s => D.seasons[s]).join(" and ");
+      parts.push("<div><h3>Offered · " + termShort(D.terms[D.terms.length - 1]) + " to " + termShort(D.terms[0]) + "</h3>" + termsHTML(code) +
+        (rec.cterms ? '<p class="note" style="margin-top:6px">The catalogue lists it for ' + esc(listed || rec.cterms) + ".</p>" : "") + "</div>");
     }
     if (rec.d) parts.push("<div><h3>Description</h3><p class=\"prose\">" + esc(rec.d) + "</p></div>");
     if (rec.dup) parts.push('<p class="note">Duplicate credit: ' + esc(rec.dup) + "</p>");
+    const links = [];
+    if (rec.curl) links.push('<a href="' + esc(rec.curl) + '" target="_blank" rel="noopener">Catalogue entry ↗</a>');
+    if (rec.src) links.push('<a href="https://classes.usc.edu/term/' + rec.src + "/catalogue/course/" + smashed(code) + '" target="_blank" rel="noopener">Schedule of Classes, ' + termName(rec.src) + " ↗</a>");
+    if (links.length) parts.push('<div class="links">' + links.join("") + "</div>");
     if (hasData(code)) {
-      parts.push('<div class="links"><a href="https://classes.usc.edu/term/' + rec.src + "/catalogue/course/" + smashed(code) + '" target="_blank" rel="noopener">Schedule of Classes, ' + termName(rec.src) + " ↗</a></div>");
-      parts.push('<p class="note">Prerequisites as listed in the ' + termName(rec.src) + " Schedule of Classes. Confirm with the catalogue and your advisor.</p>");
+      const from = rec.preSrc === "catalogue" ? "Prerequisites from the " + R.catalogue + "."
+        : rec.src ? "Prerequisites as listed in the " + termName(rec.src) + " Schedule of Classes." : "";
+      parts.push('<p class="note">' + esc(from) + " Confirm with your advisor.</p>");
     }
     return '<div class="stack">' + parts.join("") + "</div>";
   }
@@ -1239,7 +1263,7 @@ button, input, select { font: inherit; color: inherit; }
     if (state.waived.has(id)) parts.push('<p class="status waived">' + waivedText(id) + "</p>");
     parts.push('<div class="stack" style="gap:8px">' + s.courses.map(c => {
       const pre = groupsOf(c);
-      const preText = !hasData(c) ? "No recent schedule data" : pre.length ? "Needs " + pre.map(g => g.o.map(b => b.map(disp).join(" + ")).join(" / ")).join("; ") : "No prerequisites listed";
+      const preText = !hasData(c) ? "No prerequisite data" : pre.length ? "Needs " + pre.map(g => g.o.map(b => b.map(disp).join(" + ")).join(" / ")).join("; ") : "No prerequisites listed";
       return '<button type="button" class="option" data-goto-course="' + esc(c) + '"><span class="row"><span class="code">' + esc(catalogCode(c)) + '</span><span class="ssn">' + seasonsHTML(c) + "</span></span>" +
         '<span style="font-weight:600">' + esc(titleOf(c)) + "</span>" +
         '<span class="note">' + esc(preText) + (state.taken.has(c) ? " · ✓ taken" : "") + "</span></button>";
@@ -1330,8 +1354,10 @@ button, input, select { font: inherit; color: inherit; }
       "<p><strong>Boxes with several codes</strong> are one requirement line from the catalogue (for example Physics I: PHYS 135a, 151, 161 or 171). Each option can have different prerequisites; click it to see them.</p>" +
       "<p><strong>F / Sp / Su</strong> show which terms the course actually ran between " + termName(D.terms[D.terms.length - 1]) + " and " + termName(D.terms[0]) + ".</p>" +
       '<h3 style="margin:6px 0 0">About the data</h3>' +
-      "<p>Requirements are transcribed from the <a href=\"" + esc(R.source) + "\" target=\"_blank\" rel=\"noopener\">" + esc(R.catalogue) + "</a>. Prerequisites, descriptions and offering history come from the USC Schedule of Classes (updated " + esc(D.generated) + "). Entry-level prerequisites such as MATH 108 and CHEM 050 are treated as met, since most students place out of them. AP waivers follow the <a href=\"" + esc(R.examCredit.source) + "\" target=\"_blank\" rel=\"noopener\">Registrar's AP chart</a>, plus Viterbi's rule that AP Computer Science A or the CSCI 102 challenge exam lets you skip CSCI 102.</p>" +
-      (missing.length ? "<p>No recent schedule data for " + esc(missing.join(", ")) + ", so their prerequisites are unknown here.</p>" : "") +
+      "<p>Requirements are transcribed from the <a href=\"" + esc(R.source) + "\" target=\"_blank\" rel=\"noopener\">" + esc(R.catalogue) + "</a>. " + (D.catalogueExport
+        ? "Prerequisites and descriptions come from the catalogue (exported " + esc(String(D.catalogueExport.exported || "").slice(0, 10)) + "), falling back to the USC Schedule of Classes; offering history comes from the Schedule of Classes (updated " + esc(D.generated) + ")."
+        : "Prerequisites, descriptions and offering history come from the USC Schedule of Classes (updated " + esc(D.generated) + "), which can leave out prerequisites the catalogue lists.") + " Entry-level prerequisites such as MATH 108 and CHEM 050 are treated as met, since most students place out of them. AP waivers follow the <a href=\"" + esc(R.examCredit.source) + "\" target=\"_blank\" rel=\"noopener\">Registrar's AP chart</a>, plus Viterbi's rule that AP Computer Science A or the CSCI 102 challenge exam lets you skip CSCI 102.</p>" +
+      (missing.length ? "<p>No prerequisite data for " + esc(missing.join(", ")) + ", so their prerequisites are unknown here.</p>" : "") +
       "<p>This is an unofficial planning aid from QBA, the Quantitative Biology Association. Always confirm your plan with your QBIO advisor and your STARS report.</p></div>");
     return '<div class="stack">' + parts.join("") + "</div>";
   }

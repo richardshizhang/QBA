@@ -21,24 +21,32 @@ It's a static page with no build step and no dependencies beyond two Google Font
 | `index.html` | The whole app: layout, rendering and interaction. |
 | `graph-data.js` | Generated data (`window.QBIO_DATA`). Don't edit by hand. |
 | `data/requirements.json` | The major's requirements, hand-transcribed from the catalogue. |
-| `scripts/update_data.py` | Fetches prerequisites and offering history, then writes `graph-data.js`. |
+| `data/catalogue-courses.json` | Catalogue text for each course (prerequisites, terms offered, descriptions), exported from the browser. |
+| `scripts/catalogue_export.js` | Browser-console script that produces `data/catalogue-courses.json`. |
+| `scripts/catalogue.py` | Parses catalogue prerequisite sentences into AND/OR groups. |
+| `scripts/update_data.py` | Fetches offering history (and fallback prerequisites) from the Schedule of Classes, merges the catalogue export, then writes `graph-data.js`. |
 
 ## Updating for a new catalogue year
 
 1. Open the new catalogue's QBIO program page and update `data/requirements.json`. That covers the `courses` (catalogue code, title, units), the `slots` (each "X or Y" line is one slot) and the `sections` (rules such as "choose 3"). Also update the `catalogue` and `source` fields.
-2. Regenerate the data:
+2. Export the catalogue's course text. catalogue.usc.edu blocks scripts, so this runs in your own browser:
+   1. Open the program page.
+   2. Paste `scripts/catalogue_export.js` into the DevTools console (Cmd+Option+J). Chrome may ask you to type `allow pasting` first.
+   3. It reads each course one at a time (about a minute) and downloads `catalogue-courses.json`. Save that file as `data/catalogue-courses.json`.
+3. Regenerate the data:
 
    ```bash
    python3 scripts/update_data.py
    ```
 
-   This only needs Python 3.9+ and its standard library. Raw API responses are cached in `.cache/`, so reruns are fast. Delete `.cache/` to force fresh data. Some departments take a minute or more per request, so the first run takes a few minutes.
-3. Open `index.html` in a browser to check it.
+   This only needs Python 3.9+ and its standard library. Raw API responses are cached in `.cache/`, so reruns are fast. Delete `.cache/` to force fresh data. Some departments take a minute or more per request, so the first run takes a few minutes. The script prints every prerequisite where the catalogue differs from the Schedule of Classes, plus any sentence it could only partly read; skim that list.
+4. Open `index.html` in a browser to check it.
 
 ## Where the data comes from
 
 - **Requirements:** the [USC Catalogue 2026-2027 program page](https://catalogue.usc.edu/preview_program.php?catoid=22&poid=32504). catalogue.usc.edu blocks scripted access with a bot check, so this is transcribed by hand (from a saved PDF of the page).
-- **Prerequisites, corequisites, descriptions, restrictions, offering history:** the USC Schedule of Classes JSON API at `classes.usc.edu/api`. The script scans the last 11 terms, including summers, and uses each course's most recent listing.
+- **Prerequisites, corequisites, descriptions, "Terms Offered":** the catalogue's course entries, via `data/catalogue-courses.json`. The catalogue is the authority here. The Schedule of Classes left out some prerequisites, e.g. QBIO 478 and 482 both need QBIO 310, and QBIO 310 needs MATH 125.
+- **Offering history, restrictions, and fallback prerequisites:** the USC Schedule of Classes JSON API at `classes.usc.edu/api`. The script scans the last 11 terms, including summers, and uses each course's most recent listing. Its prerequisites are used only for courses missing from the catalogue export.
 
 ## AP and exam credit
 
@@ -59,8 +67,8 @@ AP Physics and AP Statistics earn elective and GE credit but aren't on the waive
 
 ## Known gaps
 
-- MATH 127, MATH 227, BISC 434 and QBIO 479 weren't offered in any scanned term, so the map can't show their prerequisites.
-- Schedule of Classes prerequisite data can be thinner than the catalogue's wording. For example, QBIO 494 doesn't list QBIO 493, and BISC 220 lists no prerequisites even though its description recommends BISC 120.
+- MATH 127, MATH 227, BISC 434 and QBIO 479 haven't run in any scanned term, so they have catalogue prerequisites but no offering history.
+- Catalogue wording that isn't a course, such as "or math placement exam" or "departmental approval", is left off the map. The details panel quotes the full sentence instead.
 - Entry-level prerequisites that most students place out of (MATH 108, CHEM 050) are treated as met.
 - Progress tracking doesn't enforce the no-double-counting rules between Computing, Specialization and Electives, and it can't count research units.
 
