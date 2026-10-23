@@ -7,7 +7,7 @@ An interactive prerequisite map of USC's **Quantitative Biology (BS)**, built fo
 - **Columns are the earliest step you could take each course**, one step after its prerequisites. When a prerequisite can be met several ways, the column follows the fastest option (QBIO 475 sits right after QBIO 310, not after MATH 407).
 - **Click a course** to highlight what it needs (orange) and what it unlocks (blue). The side panel shows the exact prerequisite logic, corequisites, restrictions, a description, and which terms it actually ran.
 - **Tick the circles** next to courses you've taken. The map then shows what you can take next, and the requirements panel tracks rough progress. Ticks are saved in the browser only.
-- **Enter AP and placement credit** under "AP & placement credit" (e.g. AP Calc BC 5 waives MATH 125 and 126; AP CS A waives CSCI 102). Courses that an exam can waive carry an `AP` badge.
+- **Enter AP and placement credit** under "AP & placement credit" (e.g. AP Calc BC 5 waives MATH 125 and 126; AP CS A waives CSCI 102). Courses that an exam can waive carry an `AP` badge. Credited and waived courses move into an "AP & waived" column before step 1, and everything that depends on them shifts left; a requirement split across steps merges back into one box (e.g. with AP Calc, PHYS 151/161/171 join PHYS 135a at step 1).
 - **Mark advisor waivers** with the "Waive" button in a course's or requirement box's details. A waiver covers the whole requirement line, e.g. all of Physics I, and STARS shows it as CW (course waiver) or RW (requirement waiver). Waived requirements count toward progress and unlock the courses that need them, with a note that those departments may still have to approve.
 - **Boxes with several codes** are one catalogue requirement line with alternatives (e.g. Physics I = PHYS 135a / 151 / 161 / 171). If the options open up at different steps, the requirement appears once per step, marked "also step N".
 - Solid arrow = required. Dashed arrow = one of several options, or needed by only some of the alternatives in the box. Arrows show the fastest routes; selecting a course also highlights its slower alternatives.
@@ -47,6 +47,13 @@ It's a static page with no build step and no dependencies beyond two Google Font
 - **Requirements:** the [USC Catalogue 2026-2027 program page](https://catalogue.usc.edu/preview_program.php?catoid=22&poid=32504). catalogue.usc.edu blocks scripted access with a bot check, so this is transcribed by hand (from a saved PDF of the page).
 - **Prerequisites, corequisites, descriptions, "Terms Offered":** the catalogue's course entries, via `data/catalogue-courses.json`. The catalogue is the authority here. The Schedule of Classes left out some prerequisites, e.g. QBIO 478 and 482 both need QBIO 310, and QBIO 310 needs MATH 125.
 - **Offering history, restrictions, and fallback prerequisites:** the USC Schedule of Classes JSON API at `classes.usc.edu/api`. The script scans the last 11 terms, including summers, and uses each course's most recent listing. Its prerequisites are used only for courses missing from the catalogue export.
+
+## Map adjustments
+
+`mapAdjustments` in `data/requirements.json` holds advice from QBIO students that changes only how the map is drawn:
+
+- `hide.courses`: options QBIO students rarely take (MATH 127, 227 and 245). They're left off the map but still listed in the requirement's details.
+- `typicalPrereqs`: draw a course after its usual prerequisite. CSCI 270 follows CSCI 104 rather than CSCI 114, because CSCI 113/114 is the lighter CS path. "Can take now" still uses the catalogue's full prerequisites.
 
 ## AP and exam credit
 

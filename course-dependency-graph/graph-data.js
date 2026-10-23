@@ -1002,6 +1002,24 @@ window.QBIO_DATA = {
     ]
    }
   ],
+  "mapAdjustments": {
+   "hide": {
+    "courses": [
+     "MATH 127",
+     "MATH 227",
+     "MATH 245"
+    ],
+    "note": "Rarely taken by QBIO students, so it's left off the map to keep it readable. It still counts for the requirement."
+   },
+   "typicalPrereqs": {
+    "CSCI 270": {
+     "ignore": [
+      "CSCI 114"
+     ],
+     "note": "On the map, CSCI 270 follows CSCI 104: QBIO students take algorithms after Data Structures. CSCI 113 and 114 are the lighter CS path and usually aren't followed by CSCI 270, though the catalogue allows it."
+    }
+   }
+  },
   "placement": {
    "courses": [
     "MATH 040",

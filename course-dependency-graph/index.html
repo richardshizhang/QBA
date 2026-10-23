@@ -715,27 +715,47 @@ button, input, select { font: inherit; color: inherit; }
   let G = null;
   const placementMet = g => g.o.some(b => b.every(x => PLACEMENT.has(x)));
 
+  // Map-only adjustments from requirements.json: rarely taken options are hidden, and some
+  // prerequisites follow the path QBIO students actually take (CSCI 270 after CSCI 104).
+  // Eligibility ("can take now") still uses the catalogue's full prerequisites.
+  const ADJ = R.mapAdjustments || {};
+  const HIDDEN = new Set((ADJ.hide && ADJ.hide.courses) || []);
+  const TYPICAL = ADJ.typicalPrereqs || {};
+  function mapGroups(code) {
+    const t = TYPICAL[code];
+    if (!t) return groupsOf(code);
+    const ignore = new Set(t.ignore);
+    return groupsOf(code).map(g => {
+      const o = g.o.filter(b => !b.some(x => ignore.has(x)));
+      return o.length ? { n: Math.min(g.n, o.length), o } : g;
+    });
+  }
+  // AP credit and waivers mean you won't take the course, so they sit before step 1.
+  const preCredited = code => CREDIT.has(code) || isWaived(code);
+
   function buildGraph() {
-    const visibleSlots = Object.keys(R.slots).filter(id => state.electives || !electiveOnly(id));
-    const slotCourses = new Set(visibleSlots.flatMap(id => R.slots[id].courses));
+    const visibleSlots = Object.keys(R.slots).filter(id => (state.electives || !electiveOnly(id)) && R.slots[id].courses.some(c => !HIDDEN.has(c)));
+    const shown = id => R.slots[id].courses.filter(c => !HIDDEN.has(c));
+    const slotCourses = new Set(visibleSlots.flatMap(shown));
     const outsideCodes = new Set();
     if (state.outside) {
-      slotCourses.forEach(c => groupsOf(c).forEach(g => {
+      slotCourses.forEach(c => mapGroups(c).forEach(g => {
         if (!placementMet(g)) g.o.flat().forEach(x => { if (OUTSIDE.has(x) && !slotCourses.has(x)) outsideCodes.add(x); });
       }));
     }
     const onMap = x => slotCourses.has(x) || outsideCodes.has(x);
     const usable = b => b.every(x => onMap(x) || PLACEMENT.has(x));
 
-    // Earliest step for each course on the map.
+    // Earliest step for each course on the map (0 = already covered by AP credit or a waiver).
     const memo = new Map();
     const stepOf = (code, stack) => {
       if (memo.has(code)) return memo.get(code);
+      if (preCredited(code)) { memo.set(code, 0); return 0; }
       stack = stack || new Set();
       if (stack.has(code)) return 1;
       stack.add(code);
       let t = 1;
-      groupsOf(code).forEach(g => {
+      mapGroups(code).forEach(g => {
         if (placementMet(g)) return;
         const ready = g.o.filter(usable).map(b => Math.max(0, ...b.filter(x => !PLACEMENT.has(x)).map(x => stepOf(x, stack))))
           .sort((a, b) => a - b);
@@ -746,12 +766,15 @@ button, input, select { font: inherit; color: inherit; }
       return t;
     };
 
-    // A requirement whose options open up at different steps becomes one box per step.
+    // A requirement whose options open up at different steps becomes one box per step; one
+    // already met by AP credit or a waiver collapses into a single box before step 1.
     const nodes = new Map(), nodeOf = new Map();
     visibleSlots.forEach(id => {
+      const courses = shown(id);
       const byStep = new Map();
-      R.slots[id].courses.forEach(c => {
-        const t = stepOf(c);
+      const met = state.waived.has(id) || courses.some(c => CREDIT.has(c));
+      courses.forEach(c => {
+        const t = met ? 0 : stepOf(c);
         if (!byStep.has(t)) byStep.set(t, []);
         byStep.get(t).push(c);
       });
@@ -759,7 +782,7 @@ button, input, select { font: inherit; color: inherit; }
       steps.forEach(t => {
         const nid = "s:" + id + (steps.length > 1 ? "@" + t : "");
         nodes.set(nid, { id: nid, kind: "slot", slot: id, courses: byStep.get(t), tier: t, cat: slotCat(id),
-          multi: R.slots[id].courses.length > 1, otherSteps: steps.filter(s => s !== t) });
+          multi: courses.length > 1, otherSteps: steps.filter(s => s !== t) });
         byStep.get(t).forEach(c => nodeOf.set(c, nid));
       });
     });
@@ -771,7 +794,7 @@ button, input, select { font: inherit; color: inherit; }
 
     const raw = [];
     nodes.forEach(n => n.courses.forEach(course => {
-      groupsOf(course).forEach(g => {
+      mapGroups(course).forEach(g => {
         if (placementMet(g)) return;
         const srcs = new Set();
         g.o.filter(usable).forEach(b => b.forEach(x => { if (nodeOf.has(x)) srcs.add(nodeOf.get(x)); }));
@@ -832,6 +855,7 @@ button, input, select { font: inherit; color: inherit; }
 
   function layout(nodes, edges, inE, outE) {
     const L = Math.max(1, ...[...nodes.values()].map(n => n.tier));
+    const T0 = Math.min(1, ...[...nodes.values()].map(n => n.tier)); // 0 when AP credit/waivers apply
     const layers = Array.from({ length: L + 1 }, () => []);
     const rank = n => n.kind === "outside" ? 900 : CAT_ORDER.indexOf(n.cat) * 100 + (slotOrder[n.slot] || 0);
     [...nodes.values()].sort((a, b) => rank(a) - rank(b)).forEach(n => layers[n.tier].push(n));
@@ -871,7 +895,7 @@ button, input, select { font: inherit; color: inherit; }
     };
     const crossings = () => {
       let c = 0;
-      for (let t = 1; t < L; t++) {
+      for (let t = T0; t < L; t++) {
         const segs = [];
         layers[t].forEach(u => (down.get(u) || []).forEach(v => segs.push([pos.get(u), pos.get(v)])));
         for (let i = 0; i < segs.length; i++) for (let j = i + 1; j < segs.length; j++) {
@@ -882,8 +906,8 @@ button, input, select { font: inherit; color: inherit; }
     };
     let best = layers.map(l => l.slice()), bestC = crossings();
     for (let it = 0; it < 24; it++) {
-      if (it % 2 === 0) for (let t = 2; t <= L; t++) sortLayer(layers[t], up);
-      else for (let t = L - 1; t >= 1; t--) sortLayer(layers[t], down);
+      if (it % 2 === 0) for (let t = T0 + 1; t <= L; t++) sortLayer(layers[t], up);
+      else for (let t = L - 1; t >= T0; t--) sortLayer(layers[t], down);
       const c = crossings();
       if (c < bestC) { bestC = c; best = layers.map(l => l.slice()); }
     }
@@ -922,20 +946,22 @@ button, input, select { font: inherit; color: inherit; }
       pav(want).forEach((z, i) => y.set(l[i], z + off[i]));
     };
     for (let it = 0; it < 8; it++) {
-      for (let t = 1; t <= L; t++) place(layers[t]);
-      for (let t = L; t >= 1; t--) place(layers[t]);
+      for (let t = T0; t <= L; t++) place(layers[t]);
+      for (let t = L; t >= T0; t--) place(layers[t]);
     }
     const minY = Math.min(...[...y.values()]);
-    const colX = t => PAD + (t - 1) * (W + GAP_X);
+    const colX = t => PAD + (t - T0) * (W + GAP_X);
     let maxY = 0;
     layers.forEach((l, t) => l.forEach(n => {
       n.x = colX(t);
       n.y = TOP + y.get(n) - minY;
       maxY = Math.max(maxY, n.y + n.h);
     }));
-    G_SIZE.w = PAD * 2 + L * W + (L - 1) * GAP_X;
+    const cols = L - T0 + 1;
+    G_SIZE.w = PAD * 2 + cols * W + (cols - 1) * GAP_X;
     G_SIZE.h = maxY + PAD;
     G_SIZE.L = L;
+    G_SIZE.T0 = T0;
 
     // Ports: spread arrows along box sides; an arrow that applies to only some options in a
     // box points at those rows.
@@ -956,7 +982,7 @@ button, input, select { font: inherit; color: inherit; }
       });
     });
   }
-  const G_SIZE = { w: 0, h: 0, L: 1 };
+  const G_SIZE = { w: 0, h: 0, L: 1, T0: 1 };
 
   function edgePath(e) {
     const pts = [[e.chain[0].x + W, e.y0]];
@@ -1008,7 +1034,7 @@ button, input, select { font: inherit; color: inherit; }
 
   function render() {
     G = buildGraph();
-    const { w, h, L } = G_SIZE;
+    const { w, h, L, T0 } = G_SIZE;
     stage.style.width = w + "px";
     stage.style.height = h + "px";
     svg.setAttribute("width", w);
@@ -1026,8 +1052,8 @@ button, input, select { font: inherit; color: inherit; }
     svg.querySelectorAll(".edge").forEach(p => edgeEls.set(G.edges[+p.dataset.i], p));
 
     let html = "";
-    for (let t = 1; t <= L; t++) {
-      html += '<div class="colhead" style="left:' + (PAD + (t - 1) * (W + GAP_X)) + "px;width:" + W + 'px">Step ' + t + "</div>";
+    for (let t = T0; t <= L; t++) {
+      html += '<div class="colhead" style="left:' + (PAD + (t - T0) * (W + GAP_X)) + "px;width:" + W + 'px">' + (t === 0 ? "AP &amp; waived" : "Step " + t) + "</div>";
     }
     G.nodes.forEach(n => {
       const multi = n.multi;
@@ -1234,6 +1260,8 @@ button, input, select { font: inherit; color: inherit; }
     };
     parts.push(reqBlock("pre", "Prerequisites", pre));
     parts.push(reqBlock("co", "Corequisites · before or alongside", co));
+    if (TYPICAL[code]) parts.push('<p class="note">' + esc(TYPICAL[code].note) + "</p>");
+    if (HIDDEN.has(code)) parts.push('<p class="note">' + esc(ADJ.hide.note) + "</p>");
     if (WAIVERS[code]) {
       const rows = WAIVERS[code].map(ex => {
         const scores = ex.options.filter(o => o.waives.includes(code)).map(o => o.label.split(",")[0]);
@@ -1298,7 +1326,7 @@ button, input, select { font: inherit; color: inherit; }
       const preText = !hasData(c) ? "No prerequisite data" : pre.length ? "Needs " + pre.map(g => g.o.map(b => b.map(disp).join(" + ")).join(" / ")).join("; ") : "No prerequisites listed";
       return '<button type="button" class="option" data-goto-course="' + esc(c) + '"><span class="row"><span class="code">' + esc(catalogCode(c)) + '</span><span class="ssn">' + seasonsHTML(c) + "</span></span>" +
         '<span style="font-weight:600">' + esc(titleOf(c)) + "</span>" +
-        '<span class="note">' + esc(preText) + (state.taken.has(c) ? " · ✓ taken" : "") + "</span></button>";
+        '<span class="note">' + esc(preText) + (state.taken.has(c) ? " · ✓ taken" : "") + (HIDDEN.has(c) ? " · not shown on the map (rarely taken)" : "") + "</span></button>";
     }).join("") + "</div>");
     return '<div class="stack">' + parts.join("") + "</div>";
   }
@@ -1383,7 +1411,10 @@ button, input, select { font: inherit; color: inherit; }
     const missing = Object.keys(R.courses).filter(c => !hasData(c)).map(disp);
     parts.push('<div class="about"><h3 style="margin:6px 0 0">How to read the map</h3>' +
       "<p><strong>Columns</strong> show the earliest step you could take each course, one step after its prerequisites. When a prerequisite can be met several ways, the column follows the fastest one; arrows show those fastest routes, and selecting a course also lights up its slower alternatives (such as MATH 407 for QBIO 475).</p>" +
-      "<p><strong>Boxes with several codes</strong> are one requirement line from the catalogue (for example Physics I: PHYS 135a, 151, 161 or 171). If its options open up at different steps, the requirement appears once per step, marked \"also step N\".</p>" +
+      "<p><strong>Boxes with several codes</strong> are one requirement line from the catalogue (for example Physics I: PHYS 135a, 151, 161 or 171). If its options open up at different steps, the requirement appears once per step, with a note pointing to the other step.</p>" +
+      "<p><strong>AP credit and waivers</strong> move the courses they cover into an \"AP &amp; waived\" column before step 1, and everything that depends on them shifts left. Ticking courses as taken doesn't move anything.</p>" +
+      (HIDDEN.size ? "<p><strong>Left off the map:</strong> " + esc([...HIDDEN].map(disp).join(", ")) + ", which QBIO students rarely take. They still count for their requirements.</p>" : "") +
+      Object.keys(TYPICAL).map(c => "<p>" + esc(TYPICAL[c].note) + "</p>").join("") +
       "<p><strong>F / Sp / Su</strong> show which terms the course actually ran between " + termName(D.terms[D.terms.length - 1]) + " and " + termName(D.terms[0]) + ".</p>" +
       '<h3 style="margin:6px 0 0">About the data</h3>' +
       "<p>Requirements are transcribed from the <a href=\"" + esc(R.source) + "\" target=\"_blank\" rel=\"noopener\">" + esc(R.catalogue) + "</a>. " + (D.catalogueExport
@@ -1421,7 +1452,7 @@ button, input, select { font: inherit; color: inherit; }
     if (!b) return;
     if (b.hasAttribute("data-clear")) confirmClear = true;
     if (b.hasAttribute("data-clear-no")) confirmClear = false;
-    if (b.hasAttribute("data-clear-yes")) { state.taken.clear(); state.waived.clear(); confirmClear = false; }
+    if (b.hasAttribute("data-clear-yes")) { state.taken.clear(); state.waived.clear(); confirmClear = false; render(); return; }
     refresh();
   });
 
@@ -1491,7 +1522,7 @@ button, input, select { font: inherit; color: inherit; }
     else if (b.dataset.waive) {
       const k = b.dataset.waive;
       if (state.waived.has(k)) state.waived.delete(k); else state.waived.add(k);
-      refresh();
+      render();
     }
     else if (b.hasAttribute("data-show-electives")) { optElectives.checked = true; setElectives(true); }
   });
@@ -1501,7 +1532,7 @@ button, input, select { font: inherit; color: inherit; }
     if (sel.value) state.credit[sel.dataset.exam] = sel.value;
     else delete state.credit[sel.dataset.exam];
     computeCredit();
-    refresh();
+    render(); // credited courses move before step 1, so the layout changes
   });
   // <details> toggle events don't bubble, so listen in the capture phase.
   panel.addEventListener("toggle", ev => {

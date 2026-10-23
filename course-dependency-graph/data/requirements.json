@@ -217,6 +217,19 @@
     }
   ],
 
+  "mapAdjustments": {
+    "hide": {
+      "courses": ["MATH 127", "MATH 227", "MATH 245"],
+      "note": "Rarely taken by QBIO students, so it's left off the map to keep it readable. It still counts for the requirement."
+    },
+    "typicalPrereqs": {
+      "CSCI 270": {
+        "ignore": ["CSCI 114"],
+        "note": "On the map, CSCI 270 follows CSCI 104: QBIO students take algorithms after Data Structures. CSCI 113 and 114 are the lighter CS path and usually aren't followed by CSCI 270, though the catalogue allows it."
+      }
+    }
+  },
+
   "placement": {
     "courses": ["MATH 040", "MATH 108", "CHEM 050"],
     "text": "Entry-level prerequisite. Most QBIO students meet it through a placement exam or AP credit (AP Precalculus 4 or 5 waives MATH 108) instead of taking the course. Check your placement results with your advisor."
