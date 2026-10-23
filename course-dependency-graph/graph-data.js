@@ -907,7 +907,9 @@ window.QBIO_DATA = {
     "units": "12",
     "rule": "choose",
     "choose": 3,
-    "note": "Study-abroad courses can also count toward this requirement; check with your advisor how yours transfer.",
+    "examCredit": false,
+    "abroadPlaceholders": 3,
+    "note": "Study-abroad courses can also count here: tick a study-abroad placeholder for each one, and check with your advisor how yours transfer.",
     "text": "Choose three of the following courses. Courses taken to satisfy the Foundational Computing Course requirement may not be used as Specialization Courses.",
     "slots": [
      "chem2",
@@ -946,7 +948,10 @@ window.QBIO_DATA = {
     "rule": "choose",
     "choose": 2,
     "minUnits": 8,
-    "note": "Study-abroad courses can also count toward this requirement; check with your advisor how yours transfer.",
+    "examCredit": false,
+    "abroadPlaceholders": 2,
+    "abroadUnits": 4,
+    "note": "Study-abroad courses can also count here: tick a study-abroad placeholder for each one, and check with your advisor how yours transfer.",
     "text": "Choose two to three of the following courses (minimum 8 units). Courses taken to satisfy the Foundational Computing, Specialization or Capstone requirements may not double-count toward upper-division electives.",
     "slots": [
      "BISC 300",

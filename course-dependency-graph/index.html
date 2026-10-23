@@ -502,6 +502,8 @@ button, input, select { font: inherit; color: inherit; }
 /* Met, but counted toward another requirement (or not needed here) */
 .pill.elsewhere { border-style: dashed; background: var(--surface); color: var(--muted); }
 .pill .where { font-size: 10.5px; color: var(--faint); }
+.pill.placeholder { border-style: dashed; background: var(--surface); color: var(--muted); }
+.pill.placeholder::before { content: "+"; color: var(--faint); font-weight: 700; }
 .lg-tick.waived { background: var(--muted); border-color: var(--muted); }
 .aptag {
   display: inline-block;
@@ -693,7 +695,7 @@ button, input, select { font: inherit; color: inherit; }
   // ---------- state ----------
   const STORE = "qbio-course-map:v1";
   // waived: requirement lines (slot ids) or outside-the-major courses an advisor has waived.
-  const state = { taken: new Set(), waived: new Set(), credit: {}, creditOpen: null, collapsed: new Set(), electives: false, outside: true, showCredit: true, zoom: 1, focus: null };
+  const state = { taken: new Set(), waived: new Set(), abroad: new Set(), credit: {}, creditOpen: null, collapsed: new Set(), electives: false, outside: true, showCredit: true, zoom: 1, focus: null };
   try {
     const saved = JSON.parse(localStorage.getItem(STORE) || "null");
     if (saved) {
@@ -703,6 +705,7 @@ button, input, select { font: inherit; color: inherit; }
       if (typeof saved.outside === "boolean") state.outside = saved.outside;
       if (typeof saved.showCredit === "boolean") state.showCredit = saved.showCredit;
       state.collapsed = new Set((saved.collapsed || []).filter(id => R.sections.some(s => s.id === id)));
+      state.abroad = new Set((saved.abroad || []).filter(id => /^abroad:[a-z]+:\d+$/.test(id)));
       Object.entries(saved.credit || {}).forEach(([id, v]) => {
         const ex = EXAMS.find(e => e.id === id);
         if (ex && ex.options.some(o => o.value === v)) state.credit[id] = v;
@@ -711,7 +714,7 @@ button, input, select { font: inherit; color: inherit; }
   } catch (e) { /* storage unavailable: start fresh */ }
   function save() {
     try {
-      localStorage.setItem(STORE, JSON.stringify({ taken: [...state.taken], waived: [...state.waived], credit: state.credit, electives: state.electives, outside: state.outside, showCredit: state.showCredit, collapsed: [...state.collapsed] }));
+      localStorage.setItem(STORE, JSON.stringify({ taken: [...state.taken], waived: [...state.waived], credit: state.credit, electives: state.electives, outside: state.outside, showCredit: state.showCredit, collapsed: [...state.collapsed], abroad: [...state.abroad] }));
     } catch (e) { /* ignore */ }
   }
 
@@ -1453,7 +1456,14 @@ button, input, select { font: inherit; color: inherit; }
   // Specialization prefers lines that can't be electives, and Electives take what's left.
   const SECTION_SHORT = { intro: "Intro", science: "Science", computing: "Computing", specialization: "Specialization", capstone: "Capstone", electives: "Electives", research: "Research" };
   const slotSatisfied = id => state.waived.has(id) || R.slots[id].courses.some(c => state.taken.has(c) || CREDIT.has(c));
+  // Met only through AP credit: unlocks later courses, but some sections don't accept it
+  // (AP Calc BC 5 skips MATH 126 without satisfying a Specialization course).
+  const creditOnly = id => !state.waived.has(id) && !R.slots[id].courses.some(c => state.taken.has(c)) && R.slots[id].courses.some(c => CREDIT.has(c));
+  // Study-abroad placeholders, e.g. "abroad:electives:1", ticked from the requirements panel.
+  const abroadIds = sec => Array.from({ length: sec.abroadPlaceholders || 0 }, (_, i) => "abroad:" + sec.id + ":" + (i + 1));
+  const isAbroad = id => id.startsWith("abroad:");
   const slotUnits = id => {
+    if (isAbroad(id)) return R.sections.find(s => s.id === id.split(":")[1]).abroadUnits || 4;
     const s = R.slots[id];
     const c = s.courses.find(x => state.taken.has(x) || CREDIT.has(x)) || s.courses[0];
     return parseFloat(unitsOf(c)) || 0;
@@ -1461,10 +1471,10 @@ button, input, select { font: inherit; color: inherit; }
   function allocate() {
     const usedBy = new Map(), counted = {}, info = {};
     const claim = (sec, id) => { usedBy.set(id, sec.id); counted[sec.id].push(id); };
-    const free = id => slotSatisfied(id) && !usedBy.has(id);
     const laterUses = (id, i) => R.sections.slice(i + 1).filter(s => (s.slots || []).includes(id)).length;
     R.sections.forEach((sec, i) => {
       counted[sec.id] = [];
+      const free = id => slotSatisfied(id) && !usedBy.has(id) && !(sec.examCredit === false && creditOnly(id));
       if (sec.rule === "track") {
         // Best track: most lines met; on a tie, spend the fewest QBIO courses (they can
         // still count as Specialization or electives).
@@ -1481,7 +1491,9 @@ button, input, select { font: inherit; color: inherit; }
         if (started) best.use.forEach(id => claim(sec, id));
         info[sec.id] = { track: best.ti, met: started ? best.use.length : 0, of: 3 };
       } else if (sec.rule === "choose") {
-        const cands = sec.slots.filter(free).sort((a, b) => laterUses(a, i) - laterUses(b, i));
+        // Ticked study-abroad placeholders belong to this section alone, so they go first.
+        const cands = abroadIds(sec).filter(id => state.abroad.has(id))
+          .concat(sec.slots.filter(free).sort((a, b) => laterUses(a, i) - laterUses(b, i)));
         (sec.minUnits ? cands : cands.slice(0, sec.choose)).forEach(id => claim(sec, id));
       } else {
         sec.slots.filter(free).forEach(id => claim(sec, id));
@@ -1490,23 +1502,35 @@ button, input, select { font: inherit; color: inherit; }
     return { usedBy, counted, info };
   }
 
+  // A study-abroad placeholder pill; clicking it toggles it.
+  function abroadPill(id, sec, alloc) {
+    const on = state.abroad.has(id);
+    const counted = on && alloc.usedBy.get(id) === sec.id;
+    const label = "Study abroad " + (sec.id === "electives" ? "elective" : sec.id) + " " + id.split(":")[2];
+    return '<button type="button" class="pill cat-' + SECTION_CAT[sec.id] + (counted ? " done" : on ? " elsewhere" : " placeholder") + '" data-abroad="' + esc(id) + '" aria-pressed="' + on + '">' +
+      esc(label) + (on && !counted ? '<span class="where">extra</span>' : "") + "</button>";
+  }
+
   // A requirement line as a pill: counted here, counted in another section, or not needed.
   function pill(id, secId, alloc) {
+    if (isAbroad(id)) return abroadPill(id, R.sections.find(s => s.id === secId), alloc);
     const s = R.slots[id];
     const target = s.courses.length > 1 ? 'data-goto-slot="' + esc(id) + '"' : 'data-goto-course="' + esc(s.courses[0]) + '"';
     let cls = "", where = "";
     if (slotSatisfied(id)) {
       const owner = alloc && alloc.usedBy.get(id);
+      const sec = R.sections.find(x => x.id === secId);
       if (alloc && owner !== secId) {
         cls = " elsewhere";
-        where = owner ? "in " + SECTION_SHORT[owner] : "extra";
+        where = owner ? "in " + SECTION_SHORT[owner] : sec && sec.examCredit === false && creditOnly(id) ? "AP doesn't count" : "extra";
       } else {
         const isTaken = s.courses.some(c => state.taken.has(c));
         const isCredit = !isTaken && s.courses.some(c => CREDIT.has(c));
         cls = isTaken ? " done" : isCredit ? " done credit" : " waived";
       }
     }
-    const tip = s.courses.map(disp).join(" / ") + (where ? (where === "extra" ? " (not needed here)" : " (counted " + where + ")") : "");
+    const tip = s.courses.map(disp).join(" / ") + (!where ? "" : where === "extra" ? " (not needed here)"
+      : where.startsWith("AP") ? " (AP credit skips the course but doesn't satisfy this requirement)" : " (counted " + where + ")");
     return '<button type="button" class="pill cat-' + slotCat(id) + cls + '" ' + target + ' title="' + esc(tip) + '">' + esc(slotName(id)) +
       (where ? '<span class="where">' + esc(where) + "</span>" : "") + "</button>";
   }
@@ -1573,7 +1597,7 @@ button, input, select { font: inherit; color: inherit; }
         done = units >= sec.minUnits && mine.length >= sec.choose;
         prog = units + " / " + sec.minUnits + " units";
         if (state.electives) body += pills(sec.slots, sec);
-        else body += (mine.length ? pills(mine, sec) : "") +
+        else body += (mine.some(id => !isAbroad(id)) ? pills(mine.filter(id => !isAbroad(id)), sec) : "") +
           '<button type="button" class="btn" data-show-electives>Show all ' + sec.slots.length + " elective options on the map</button>";
       } else if (sec.rule === "choose") {
         done = mine.length >= sec.choose;
@@ -1583,6 +1607,7 @@ button, input, select { font: inherit; color: inherit; }
         prog = sec.units + " units";
         body += pills(sec.slots, sec);
       }
+      if (sec.abroadPlaceholders) body += '<div class="pills">' + abroadIds(sec).map(id => abroadPill(id, sec, alloc)).join("") + "</div>";
       if (sec.note) body += '<p class="note">' + esc(sec.note) + "</p>";
       const open = !state.collapsed.has(sec.id);
       parts.push('<details class="sec" data-sec="' + esc(sec.id) + '"' + (open ? " open" : "") + '><summary class="sec-head"><strong>' + esc(sec.title) +
@@ -1627,10 +1652,10 @@ button, input, select { font: inherit; color: inherit; }
   const clearWrap = document.getElementById("clear-wrap");
   let confirmClear = false;
   function renderClear() {
-    const n = state.taken.size + state.waived.size;
+    const n = state.taken.size + state.waived.size + state.abroad.size;
     if (!n) { clearWrap.innerHTML = ""; confirmClear = false; return; }
     clearWrap.innerHTML = confirmClear
-      ? "Clear " + n + ' taken and waived marks? <button type="button" class="btn danger" data-clear-yes>Clear</button><button type="button" class="btn" data-clear-no>Keep</button>'
+      ? "Clear " + n + ' taken, waived and study-abroad marks? <button type="button" class="btn danger" data-clear-yes>Clear</button><button type="button" class="btn" data-clear-no>Keep</button>'
       : '<button type="button" class="btn" data-clear>Clear marks (' + n + ")</button>";
   }
   clearWrap.addEventListener("click", ev => {
@@ -1638,7 +1663,7 @@ button, input, select { font: inherit; color: inherit; }
     if (!b) return;
     if (b.hasAttribute("data-clear")) confirmClear = true;
     if (b.hasAttribute("data-clear-no")) confirmClear = false;
-    if (b.hasAttribute("data-clear-yes")) { state.taken.clear(); state.waived.clear(); confirmClear = false; render(); return; }
+    if (b.hasAttribute("data-clear-yes")) { state.taken.clear(); state.waived.clear(); state.abroad.clear(); confirmClear = false; render(); return; }
     refresh();
   });
 
@@ -1711,6 +1736,11 @@ button, input, select { font: inherit; color: inherit; }
     else if (b.dataset.gotoCourse) select({ kind: "course", id: b.dataset.gotoCourse }, true);
     else if (b.dataset.gotoSlot) select({ kind: "slot", id: b.dataset.gotoSlot }, true);
     else if (b.dataset.tick) toggleTaken(b.dataset.tick);
+    else if (b.dataset.abroad) {
+      const k = b.dataset.abroad;
+      if (state.abroad.has(k)) state.abroad.delete(k); else state.abroad.add(k);
+      refresh(); // placeholders don't appear on the map
+    }
     else if (b.dataset.waive) {
       const k = b.dataset.waive;
       if (state.waived.has(k)) state.waived.delete(k); else state.waived.add(k);
