@@ -22,31 +22,24 @@ profile, "dois" lists their papers instead.
     python3 scripts/resolve_authors.py --only remo-rohs yan-liu   # redo a few
     python3 scripts/resolve_authors.py --review-only              # just rewrite the review
 
-API responses are cached in data/raw/openalex/, so reruns cost nothing. OpenAlex bills
-in credits: a name search costs 10, a filtered list 1, a lookup by ID nothing. Without
-a key everyone on your network shares 1,000 credits a day; a free key from
-https://openalex.org/settings/api gives 10,000. Put the key in the OPENALEX_API_KEY
-environment variable or in a file named .openalex-key next to this project's README
-(it is gitignored). A full first run uses roughly 1,200 credits. If the budget runs
-out midway, everything finished so far is still written; rerun after midnight UTC.
-Only the standard library is used.
+API responses are cached in data/raw/openalex/, so reruns cost nothing. A full first
+run uses roughly 1,200 OpenAlex credits (see scripts/openalex.py for budgets and the
+API key). If the budget runs out midway, everything finished so far is still written;
+rerun after midnight UTC. Only the standard library is used.
 """
 
 import argparse
 import concurrent.futures as futures
-import hashlib
 import json
 import math
 import os
 import re
 import sys
-import time
 import unicodedata
-import urllib.error
-import urllib.parse
-import urllib.request
 
-API = "https://api.openalex.org"
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import openalex  # noqa: E402
+
 USC = "https://openalex.org/I1174212"
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FACULTY = os.path.join(ROOT, "data", "faculty.json")
@@ -98,57 +91,12 @@ GROUPS = ("core", "joint", "emeritus")
 
 # ---------------------------------------------------------------- OpenAlex access
 
-class OutOfBudget(Exception):
-    pass
-
-
-KEY_FILE = os.path.join(ROOT, ".openalex-key")
-credits_left = None  # from the last response's X-RateLimit-Remaining header
-
-
-def api_key():
-    if os.environ.get("OPENALEX_API_KEY"):
-        return os.environ["OPENALEX_API_KEY"].strip()
-    if os.path.exists(KEY_FILE):
-        with open(KEY_FILE, encoding="utf-8") as f:
-            return f.read().strip() or None
-    return None
+OutOfBudget = openalex.OutOfBudget
+short = openalex.short
 
 
 def get_json(path, params):
-    """GET {API}{path}?params, cached on disk by URL (the API key is not part of it)."""
-    query = urllib.parse.urlencode(params, safe=":|,")
-    url = f"{API}{path}?{query}"
-    cache = os.path.join(CACHE, hashlib.sha1(url.encode()).hexdigest() + ".json")
-    if os.path.exists(cache):
-        with open(cache, encoding="utf-8") as f:
-            return json.load(f)
-    global credits_left
-    key = api_key()
-    full = url + (f"&api_key={key}" if key else "")
-    req = urllib.request.Request(full, headers={"User-Agent": "QBA faculty map (USC student project)"})
-    for attempt in range(6):
-        try:
-            with urllib.request.urlopen(req, timeout=60) as resp:
-                data = json.load(resp)
-                credits_left = resp.headers.get("X-RateLimit-Remaining", credits_left)
-            break
-        except urllib.error.HTTPError as exc:
-            if exc.code == 429:
-                body = exc.read().decode("utf-8", "replace")
-                if "per second" not in body:
-                    raise OutOfBudget(body[:300]) from exc
-                # Burst limit (10 requests/second), not the daily budget: wait and retry.
-            elif attempt == 5:
-                raise RuntimeError(f"{url}: HTTP {exc.code}") from exc
-        except Exception as exc:
-            if attempt == 5:
-                raise RuntimeError(f"{url}: {exc}") from exc
-        time.sleep(1 + 2 * attempt)
-    os.makedirs(CACHE, exist_ok=True)
-    with open(cache, "w", encoding="utf-8") as f:
-        json.dump(data, f)
-    return data
+    return openalex.get_json(path, params, cache_dir=CACHE)
 
 
 def search_authors(name, filt=None, per_page=15):
@@ -165,10 +113,6 @@ def top_works(author_ids, sort, n):
 
 
 # ---------------------------------------------------------------- matching
-
-def short(oa_id):
-    return oa_id.rsplit("/", 1)[-1]
-
 
 def tokens(name, join_hyphens=False):
     name = unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode().lower()
@@ -570,12 +514,12 @@ def main():
     n_check = sum(1 for e in ordered.values() if e["status"] != "verified" and e["confidence"] != "high")
     print(f"\nwrote {os.path.relpath(MAPPING, ROOT)} and {os.path.relpath(REVIEW, ROOT)}: "
           f"{len(ordered)} of {len(faculty)} faculty, {n_check} flagged for a look")
-    if credits_left is not None:
-        print(f"OpenAlex credits left today: {credits_left}")
+    if openalex.credits_left is not None:
+        print(f"OpenAlex credits left today: {openalex.credits_left}")
     missing = [p["name"] for p in faculty if p["id"] not in ordered]
     if out_of_budget:
         sys.exit(f"\nOpenAlex budget used up before {len(missing)} faculty: {', '.join(missing)}.\n"
-                 "Rerun after midnight UTC, or add a free API key (see the top of this script).")
+                 "Rerun after midnight UTC, or add a free API key (see scripts/openalex.py).")
 
 
 if __name__ == "__main__":

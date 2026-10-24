@@ -1,0 +1,10 @@
+{
+  "liang-chen": {
+    "drop": ["W2139038419", "W4381331732"],
+    "note": "USC namesakes: a carbon-nanotube paper (Viterbi engineering) and a marine heatwave/algae paper."
+  },
+  "michael-edge": {
+    "keep": ["W7214092425"],
+    "note": "His 2026 paper on measurement error vs. change heterogeneity; no institution listed, so the topic check dropped it."
+  }
+}
