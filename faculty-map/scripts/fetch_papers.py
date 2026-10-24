@@ -82,6 +82,10 @@ NOT_RESEARCH_TITLE = re.compile(
     r"(supplementary |supplemental )?(figure|fig\.|table) s?\d|publisher correction|author correction|"
     r"correction( to)?\b|corrigendum|erratum|retraction|retracted|expression of concern)",
     re.I)
+# Placeholder records: the whole title is one of these.
+JUNK_TITLE = re.compile(
+    r"^(oup accepted manuscript|accepted manuscript|author manuscript|contributors|front matter|"
+    r"back matter|index|table of contents|editorial board|title page|untitled|10\.\d{4,}/\S+)$", re.I)
 # Conference abstracts carry poster numbers: "Abstract 3825: ...", "BM-15 * ...".
 TITLE_PREFIX = re.compile(r"^(abstract\s+[a-z]*[-\d]+[a-z]*\s*:\s*|[a-z]{1,6}-?\d+[a-z]?\s*\*\s*)", re.I)
 
@@ -256,7 +260,7 @@ def research_problem(w, info):
         return f"type: {w['type']}"
     if w["type"] == "dissertation" and info.get("position") != "first":
         return "someone else's dissertation"
-    if NOT_RESEARCH_TITLE.match(w["title"]) or not w["title"]:
+    if not w["title"] or NOT_RESEARCH_TITLE.match(w["title"]) or JUNK_TITLE.match(w["title"]):
         return "not research (title)"
     if w["language"] not in (None, "en"):
         return f"language: {w['language']}"
@@ -334,6 +338,8 @@ def apply_filters(works, overrides):
             info = w["faculty"][pid]
             if info["reason"] or info["network"] in ("main", "curated"):
                 continue
+            if w["authors_truncated"] and info["position"] is None:
+                continue  # beyond the first 100 authors, so no affiliation to go on
             t = w["topic"]
             if t and sub[t["subfield"]] / n < SUBFIELD_SHARE and field[t["field"]] / n < FIELD_SHARE:
                 info["reason"] = f"off-profile ({t['field']} / {t['subfield']})"

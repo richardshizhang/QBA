@@ -9,7 +9,7 @@ early work in another field. Fix mistakes in
 
 | Faculty | Fetched | Kept | With abstract | Duplicates | Not research | Off-profile | By hand |
 |---|---|---|---|---|---|---|---|
-| [Helen Berman](#helen-berman) | 420 | **336** | 198 | 15 | 43 | 26 |  |
+| [Helen Berman](#helen-berman) | 420 | **335** | 197 | 15 | 44 | 26 |  |
 | [Peter Calabrese](#peter-calabrese) | 51 | **47** | 34 | 1 | 1 | 2 |  |
 | [Mark Chaisson](#mark-chaisson) | 115 | **87** | 70 | 8 | 19 | 1 |  |
 | [Liang Chen](#liang-chen) | 69 | **42** | 37 | 2 | 4 | 19 | 2 |
@@ -24,8 +24,8 @@ early work in another field. Fix mistakes in
 | [Andrew Smith](#andrew-smith) | 248 | **114** | 98 | 2 | 54 | 78 |  |
 | [Fengzhu Sun](#fengzhu-sun) | 288 | **232** | 197 | 7 | 47 | 2 |  |
 | [Andrew McMahon](#andrew-mcmahon) | 493 | **437** | 243 | 16 | 36 | 4 |  |
-| [Simon Tavaré](#simon-tavare) | 528 | **348** | 256 | 8 | 162 | 10 |  |
-| [Michael Waterman](#michael-waterman) | 297 | **243** | 143 | 18 | 17 | 19 |  |
+| [Simon Tavaré](#simon-tavare) | 528 | **349** | 257 | 8 | 162 | 9 |  |
+| [Michael Waterman](#michael-waterman) | 297 | **244** | 144 | 18 | 18 | 17 |  |
 | [Don B. Arnold](#don-b-arnold) | 61 | **41** | 30 | 7 | 13 |  |  |
 | [Charleston Chiang](#charleston-chiang) | 112 | **95** | 68 | 11 | 6 |  |  |
 | [Rosa Di Felice](#rosa-di-felice) | 175 | **143** | 108 | 7 | 14 | 11 |  |
@@ -34,12 +34,12 @@ early work in another field. Fix mistakes in
 | [Peter Foster](#peter-foster) | 18 | **18** | 13 | 0 | 0 |  |  |
 | [Scott Fraser](#scott-fraser) | 554 | **435** | 288 | 10 | 22 | 87 |  |
 | [Krishna Garikipati](#krishna-garikipati) | 250 | **194** | 94 | 20 | 30 | 6 |  |
-| [Steven Gazal](#steven-gazal) | 167 | **119** | 73 | 9 | 32 | 7 |  |
+| [Steven Gazal](#steven-gazal) | 167 | **118** | 72 | 8 | 34 | 7 |  |
 | [Christoph Haselwandter](#christoph-haselwandter) | 70 | **48** | 38 | 2 | 3 | 17 |  |
 | [Andrei Irimia](#andrei-irimia) | 220 | **183** | 141 | 3 | 7 | 27 |  |
 | [Eva Kanso](#eva-kanso) | 248 | **210** | 116 | 21 | 15 | 2 |  |
 | [Judith Kribelbauer](#judith-kribelbauer) | 34 | **28** | 25 | 2 | 2 | 2 |  |
-| [Jerry S.H. Lee](#jerry-s-h-lee) | 171 | **130** | 112 | 9 | 19 | 13 |  |
+| [Jerry S.H. Lee](#jerry-s-h-lee) | 171 | **131** | 112 | 9 | 19 | 12 |  |
 | [Naomi Levine](#naomi-levine) | 104 | **86** | 69 | 1 | 16 | 1 |  |
 | [Sheng Li](#sheng-li) | 105 | **74** | 60 | 2 | 17 | 12 |  |
 | [Ruishan Liu](#ruishan-liu) | 47 | **31** | 24 | 3 | 3 | 10 |  |
@@ -52,13 +52,13 @@ early work in another field. Fix mistakes in
 | [Julia Schwartzman](#julia-schwartzman) | 60 | **43** | 36 | 3 | 11 | 3 |  |
 | [Chang (April) Shu](#chang-shu) | 78 | **41** | 29 | 2 | 5 | 30 |  |
 | [Rory Spence](#rory-spence) | 15 | **12** | 9 | 1 | 0 | 2 |  |
-| [Paul Thomas](#paul-thomas) | 127 | **101** | 91 | 4 | 11 | 11 |  |
-| [Paul Thompson](#paul-thompson) | 2853 | **2563** | 1756 | 166 | 93 | 31 |  |
-| [Arthur Toga](#arthur-toga) | 1813 | **1617** | 1064 | 78 | 65 | 53 |  |
+| [Paul Thomas](#paul-thomas) | 127 | **102** | 92 | 4 | 11 | 10 |  |
+| [Paul Thompson](#paul-thompson) | 2853 | **2572** | 1763 | 166 | 93 | 22 |  |
+| [Arthur Toga](#arthur-toga) | 1813 | **1633** | 1077 | 78 | 65 | 37 |  |
 | [Peter Yingxiao Wang](#peter-yingxiao-wang) | 307 | **217** | 155 | 3 | 66 | 21 |  |
-| [Arieh Warshel](#arieh-warshel) | 608 | **514** | 376 | 11 | 62 | 21 |  |
+| [Arieh Warshel](#arieh-warshel) | 608 | **515** | 376 | 11 | 62 | 20 |  |
 
-10421 distinct kept papers (11293 faculty–paper pairs).
+10435 distinct kept papers (11321 faculty–paper pairs).
 
 ---
 
@@ -492,8 +492,9 @@ early work in another field. Fix mistakes in
 <a id="simon-tavare"></a>
 ## Simon Tavaré
 
-**Kept, but unusual topic for them (24):** drop by hand if not theirs.
+**Kept, but unusual topic for them (25):** drop by hand if not theirs.
 
+- 2020 · [W3004890574](https://openalex.org/W3004890574) Butler enables rapid cloud-based analysis of thousands of human genomes · *Information Systems and Management* · no institution listed
 - 2019 · [W2954425631](https://openalex.org/W2954425631) Loss of the interleukin-6 receptor causes immunodeficiency, atopy, and abnormal inflammatory resp... · *Immunology* · Cancer Research UK; New York Genome Center; Columbia University
 - 2015 · [W2415492558](https://openalex.org/W2415492558) PWE-171 Mobile element insertions are frequent and potentially mutagenic events in oesophageal ca... · *Plant Science* · Cancer Research UK Cambridge Center
 - 2013 · [W2168059726](https://openalex.org/W2168059726) Automated quantification of the schooling behaviour of sticklebacks · *Water Science and Technology* · University of Southern California; University of Cambridge
@@ -519,12 +520,11 @@ early work in another field. Fix mistakes in
 - 2001 · [W1989943612](https://openalex.org/W1989943612) Recombination in theompAGene but Not theomcBGene ofChlamydiaContributes to Serovar-Specific Diffe... · *Microbiology* · University of Southern California
 - 1995 · [W2138167972](https://openalex.org/W2138167972) Single sperm analysis of the trinucleotide repeats in the Huntington's disease gene: quantificati... · *Cellular and Molecular Neuroscience* · University of Southern California
 
-**Dropped as off-profile (10):**
+**Dropped as off-profile (9):**
 
 - 2023 · [W4382457803](https://openalex.org/W4382457803) Gradient Estimation for Binary Latent Variables via Gradient Variance Clipping · *Artificial Intelligence* · Columbia University
 - 2023 · [W4387011789](https://openalex.org/W4387011789) Spatial regulation of Drosophila ovarian Follicle Stem Cell division rates and cell cycle transit... · *Molecular Biology* · Columbia University
 - 2020 · [W4287760801](https://openalex.org/W4287760801) A note on the Screaming Toes game · *Discrete Mathematics and Combinatorics* · no institution listed
-- 2020 · [W3004890574](https://openalex.org/W3004890574) Butler enables rapid cloud-based analysis of thousands of human genomes · *Information Systems and Management* · no institution listed
 - 2018 · [W2765966903](https://openalex.org/W2765966903) Division-independent differentiation mandates proliferative competition among stem cells · *Molecular Biology* · University of Cambridge; Cancer Research UK
 - 2013 · [W2093700242](https://openalex.org/W2093700242) Bayesian clustering of replicated time-course gene expression data with weak signals · *Artificial Intelligence* · University of Cambridge
 - 2004 · [W2287027551](https://openalex.org/W2287027551) Stochastic models in colon cancer · *Modeling and Simulation* · no institution listed
@@ -537,11 +537,12 @@ early work in another field. Fix mistakes in
 <a id="michael-waterman"></a>
 ## Michael Waterman
 
-**Kept, but unusual topic for them (10):** drop by hand if not theirs.
+**Kept, but unusual topic for them (11):** drop by hand if not theirs.
 
 - 2021 · [W3139957287](https://openalex.org/W3139957287) The Human Genome Project: the Beginning of the Beginning · *History and Philosophy of Science* · University of Southern California; University of Virginia
 - 2020 · [W3107493862](https://openalex.org/W3107493862) Multiscale Feedback Loops in SARS-CoV-2 Viral Evolution · *Infectious Diseases* · University of Virginia
 - 2009 · [W2080117937](https://openalex.org/W2080117937) A Single Molecule Scaffold for the Maize Genome · *Plant Science* · University of Southern California
+- 2009 · [W2014704298](https://openalex.org/W2014704298) The B73 Maize Genome: Complexity, Diversity, and Dynamics · *Plant Science* · no institution listed
 - 2006 · [W191434579](https://openalex.org/W191434579) Stan Ulam and Computational Biology · *History and Philosophy of Science* · University of Southern California
 - 2000 · [W1041560277](https://openalex.org/W1041560277) Mathematical Sciences and The New Biology · *History and Philosophy of Science* · University of Southern California
 - 1997 · [W2610957710](https://openalex.org/W2610957710) Pooling Strategies for Establishing Physical Genome Maps Using FISH · *Plant Science* · no institution listed
@@ -550,10 +551,8 @@ early work in another field. Fix mistakes in
 - 1982 · [W2074984142](https://openalex.org/W2074984142) Hierarchical analysis of influenza A hemagglutinin gene sequences · *Epidemiology* · Los Alamos National Laboratory
 - 1980 · [W1984307184](https://openalex.org/W1984307184) New Stratigraphic Correlation Techniques · *Geochemistry and Petrology* · no institution listed
 
-**Dropped as off-profile (19):**
+**Dropped as off-profile (17):**
 
-- 2009 · [W2014704298](https://openalex.org/W2014704298) The B73 Maize Genome: Complexity, Diversity, and Dynamics · *Plant Science* · no institution listed
-- 2000 · [W2127178311](https://openalex.org/W2127178311) 10.1016/b978-044488002-4/50041-5 · *Museology* · no institution listed
 - 1995 · [W2493457972](https://openalex.org/W2493457972) Algorithms for DDP · *Control and Systems Engineering* · no institution listed
 - 1995 · [W4210658033](https://openalex.org/W4210658033) Multiple Maps · *Geography, Planning and Development* · no institution listed
 - 1995 · [W4247893721](https://openalex.org/W4247893721) Physical Genome Maps: Oceans, Islands and Anchors · *Plant Science* · no institution listed
@@ -755,10 +754,9 @@ early work in another field. Fix mistakes in
 <a id="steven-gazal"></a>
 ## Steven Gazal
 
-**Kept, but unusual topic for them (2):** drop by hand if not theirs.
+**Kept, but unusual topic for them (1):** drop by hand if not theirs.
 
 - 2026 · [W7122561801](https://openalex.org/W7122561801) Late‐Onset Rheumatoid Arthritis and Air Pollution in a Multiethnic Cohort · *Health, Toxicology and Mutagenesis* · University of Southern California
-- 2016 · [W2544136853](https://openalex.org/W2544136853) OUP accepted manuscript · *Materials Chemistry* · Broad Institute; Harvard University
 
 **Dropped as off-profile (7):**
 
@@ -905,13 +903,14 @@ early work in another field. Fix mistakes in
 <a id="jerry-s-h-lee"></a>
 ## Jerry S.H. Lee
 
-**Kept, but unusual topic for them (14):** drop by hand if not theirs.
+**Kept, but unusual topic for them (15):** drop by hand if not theirs.
 
 - 2026 · [W7212175130](https://openalex.org/W7212175130) Big Data and Artificial Intelligence in Cancer Drug Discovery: Promise, Challenges, and Emerging ... · *Computational Theory and Mathematics* · University of Southern California; Ellison Medical Institute
 - 2025 · [W4412163847](https://openalex.org/W4412163847) Abstract B039: Detecting obesity-associated histopathology characteristics in breast cancer using... · *Artificial Intelligence* · Ellison Medical Institute
 - 2024 · [W4404389325](https://openalex.org/W4404389325) Ten Pillars for Data Meshes · *Information Systems* · Ellison Institute of Technology
 - 2023 · [W4376133491](https://openalex.org/W4376133491) Chemotherapy Treatment Costs and Clinical Outcomes of Colon Cancer in the U.S. Military Health Sy... · *Economics and Econometrics* · University of Southern California; Ellison Institute of Technology; Ellison Medical Institute
 - 2023 · [W4388626280](https://openalex.org/W4388626280) Detecting Disruption of HER2 Membrane Protein Organization in Cell Membranes with Nanoscale Preci... · *Materials Chemistry* · University of Southern California; Ellison Institute of Technology
+- 2022 · [W4205223655](https://openalex.org/W4205223655) Clinical trial design during and beyond the pandemic: the I-SPY COVID trial · *Statistics and Probability* · no institution listed
 - 2021 · [W3164859410](https://openalex.org/W3164859410) A field guide to cultivating computational biology · *Information Systems and Management* · University of Southern California; Ellison Medical Institute
 - 2021 · [W3200497141](https://openalex.org/W3200497141) Evaluating the impact of ideation and actualization of multidisciplinary research · *Statistics, Probability and Uncertainty* · University of Southern California; Ellison Medical Institute
 - 2020 · [W3005126283](https://openalex.org/W3005126283) Minimum Technical Data Elements for Liquid Biopsy Data Submitted to Public Databases · *Information Systems* · University of Southern California
@@ -922,10 +921,9 @@ early work in another field. Fix mistakes in
 - 2011 · [W2417518679](https://openalex.org/W2417518679) Physical oncology · *Radiation* · Office of the Director; National Cancer Institute
 - 2010 · [W2102201903](https://openalex.org/W2102201903) Strategic Workshops on Cancer Nanotechnology · *Biomedical Engineering* · National Cancer Institute
 
-**Dropped as off-profile (13):**
+**Dropped as off-profile (12):**
 
 - 2024 · [W4392745766](https://openalex.org/W4392745766) 2.2 “Zen 4c”: The AMD 5nm Area-Optimized ×86-64 Microprocessor Core · *Hardware and Architecture* · Advanced Micro Devices (United States)
-- 2022 · [W4205223655](https://openalex.org/W4205223655) Clinical trial design during and beyond the pandemic: the I-SPY COVID trial · *Statistics and Probability* · no institution listed
 - 2021 · [W4412288638](https://openalex.org/W4412288638) Expanding the Heterogeneity of Human Dendritic Cells in the Intestinal Lamina Propria · *Immunology* · University of Copenhagen
 - 2018 · [W2803056852](https://openalex.org/W2803056852) A broader active site in Pyrococcus horikoshii CoA disulfide reductase accommodates larger substr... · *Materials Chemistry* · Pomona College
 - 2016 · [W2914559679](https://openalex.org/W2914559679) Investigating the Half‐site Reactivity of a Member of the PNDOR Family of Proteins · *Materials Chemistry* · Pomona College
@@ -1264,17 +1262,17 @@ early work in another field. Fix mistakes in
 <a id="paul-thomas"></a>
 ## Paul Thomas
 
-**Kept, but unusual topic for them (5):** drop by hand if not theirs.
+**Kept, but unusual topic for them (6):** drop by hand if not theirs.
 
 - 2024 · [W4395467833](https://openalex.org/W4395467833) Perspectives on tracking data reuse across biodata resources · *Information Systems* · University of Southern California
 - 2023 · [W4376133528](https://openalex.org/W4376133528) SARS-CoV-2 viral variants can rapidly be identified for clinical decision making and population s... · *Infectious Diseases* · University of Southern California
 - 2023 · [W4327723524](https://openalex.org/W4327723524) Surveillance of Severe Acute Respiratory Syndrome Coronavirus 2 and Variants Using Digital Drople... · *Infectious Diseases* · University of Southern California
+- 2022 · [W4223520055](https://openalex.org/W4223520055) Mapping genomic loci implicates genes and synaptic biology in schizophrenia · *Psychiatry and Mental health* · no institution listed
 - 2010 · [W2101000074](https://openalex.org/W2101000074) Genome sequence of the necrotrophic plant pathogen Pythium ultimum reveals original pathogenicity... · *Plant Science* · SRI International
 - 2010 · [W1978878907](https://openalex.org/W1978878907) PharmGKB summary · *Pharmacology* · SRI International; Stanford University
 
-**Dropped as off-profile (11):**
+**Dropped as off-profile (10):**
 
-- 2022 · [W4223520055](https://openalex.org/W4223520055) Mapping genomic loci implicates genes and synaptic biology in schizophrenia · *Psychiatry and Mental health* · no institution listed
 - 1996 · [W2087928415](https://openalex.org/W2087928415) An iterative method for extracting energy-like quantities from protein structures. · *Molecular Biology* · University of California, San Francisco
 - 1996 · [W2085764610](https://openalex.org/W2085764610) Statistical Potentials Extracted From Protein Structures: How Accurate Are They? · *Molecular Biology* · University of California, San Francisco
 - 1995 · [W2116050576](https://openalex.org/W2116050576) A simple protein folding algorithm using a binary code and secondary structure constraints · *Molecular Biology* · University of California, San Francisco
@@ -1291,7 +1289,7 @@ early work in another field. Fix mistakes in
 <a id="paul-thompson"></a>
 ## Paul Thompson
 
-**Kept, but unusual topic for them (247):** drop by hand if not theirs.
+**Kept, but unusual topic for them (256):** drop by hand if not theirs.
 
 - 2026 · [W7155602241](https://openalex.org/W7155602241) 418. Decoding Generalized Anxiety Disorder From Structural Magnetic Resonance Imaging: A Machine ... · *Experimental and Cognitive Psychology* · University of Southern California
 - 2026 · [W7155614247](https://openalex.org/W7155614247) 532. Revealing the Genetic Architecture of Cerebrospinal Fluid Phenotypes in Early Infancy · *Cellular and Molecular Neuroscience* · University of Southern California
@@ -1311,105 +1309,81 @@ early work in another field. Fix mistakes in
 - 2026 · [W7155567708](https://openalex.org/W7155567708) Brain Atrophy in Spinocerebellar Ataxia Type 1 (SCA1) across the Disease Course: MRI Volumetrics ... · *Cellular and Molecular Neuroscience* · University of Southern California
 - 2026 · [W7161032669](https://openalex.org/W7161032669) CLUES A Comprehensive Workflow for Integrating Geospatial Data in Biomedical Research · *Health, Toxicology and Mutagenesis* · University of Southern California
 - 2026 · [W7140690705](https://openalex.org/W7140690705) Dan J. Stein (1962–2025): Towering global scholar, collaborator, colleague, mentor and friend · *History* · University of Southern California
+- 2026 · [W7150842357](https://openalex.org/W7150842357) Epigenetic signatures linking environmental exposure, cortical structure and psychiatric traits · *Molecular Biology* · no institution listed
 - 2026 · [W7126166212](https://openalex.org/W7126166212) Global Disparities in Neuroimaging Research for Mental Health Conditions · *Social Psychology* · University of Southern California
+- 2026 · [W7221838247](https://openalex.org/W7221838247) Highly mobile seabirds reveal areas of conservation importance across the Atlantic · *Ecology* · no institution listed
 - 2026 · [W7155086383](https://openalex.org/W7155086383) How Much Data is Enough? The Zeta Law of Discoverability in Biomedical Data, featuring the enigma... · *Artificial Intelligence* · University of Southern California
 - 2026 · [W7134897484](https://openalex.org/W7134897484) Identification of Biological Subtypes of Friedreich Ataxia with Structural MRI-based Machine Lear... · *Cellular and Molecular Neuroscience* · University of Southern California
 - 2026 · [W7155639357](https://openalex.org/W7155639357) Mapping Ageing in Anxiety Disorders With Brain Charts: An Enigma-Anxiety Mega-Analysis · *Experimental and Cognitive Psychology* · University of Southern California
 - 2026 · [W7160490039](https://openalex.org/W7160490039) Multimodal Free-Water Imaging Links Cardiometabolic Risk to Periarterial Dysfunction and Amyloid ... · *Cellular and Molecular Neuroscience* · University of Southern California
-- 2026 · [W7160847900](https://openalex.org/W7160847900) Neurobagel: building an international network for distributed data discovery · *Artificial Intelligence* · no institution listed
-- 2026 · [W7162017840](https://openalex.org/W7162017840) Nipoppy: A framework for standardizing neuroimaging studies to facilitate international derived-d... · *Information Systems* · University of Southern California
-- … and 222 more
+- … and 231 more
 
-**Dropped as off-profile (31):**
+**Dropped as off-profile (22):**
 
 - 2026 · [W7165392254](https://openalex.org/W7165392254) Analysis of second-generation epigenetic clocks reveals further associations between disproportio... · *Molecular Biology* · no institution listed
 - 2026 · [W7165729059](https://openalex.org/W7165729059) Cortical Morphometric Similarity in insomnia: A machine-learning classification based on multisit... · *Experimental and Cognitive Psychology* · no institution listed
 - 2026 · [W7126255982](https://openalex.org/W7126255982) Deep learning enhanced ALPS reveals genetic and environmental factors of brain glymphatic function · *Cellular and Molecular Neuroscience* · no institution listed
-- 2026 · [W7150842357](https://openalex.org/W7150842357) Epigenetic signatures linking environmental exposure, cortical structure and psychiatric traits · *Molecular Biology* · no institution listed
-- 2026 · [W7221838247](https://openalex.org/W7221838247) Highly mobile seabirds reveal areas of conservation importance across the Atlantic · *Ecology* · no institution listed
 - 2026 · [W7223224185](https://openalex.org/W7223224185) Retrospective harmonization of neuropsychiatric questionnaires in a large multi-site research con... · *Management Science and Operations Research* · no institution listed
 - 2026 · [W7155179154](https://openalex.org/W7155179154) Structural brain differences associated with panic disorder: an ENIGMA-Anxiety Working Group mega... · *Experimental and Cognitive Psychology* · no institution listed
 - 2026 · [W7164398723](https://openalex.org/W7164398723) Structural brain differences associated with panic disorder: an ENIGMA-Anxiety Working Group mega... · *Experimental and Cognitive Psychology* · no institution listed
 - 2026 · [W7216065243](https://openalex.org/W7216065243) Structural brain differences associated with panic disorder: an ENIGMA-Anxiety Working Group mega... · *Experimental and Cognitive Psychology* · no institution listed
-- 2025 · [W4411413428](https://openalex.org/W4411413428) Framework for Brain-Derived Dimensions of Psychopathology · *Experimental and Cognitive Psychology* · no institution listed
 - 2025 · [W7117670331](https://openalex.org/W7117670331) How Much Data Is Enough? Uniform Convergence Bounds for Generative & Vision-Language Models under... · *Artificial Intelligence* · no institution listed
 - 2024 · [W4403025564](https://openalex.org/W4403025564) A protocol for data harmonization in large cohorts · *Information Systems* · no institution listed
 - 2024 · [W7117143391](https://openalex.org/W7117143391) Bayesian scalar-on-tensor regression using the Tucker decomposition for sparse spatial modeling · *Computational Mathematics* · no institution listed
-- 2024 · [W4390705475](https://openalex.org/W4390705475) Brain-based classification of youth with anxiety disorders: transdiagnostic examinations within t... · *Experimental and Cognitive Psychology* · no institution listed
 - 2024 · [W4399550530](https://openalex.org/W4399550530) Cortical and Subcortical Brain Alterations in Specific Phobia and Its Animal and Blood-Injection-... · *Experimental and Cognitive Psychology* · South African Medical Research Council; University of Cape Town; Humboldt-Universität zu Berlin
 - 2024 · [W4393120764](https://openalex.org/W4393120764) Interpretable discriminant analysis for functional data supported on random nonlinear domains wit... · *Statistics and Probability* · no institution listed
 - 2024 · [W4403026765](https://openalex.org/W4403026765) Large-scale population data enrichment in mental health research · *Health, Toxicology and Mutagenesis* · no institution listed
 - 2024 · [W4403889400](https://openalex.org/W4403889400) Linking neuroimaging and mental health data from the ABCD Study to UrbanSat measurements of macro... · *Health, Toxicology and Mutagenesis* · no institution listed
 - 2024 · [W4403026762](https://openalex.org/W4403026762) Multi-omics analyses of the environMENTAL project provide insights into mental health and disease · *Health, Toxicology and Mutagenesis* · no institution listed
 - 2023 · [W4386083768](https://openalex.org/W4386083768) Addressing Global Environmental Challenges to Mental Health Using Population Neuroscience · *Health, Toxicology and Mutagenesis* · no institution listed
-- 2023 · [W4317497443](https://openalex.org/W4317497443) Bridging Big Data: Procedures for Combining Non-equivalent Cognitive Measures from the ENIGMA Con... · *Management Science and Operations Research* · no institution listed
 - 2023 · [W4380785158](https://openalex.org/W4380785158) Effects of urban living environments on mental health in adults · *Health, Toxicology and Mutagenesis* · no institution listed
-- 2022 · [W4309842425](https://openalex.org/W4309842425) Brain-Based Classification of Youth with Anxiety Disorders: an ENIGMA-ANXIETY Transdiagnostic Exa... · *Experimental and Cognitive Psychology* · no institution listed
-- 2021 · [W3131059059](https://openalex.org/W3131059059) Cortical thickness across the lifespan: Data from 17,075 healthy individuals aged 3–90 years · *Experimental and Cognitive Psychology* · no institution listed
 - 2020 · [W3007289092](https://openalex.org/W3007289092) Challenges and Opportunities with Causal Discovery Algorithms: Application to Alzheimer’s Pathoph... · *Artificial Intelligence* · University of California, Los Angeles; University of California, San Francisco
-- 2018 · [W2888882574](https://openalex.org/W2888882574) Planar cell polarity pathway and development of the human visual cortex · *Developmental Neuroscience* · no institution listed
-- 2018 · [W2791791568](https://openalex.org/W2791791568) Statistical tests and identifiability conditions for pooling and analyzing multisite datasets · *Statistics and Probability* · no institution listed
 - 2017 · [W2767147736](https://openalex.org/W2767147736) Pattern Discovery in Brain Imaging Genetics via SCCA Modeling with a Generic Non-convex Penalty · *Statistics and Probability* · University of California, Los Angeles; University of California, San Francisco
 - 2004 · [W1607303664](https://openalex.org/W1607303664) Neurobiology of intelligence: Health implications? · *Experimental and Cognitive Psychology* · no institution listed
 - 2004 · [W2149849723](https://openalex.org/W2149849723) Neurobiology of intelligence: science and ethics · *Experimental and Cognitive Psychology* · University of California, Los Angeles
-- … and 1 more
+- 2003 · [W91539398](https://openalex.org/W91539398) Behaviour Selection Using Neural Networks. · *Artificial Intelligence* · no institution listed
 
 ---
 
 <a id="arthur-toga"></a>
 ## Arthur Toga
 
-**Kept, but unusual topic for them (249):** drop by hand if not theirs.
+**Kept, but unusual topic for them (213):** drop by hand if not theirs.
 
 - 2026 · [W7126114810](https://openalex.org/W7126114810) Depressive symptoms but not chronic stress mediate the link between income and cognition in Latin... · *Health* · no institution listed
 - 2026 · [W7214704922](https://openalex.org/W7214704922) Mediating effect of pro-inflammatory cytokines in the association between depression, anxiety, an... · *Biological Psychiatry* · University of Southern California
 - 2026 · [W7160490039](https://openalex.org/W7160490039) Multimodal Free-Water Imaging Links Cardiometabolic Risk to Periarterial Dysfunction and Amyloid ... · *Cellular and Molecular Neuroscience* · University of Southern California
-- 2025 · [W4409411157](https://openalex.org/W4409411157) A genetically informed brain atlas for enhancing brain imaging genomics · *Genetics* · University of Southern California
-- 2025 · [W4414623171](https://openalex.org/W4414623171) Brain–heart–eye axis revealed by multi-organ imaging genetics and proteomics · *Genetics* · University of Southern California
 - 2025 · [W7116855622](https://openalex.org/W7116855622) Enhancing interoperability features in the Global Alzheimer's Association Interactive Network · *Information Systems* · University of Southern California
 - 2025 · [W7117140293](https://openalex.org/W7117140293) Improved Data Reporting in Alzheimer's Publications with Layered Digital Media ‐ Schol‐AR · *History and Philosophy of Science* · University of Southern California
 - 2025 · [W4414282163](https://openalex.org/W4414282163) Networks and clusters of immunometabolic biomarkers and depression-associated features in middle-... · *Biological Psychiatry* · no institution listed
-- 2025 · [W4411100450](https://openalex.org/W4411100450) Neuroimaging endophenotypes reveal underlying mechanisms and genetic factors contributing to prog... · *Genetics* · University of Southern California
 - 2025 · [W4409235203](https://openalex.org/W4409235203) Perivascular and parenchymal fluid characteristics are related to age and cognitive performance a... · *Cellular and Molecular Neuroscience* · University of Southern California
 - 2025 · [W7116904961](https://openalex.org/W7116904961) ProtBAG: eleven organ‐specific proteome‐based biological age using CSF proteomics · *Spectroscopy* · University of Southern California
 - 2025 · [W4408636683](https://openalex.org/W4408636683) The quest to share data · *Information Systems* · University of Southern California
 - 2024 · [W4406209244](https://openalex.org/W4406209244) A unified framework for federated discovery, interrogation, and analysis using the GAAIN and AD W... · *Information Systems* · University of Southern California
+- 2024 · [W4393120764](https://openalex.org/W4393120764) Interpretable discriminant analysis for functional data supported on random nonlinear domains wit... · *Statistics and Probability* · no institution listed
 - 2024 · [W4404744041](https://openalex.org/W4404744041) Perivascular and parenchymal fluid characteristics differentially contribute to cognition in typi... · *Cellular and Molecular Neuroscience* · no institution listed
-- 2024 · [W4400126168](https://openalex.org/W4400126168) The genetic architecture of biological age in nine human organ systems · *Genetics* · University of Southern California
-- 2024 · [W4393115371](https://openalex.org/W4393115371) The genetic architecture of multimodal human brain age · *Genetics* · University of Southern California
 - 2023 · [W4385556485](https://openalex.org/W4385556485) Age-related changes to perivascular and parenchymal fluid flow dynamics with multi-compartment di... · *Cellular and Molecular Neuroscience* · no institution listed
 - 2023 · [W4323830777](https://openalex.org/W4323830777) Brain perivascular space imaging across the human lifespan · *Cellular and Molecular Neuroscience* · University of Southern California
-- 2023 · [W4362666447](https://openalex.org/W4362666447) Deep learning-based polygenic risk analysis for Alzheimer’s disease prediction · *Genetics* · University of Southern California; University of California, Davis
 - 2023 · [W4386271283](https://openalex.org/W4386271283) Evaluation of Neighborhood-Level Disadvantage and Cognition in Mexican American and Non-Hispanic ... · *Health* · no institution listed
 - 2023 · [W4388934559](https://openalex.org/W4388934559) Relationship of Hoarding and Depression Symptoms in Older Adults · *Clinical Psychology* · University of Southern California
 - 2023 · [W4367053695](https://openalex.org/W4367053695) The image and data archive at the laboratory of neuro imaging · *Information Systems* · University of Southern California
 - 2023 · [W4378232567](https://openalex.org/W4378232567) The pursuit of approaches to federate data to accelerate Alzheimer’s disease and related dementia... · *Information Systems* · University of Southern California
 - 2022 · [W4220714439](https://openalex.org/W4220714439) Aberrant functional connectivity between reward and inhibitory control networks in pre-adolescent... · *Clinical Psychology* · University of Southern California
 - 2022 · [W4213145343](https://openalex.org/W4213145343) Regional gray matter abnormalities in pre-adolescent binge eating disorder: A voxel-based morphom... · *Clinical Psychology* · University of Southern California
-- … and 224 more
+- 2022 · [W4307500018](https://openalex.org/W4307500018) Sex differences in regional gray matter density in pre-adolescent binge eating disorder: a voxel-... · *Clinical Psychology* · University of Southern California
+- 2022 · [W4214911544](https://openalex.org/W4214911544) Sharing of Alzheimer’s Disease Research Data in the Global Alzheimer’s Association Interactive Ne... · *Information Systems* · no institution listed
+- 2022 · [W4312087119](https://openalex.org/W4312087119) The influence of cognitive status on perivascular space enlargement trajectories in a longitudina... · *Cellular and Molecular Neuroscience* · University of Southern California
+- 2020 · [W3059136655](https://openalex.org/W3059136655) Atlas of Transcription Factor Binding Sites from ENCODE DNase Hypersensitivity Data across 27 Tis... · *Molecular Biology* · University of Southern California
+- 2020 · [W3100311673](https://openalex.org/W3100311673) Body mass index, time of day and genetics affect perivascular spaces in the white matter · *Cellular and Molecular Neuroscience* · University of Southern California
+- … and 188 more
 
-**Dropped as off-profile (53):**
+**Dropped as off-profile (37):**
 
 - 2026 · [W7165392254](https://openalex.org/W7165392254) Analysis of second-generation epigenetic clocks reveals further associations between disproportio... · *Molecular Biology* · no institution listed
 - 2026 · [W7126255982](https://openalex.org/W7126255982) Deep learning enhanced ALPS reveals genetic and environmental factors of brain glymphatic function · *Cellular and Molecular Neuroscience* · no institution listed
 - 2024 · [W7117143391](https://openalex.org/W7117143391) Bayesian scalar-on-tensor regression using the Tucker decomposition for sparse spatial modeling · *Computational Mathematics* · no institution listed
-- 2024 · [W4396626408](https://openalex.org/W4396626408) Genetic variants for head size share genes and pathways with cancer · *Genetics* · no institution listed
-- 2024 · [W4403609401](https://openalex.org/W4403609401) Genomic analysis of intracranial and subcortical brain volumes yields polygenic scores accounting... · *Genetics* · no institution listed
-- 2024 · [W4393120764](https://openalex.org/W4393120764) Interpretable discriminant analysis for functional data supported on random nonlinear domains wit... · *Statistics and Probability* · no institution listed
-- 2020 · [W3088494006](https://openalex.org/W3088494006) Genetic correlations and genome-wide associations of cortical structure in general population sam... · *Genetics* · no institution listed
 - 2020 · [W3003689143](https://openalex.org/W3003689143) Statistical Guidelines for Handling Missing Data in Traumatic Brain Injury Clinical Research · *Statistics and Probability* · no institution listed
-- 2020 · [W3011154449](https://openalex.org/W3011154449) The genetic architecture of the human cerebral cortex · *Genetics* · no institution listed
-- 2019 · [W2980879969](https://openalex.org/W2980879969) Genetic architecture of subcortical brain structures in 38,851 individuals · *Genetics* · no institution listed
-- 2018 · [W2890187615](https://openalex.org/W2890187615) Genetic Determinants of Cortical Structure (Thickness, Surface Area and Volumes) among Disease Fr... · *Genetics* · no institution listed
-- 2018 · [W2888882574](https://openalex.org/W2888882574) Planar cell polarity pathway and development of the human visual cortex · *Developmental Neuroscience* · no institution listed
 - 2018 · [W2791791568](https://openalex.org/W2791791568) Statistical tests and identifiability conditions for pooling and analyzing multisite datasets · *Statistics and Probability* · no institution listed
-- 2017 · [W2752955499](https://openalex.org/W2752955499) Genetic Architecture of Subcortical Brain Structures in Over 40,000 Individuals Worldwide · *Genetics* · no institution listed
-- 2017 · [W2574432813](https://openalex.org/W2574432813) Novel genetic loci associated with hippocampal volume · *Genetics* · no institution listed
-- 2016 · [W2225056762](https://openalex.org/W2225056762) Genetic studies of plasma analytes identify novel potential biomarkers for several complex traits · *Genetics* · no institution listed
-- 2015 · [W2140054173](https://openalex.org/W2140054173) Common genetic variants influence human subcortical brain structures · *Genetics* · no institution listed
-- 2014 · [W2102521965](https://openalex.org/W2102521965) The ENIGMA Consortium: large-scale collaborative analyses of neuroimaging and genetic data · *Genetics* · no institution listed
-- 2012 · [W2123275897](https://openalex.org/W2123275897) CAG repeat expansion in Huntington disease determines age at onset in a fully dominant fashion · *Cellular and Molecular Neuroscience* · no institution listed
-- 2012 · [W2116668074](https://openalex.org/W2116668074) Identification of common variants associated with human hippocampal and intracranial volumes · *Genetics* · no institution listed
 - 2010 · [W2151327690](https://openalex.org/W2151327690) A commonly carried allele of the obesity-related FTO gene is associated with reduced brain volume... · *Genetics* · University of California, Los Angeles
 - 2010 · [W2322857229](https://openalex.org/W2322857229) Coupling Existing Client and Server Software for Integrating Waxholm Space · *Information Systems and Management* · no institution listed
 - 2009 · [W1529745931](https://openalex.org/W1529745931) Sex-dependent association of common variants of microcephaly genes with brain structure · *Genetics* · no institution listed
@@ -1420,7 +1394,22 @@ early work in another field. Fix mistakes in
 - 2002 · [W2145139316](https://openalex.org/W2145139316) Turning unorganized points into contours · *Computational Mechanics* · University of California, Los Angeles
 - 2002 · [W2135658445](https://openalex.org/W2135658445) Voxel-coding for tiling complex volumetric objects · *Computational Mechanics* · University of California, Los Angeles
 - 1999 · [W1585488465](https://openalex.org/W1585488465) The Rhesus Monkey Brain in Stereotaxic Coordinates · *Social Psychology* · no institution listed
-- … and 23 more
+- 1997 · [W2055480081](https://openalex.org/W2055480081) Arrangement of Vestibular Nerve Fibers in the Semicircular Canal Crista of the Chinchilla · *Neurology* · University of California, Los Angeles
+- 1997 · [W2018804161](https://openalex.org/W2018804161) Brain‐Mapping Neurotoxicity and Neuropathologya · *Immunology* · University of California, Los Angeles
+- 1996 · [W2066396916](https://openalex.org/W2066396916) A 3D medical image database management system · *Signal Processing* · University of California, Los Angeles
+- 1996 · [W2137853214](https://openalex.org/W2137853214) Design and Implementation of QBISM, a 3D Medical Image Database System · *Signal Processing* · University of California, Los Angeles
+- 1995 · [W2012270901](https://openalex.org/W2012270901) A graphic digital database of drosophila embryogenesis · *Molecular Biology* · University of California, Los Angeles
+- 1995 · [W2142380333](https://openalex.org/W2142380333) Comparative distribution off receptors for amylin and the related peptides calcitonin gene relate... · *Cellular and Molecular Neuroscience* · St Vincents Institute of Medical Research
+- 1995 · [W2094663297](https://openalex.org/W2094663297) Human Brain Anatomy in Computerized Images · *Biomedical Engineering* · no institution listed
+- 1992 · [W1965388823](https://openalex.org/W1965388823) Microanatomy of the Orbital Apex · *Biomedical Engineering* · University of California, Los Angeles
+- 1991 · [W2009431977](https://openalex.org/W2009431977) A digital three-dimensional atlas of structure/function relationships · *Biomedical Engineering* · University of California, Los Angeles
+- 1991 · [W1977732783](https://openalex.org/W1977732783) Continuous cocaine administration produces persisting changes in brain neurochemistry and behavior · *Cellular and Molecular Neuroscience* · University of California, Los Angeles
+- 1991 · [W1999837164](https://openalex.org/W1999837164) Physiological and developmental implications of motor unit anatomy · *Biomedical Engineering* · University of California, Los Angeles
+- 1990 · [W1987914734](https://openalex.org/W1987914734) Autoradiographic analysis of regional alterations in brain receptors following chronic administra... · *Cellular and Molecular Neuroscience* · University of California, Los Angeles
+- 1987 · [W2054620734](https://openalex.org/W2054620734) Digital image reconstruction for the study of brain structure and function · *Computer Graphics and Computer-Aided Design* · Washington University in St. Louis
+- 1985 · [W2035211890](https://openalex.org/W2035211890) Image Analysis of Brain Physiology · *Computer Graphics and Computer-Aided Design* · Washington University in St. Louis
+- 1985 · [W1976026888](https://openalex.org/W1976026888) Quantitative film autoradiography for tritium: Methodological considerations · *Radiation* · Washington University in St. Louis
+- … and 7 more
 
 ---
 
@@ -1472,7 +1461,7 @@ early work in another field. Fix mistakes in
 <a id="arieh-warshel"></a>
 ## Arieh Warshel
 
-**Kept, but unusual topic for them (48):** drop by hand if not theirs.
+**Kept, but unusual topic for them (49):** drop by hand if not theirs.
 
 - 2026 · [W7201996666](https://openalex.org/W7201996666) An Explicit Interaction-Prompted Diffusion Framework for High-Fidelity 3D Molecular Generation · *Computational Theory and Mathematics* · University of Southern California
 - 2026 · [W7128210622](https://openalex.org/W7128210622) Combating Antiviral Drug Resistance: A Multipronged Strategy · *Infectious Diseases* · University of Southern California
@@ -1480,6 +1469,7 @@ early work in another field. Fix mistakes in
 - 2025 · [W4410499824](https://openalex.org/W4410499824) Computational and Experimental Study of the Conformational Variation of the Catalytic Residue His... · *Infectious Diseases* · University of Southern California
 - 2025 · [W4416125960](https://openalex.org/W4416125960) On the Intellectual Freedom and Responsibility of Scientists in the Time of “Consequences Culture” · *Political Science and International Relations* · University of Southern California
 - 2025 · [W4417321554](https://openalex.org/W4417321554) Semi-inductive dataset construction and framework optimization for practical drug target interact... · *Computational Theory and Mathematics* · University of Southern California; Chinese University of Hong Kong; Chinese Academy of Medical Sciences & Peking Union Medical College
+- 2025 · [W4409148148](https://openalex.org/W4409148148) The need to implement FAIR principles in biomolecular simulations · *Information Systems* · no institution listed
 - 2025 · [W4414162881](https://openalex.org/W4414162881) Understanding hypertrophic cardiomyopathy and its regulation by myosin drugs · *Cardiology and Cardiovascular Medicine* · University of Southern California
 - 2024 · [W4394813343](https://openalex.org/W4394813343) Computational Mechanistic Insights into Reversible and Irreversible Covalent Inhibitors Targeting... · *Infectious Diseases* · University of Southern California
 - 2024 · [W4402555338](https://openalex.org/W4402555338) Exploring the Activation Process of the Glycine Receptor · *Cellular and Molecular Neuroscience* · University of Southern California
@@ -1498,12 +1488,10 @@ early work in another field. Fix mistakes in
 - 2016 · [W2558765398](https://openalex.org/W2558765398) Perspective on Calculations of Binding Free Energies · *Computational Theory and Mathematics* · University of Southern California
 - 2016 · [W2346906930](https://openalex.org/W2346906930) The Physics and Physical Chemistry of Molecular Machines · *Statistical and Nonlinear Physics* · University of Southern California
 - 2015 · [W2172543250](https://openalex.org/W2172543250) Equilibrium fluctuation relations for voltage coupling in membrane proteins · *Statistical and Nonlinear Physics* · University of Southern California
-- 2011 · [W2133718756](https://openalex.org/W2133718756) Validating the vitality strategy for fighting drug resistance · *Infectious Diseases* · University of Southern California
-- … and 23 more
+- … and 24 more
 
-**Dropped as off-profile (21):**
+**Dropped as off-profile (20):**
 
-- 2025 · [W4409148148](https://openalex.org/W4409148148) The need to implement FAIR principles in biomolecular simulations · *Information Systems* · no institution listed
 - 2018 · [W2941586159](https://openalex.org/W2941586159) Using brain vs. brute force in computational studies of biological systems · *Computational Theory and Mathematics* · no institution listed
 - 2013 · [W2061505252](https://openalex.org/W2061505252) Reprint of: Semiclassical trajectory approach to photoisomerization · *Physical and Theoretical Chemistry* · Weizmann Institute of Science
 - 1999 · [W1591700864](https://openalex.org/W1591700864) How does complexity lead to apparently simple function · *Statistical and Nonlinear Physics* · no institution listed

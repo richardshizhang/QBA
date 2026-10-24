@@ -1,0 +1,2161 @@
+{
+ "weighting": "each shared paper adds 1/(authors - 1) to a pair's strength (Newman 2001)",
+ "size_bins": [
+  "2-10",
+  "11-50",
+  "51+"
+ ],
+ "edges": [
+  {
+   "source": "arthur-toga",
+   "target": "paul-thompson",
+   "strength": 100.92,
+   "papers": 683,
+   "by_size": {
+    "2-10": 334,
+    "11-50": 212,
+    "51+": 137
+   },
+   "at_usc": 60,
+   "first_year": 1996,
+   "last_year": 2026,
+   "examples": [
+    {
+     "id": "W7160490039",
+     "title": "Multimodal Free-Water Imaging Links Cardiometabolic Risk to Periarterial Dysfunction and Amyloid Accumulation in Early Alzheimer’s",
+     "year": 2026,
+     "authors": 20,
+     "venue": "Research Square"
+    },
+    {
+     "id": "W7161751758",
+     "title": "Predicting Autopsy-Confirmed Neuropathology across Clinical, Neuroimaging, and CSF Biomarkers using Machine Learning",
+     "year": 2026,
+     "authors": 25,
+     "venue": "SSRN Electronic Journal"
+    },
+    {
+     "id": "W4410586290",
+     "title": "Genetic architecture of the limbic white matter microstructure in aging and Alzheimer's Disease",
+     "year": 2026,
+     "authors": 48,
+     "venue": "Alzheimer s & Dementia"
+    },
+    {
+     "id": "W7117305156",
+     "title": "Sex‐Modified Effects of APOE ‐ε4 on Spatial Patterns of Brain Atrophy: A Multi‐cohort Study",
+     "year": 2025,
+     "authors": 25,
+     "venue": "Alzheimer s & Dementia"
+    },
+    {
+     "id": "W4409391705",
+     "title": "The effect of Alzheimer's disease genetic factors on limbic white matter microstructure",
+     "year": 2025,
+     "authors": 48,
+     "venue": "Alzheimer s & Dementia"
+    },
+    {
+     "id": "W4393115371",
+     "title": "The genetic architecture of multimodal human brain age",
+     "year": 2024,
+     "authors": 18,
+     "venue": "Nature Communications"
+    },
+    {
+     "id": "W4399561968",
+     "title": "Sex, racial, and APOE -ε4 allele differences in longitudinal white matter microstructure in multiple cohorts of aging and Alzheimer’s disease",
+     "year": 2024,
+     "authors": 46,
+     "venue": "bioRxiv (Cold Spring Harbor Laboratory)"
+    },
+    {
+     "id": "W4405727864",
+     "title": "Sex and APOE ε4 allele differences in longitudinal white matter microstructure in multiple cohorts of aging and Alzheimer's disease",
+     "year": 2024,
+     "authors": 48,
+     "venue": "Alzheimer s & Dementia"
+    }
+   ]
+  },
+  {
+   "source": "eva-kanso",
+   "target": "paul-newton",
+   "strength": 9.417,
+   "papers": 17,
+   "by_size": {
+    "2-10": 17,
+    "11-50": 0,
+    "51+": 0
+   },
+   "at_usc": 13,
+   "first_year": 2007,
+   "last_year": 2014,
+   "examples": [
+    {
+     "id": "W2096607080",
+     "title": "Coins falling in water",
+     "year": 2014,
+     "authors": 3,
+     "venue": "Journal of Fluid Mechanics"
+    },
+    {
+     "id": "W2158354797",
+     "title": "The finite-dipole dynamical system",
+     "year": 2012,
+     "authors": 3,
+     "venue": "Proceedings of the Royal Society A Mathematical Physical and Engineering Sciences"
+    },
+    {
+     "id": "W2058407133",
+     "title": "Modeling and Simulation of Procoagulant Circulating Tumor Cells in Flow",
+     "year": 2012,
+     "authors": 5,
+     "venue": "Frontiers in Oncology"
+    },
+    {
+     "id": "W2075598992",
+     "title": "A low-dimensional deformation model for cancer cells in flow",
+     "year": 2012,
+     "authors": 7,
+     "venue": "Physics of Fluids"
+    },
+    {
+     "id": "W2003256910",
+     "title": "Wake structure of a deformable Joukowski airfoil",
+     "year": 2011,
+     "authors": 3,
+     "venue": "Physica D Nonlinear Phenomena"
+    },
+    {
+     "id": "W2029077941",
+     "title": "Hydrodynamically coupled oscillators",
+     "year": 2011,
+     "authors": 3,
+     "venue": "Journal of Fluid Mechanics"
+    },
+    {
+     "id": "W2600899311",
+     "title": "The constrained dipole dynamical system",
+     "year": 2011,
+     "authors": 3,
+     "venue": "Bulletin of the American Physical Society"
+    },
+    {
+     "id": "W2963453056",
+     "title": "Insights into vortex merger using the core growth model",
+     "year": 2011,
+     "authors": 3,
+     "venue": "arXiv (Cornell University)"
+    }
+   ]
+  },
+  {
+   "source": "fengzhu-sun",
+   "target": "michael-waterman",
+   "strength": 7.072,
+   "papers": 24,
+   "by_size": {
+    "2-10": 22,
+    "11-50": 2,
+    "51+": 0
+   },
+   "at_usc": 20,
+   "first_year": 1995,
+   "last_year": 2019,
+   "examples": [
+    {
+     "id": "W2953230653",
+     "title": "A new statistic for efficient detection of repetitive sequences",
+     "year": 2019,
+     "authors": 5,
+     "venue": "Bioinformatics"
+    },
+    {
+     "id": "W2962807110",
+     "title": "Benchmarking of alignment-free sequence comparison methods",
+     "year": 2019,
+     "authors": 19,
+     "venue": "Genome biology"
+    },
+    {
+     "id": "W2763619987",
+     "title": "Optimal choice of word length when comparing two Markov sequences using a χ 2-statistic",
+     "year": 2017,
+     "authors": 5,
+     "venue": "BMC Genomics"
+    },
+    {
+     "id": "W2611554670",
+     "title": "CAFE: aCcelerated Alignment-FrEe sequence analysis",
+     "year": 2017,
+     "authors": 6,
+     "venue": "Nucleic Acids Research"
+    },
+    {
+     "id": "W2172024938",
+     "title": "DiseaseConnect: a comprehensive web server for mechanism-based disease–disease connections",
+     "year": 2014,
+     "authors": 13,
+     "venue": "Nucleic Acids Research"
+    },
+    {
+     "id": "W2334049736",
+     "title": "New developments of alignment-free sequence comparison: measures, statistics and next-generation",
+     "year": 2013,
+     "authors": 5,
+     "venue": null
+    },
+    {
+     "id": "W2094890728",
+     "title": "New developments of alignment-free sequence comparison: measures, statistics and next-generation sequencing",
+     "year": 2013,
+     "authors": 6,
+     "venue": "Briefings in Bioinformatics"
+    },
+    {
+     "id": "W2168031553",
+     "title": "Normal and Compound Poisson Approximations for Pattern Occurrences in NGS Reads",
+     "year": 2012,
+     "authors": 6,
+     "venue": "Journal of Computational Biology"
+    }
+   ]
+  },
+  {
+   "source": "remo-rohs",
+   "target": "tsu-pei-chiu",
+   "strength": 5.334,
+   "papers": 25,
+   "by_size": {
+    "2-10": 21,
+    "11-50": 4,
+    "51+": 0
+   },
+   "at_usc": 25,
+   "first_year": 2014,
+   "last_year": 2026,
+   "examples": [
+    {
+     "id": "W7133619111",
+     "title": "Sequence-based modeling of low-affinity transcription factor–DNA binding through deep learning",
+     "year": 2026,
+     "authors": 5,
+     "venue": "NAR Genomics and Bioinformatics"
+    },
+    {
+     "id": "W7138865111",
+     "title": "Readout of intrinsic and induced DNA shape by homeodomain transcription factor complexes",
+     "year": 2026,
+     "authors": 7,
+     "venue": "Biophysical Journal"
+    },
+    {
+     "id": "W7214299273",
+     "title": "DNA breathing and shape encode distinct mechanisms of transcription factor binding",
+     "year": 2026,
+     "authors": 9,
+     "venue": "Bioinformatics Advances"
+    },
+    {
+     "id": "W7119228294",
+     "title": "Quantitative modulation of a spatial enhancer through the biophysical properties of a transcription factor binding site",
+     "year": 2026,
+     "authors": 18,
+     "venue": "Science Advances"
+    },
+    {
+     "id": "W4407060817",
+     "title": "DNAdesign: feature-aware in silico design of synthetic DNA through mutation",
+     "year": 2025,
+     "authors": 5,
+     "venue": "Bioinformatics"
+    },
+    {
+     "id": "W4406716195",
+     "title": "Contribution of DNA breathing to physical interactions with transcription factors",
+     "year": 2025,
+     "authors": 10,
+     "venue": "bioRxiv (Cold Spring Harbor Laboratory)"
+    },
+    {
+     "id": "W4391693196",
+     "title": "Predicting DNA structure using a deep learning method",
+     "year": 2024,
+     "authors": 3,
+     "venue": "Nature Communications"
+    },
+    {
+     "id": "W4401340626",
+     "title": "Geometric deep learning of protein–DNA binding specificity",
+     "year": 2024,
+     "authors": 8,
+     "venue": "Nature Methods"
+    }
+   ]
+  },
+  {
+   "source": "helen-berman",
+   "target": "remo-rohs",
+   "strength": 1.75,
+   "papers": 5,
+   "by_size": {
+    "2-10": 5,
+    "11-50": 0,
+    "51+": 0
+   },
+   "at_usc": 4,
+   "first_year": 2015,
+   "last_year": 2025,
+   "examples": [
+    {
+     "id": "W4407596333",
+     "title": "RNAproDB: A Webserver and Interactive Database for Analyzing Protein–RNA Interactions",
+     "year": 2025,
+     "authors": 7,
+     "venue": "Journal of Molecular Biology"
+    },
+    {
+     "id": "W4404026548",
+     "title": "DNAproDB: an updated database for the automated and interactive analysis of protein–DNA complexes",
+     "year": 2024,
+     "authors": 5,
+     "venue": "Nucleic Acids Research"
+    },
+    {
+     "id": "W2980355954",
+     "title": "DNAproDB: an expanded database and web-based tool for structural analysis of DNA–protein complexes",
+     "year": 2019,
+     "authors": 4,
+     "venue": "Nucleic Acids Research"
+    },
+    {
+     "id": "W2607174456",
+     "title": "DNAproDB: an interactive tool for structural analysis of DNA–protein complexes",
+     "year": 2017,
+     "authors": 3,
+     "venue": "Nucleic Acids Research"
+    },
+    {
+     "id": "W2424010939",
+     "title": "27 Analysis of DNA deformations in transcription factor–DNA complexes",
+     "year": 2015,
+     "authors": 3,
+     "venue": "Journal of Biomolecular Structure and Dynamics"
+    }
+   ]
+  },
+  {
+   "source": "scott-fraser",
+   "target": "stacey-finley",
+   "strength": 1.7,
+   "papers": 5,
+   "by_size": {
+    "2-10": 5,
+    "11-50": 0,
+    "51+": 0
+   },
+   "at_usc": 5,
+   "first_year": 2022,
+   "last_year": 2025,
+   "examples": [
+    {
+     "id": "W4407497289",
+     "title": "BPS2025 - A tale of trafficking: On prolactin receptor localization in pancreatic β-cells",
+     "year": 2025,
+     "authors": 4,
+     "venue": "Biophysical Journal"
+    },
+    {
+     "id": "W4415189575",
+     "title": "Prolactin receptor localization and dynamics: Insights from quantitative imaging and mathematical modeling",
+     "year": 2025,
+     "authors": 4,
+     "venue": "bioRxiv (Cold Spring Harbor Laboratory)"
+    },
+    {
+     "id": "W4391658647",
+     "title": "Integrating mechanistic modeling and quantitative imaging to reveal pancreatic beta cell signaling dynamics",
+     "year": 2024,
+     "authors": 4,
+     "venue": "Biophysical Journal"
+    },
+    {
+     "id": "W4319929602",
+     "title": "Predictive modeling of signal transduction anchored by quantitative imaging",
+     "year": 2023,
+     "authors": 3,
+     "venue": "Biophysical Journal"
+    },
+    {
+     "id": "W4306648050",
+     "title": "Kinetic and data-driven modeling of pancreatic β-cell central carbon metabolism and insulin secretion",
+     "year": 2022,
+     "authors": 6,
+     "venue": "PLoS Computational Biology"
+    }
+   ]
+  },
+  {
+   "source": "charleston-chiang",
+   "target": "nicholas-mancuso",
+   "strength": 1.433,
+   "papers": 11,
+   "by_size": {
+    "2-10": 4,
+    "11-50": 7,
+    "51+": 0
+   },
+   "at_usc": 11,
+   "first_year": 2021,
+   "last_year": 2026,
+   "examples": [
+    {
+     "id": "W7166827715",
+     "title": "Genome-wide association study and predictors of neonatal blood cell traits in Hispanic newborns",
+     "year": 2026,
+     "authors": 12,
+     "venue": "The American Journal of Human Genetics"
+    },
+    {
+     "id": "W4408673032",
+     "title": "A likelihood-based framework for demographic inference from genealogical trees",
+     "year": 2025,
+     "authors": 8,
+     "venue": "Nature Genetics"
+    },
+    {
+     "id": "W4414824671",
+     "title": "96. MACHINE LEARNING-DERIVED SUBTYPES OF AUTISM REVEAL DISTINCT GENETIC CONTRIBUTIONS FROM COMMON AND RARE VARIANTS",
+     "year": 2025,
+     "authors": 9,
+     "venue": "European Neuropsychopharmacology"
+    },
+    {
+     "id": "W4415541584",
+     "title": "The impact of Indigenous American-like ancestry on the risk of acute lymphoblastic leukemia in Hispanic/Latino children",
+     "year": 2025,
+     "authors": 16,
+     "venue": "Human Genetics and Genomics Advances"
+    },
+    {
+     "id": "W4406408332",
+     "title": "The impact of Indigenous American-like ancestry on risk of acute lymphoblastic leukemia in Hispanic/Latino children",
+     "year": 2025,
+     "authors": 16,
+     "venue": "medRxiv"
+    },
+    {
+     "id": "W4393190788",
+     "title": "A noncoding regulatory variant in IKZF1 increases acute lymphoblastic leukemia risk in Hispanic/Latino children",
+     "year": 2024,
+     "authors": 25,
+     "venue": "Cell Genomics"
+    },
+    {
+     "id": "W4389427563",
+     "title": "Tree-based QTL mapping with expected local genetic relatedness matrices",
+     "year": 2023,
+     "authors": 7,
+     "venue": "The American Journal of Human Genetics"
+    },
+    {
+     "id": "W4387882148",
+     "title": "Estimating heritability explained by local ancestry and evaluating stratification bias in admixture mapping from summary statistics",
+     "year": 2023,
+     "authors": 18,
+     "venue": "The American Journal of Human Genetics"
+    }
+   ]
+  },
+  {
+   "source": "nicholas-mancuso",
+   "target": "steven-gazal",
+   "strength": 1.379,
+   "papers": 11,
+   "by_size": {
+    "2-10": 5,
+    "11-50": 5,
+    "51+": 1
+   },
+   "at_usc": 11,
+   "first_year": 2022,
+   "last_year": 2026,
+   "examples": [
+    {
+     "id": "W4413215714",
+     "title": "Identifying independent causal cell types for human diseases and risk variants",
+     "year": 2026,
+     "authors": 10,
+     "venue": "Cell Genomics"
+    },
+    {
+     "id": "W7166827715",
+     "title": "Genome-wide association study and predictors of neonatal blood cell traits in Hispanic newborns",
+     "year": 2026,
+     "authors": 12,
+     "venue": "The American Journal of Human Genetics"
+    },
+    {
+     "id": "W7143370142",
+     "title": "Single-cell full-length transcriptome of human lung reveals genetic effects on isoform regulation beyond gene-level expression",
+     "year": 2026,
+     "authors": 30,
+     "venue": "bioRxiv (Cold Spring Harbor Laboratory)"
+    },
+    {
+     "id": "W4406663354",
+     "title": "Efficient count-based models improve power and robustness for large-scale single-cell eQTL mapping",
+     "year": 2025,
+     "authors": 5,
+     "venue": "medRxiv"
+    },
+    {
+     "id": "W4412514933",
+     "title": "Improved multiancestry fine-mapping identifies cis-regulatory variants underlying molecular traits and disease risk",
+     "year": 2025,
+     "authors": 11,
+     "venue": "Nature Genetics"
+    },
+    {
+     "id": "W4401883079",
+     "title": "Genes with differential expression across ancestries are enriched in ancestry-specific disease effects likely due to gene-by-environment interactions",
+     "year": 2024,
+     "authors": 5,
+     "venue": "The American Journal of Human Genetics"
+    },
+    {
+     "id": "W4393190788",
+     "title": "A noncoding regulatory variant in IKZF1 increases acute lymphoblastic leukemia risk in Hispanic/Latino children",
+     "year": 2024,
+     "authors": 25,
+     "venue": "Cell Genomics"
+    },
+    {
+     "id": "W4387911032",
+     "title": "A scalable approach to characterize pleiotropy across thousands of human diseases and complex traits using GWAS summary statistics",
+     "year": 2023,
+     "authors": 6,
+     "venue": "The American Journal of Human Genetics"
+    }
+   ]
+  },
+  {
+   "source": "aiichiro-nakano",
+   "target": "vsevolod-katritch",
+   "strength": 1.167,
+   "papers": 3,
+   "by_size": {
+    "2-10": 3,
+    "11-50": 0,
+    "51+": 0
+   },
+   "at_usc": 3,
+   "first_year": 2024,
+   "last_year": 2026,
+   "examples": [
+    {
+     "id": "W7154246792",
+     "title": "Multiparadigm Benchmark of Molecular Docking: From Physics to Co-Folding and Hybrid Models",
+     "year": 2026,
+     "authors": 4,
+     "venue": "Journal of Chemical Information and Modeling"
+    },
+    {
+     "id": "W7154289065",
+     "title": "A Multi-Paradigm Benchmark of Molecular Docking: From Physics to Co-folding and Hybrid Models",
+     "year": 2026,
+     "authors": 4,
+     "venue": "Zenodo (CERN European Organization for Nuclear Research)"
+    },
+    {
+     "id": "W4395110306",
+     "title": "Scalable computation of anisotropic vibrations for large macromolecular assemblies",
+     "year": 2024,
+     "authors": 3,
+     "venue": "Nature Communications"
+    }
+   ]
+  },
+  {
+   "source": "peter-calabrese",
+   "target": "simon-tavare",
+   "strength": 1.158,
+   "papers": 4,
+   "by_size": {
+    "2-10": 4,
+    "11-50": 0,
+    "51+": 0
+   },
+   "at_usc": 4,
+   "first_year": 2004,
+   "last_year": 2005,
+   "examples": [
+    {
+     "id": "W2113948354",
+     "title": "Numbers of mutations to different types of colorectal cancer",
+     "year": 2005,
+     "authors": 6,
+     "venue": "BMC Cancer"
+    },
+    {
+     "id": "W2132373340",
+     "title": "Pretumor Progression",
+     "year": 2004,
+     "authors": 3,
+     "venue": "American Journal Of Pathology"
+    },
+    {
+     "id": "W2164139230",
+     "title": "Enhanced Stem Cell Survival in Familial Adenomatous Polyposis",
+     "year": 2004,
+     "authors": 4,
+     "venue": "American Journal Of Pathology"
+    },
+    {
+     "id": "W1989413259",
+     "title": "Colorectal Pretumor Progression Before and After Loss of DNA Mismatch Repair",
+     "year": 2004,
+     "authors": 9,
+     "venue": "American Journal Of Pathology"
+    }
+   ]
+  },
+  {
+   "source": "arthur-toga",
+   "target": "fengzhu-sun",
+   "strength": 0.952,
+   "papers": 5,
+   "by_size": {
+    "2-10": 5,
+    "11-50": 0,
+    "51+": 0
+   },
+   "at_usc": 5,
+   "first_year": 2018,
+   "last_year": 2021,
+   "examples": [
+    {
+     "id": "W3153027014",
+     "title": "Improving brain age estimates with deep learning leads to identification of novel genetic factors associated with brain aging",
+     "year": 2021,
+     "authors": 8,
+     "venue": "Neurobiology of Aging"
+    },
+    {
+     "id": "W3003241500",
+     "title": "Association of relative brain age with tobacco smoking, alcohol consumption, and genetic variants",
+     "year": 2020,
+     "authors": 5,
+     "venue": "Scientific Reports"
+    },
+    {
+     "id": "W3015267365",
+     "title": "Parity is associated with cognitive function and brain age in both females and males",
+     "year": 2020,
+     "authors": 8,
+     "venue": "Scientific Reports"
+    },
+    {
+     "id": "W2901488768",
+     "title": "Association of brain age with smoking, alcohol consumption, and genetic variants",
+     "year": 2018,
+     "authors": 5,
+     "venue": "bioRxiv (Cold Spring Harbor Laboratory)"
+    },
+    {
+     "id": "W2799812114",
+     "title": "Classifying Alzheimer's disease with brain imaging and genetic data using a neural network framework",
+     "year": 2018,
+     "authors": 7,
+     "venue": "Neurobiology of Aging"
+    }
+   ]
+  },
+  {
+   "source": "andrei-irimia",
+   "target": "paul-thompson",
+   "strength": 0.866,
+   "papers": 23,
+   "by_size": {
+    "2-10": 2,
+    "11-50": 14,
+    "51+": 7
+   },
+   "at_usc": 16,
+   "first_year": 2020,
+   "last_year": 2026,
+   "examples": [
+    {
+     "id": "W7128737438",
+     "title": "Structural brain differences between individuals with and without depressive symptoms following complicated mild to severe traumatic brain injury",
+     "year": 2026,
+     "authors": 28,
+     "venue": null
+    },
+    {
+     "id": "W7148664090",
+     "title": "Characterizing Heterogeneity in Brain Morphology in Traumatic Brain Injury Using Normative Modeling",
+     "year": 2026,
+     "authors": 33,
+     "venue": "Neurology"
+    },
+    {
+     "id": "W4409086458",
+     "title": "Genetic Insights into Brain Morphology: a Genome-Wide Association Study of Cortical Thickness and T1-Weighted MRI Gray Matter-White Matter Intensity Contrast",
+     "year": 2025,
+     "authors": 5,
+     "venue": "Neuroinformatics"
+    },
+    {
+     "id": "W4417256514",
+     "title": "Deep neural networks and genome-wide associations reveal the polygenic architecture of local brain aging",
+     "year": 2025,
+     "authors": 9,
+     "venue": "GeroScience"
+    },
+    {
+     "id": "W4412020960",
+     "title": "ENIGMA’s advanced guide for parcellation error identification (EAGLE-I): An implementation in the context of brain lesions",
+     "year": 2025,
+     "authors": 26,
+     "venue": "MethodsX"
+    },
+    {
+     "id": "W4399440815",
+     "title": "Accelerated Aging after Traumatic Brain Injury: An ENIGMA Multi‐Cohort Mega‐Analysis",
+     "year": 2024,
+     "authors": 36,
+     "venue": "Annals of Neurology"
+    },
+    {
+     "id": "W4392467710",
+     "title": "ENIGMA’s simple seven: Recommendations to enhance the reproducibility of resting-state fMRI in traumatic brain injury",
+     "year": 2024,
+     "authors": 37,
+     "venue": "NeuroImage Clinical"
+    },
+    {
+     "id": "W4388695171",
+     "title": "Multimodal Analysis of Secondary Cerebellar Alterations After Pediatric Traumatic Brain Injury",
+     "year": 2023,
+     "authors": 32,
+     "venue": "JAMA Network Open"
+    }
+   ]
+  },
+  {
+   "source": "michael-waterman",
+   "target": "simon-tavare",
+   "strength": 0.833,
+   "papers": 2,
+   "by_size": {
+    "2-10": 2,
+    "11-50": 0,
+    "51+": 0
+   },
+   "at_usc": 1,
+   "first_year": 1991,
+   "last_year": 2005,
+   "examples": [
+    {
+     "id": "W297888808",
+     "title": "Computational Genome Analysis: An Introduction",
+     "year": 2005,
+     "authors": 3,
+     "venue": null
+    },
+    {
+     "id": "W2095658341",
+     "title": "Genomic mapping by anchoring random clones: A mathematical analysis",
+     "year": 1991,
+     "authors": 4,
+     "venue": "Genomics"
+    }
+   ]
+  },
+  {
+   "source": "remo-rohs",
+   "target": "rosa-di-felice",
+   "strength": 0.829,
+   "papers": 5,
+   "by_size": {
+    "2-10": 5,
+    "11-50": 0,
+    "51+": 0
+   },
+   "at_usc": 4,
+   "first_year": 2013,
+   "last_year": 2020,
+   "examples": [
+    {
+     "id": "W3046740957",
+     "title": "Landscape of DNA binding signatures of myocyte enhancer factor-2B reveals a unique interplay of base and shape readout",
+     "year": 2020,
+     "authors": 6,
+     "venue": "Nucleic Acids Research"
+    },
+    {
+     "id": "W3102018710",
+     "title": "The RNA Polymerase α Subunit Recognizes the DNA Shape of the Upstream Promoter Element",
+     "year": 2020,
+     "authors": 8,
+     "venue": "Biochemistry"
+    },
+    {
+     "id": "W2608225742",
+     "title": "CRISPR–Cas9 Mediated DNA Unwinding Detected Using Site-Directed Spin Labeling",
+     "year": 2017,
+     "authors": 8,
+     "venue": "ACS Chemical Biology"
+    },
+    {
+     "id": "W2117314105",
+     "title": "Control of DNA minor groove width and Fis protein binding by the purine 2-amino group",
+     "year": 2013,
+     "authors": 6,
+     "venue": "Nucleic Acids Research"
+    },
+    {
+     "id": "W2069520341",
+     "title": "DNAshape: a method for the high-throughput prediction of DNA structural features on a genomic scale",
+     "year": 2013,
+     "authors": 8,
+     "venue": "Nucleic Acids Research"
+    }
+   ]
+  },
+  {
+   "source": "geoffrey-fudenberg",
+   "target": "mark-chaisson",
+   "strength": 0.75,
+   "papers": 2,
+   "by_size": {
+    "2-10": 2,
+    "11-50": 0,
+    "51+": 0
+   },
+   "at_usc": 2,
+   "first_year": 2023,
+   "last_year": 2026,
+   "examples": [
+    {
+     "id": "W7163649692",
+     "title": "CLASH (Chromatin Loop Across-sample Score Harmonizer) quantifies the relative contributions of genetic variation, methylation, and CTCF occupancy on chromatin loop strength across individuals",
+     "year": 2026,
+     "authors": 3,
+     "venue": "bioRxiv (Cold Spring Harbor Laboratory)"
+    },
+    {
+     "id": "W4363672366",
+     "title": "The motif composition of variable number tandem repeats impacts gene expression",
+     "year": 2023,
+     "authors": 5,
+     "venue": "Genome Research"
+    }
+   ]
+  },
+  {
+   "source": "judith-kribelbauer",
+   "target": "remo-rohs",
+   "strength": 0.675,
+   "papers": 4,
+   "by_size": {
+    "2-10": 3,
+    "11-50": 1,
+    "51+": 0
+   },
+   "at_usc": 1,
+   "first_year": 2018,
+   "last_year": 2026,
+   "examples": [
+    {
+     "id": "W7138865111",
+     "title": "Readout of intrinsic and induced DNA shape by homeodomain transcription factor complexes",
+     "year": 2026,
+     "authors": 7,
+     "venue": "Biophysical Journal"
+    },
+    {
+     "id": "W7119228294",
+     "title": "Quantitative modulation of a spatial enhancer through the biophysical properties of a transcription factor binding site",
+     "year": 2026,
+     "authors": 18,
+     "venue": "Science Advances"
+    },
+    {
+     "id": "W2983170455",
+     "title": "Toward a Mechanistic Understanding of DNA Methylation Readout by Transcription Factors",
+     "year": 2019,
+     "authors": 5,
+     "venue": "Journal of Molecular Biology"
+    },
+    {
+     "id": "W2792170325",
+     "title": "Systematic prediction of DNA shape changes due to CpG methylation explains epigenetic effects on protein–DNA binding",
+     "year": 2018,
+     "authors": 6,
+     "venue": "Epigenetics & Chromatin"
+    }
+   ]
+  },
+  {
+   "source": "adam-maclean",
+   "target": "andrew-mcmahon",
+   "strength": 0.674,
+   "papers": 3,
+   "by_size": {
+    "2-10": 1,
+    "11-50": 2,
+    "51+": 0
+   },
+   "at_usc": 3,
+   "first_year": 2023,
+   "last_year": 2023,
+   "examples": [
+    {
+     "id": "W4378648807",
+     "title": "Sex differences in proximal tubule metabolism influence hemodynamics and salt reabsorption to mediate dimorphic susceptibility to kidney diseases",
+     "year": 2023,
+     "authors": 3,
+     "venue": "Physiology"
+    },
+    {
+     "id": "W4372328915",
+     "title": "Direct androgen receptor regulation of sexually dimorphic gene expression in the mammalian kidney",
+     "year": 2023,
+     "authors": 12,
+     "venue": "bioRxiv (Cold Spring Harbor Laboratory)"
+    },
+    {
+     "id": "W4386444526",
+     "title": "Direct androgen receptor control of sexually dimorphic gene expression in the mammalian kidney",
+     "year": 2023,
+     "authors": 13,
+     "venue": "Developmental Cell"
+    }
+   ]
+  },
+  {
+   "source": "andrei-irimia",
+   "target": "arthur-toga",
+   "strength": 0.652,
+   "papers": 10,
+   "by_size": {
+    "2-10": 1,
+    "11-50": 5,
+    "51+": 4
+   },
+   "at_usc": 3,
+   "first_year": 2011,
+   "last_year": 2026,
+   "examples": [
+    {
+     "id": "W7212282480",
+     "title": "Tissue- and compartment-resolved brain age reveals vascular-metabolic and neurodegenerative aging",
+     "year": 2026,
+     "authors": 16,
+     "venue": "Research Square"
+    },
+    {
+     "id": "W2968250246",
+     "title": "The LONI QC System: A Semi-Automated, Web-Based and Freely-Available Environment for the Comprehensive Quality Control of Neuroimaging Data",
+     "year": 2019,
+     "authors": 17,
+     "venue": "Frontiers in Neuroinformatics"
+    },
+    {
+     "id": "W2567143195",
+     "title": "Toward Precision and Reproducibility of Diffusion Tensor Imaging: A Multicenter Diffusion Phantom and Traveling Volunteer Study",
+     "year": 2016,
+     "authors": 13,
+     "venue": "American Journal of Neuroradiology"
+    },
+    {
+     "id": "W2043275179",
+     "title": "Mapping Connectivity Damage in the Case of Phineas Gage",
+     "year": 2012,
+     "authors": 6,
+     "venue": "PLoS ONE"
+    },
+    {
+     "id": "W2101177701",
+     "title": "Patient-Tailored Connectomics Visualization for the Assessment of White Matter Atrophy in Traumatic Brain Injury",
+     "year": 2012,
+     "authors": 11,
+     "venue": "Frontiers in Neurology"
+    },
+    {
+     "id": "W2171289936",
+     "title": "Comparison of Acute and Chronic Traumatic Brain Injury Using Semi-Automatic Multimodal Segmentation of MR Volumes",
+     "year": 2011,
+     "authors": 12,
+     "venue": "Journal of Neurotrauma"
+    },
+    {
+     "id": "W7154470535",
+     "title": "Interpretable deep learning reveals spatiotemporal MRI features of brain aging that align with neurodegeneration",
+     "year": 2026,
+     "authors": 100,
+     "venue": "GeroScience"
+    },
+    {
+     "id": "W4407897763",
+     "title": "Deep learning to quantify the pace of brain aging in relation to neurocognitive changes",
+     "year": 2025,
+     "authors": 100,
+     "venue": "Proceedings of the National Academy of Sciences"
+    }
+   ]
+  },
+  {
+   "source": "aiichiro-nakano",
+   "target": "rosa-di-felice",
+   "strength": 0.533,
+   "papers": 2,
+   "by_size": {
+    "2-10": 2,
+    "11-50": 0,
+    "51+": 0
+   },
+   "at_usc": 2,
+   "first_year": 2024,
+   "last_year": 2026,
+   "examples": [
+    {
+     "id": "W7164210201",
+     "title": "Dynamics of Majorana fermions on a quantum computer",
+     "year": 2026,
+     "authors": 4,
+     "venue": "Physical review. B./Physical review. B"
+    },
+    {
+     "id": "W4401420971",
+     "title": "Dynamics of symmetry-protected topological matter on a quantum computer",
+     "year": 2024,
+     "authors": 6,
+     "venue": "Physical review. B./Physical review. B"
+    }
+   ]
+  },
+  {
+   "source": "andrew-smith",
+   "target": "michael-waterman",
+   "strength": 0.5,
+   "papers": 1,
+   "by_size": {
+    "2-10": 1,
+    "11-50": 0,
+    "51+": 0
+   },
+   "at_usc": 1,
+   "first_year": 2013,
+   "last_year": 2013,
+   "examples": [
+    {
+     "id": "W2032845906",
+     "title": "A Geometric Interpretation for Local Alignment-Free Sequence Comparison",
+     "year": 2013,
+     "authors": 3,
+     "venue": "Journal of Computational Biology"
+    }
+   ]
+  },
+  {
+   "source": "andrew-smith",
+   "target": "peter-calabrese",
+   "strength": 0.5,
+   "papers": 2,
+   "by_size": {
+    "2-10": 2,
+    "11-50": 0,
+    "51+": 0
+   },
+   "at_usc": 2,
+   "first_year": 2016,
+   "last_year": 2019,
+   "examples": [
+    {
+     "id": "W2987233838",
+     "title": "Predicting the Number of Bases to Attain Sufficient Coverage in High-Throughput Sequencing Experiments",
+     "year": 2019,
+     "authors": 5,
+     "venue": "Journal of Computational Biology"
+    },
+    {
+     "id": "W2512836802",
+     "title": "Estimating the number of species to attain sufficient representation in a random sample",
+     "year": 2016,
+     "authors": 5,
+     "venue": "arXiv (Cornell University)"
+    }
+   ]
+  },
+  {
+   "source": "ruishan-liu",
+   "target": "yan-liu",
+   "strength": 0.5,
+   "papers": 2,
+   "by_size": {
+    "2-10": 2,
+    "11-50": 0,
+    "51+": 0
+   },
+   "at_usc": 1,
+   "first_year": 2025,
+   "last_year": 2026,
+   "examples": [
+    {
+     "id": "W7160389771",
+     "title": "Benchmarking computational methods for multi-omics biomarker discovery in cancer",
+     "year": 2026,
+     "authors": 5,
+     "venue": "Briefings in Bioinformatics"
+    },
+    {
+     "id": "W7130896866",
+     "title": "DGSurv: Dynamic Graph-Based Multimodal Learning for Interpretable Cancer Survival Prediction",
+     "year": 2025,
+     "authors": 5,
+     "venue": "PubMed Central"
+    }
+   ]
+  },
+  {
+   "source": "don-b-arnold",
+   "target": "scott-fraser",
+   "strength": 0.499,
+   "papers": 4,
+   "by_size": {
+    "2-10": 2,
+    "11-50": 2,
+    "51+": 0
+   },
+   "at_usc": 4,
+   "first_year": 2016,
+   "last_year": 2025,
+   "examples": [
+    {
+     "id": "W4416587275",
+     "title": "Negative-Valence Neurons in the Larval Zebrafish Pallium",
+     "year": 2025,
+     "authors": 6,
+     "venue": "eLife"
+    },
+    {
+     "id": "W4206594452",
+     "title": "Regional synapse gain and loss accompany memory formation in larval zebrafish",
+     "year": 2022,
+     "authors": 13,
+     "venue": "Proceedings of the National Academy of Sciences"
+    },
+    {
+     "id": "W2899096728",
+     "title": "Discs large 1 controls daughter-cell polarity after cytokinesis in vertebrate morphogenesis",
+     "year": 2018,
+     "authors": 9,
+     "venue": "Proceedings of the National Academy of Sciences"
+    },
+    {
+     "id": "W2411625774",
+     "title": "An E3-ligase-based method for ablating inhibitory synapses",
+     "year": 2016,
+     "authors": 12,
+     "venue": "Nature Methods"
+    }
+   ]
+  },
+  {
+   "source": "judith-kribelbauer",
+   "target": "tsu-pei-chiu",
+   "strength": 0.425,
+   "papers": 3,
+   "by_size": {
+    "2-10": 2,
+    "11-50": 1,
+    "51+": 0
+   },
+   "at_usc": 1,
+   "first_year": 2018,
+   "last_year": 2026,
+   "examples": [
+    {
+     "id": "W7138865111",
+     "title": "Readout of intrinsic and induced DNA shape by homeodomain transcription factor complexes",
+     "year": 2026,
+     "authors": 7,
+     "venue": "Biophysical Journal"
+    },
+    {
+     "id": "W7119228294",
+     "title": "Quantitative modulation of a spatial enhancer through the biophysical properties of a transcription factor binding site",
+     "year": 2026,
+     "authors": 18,
+     "venue": "Science Advances"
+    },
+    {
+     "id": "W2792170325",
+     "title": "Systematic prediction of DNA shape changes due to CpG methylation explains epigenetic effects on protein–DNA binding",
+     "year": 2018,
+     "authors": 6,
+     "venue": "Epigenetics & Chromatin"
+    }
+   ]
+  },
+  {
+   "source": "andrew-mcmahon",
+   "target": "andrew-smith",
+   "strength": 0.407,
+   "papers": 6,
+   "by_size": {
+    "2-10": 0,
+    "11-50": 6,
+    "51+": 0
+   },
+   "at_usc": 5,
+   "first_year": 2017,
+   "last_year": 2020,
+   "examples": [
+    {
+     "id": "W3193982672",
+     "title": "Spatial Transcriptional Mapping of the Human Nephrogenic Program",
+     "year": 2020,
+     "authors": 23,
+     "venue": "Developmental Cell"
+    },
+    {
+     "id": "W2955066631",
+     "title": "In Vivo Developmental Trajectories of Human Podocyte Inform In Vitro Differentiation of Pluripotent Stem Cell-Derived Podocytes",
+     "year": 2019,
+     "authors": 13,
+     "venue": "Developmental Cell"
+    },
+    {
+     "id": "W2789166354",
+     "title": "Conserved and Divergent Features of Mesenchymal Progenitor Cell Types within the Cortical Nephrogenic Niche of the Human and Mouse Kidney",
+     "year": 2018,
+     "authors": 14,
+     "venue": "Journal of the American Society of Nephrology"
+    },
+    {
+     "id": "W2806222066",
+     "title": "Progressive Recruitment of Mesenchymal Progenitors Reveals a Time-Dependent Process of Cell Fate Acquisition in Mouse and Human Nephrogenesis",
+     "year": 2018,
+     "authors": 15,
+     "venue": "Developmental Cell"
+    },
+    {
+     "id": "W2786553466",
+     "title": "Transcriptional regulatory control of mammalian nephron progenitors revealed by multi-factor cistromic analysis and genetic studies",
+     "year": 2018,
+     "authors": 18,
+     "venue": "PLoS Genetics"
+    },
+    {
+     "id": "W2755721550",
+     "title": "Molecular characterization of the transition from acute to chronic kidney injury following ischemia/reperfusion",
+     "year": 2017,
+     "authors": 15,
+     "venue": "JCI Insight"
+    }
+   ]
+  },
+  {
+   "source": "arun-durvasula",
+   "target": "steven-gazal",
+   "strength": 0.393,
+   "papers": 5,
+   "by_size": {
+    "2-10": 2,
+    "11-50": 2,
+    "51+": 1
+   },
+   "at_usc": 2,
+   "first_year": 2023,
+   "last_year": 2026,
+   "examples": [
+    {
+     "id": "W4413215714",
+     "title": "Identifying independent causal cell types for human diseases and risk variants",
+     "year": 2026,
+     "authors": 10,
+     "venue": "Cell Genomics"
+    },
+    {
+     "id": "W7202385020",
+     "title": "Correlations between causal effect sizes of proximal SNPs vary with functional annotations and implicate stabilizing selection",
+     "year": 2026,
+     "authors": 14,
+     "venue": "Nature Genetics"
+    },
+    {
+     "id": "W4327893744",
+     "title": "The lingering effects of Neanderthal introgression on human complex traits",
+     "year": 2023,
+     "authors": 10,
+     "venue": "eLife"
+    },
+    {
+     "id": "W4389342671",
+     "title": "Pervasive correlations between causal disease effects of proximal SNPs vary with functional annotations and implicate stabilizing selection",
+     "year": 2023,
+     "authors": 13,
+     "venue": "medRxiv"
+    },
+    {
+     "id": "W4402220283",
+     "title": "Deciphering the impact of genomic variation on function",
+     "year": 2024,
+     "authors": 100,
+     "venue": "Nature"
+    }
+   ]
+  },
+  {
+   "source": "adam-maclean",
+   "target": "jazlyn-mooney",
+   "strength": 0.333,
+   "papers": 1,
+   "by_size": {
+    "2-10": 1,
+    "11-50": 0,
+    "51+": 0
+   },
+   "at_usc": 1,
+   "first_year": 2024,
+   "last_year": 2024,
+   "examples": [
+    {
+     "id": "W4404735508",
+     "title": "Developmental hematopoietic stem cell variation explains clonal hematopoiesis later in life",
+     "year": 2024,
+     "authors": 4,
+     "venue": "Nature Communications"
+    }
+   ]
+  },
+  {
+   "source": "fengzhu-sun",
+   "target": "peter-calabrese",
+   "strength": 0.333,
+   "papers": 1,
+   "by_size": {
+    "2-10": 1,
+    "11-50": 0,
+    "51+": 0
+   },
+   "at_usc": 1,
+   "first_year": 2002,
+   "last_year": 2002,
+   "examples": [
+    {
+     "id": "W1978136801",
+     "title": "Haplotype Block Structure and Its Applications to Association Studies: Power and Study Designs",
+     "year": 2002,
+     "authors": 4,
+     "venue": "The American Journal of Human Genetics"
+    }
+   ]
+  },
+  {
+   "source": "charleston-chiang",
+   "target": "michael-edge",
+   "strength": 0.31,
+   "papers": 2,
+   "by_size": {
+    "2-10": 2,
+    "11-50": 0,
+    "51+": 0
+   },
+   "at_usc": 2,
+   "first_year": 2023,
+   "last_year": 2025,
+   "examples": [
+    {
+     "id": "W4408673032",
+     "title": "A likelihood-based framework for demographic inference from genealogical trees",
+     "year": 2025,
+     "authors": 8,
+     "venue": "Nature Genetics"
+    },
+    {
+     "id": "W4389427563",
+     "title": "Tree-based QTL mapping with expected local genetic relatedness matrices",
+     "year": 2023,
+     "authors": 7,
+     "venue": "The American Journal of Human Genetics"
+    }
+   ]
+  },
+  {
+   "source": "michael-edge",
+   "target": "nicholas-mancuso",
+   "strength": 0.31,
+   "papers": 2,
+   "by_size": {
+    "2-10": 2,
+    "11-50": 0,
+    "51+": 0
+   },
+   "at_usc": 2,
+   "first_year": 2023,
+   "last_year": 2025,
+   "examples": [
+    {
+     "id": "W4408673032",
+     "title": "A likelihood-based framework for demographic inference from genealogical trees",
+     "year": 2025,
+     "authors": 8,
+     "venue": "Nature Genetics"
+    },
+    {
+     "id": "W4389427563",
+     "title": "Tree-based QTL mapping with expected local genetic relatedness matrices",
+     "year": 2023,
+     "authors": 7,
+     "venue": "The American Journal of Human Genetics"
+    }
+   ]
+  },
+  {
+   "source": "geoffrey-fudenberg",
+   "target": "nicholas-mancuso",
+   "strength": 0.25,
+   "papers": 1,
+   "by_size": {
+    "2-10": 1,
+    "11-50": 0,
+    "51+": 0
+   },
+   "at_usc": 1,
+   "first_year": 2023,
+   "last_year": 2023,
+   "examples": [
+    {
+     "id": "W4363672366",
+     "title": "The motif composition of variable number tandem repeats impacts gene expression",
+     "year": 2023,
+     "authors": 5,
+     "venue": "Genome Research"
+    }
+   ]
+  },
+  {
+   "source": "mark-chaisson",
+   "target": "nicholas-mancuso",
+   "strength": 0.25,
+   "papers": 1,
+   "by_size": {
+    "2-10": 1,
+    "11-50": 0,
+    "51+": 0
+   },
+   "at_usc": 1,
+   "first_year": 2023,
+   "last_year": 2023,
+   "examples": [
+    {
+     "id": "W4363672366",
+     "title": "The motif composition of variable number tandem repeats impacts gene expression",
+     "year": 2023,
+     "authors": 5,
+     "venue": "Genome Research"
+    }
+   ]
+  },
+  {
+   "source": "charleston-chiang",
+   "target": "steven-gazal",
+   "strength": 0.223,
+   "papers": 3,
+   "by_size": {
+    "2-10": 0,
+    "11-50": 3,
+    "51+": 0
+   },
+   "at_usc": 3,
+   "first_year": 2022,
+   "last_year": 2026,
+   "examples": [
+    {
+     "id": "W7166827715",
+     "title": "Genome-wide association study and predictors of neonatal blood cell traits in Hispanic newborns",
+     "year": 2026,
+     "authors": 12,
+     "venue": "The American Journal of Human Genetics"
+    },
+    {
+     "id": "W4393190788",
+     "title": "A noncoding regulatory variant in IKZF1 increases acute lymphoblastic leukemia risk in Hispanic/Latino children",
+     "year": 2024,
+     "authors": 25,
+     "venue": "Cell Genomics"
+    },
+    {
+     "id": "W4310159444",
+     "title": "Racial and Ethnic Disparities in Childhood Acute Lymphoblastic Leukemia Risk Due to an IKZF1 Noncoding Regulatory Variant",
+     "year": 2022,
+     "authors": 12,
+     "venue": "Blood"
+    }
+   ]
+  },
+  {
+   "source": "bodour-salhia",
+   "target": "paul-newton",
+   "strength": 0.197,
+   "papers": 3,
+   "by_size": {
+    "2-10": 0,
+    "11-50": 3,
+    "51+": 0
+   },
+   "at_usc": 3,
+   "first_year": 2021,
+   "last_year": 2024,
+   "examples": [
+    {
+     "id": "W4393427168",
+     "title": "Comparative analysis of the spatial distribution of brain metastases across several primary cancers using machine learning and deep learning models",
+     "year": 2024,
+     "authors": 16,
+     "venue": "Journal of Neuro-Oncology"
+    },
+    {
+     "id": "W4306361728",
+     "title": "A quantitative characterization of the spatial distribution of brain metastases from breast cancer and respective molecular subtypes",
+     "year": 2022,
+     "authors": 15,
+     "venue": "Journal of Neuro-Oncology"
+    },
+    {
+     "id": "W3217093718",
+     "title": "Anatomical and topographical variations in the distribution of brain metastases based on primary cancer origin and molecular subtypes: a systematic review",
+     "year": 2021,
+     "authors": 18,
+     "venue": "Neuro-Oncology Advances"
+    }
+   ]
+  },
+  {
+   "source": "jerry-s-h-lee",
+   "target": "peter-calabrese",
+   "strength": 0.167,
+   "papers": 1,
+   "by_size": {
+    "2-10": 1,
+    "11-50": 0,
+    "51+": 0
+   },
+   "at_usc": 1,
+   "first_year": 2025,
+   "last_year": 2025,
+   "examples": [
+    {
+     "id": "W4415011243",
+     "title": "Evaluating peer-to-peer bioinformatics education: a case study of student learning outcomes and community impact in an undergraduate multi-omic data analysis course",
+     "year": 2025,
+     "authors": 7,
+     "venue": "bioRxiv (Cold Spring Harbor Laboratory)"
+    }
+   ]
+  },
+  {
+   "source": "peter-calabrese",
+   "target": "vsevolod-katritch",
+   "strength": 0.167,
+   "papers": 1,
+   "by_size": {
+    "2-10": 1,
+    "11-50": 0,
+    "51+": 0
+   },
+   "at_usc": 1,
+   "first_year": 2022,
+   "last_year": 2022,
+   "examples": [
+    {
+     "id": "W4308603283",
+     "title": "Germline selection of PTPN11 (HGNC:9644) variants make a major contribution to both Noonan syndrome's high birth rate and the transmission of sporadic cancer variants resulting in fetal abnormality",
+     "year": 2022,
+     "authors": 7,
+     "venue": "Human Mutation"
+    }
+   ]
+  },
+  {
+   "source": "arthur-toga",
+   "target": "bodour-salhia",
+   "strength": 0.13,
+   "papers": 2,
+   "by_size": {
+    "2-10": 0,
+    "11-50": 2,
+    "51+": 0
+   },
+   "at_usc": 2,
+   "first_year": 2021,
+   "last_year": 2022,
+   "examples": [
+    {
+     "id": "W4306361728",
+     "title": "A quantitative characterization of the spatial distribution of brain metastases from breast cancer and respective molecular subtypes",
+     "year": 2022,
+     "authors": 15,
+     "venue": "Journal of Neuro-Oncology"
+    },
+    {
+     "id": "W3217093718",
+     "title": "Anatomical and topographical variations in the distribution of brain metastases based on primary cancer origin and molecular subtypes: a systematic review",
+     "year": 2021,
+     "authors": 18,
+     "venue": "Neuro-Oncology Advances"
+    }
+   ]
+  },
+  {
+   "source": "arthur-toga",
+   "target": "paul-newton",
+   "strength": 0.13,
+   "papers": 2,
+   "by_size": {
+    "2-10": 0,
+    "11-50": 2,
+    "51+": 0
+   },
+   "at_usc": 2,
+   "first_year": 2021,
+   "last_year": 2022,
+   "examples": [
+    {
+     "id": "W4306361728",
+     "title": "A quantitative characterization of the spatial distribution of brain metastases from breast cancer and respective molecular subtypes",
+     "year": 2022,
+     "authors": 15,
+     "venue": "Journal of Neuro-Oncology"
+    },
+    {
+     "id": "W3217093718",
+     "title": "Anatomical and topographical variations in the distribution of brain metastases based on primary cancer origin and molecular subtypes: a systematic review",
+     "year": 2021,
+     "authors": 18,
+     "venue": "Neuro-Oncology Advances"
+    }
+   ]
+  },
+  {
+   "source": "peter-yingxiao-wang",
+   "target": "scott-fraser",
+   "strength": 0.129,
+   "papers": 2,
+   "by_size": {
+    "2-10": 0,
+    "11-50": 2,
+    "51+": 0
+   },
+   "at_usc": 2,
+   "first_year": 2024,
+   "last_year": 2025,
+   "examples": [
+    {
+     "id": "W4409622232",
+     "title": "Far-red chemigenetic kinase biosensors enable multiplexed and super-resolved imaging of signaling networks",
+     "year": 2025,
+     "authors": 17,
+     "venue": "Nature Biotechnology"
+    },
+    {
+     "id": "W4391753723",
+     "title": "Far-red chemigenetic biosensors for multi-dimensional and super-resolved kinase activity imaging",
+     "year": 2024,
+     "authors": 16,
+     "venue": "bioRxiv (Cold Spring Harbor Laboratory)"
+    }
+   ]
+  },
+  {
+   "source": "remo-rohs",
+   "target": "scott-fraser",
+   "strength": 0.125,
+   "papers": 1,
+   "by_size": {
+    "2-10": 1,
+    "11-50": 0,
+    "51+": 0
+   },
+   "at_usc": 1,
+   "first_year": 2023,
+   "last_year": 2023,
+   "examples": [
+    {
+     "id": "W4386994964",
+     "title": "Hand2 represses non-cardiac cell fates through chromatin remodeling at cis- regulatory elements",
+     "year": 2023,
+     "authors": 9,
+     "venue": "bioRxiv (Cold Spring Harbor Laboratory)"
+    }
+   ]
+  },
+  {
+   "source": "vsevolod-katritch",
+   "target": "yan-liu",
+   "strength": 0.125,
+   "papers": 1,
+   "by_size": {
+    "2-10": 1,
+    "11-50": 0,
+    "51+": 0
+   },
+   "at_usc": 1,
+   "first_year": 2026,
+   "last_year": 2026,
+   "examples": [
+    {
+     "id": "W7197027488",
+     "title": "Trustworthy Protein-Ligand Binding Affinity Prediction via Reliability-Aware Multi-Engine Fusion",
+     "year": 2026,
+     "authors": 9,
+     "venue": "ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD)"
+    }
+   ]
+  },
+  {
+   "source": "jerry-s-h-lee",
+   "target": "paul-newton",
+   "strength": 0.117,
+   "papers": 2,
+   "by_size": {
+    "2-10": 0,
+    "11-50": 2,
+    "51+": 0
+   },
+   "at_usc": 0,
+   "first_year": 2020,
+   "last_year": 2020,
+   "examples": [
+    {
+     "id": "W3037948815",
+     "title": "Quantified Kinematics to Evaluate Patient Chemotherapy Risks in Clinic",
+     "year": 2020,
+     "authors": 16,
+     "venue": "JCO Clinical Cancer Informatics"
+    },
+    {
+     "id": "W3088344301",
+     "title": "Use of Wearable Activity Tracker in Patients With Cancer Undergoing Chemotherapy: Toward Evaluating Risk of Unplanned Health Care Encounters",
+     "year": 2020,
+     "authors": 21,
+     "venue": "JCO Clinical Cancer Informatics"
+    }
+   ]
+  },
+  {
+   "source": "arun-durvasula",
+   "target": "nicholas-mancuso",
+   "strength": 0.111,
+   "papers": 1,
+   "by_size": {
+    "2-10": 1,
+    "11-50": 0,
+    "51+": 0
+   },
+   "at_usc": 1,
+   "first_year": 2026,
+   "last_year": 2026,
+   "examples": [
+    {
+     "id": "W4413215714",
+     "title": "Identifying independent causal cell types for human diseases and risk variants",
+     "year": 2026,
+     "authors": 10,
+     "venue": "Cell Genomics"
+    }
+   ]
+  },
+  {
+   "source": "julia-schwartzman",
+   "target": "naomi-levine",
+   "strength": 0.091,
+   "papers": 1,
+   "by_size": {
+    "2-10": 0,
+    "11-50": 1,
+    "51+": 0
+   },
+   "at_usc": 0,
+   "first_year": 2022,
+   "last_year": 2022,
+   "examples": [
+    {
+     "id": "W4220993648",
+     "title": "Microbes contribute to setting the ocean carbon flux by altering the fate of sinking particulates",
+     "year": 2022,
+     "authors": 12,
+     "venue": "Nature Communications"
+    }
+   ]
+  },
+  {
+   "source": "scott-fraser",
+   "target": "steve-kay",
+   "strength": 0.091,
+   "papers": 1,
+   "by_size": {
+    "2-10": 0,
+    "11-50": 1,
+    "51+": 0
+   },
+   "at_usc": 0,
+   "first_year": 2026,
+   "last_year": 2026,
+   "examples": [
+    {
+     "id": "W7223060537",
+     "title": "Bright Probes, Blurred Metabolism: Navigating Fluorescent Protein Cross-Excitation in NADH FLIM",
+     "year": 2026,
+     "authors": 12,
+     "venue": "Biophysical Reports"
+    }
+   ]
+  },
+  {
+   "source": "remo-rohs",
+   "target": "steve-kay",
+   "strength": 0.077,
+   "papers": 1,
+   "by_size": {
+    "2-10": 0,
+    "11-50": 1,
+    "51+": 0
+   },
+   "at_usc": 1,
+   "first_year": 2024,
+   "last_year": 2024,
+   "examples": [
+    {
+     "id": "W4396216085",
+     "title": "Targeting circadian transcriptional programs through a cis-regulatory mechanism in triple negative breast cancer",
+     "year": 2024,
+     "authors": 14,
+     "venue": "bioRxiv (Cold Spring Harbor Laboratory)"
+    }
+   ]
+  },
+  {
+   "source": "steve-kay",
+   "target": "tsu-pei-chiu",
+   "strength": 0.077,
+   "papers": 1,
+   "by_size": {
+    "2-10": 0,
+    "11-50": 1,
+    "51+": 0
+   },
+   "at_usc": 1,
+   "first_year": 2024,
+   "last_year": 2024,
+   "examples": [
+    {
+     "id": "W4396216085",
+     "title": "Targeting circadian transcriptional programs through a cis-regulatory mechanism in triple negative breast cancer",
+     "year": 2024,
+     "authors": 14,
+     "venue": "bioRxiv (Cold Spring Harbor Laboratory)"
+    }
+   ]
+  },
+  {
+   "source": "jerry-s-h-lee",
+   "target": "stacey-finley",
+   "strength": 0.067,
+   "papers": 1,
+   "by_size": {
+    "2-10": 0,
+    "11-50": 1,
+    "51+": 0
+   },
+   "at_usc": 1,
+   "first_year": 2021,
+   "last_year": 2021,
+   "examples": [
+    {
+     "id": "W3164859410",
+     "title": "A field guide to cultivating computational biology",
+     "year": 2021,
+     "authors": 16,
+     "venue": "PLoS Biology"
+    }
+   ]
+  },
+  {
+   "source": "chang-shu",
+   "target": "nicholas-mancuso",
+   "strength": 0.046,
+   "papers": 2,
+   "by_size": {
+    "2-10": 0,
+    "11-50": 1,
+    "51+": 1
+   },
+   "at_usc": 2,
+   "first_year": 2024,
+   "last_year": 2026,
+   "examples": [
+    {
+     "id": "W4404556530",
+     "title": "Multi-ancestry GWAS of severe pregnancy nausea and vomiting identifies risk loci associated with appetite, insulin signaling, and brain plasticity",
+     "year": 2024,
+     "authors": 29,
+     "venue": "medRxiv"
+    },
+    {
+     "id": "W7154214372",
+     "title": "Multi-ancestry genome-wide association study of severe pregnancy nausea and vomiting",
+     "year": 2026,
+     "authors": 100,
+     "venue": "Nature Genetics"
+    }
+   ]
+  },
+  {
+   "source": "charleston-chiang",
+   "target": "jazlyn-mooney",
+   "strength": 0.025,
+   "papers": 1,
+   "by_size": {
+    "2-10": 0,
+    "11-50": 1,
+    "51+": 0
+   },
+   "at_usc": 1,
+   "first_year": 2026,
+   "last_year": 2026,
+   "examples": [
+    {
+     "id": "W4416617129",
+     "title": "Challenges and recommendations in establishing national human diversity genomic projects",
+     "year": 2026,
+     "authors": 41,
+     "venue": "Nature Methods"
+    }
+   ]
+  },
+  {
+   "source": "chang-shu",
+   "target": "steven-gazal",
+   "strength": 0.01,
+   "papers": 1,
+   "by_size": {
+    "2-10": 0,
+    "11-50": 0,
+    "51+": 1
+   },
+   "at_usc": 1,
+   "first_year": 2026,
+   "last_year": 2026,
+   "examples": [
+    {
+     "id": "W7154214372",
+     "title": "Multi-ancestry genome-wide association study of severe pregnancy nausea and vomiting",
+     "year": 2026,
+     "authors": 100,
+     "venue": "Nature Genetics"
+    }
+   ]
+  }
+ ],
+ "faculty": {
+  "helen-berman": {
+   "collaborators": 1,
+   "strength": 1.75
+  },
+  "peter-calabrese": {
+   "collaborators": 5,
+   "strength": 2.325
+  },
+  "mark-chaisson": {
+   "collaborators": 2,
+   "strength": 1.0
+  },
+  "liang-chen": {
+   "collaborators": 0,
+   "strength": 0.0
+  },
+  "tsu-pei-chiu": {
+   "collaborators": 3,
+   "strength": 5.836
+  },
+  "michael-edge": {
+   "collaborators": 2,
+   "strength": 0.62
+  },
+  "geoffrey-fudenberg": {
+   "collaborators": 2,
+   "strength": 1.0
+  },
+  "vsevolod-katritch": {
+   "collaborators": 3,
+   "strength": 1.459
+  },
+  "steve-kay": {
+   "collaborators": 3,
+   "strength": 0.245
+  },
+  "adam-maclean": {
+   "collaborators": 2,
+   "strength": 1.007
+  },
+  "jazlyn-mooney": {
+   "collaborators": 2,
+   "strength": 0.358
+  },
+  "remo-rohs": {
+   "collaborators": 6,
+   "strength": 8.79
+  },
+  "andrew-smith": {
+   "collaborators": 3,
+   "strength": 1.407
+  },
+  "fengzhu-sun": {
+   "collaborators": 3,
+   "strength": 8.357
+  },
+  "andrew-mcmahon": {
+   "collaborators": 2,
+   "strength": 1.081
+  },
+  "simon-tavare": {
+   "collaborators": 2,
+   "strength": 1.991
+  },
+  "michael-waterman": {
+   "collaborators": 3,
+   "strength": 8.405
+  },
+  "don-b-arnold": {
+   "collaborators": 1,
+   "strength": 0.499
+  },
+  "charleston-chiang": {
+   "collaborators": 4,
+   "strength": 1.991
+  },
+  "rosa-di-felice": {
+   "collaborators": 2,
+   "strength": 1.362
+  },
+  "arun-durvasula": {
+   "collaborators": 2,
+   "strength": 0.504
+  },
+  "stacey-finley": {
+   "collaborators": 2,
+   "strength": 1.767
+  },
+  "peter-foster": {
+   "collaborators": 0,
+   "strength": 0.0
+  },
+  "scott-fraser": {
+   "collaborators": 5,
+   "strength": 2.544
+  },
+  "krishna-garikipati": {
+   "collaborators": 0,
+   "strength": 0.0
+  },
+  "steven-gazal": {
+   "collaborators": 4,
+   "strength": 2.005
+  },
+  "christoph-haselwandter": {
+   "collaborators": 0,
+   "strength": 0.0
+  },
+  "andrei-irimia": {
+   "collaborators": 2,
+   "strength": 1.518
+  },
+  "eva-kanso": {
+   "collaborators": 1,
+   "strength": 9.417
+  },
+  "judith-kribelbauer": {
+   "collaborators": 2,
+   "strength": 1.1
+  },
+  "jerry-s-h-lee": {
+   "collaborators": 3,
+   "strength": 0.351
+  },
+  "naomi-levine": {
+   "collaborators": 1,
+   "strength": 0.091
+  },
+  "sheng-li": {
+   "collaborators": 0,
+   "strength": 0.0
+  },
+  "ruishan-liu": {
+   "collaborators": 1,
+   "strength": 0.5
+  },
+  "yan-liu": {
+   "collaborators": 2,
+   "strength": 0.625
+  },
+  "nicholas-mancuso": {
+   "collaborators": 7,
+   "strength": 3.779
+  },
+  "aiichiro-nakano": {
+   "collaborators": 2,
+   "strength": 1.7
+  },
+  "paul-newton": {
+   "collaborators": 4,
+   "strength": 9.861
+  },
+  "meisam-razaviyayn": {
+   "collaborators": 0,
+   "strength": 0.0
+  },
+  "bodour-salhia": {
+   "collaborators": 2,
+   "strength": 0.327
+  },
+  "julia-schwartzman": {
+   "collaborators": 1,
+   "strength": 0.091
+  },
+  "chang-shu": {
+   "collaborators": 2,
+   "strength": 0.056
+  },
+  "rory-spence": {
+   "collaborators": 0,
+   "strength": 0.0
+  },
+  "paul-thomas": {
+   "collaborators": 0,
+   "strength": 0.0
+  },
+  "paul-thompson": {
+   "collaborators": 2,
+   "strength": 101.786
+  },
+  "arthur-toga": {
+   "collaborators": 5,
+   "strength": 102.784
+  },
+  "peter-yingxiao-wang": {
+   "collaborators": 1,
+   "strength": 0.129
+  },
+  "arieh-warshel": {
+   "collaborators": 0,
+   "strength": 0.0
+  }
+ }
+}
