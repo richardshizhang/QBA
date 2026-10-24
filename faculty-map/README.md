@@ -2,7 +2,7 @@
 
 A map of USC's Quantitative and Computational Biology faculty (core and joint). Faculty who work on similar problems or use similar techniques sit close together, and lines connect people who have published together.
 
-**Status:** work in progress. All 48 core, joint and emeritus faculty are matched to their publication records in [OpenAlex](https://openalex.org), a free database of scholarly papers. Their papers are downloaded and filtered (10,435 distinct papers kept), and collaboration edges are built (51 pairs). The map itself isn't built yet.
+**Status:** work in progress. All 48 core, joint and emeritus faculty are matched to their publication records in [OpenAlex](https://openalex.org), a free database of scholarly papers. Their papers are downloaded and filtered (10,435 distinct papers kept), collaboration edges are built (51 pairs), and each person has three research-feature vectors. The dimensionality-reduction experiments in `analysis.ipynb` are next. The map itself isn't built yet.
 
 ## Plan
 
@@ -10,9 +10,9 @@ A map of USC's Quantitative and Computational Biology faculty (core and joint). 
 2. **Match faculty to OpenAlex author profiles**, checked by hand. ✔︎
 3. **Download papers.** Fetch titles, abstracts, topics and authorship details, dropping namesakes' papers, reviewer reports and supplementary files. ✔︎
 4. **Collaboration edges.** Count co-authored papers, down-weighting huge consortium papers. ✔︎
-5. **Research similarity.** Compare TF-IDF on abstracts, OpenAlex topic profiles and scientific-text embeddings (SPECTER2).
+5. **Research similarity.** Compare TF-IDF on abstracts, OpenAlex topic profiles and scientific-text embeddings (SPECTER2). ✔︎
 6. **Problem vs. technique.** Give each a separate similarity score (later).
-7. **Dimensionality reduction and clustering.** Compare PCA, MDS, t-SNE and UMAP in a notebook.
+7. **Dimensionality reduction and clustering.** Compare PCA, MDS, t-SNE and UMAP in `analysis.ipynb` (set up, with a working baseline for each method).
 8. **Interactive page** like the [course map](../course-dependency-graph/).
 
 Emeriti are included and will sit behind a toggle. The adjunct member (UCLA) is left out.
@@ -25,27 +25,36 @@ Emeriti are included and will sit behind a toggle. The adjunct member (UCLA) is 
 | `scripts/resolve_authors.py` | Matches each person to OpenAlex author IDs. Writes `data/openalex-authors.json` and the review page `data/id-review.md`. |
 | `scripts/fetch_papers.py` | Downloads everyone's papers as trimmed records into `data/papers/papers.json`, filters them, and writes `data/paper-report.md`. |
 | `scripts/build_edges.py` | Builds collaboration edges from the kept papers into `data/edges.json` and writes `data/collaboration-report.md`. |
+| `scripts/build_features.py` | Builds each person's TF-IDF, topic and SPECTER2 vectors into `data/features/faculty-features.npz` and writes `data/features/features-report.md`. |
 | `scripts/openalex.py` | Shared OpenAlex API access (key, budget, retries). |
+| `analysis.ipynb` | Dimensionality reduction, clustering and the collaboration overlay. Exports the chosen layout to `data/layout.json`. |
 | `data/faculty.json` | Generated roster. Don't edit by hand; rerun the scraper. |
 | `data/openalex-authors.json` | Faculty → OpenAlex author IDs. Entries with `"status": "verified"` were checked by hand and survive reruns. `openalex` lists every profile that belongs to the person, since OpenAlex often splits one career across several profiles. `dois` lists papers for anyone OpenAlex never linked to a profile. |
 | `data/id-review.md` | Most-cited and most-recent papers for each match, plus the possible extra profiles, for checking by eye. |
 | `data/paper-overrides.json` | Hand corrections to the paper filter: `{"person-id": {"keep": [...], "drop": [...]}}` with OpenAlex work IDs. |
 | `data/paper-report.md` | Papers kept and dropped per person: off-profile drops, plus kept papers with unusual topics to check. |
-| `data/papers/` | Downloaded paper records (gitignored, about 26 MB). Rebuild with `scripts/fetch_papers.py`. |
+| `data/papers/` | Downloaded paper records and cached SPECTER2 paper embeddings (gitignored, about 40 MB). Rebuild with `scripts/fetch_papers.py` and `scripts/build_features.py`. |
 | `data/edges.json` | One entry per pair of faculty who share papers: strength, paper counts by author-list size, papers where both list USC, years, and up to 8 example papers. Also each person's number of QCB co-authors and total strength. |
 | `data/collaboration-report.md` | All edges in a table, the most connected faculty, and those with no QCB co-authors. |
+| `data/features/faculty-features.npz` | The 48 faculty's feature matrices (`tfidf`, `topics`, `subfields`, `fields`, `specter`) with vocabularies and topic names. Committed (about 1.3 MB) so the notebook runs from a fresh clone. |
+| `data/features/features-report.md` | Top terms, top topics and nearest neighbours per person under each representation, and how much the representations agree. |
 | `data/raw/` | Cached page and author-search responses (gitignored). |
 
 ## Running
 
-Only the Python standard library is needed so far.
+The data scripts need only the Python standard library. Features and the notebook need numpy, scikit-learn, scipy, matplotlib, seaborn and umap-learn. SPECTER2 embeddings also need torch, transformers and the `adapters` library, which goes in a project virtual environment so it can't disturb other Python work:
 
 ```bash
 python3 scripts/scrape_faculty.py
 python3 scripts/resolve_authors.py
 python3 scripts/fetch_papers.py
 python3 scripts/build_edges.py
+python3 -m venv --system-site-packages .venv
+.venv/bin/python -m pip install adapters
+.venv/bin/python scripts/build_features.py
 ```
+
+The SPECTER2 model download is about 440 MB (into `~/.cache/huggingface`). Embedding all 10,435 papers takes about four minutes on an Apple-silicon GPU. Paper embeddings are cached, so later runs take seconds.
 
 After editing `data/paper-overrides.json`, reapply the filters without downloading again:
 
@@ -71,6 +80,16 @@ Title, year, type, venue, citation count, the plain-text abstract (about 70% of 
 Two faculty members are linked when both are kept authors of the same paper. Each shared paper adds 1/(authors − 1) to the pair's **strength**, which is Newman's collaboration weight. A two-author paper adds 1, a ten-author paper 0.11, and a 100-author consortium paper about 0.01. So Kanso and Newton's 17 small papers (strength 9.4) outweigh Irimia and Thompson's 23 mostly consortium papers (0.9). Paper counts, broken down by author-list size, are kept alongside, as is the number of papers on which both list a USC affiliation.
 
 Strengths run from 0.01 to about 100: Toga and Thompson share 683 papers going back to their UCLA lab. The map will need a log scale for line widths. 39 of the 48 faculty have at least one QCB co-author. The other 9 are listed at the end of the collaboration report.
+
+### Research features
+
+Every person gets three vectors built from their kept papers. Recent papers count most (weight halves every 10 years), first- and last-author papers count fully, middle-author papers half, and papers with more than 50 authors half again. That way Thompson's 2,500 consortium-heavy papers describe his own lab's work and don't swamp everything else.
+
+- **TF-IDF**: words and two-word phrases from titles, abstracts and keywords. Each person's term frequencies are the weighted mean of their papers'. The IDF counts how many *faculty* use a term rather than how many papers, so prolific people don't set the vocabulary.
+- **Topics**: shares of OpenAlex's topic labels (1,485 topics appear), plus coarser subfield and field shares.
+- **SPECTER2**: [allenai/specter2](https://huggingface.co/allenai/specter2), a model trained so that papers which cite each other land close together, with its proximity adapter for similarity search. Each person's vector is the weighted mean of their papers' embeddings. Raw SPECTER2 vectors all point roughly the same way, so centre them (subtract the mean) before comparing.
+
+The three agree well but not perfectly: rank correlation of 0.78 between TF-IDF and topics, and 0.69 between either and SPECTER2. Each person's nearest neighbours fall into the communities you'd expect: statistical and population genetics, neuroimaging, physics and mechanics of living systems, molecular simulation, machine learning, protein–DNA binding, ocean microbes.
 
 ### What OpenAlex gets wrong
 
