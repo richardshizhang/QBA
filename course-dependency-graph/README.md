@@ -58,6 +58,9 @@ It's a static page with no build step and no dependencies beyond two Google Font
 - `hide.courses`: options QBIO students rarely take (MATH 127, 227 and 245). They're left off the map but still listed in the requirement's details.
 - `hideWhenTaken`: once you take a course, hide the separate course it replaces. CSCI 103 and 113 hide each other, and CSCI 104 hides CSCI 114. (Options within one requirement line, like PHYS 135a vs 151, collapse automatically.)
 - `typicalPrereqs`: draw a course after its usual prerequisite. CSCI 270 follows CSCI 104 rather than CSCI 114, because CSCI 113/114 is the lighter CS path. "Can take now" still uses the catalogue's full prerequisites.
+- `keepTogether`: courses usually taken together sit next to each other whenever they share a column. CSCI 103 and CSCI 170 both follow CSCI 102 and lead to CSCI 104.
+
+Turning off "Outside prerequisites" counts those courses (such as CSCI 102) as met before step 1, so a course that needs "CSCI 102 or CSCI 113" stays in step 1 instead of waiting for CSCI 113.
 
 ## AP and exam credit
 

@@ -1040,6 +1040,15 @@ window.QBIO_DATA = {
      ],
      "note": "On the map, CSCI 270 follows CSCI 104: QBIO students take algorithms after Data Structures. CSCI 113 and 114 are the lighter CS path and usually aren't followed by CSCI 270, though the catalogue allows it."
     }
+   },
+   "keepTogether": {
+    "groups": [
+     [
+      "CSCI 103",
+      "CSCI 170"
+     ]
+    ],
+    "note": "CSCI 103 and CSCI 170 are usually taken together (both follow CSCI 102 and both lead to CSCI 104), so the map keeps them side by side."
    }
   },
   "placement": {

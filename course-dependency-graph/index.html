@@ -761,6 +761,8 @@ button, input, select { font: inherit; color: inherit; }
   const ADJ = R.mapAdjustments || {};
   const HIDDEN = new Set((ADJ.hide && ADJ.hide.courses) || []);
   const TYPICAL = ADJ.typicalPrereqs || {};
+  // Courses usually taken together stay next to each other when they share a column.
+  const TOGETHER = (ADJ.keepTogether && ADJ.keepTogether.groups) || [];
   function mapGroups(code) {
     const t = TYPICAL[code];
     if (!t) return groupsOf(code);
@@ -798,14 +800,17 @@ button, input, select { font: inherit; color: inherit; }
       }));
     }
     const onMap = x => slotCourses.has(x) || outsideCodes.has(x);
-    const usable = b => b.every(x => onMap(x) || PLACEMENT.has(x));
+    // Hidden outside prerequisites count as met before step 1, so CSCI 170 ("CSCI 102 or 113")
+    // stays beside CSCI 103 instead of waiting for CSCI 113.
+    const offMapOutside = x => !state.outside && OUTSIDE.has(x) && !slotCourses.has(x);
+    const usable = b => b.every(x => onMap(x) || PLACEMENT.has(x) || offMapOutside(x));
 
     // Earliest step for each course on the map (0 = already covered by AP credit or a waiver,
     // or taken while taken courses are hidden).
     const memo = new Map();
     const stepOf = (code, stack) => {
       if (memo.has(code)) return memo.get(code);
-      if (atStart(code)) { memo.set(code, 0); return 0; }
+      if (atStart(code) || offMapOutside(code)) { memo.set(code, 0); return 0; }
       stack = stack || new Set();
       if (stack.has(code)) return 1;
       stack.add(code);
@@ -942,6 +947,22 @@ button, input, select { font: inherit; color: inherit; }
       for (let i = 0; i + 1 < e.chain.length; i++) link(e.chain[i], e.chain[i + 1]);
     });
 
+    // Keep-together groups: pull later members up behind the first one, so nothing (not even
+    // an arrow's lane) sits between them.
+    const groupOf = new Map();
+    TOGETHER.forEach((g, gi) => nodes.forEach(n => { if (n.courses.some(c => g.includes(c))) groupOf.set(n, gi); }));
+    const glue = l => {
+      for (let i = 0; i < l.length; i++) {
+        const g = groupOf.get(l[i]);
+        if (g === undefined) continue;
+        const after = l.slice(i + 1);
+        const mates = after.filter(n => groupOf.get(n) === g);
+        l.splice(i + 1, after.length, ...mates, ...after.filter(n => groupOf.get(n) !== g));
+        i += mates.length;
+      }
+    };
+    layers.forEach(glue);
+
     // A box with no arrows, or only arrows to the "AP & waived" column, has nothing to pull
     // it into place and drifts to the bottom; anchor it to same-category boxes in the
     // neighbouring columns instead (QBIO 481 next to the other capstones under AP Calc).
@@ -964,6 +985,7 @@ button, input, select { font: inherit; color: inherit; }
       });
       keyed.sort((a, b) => a.k - b.k || a.i - b.i);
       l.splice(0, l.length, ...keyed.map(o => o.n));
+      glue(l);
       l.forEach((n, i) => pos.set(n, i));
     };
     const crossings = () => {
@@ -1019,6 +1041,14 @@ button, input, select { font: inherit; color: inherit; }
         const d = ns.length ? ns.reduce((s, m) => s + center(m), 0) / ns.length - n.h / 2 : y.get(n);
         return d - off[i];
       });
+      // A glued group shares one target, so it moves as a single block.
+      for (let i = 0; i < l.length;) {
+        let j = i + 1;
+        while (j < l.length && groupOf.has(l[i]) && groupOf.get(l[j]) === groupOf.get(l[i])) j++;
+        const mean = want.slice(i, j).reduce((s, v) => s + v, 0) / (j - i);
+        for (let k = i; k < j; k++) want[k] = mean;
+        i = j;
+      }
       const weights = l.map(n => loose(n) && peers(n).length ? LOOSE_WEIGHT : 1);
       pav(want, weights).forEach((z, i) => y.set(l[i], z + off[i]));
     };
@@ -1046,6 +1076,7 @@ button, input, select { font: inherit; color: inherit; }
       if (!want.size) return;
       // Other boxes keep their order (their tops already increase down the column).
       l.sort((a, b) => (want.has(a) ? want.get(a) : y.get(a)) - (want.has(b) ? want.get(b) : y.get(b)));
+      glue(l);
       const off = [0];
       for (let i = 1; i < l.length; i++) off[i] = off[i - 1] + l[i - 1].h + gap(l[i - 1], l[i]);
       const target = l.map((n, i) => (want.has(n) ? want.get(n) : y.get(n)) - off[i]);
@@ -1635,6 +1666,7 @@ button, input, select { font: inherit; color: inherit; }
       (HIDDEN.size ? "<p><strong>Left off the map:</strong> " + esc([...HIDDEN].map(disp).join(", ")) + ", which QBIO students rarely take. They still count for their requirements.</p>" : "") +
       Object.keys(TYPICAL).map(c => "<p>" + esc(TYPICAL[c].note) + "</p>").join("") +
       (ADJ.hideWhenTaken ? "<p>" + esc(ADJ.hideWhenTaken.note) + "</p>" : "") +
+      (ADJ.keepTogether ? "<p>" + esc(ADJ.keepTogether.note) + "</p>" : "") +
       "<p><strong>F / Sp / Su</strong> show which terms the course actually ran between " + termName(D.terms[D.terms.length - 1]) + " and " + termName(D.terms[0]) + ".</p>" +
       '<h3 style="margin:6px 0 0">About the data</h3>' +
       "<p>Requirements are transcribed from the <a href=\"" + esc(R.source) + "\" target=\"_blank\" rel=\"noopener\">" + esc(R.catalogue) + "</a>. " + (D.catalogueExport
