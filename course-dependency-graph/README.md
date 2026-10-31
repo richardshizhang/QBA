@@ -15,7 +15,7 @@ An interactive prerequisite map of USC's **Quantitative Biology (BS)**, built fo
 - **Boxes with several codes** are one catalogue requirement line with alternatives (e.g. Physics I = PHYS 135a / 151 / 161 / 171). If the options open up at different steps, the requirement appears once per step, marked "also step N".
 - Solid arrow = required. Dashed arrow = one of several options, or needed by only some of the alternatives in the box. Arrows show the fastest routes; selecting a course also highlights its slower alternatives.
 
-It's a static page with no build step and no dependencies beyond two Google Fonts.
+It's a static page with no build step and no dependencies beyond two Google Fonts and the GoatCounter visit counter.
 
 ## Files
 
@@ -91,3 +91,9 @@ This is an unofficial planning aid. Students should confirm their plan with a QB
 ## Hosting
 
 The map is hosted with GitHub Pages from the `main` branch of [richardshizhang/QBA](https://github.com/richardshizhang/QBA). Pushing to `main` republishes it, usually within a minute or two. Any other static host works too: serve `index.html` and `graph-data.js` side by side.
+
+## Visit counts
+
+The page counts visits with [GoatCounter](https://www.goatcounter.com), which sets no cookies and collects no personal data. Students' ticks, credit and waivers stay in their own browsers; GoatCounter only sees that the page was opened (plus referrer, browser and screen size). The page's About section says this. Stats are on the GoatCounter dashboard at https://richardshizhang.goatcounter.com (sign in to see them).
+
+GoatCounter ignores visits from `localhost` and from opening `index.html` as a local file, so local testing doesn't inflate the numbers. To point the counter at a different GoatCounter site, change the `data-goatcounter` URL in the `<script>` tag near the top of `index.html`, or delete that tag to turn counting off.

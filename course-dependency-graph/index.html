@@ -9,6 +9,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,400..800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<!-- Cookie-free visit counts: https://richardshizhang.goatcounter.com -->
+<script data-goatcounter="https://richardshizhang.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <style>
 :root {
   /* Layout: full-height workbench. Header strip, pannable prerequisite map (graph-paper ground), detail rail on the right. */
@@ -1673,6 +1675,7 @@ button, input, select { font: inherit; color: inherit; }
         ? "Prerequisites and descriptions come from the catalogue (exported " + esc(String(D.catalogueExport.exported || "").slice(0, 10)) + "), falling back to the USC Schedule of Classes; offering history comes from the Schedule of Classes (updated " + esc(D.generated) + ")."
         : "Prerequisites, descriptions and offering history come from the USC Schedule of Classes (updated " + esc(D.generated) + "), which can leave out prerequisites the catalogue lists.") + " Entry-level prerequisites such as MATH 108 and CHEM 050 are treated as met, since most students place out of them. AP waivers follow the <a href=\"" + esc(R.examCredit.source) + "\" target=\"_blank\" rel=\"noopener\">Registrar's AP chart</a>, plus Viterbi's rule that AP Computer Science A or the CSCI 102 challenge exam lets you skip CSCI 102.</p>" +
       (missing.length ? "<p>No prerequisite data for " + esc(missing.join(", ")) + ", so their prerequisites are unknown here.</p>" : "") +
+      (document.querySelector("script[data-goatcounter]") ? "<p>Visits to this page are counted with <a href=\"https://www.goatcounter.com\" target=\"_blank\" rel=\"noopener\">GoatCounter</a>, which uses no cookies and collects no personal data. Your ticks, credit and waivers never leave your browser.</p>" : "") +
       "<p>This is an unofficial planning aid from QBA, the Quantitative Biology Association. Always confirm your plan with your QBIO advisor and your STARS report.</p></div>");
     return '<div class="stack">' + parts.join("") + "</div>";
   }
