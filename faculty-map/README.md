@@ -2,7 +2,7 @@
 
 A map of USC's Quantitative and Computational Biology faculty (core and joint). Faculty who work on similar problems or use similar techniques sit close together, and lines connect people who have published together.
 
-**Status:** work in progress. All 48 core, joint and emeritus faculty are matched to their publication records in [OpenAlex](https://openalex.org), a free database of scholarly papers. Their papers are downloaded and filtered (10,435 distinct papers kept), collaboration edges are built (51 pairs), and each person has three research-feature vectors. The dimensionality-reduction experiments in `analysis.ipynb` are next. The map itself isn't built yet.
+**Status:** work in progress. All 48 core, joint and emeritus faculty are matched to their publication records in [OpenAlex](https://openalex.org), a free database of scholarly papers. Their papers are downloaded and filtered (10,435 distinct papers kept), collaboration edges are built (51 pairs), and each person has three research-feature vectors. The map's positions and clusters are chosen and exported to `data/layout.json` (t-SNE and UMAP on SPECTER2 for all 48 people, with an average-linkage tree cut into 9 clusters). The interactive page itself isn't built yet.
 
 ## Plan
 
@@ -12,10 +12,10 @@ A map of USC's Quantitative and Computational Biology faculty (core and joint). 
 4. **Collaboration edges.** Count co-authored papers, down-weighting huge consortium papers. ✔︎
 5. **Research similarity.** Compare TF-IDF on abstracts, OpenAlex topic profiles and scientific-text embeddings (SPECTER2). ✔︎
 6. **Problem vs. technique.** Give each a separate similarity score (later).
-7. **Dimensionality reduction and clustering.** Compare PCA, MDS, t-SNE and UMAP in `analysis.ipynb` (set up, with a working baseline for each method).
+7. **Dimensionality reduction and clustering.** Compare PCA, MDS, t-SNE and UMAP in `analysis.ipynb`, then export the chosen views. ✔︎
 8. **Interactive page** like the [course map](../course-dependency-graph/).
 
-Emeriti are included and will sit behind a toggle. The adjunct member (UCLA) is left out.
+Emeriti are included. The adjunct member (UCLA) is left out.
 
 ## Files
 
@@ -27,7 +27,7 @@ Emeriti are included and will sit behind a toggle. The adjunct member (UCLA) is 
 | `scripts/build_edges.py` | Builds collaboration edges from the kept papers into `data/edges.json` and writes `data/collaboration-report.md`. |
 | `scripts/build_features.py` | Builds each person's TF-IDF, topic and SPECTER2 vectors into `data/features/faculty-features.npz` and writes `data/features/features-report.md`. |
 | `scripts/openalex.py` | Shared OpenAlex API access (key, budget, retries). |
-| `analysis.ipynb` | Dimensionality reduction, clustering and the collaboration overlay. Exports the chosen layout to `data/layout.json`. |
+| `analysis.ipynb` | Dimensionality reduction, clustering and the collaboration overlay. Exports the chosen layouts and tree to `data/layout.json`. Set the representation only in the cell that builds `X`: everything after it reads `X`, `S` and `D` from there, and changing `REP` anywhere else only changes plot titles. |
 | `data/faculty.json` | Generated roster. Don't edit by hand; rerun the scraper. |
 | `data/openalex-authors.json` | Faculty → OpenAlex author IDs. Entries with `"status": "verified"` were checked by hand and survive reruns. `openalex` lists every profile that belongs to the person, since OpenAlex often splits one career across several profiles. `dois` lists papers for anyone OpenAlex never linked to a profile. |
 | `data/id-review.md` | Most-cited and most-recent papers for each match, plus the possible extra profiles, for checking by eye. |
@@ -38,6 +38,7 @@ Emeriti are included and will sit behind a toggle. The adjunct member (UCLA) is 
 | `data/collaboration-report.md` | All edges in a table, the most connected faculty, and those with no QCB co-authors. |
 | `data/features/faculty-features.npz` | The 48 faculty's feature matrices (`tfidf`, `topics`, `subfields`, `fields`, `specter`) with vocabularies and topic names. Committed (about 1.3 MB) so the notebook runs from a fresh clone. |
 | `data/features/features-report.md` | Top terms, top topics and nearest neighbours per person under each representation, and how much the representations agree. |
+| `data/layout.json` | What the map reads, written by the notebook's last cell. `faculty` has each person's cluster and one `[x, y]` per layout (0–1, same scale on both axes, layouts rotated to line up). `tree` holds the full average-linkage tree: in `merges`, node numbers below the faculty count are people in `faculty` order, and n+i is `merges[i]`. |
 | `data/raw/` | Cached page and author-search responses (gitignored). |
 
 ## Running

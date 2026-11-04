@@ -2,3 +2,4 @@ data/raw/
 data/papers/
 .openalex-key
 .venv/
+.ipynb_checkpoints/
