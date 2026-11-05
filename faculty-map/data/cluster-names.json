@@ -1,0 +1,11 @@
+[
+  {"anchor": "mark-chaisson", "name": "Genomics & statistical genetics", "color": "green"},
+  {"anchor": "remo-rohs", "name": "Gene regulation & genome structure", "color": "magenta"},
+  {"anchor": "helen-berman", "name": "Protein structure & drug design", "color": "magenta", "hollow": true},
+  {"anchor": "naomi-levine", "name": "Ocean & microbial ecology", "color": "orange"},
+  {"anchor": "eva-kanso", "name": "Physical modeling & simulation", "color": "blue"},
+  {"anchor": "bodour-salhia", "name": "Cancer & cell systems", "color": "violet"},
+  {"anchor": "steve-kay", "name": "Cells, development & imaging", "color": "yellow"},
+  {"anchor": "yan-liu", "name": "Machine learning & optimization", "color": "red"},
+  {"anchor": "paul-thompson", "name": "Brain imaging & brain health", "color": "aqua"}
+]
