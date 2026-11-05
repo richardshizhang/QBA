@@ -9,7 +9,7 @@ An interactive map of USC's Quantitative and Computational Biology faculty (core
 - **Filter** by core, joint and emeritus faculty, and show all collaborations, the closest only, or none.
 - **Find your place on the map.** Type your interests and experience and a "You" dot flies in, with lines to your closest faculty labeled with shared keywords. Or throw a dot: flick it from the corner, or drag it anywhere, to see who works near that spot and what the area is about. It all runs in the browser, so nothing typed is sent anywhere.
 
-Open `index.html` in a browser. It's a static page with no build step and no dependencies beyond a Google Font.
+Open `index.html` in a browser. It's a static page with no build step and no dependencies beyond a Google Font and the GoatCounter visit counter.
 
 **Status:** first version of the page is done. All 48 core, joint and emeritus faculty are matched to their publication records in [OpenAlex](https://openalex.org), a free database of scholarly papers. Their papers are downloaded and filtered (10,435 distinct papers kept), collaboration edges are built (51 pairs), and each person has three research-feature vectors. The map's positions and clusters are exported to `data/layout.json` (t-SNE and UMAP on SPECTER2 for all 48 people, with an average-linkage tree cut into 9 clusters), and the interactive page is built. The cluster names in `data/cluster-names.json` are drafts.
 
@@ -121,6 +121,12 @@ The browser pulls the known terms out of the text, matching two-word phrases fir
 **Where the dot goes.** t-SNE and UMAP have no exact way to add a new point, so the dot sits at the weighted average of its closest matches, nudged off any mark it would cover. That's an estimate of where it belongs. A thrown dot works in reverse: it blends the people nearest where it lands, and is compared with everyone by cosine similarity using the faculty similarity matrix.
 
 **Percentages** compare each person with the dot's closest match, who is always 100%. A typed dot's scores come from word matches and a thrown dot's from cosine similarity, so the two aren't comparable with each other.
+
+### Visit counts
+
+The page counts visits with [GoatCounter](https://www.goatcounter.com), which sets no cookies and collects no personal data. It only sees that the page was opened (plus referrer, browser and screen size), never what a student types, and the page keeps nothing in its URL. The "How this was made" dialog says this. Stats share the course map's dashboard at https://richardshizhang.goatcounter.com, listed by page path (sign in to see them).
+
+GoatCounter ignores visits from `localhost` and from opening `index.html` as a local file, so local testing doesn't inflate the numbers. To turn counting off, delete the `data-goatcounter` `<script>` tag near the top of `index.html`.
 
 ### Research features
 
