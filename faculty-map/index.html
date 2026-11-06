@@ -79,7 +79,10 @@ button { cursor: pointer; }
 .seg span { display: block; padding: 4px 12px; border-radius: 4px; font-weight: 600; color: var(--muted); }
 .seg input:checked + span { background: var(--surface); color: var(--ink); box-shadow: 0 0 0 1px var(--line); }
 .seg input:focus-visible + span { outline: 2px solid var(--focus); outline-offset: 1px; }
-.lens { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+.lens {
+  position: absolute; top: 12px; right: 12px; max-width: calc(100% - 160px); display: flex; flex-wrap: wrap; justify-content: flex-end;
+  align-items: center; gap: 2px 14px; padding: 3px 10px 3px 3px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+}
 .switch { display: inline-flex; align-items: center; gap: 8px; min-height: 32px; font-weight: 600; cursor: pointer; }
 .switch input {
   appearance: none; position: relative; flex: none; width: 34px; height: 20px; margin: 0; border-radius: 10px;
@@ -91,7 +94,7 @@ button { cursor: pointer; }
 }
 .switch input:checked { background: var(--ink); }
 .switch input:checked::before { transform: translateX(14px); }
-#expand-msg { color: var(--muted); font-size: 12.5px; }
+#expand-msg { position: absolute; top: calc(100% + 4px); right: 2px; color: var(--muted); font-size: 12.5px; white-space: nowrap; }
 .find input {
   width: 250px; max-width: 100%; height: 32px; padding: 0 10px; background: var(--surface);
   border: 1px solid var(--edge); border-radius: var(--r);
@@ -103,6 +106,7 @@ button { cursor: pointer; }
 .filters select { height: 30px; background: var(--surface); border: 1px solid var(--edge); border-radius: var(--r); padding: 0 4px; color: var(--ink); }
 .ghost { height: 32px; padding: 0 10px; background: none; border: 1px solid var(--edge); border-radius: var(--r); font-weight: 600; white-space: nowrap; }
 .ghost:hover { background: var(--sunk); }
+.actions { display: flex; gap: 8px; }
 
 main { display: grid; grid-template-columns: minmax(0, 1fr) 372px; min-height: 0; }
 #stage { position: relative; min-width: 0; min-height: 0; background: var(--surface); }
@@ -113,6 +117,7 @@ main { display: grid; grid-template-columns: minmax(0, 1fr) 372px; min-height: 0
 #scroller.grab { cursor: grab; }
 #scroller.grabbing { cursor: grabbing; user-select: none; }
 #map, #tree { display: block; }
+#tree { margin-top: var(--band); }
 .zoom { position: absolute; right: 12px; bottom: 12px; display: flex; gap: 4px; }
 .zoom button {
   min-width: 34px; height: 34px; padding: 0 8px; background: var(--surface); border: 1px solid var(--edge);
@@ -163,12 +168,14 @@ main { display: grid; grid-template-columns: minmax(0, 1fr) 372px; min-height: 0
 }
 
 /* The student's dot */
+.dots { position: absolute; left: 12px; top: 12px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
 .dock {
-  position: absolute; left: 12px; top: 12px; display: inline-flex; align-items: center; gap: 8px; height: 34px;
+  display: inline-flex; align-items: center; gap: 8px; height: 34px;
   padding: 0 12px 0 9px; background: var(--surface); border: 1px solid var(--edge); border-radius: 17px;
   font-weight: 600; cursor: grab; touch-action: none; user-select: none;
 }
-.dock:hover { background: var(--sunk); }
+.undock { height: 30px; padding: 0 12px; background: var(--surface); border: 1px solid var(--edge); border-radius: 15px; font-size: 13px; font-weight: 600; }
+.dock:hover, .undock:hover { background: var(--sunk); }
 .dock .ball { width: 13px; height: 13px; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 2px var(--surface), 0 0 0 3.5px var(--ink); }
 .you { cursor: grab; touch-action: none; outline: none; }
 .you .core { fill: var(--ink); stroke: var(--surface); stroke-width: 2.5; }
@@ -209,7 +216,7 @@ main { display: grid; grid-template-columns: minmax(0, 1fr) 372px; min-height: 0
 .tbar { stroke: var(--hue); stroke-width: 3; stroke-linecap: round; }
 
 /* List */
-#list { padding: 12px 16px 56px; }
+#list { padding: calc(var(--band) + 4px) 16px 56px; }
 #list table { width: 100%; border-collapse: collapse; font-size: 13px; }
 #list th { text-align: left; color: var(--muted); font-weight: 600; font-size: 12px; padding: 4px 10px 4px 0; border-bottom: 1px solid var(--line); }
 #list th.num, #list td.num { text-align: right; font-variant-numeric: tabular-nums; }
@@ -333,18 +340,41 @@ dialog h3 { font-size: 14px; font-weight: 700; margin: 12px 0 2px; }
 dialog p { margin-top: 2px; }
 dialog form { text-align: right; margin-top: 12px; }
 
+/* Tutorial */
+#tour {
+  position: fixed; inset: auto; width: 330px; margin: 0; padding: 12px 14px; color: var(--ink);
+  background: var(--surface); border: 1px solid var(--edge); border-radius: 10px; box-shadow: 0 6px 24px rgb(0 0 0 / .28);
+}
+#tour h2 { font-size: 16px; line-height: 1.25; font-weight: 750; outline: none; }
+.tour-count { color: var(--muted); font-size: 12px; }
+.tour-body { margin-top: 4px; }
+.tour-try { margin-top: 8px; padding: 6px 9px; background: var(--sunk); border-radius: var(--r); font-size: 13px; font-weight: 600; }
+.tour-try.done { background: none; padding: 0; font-weight: 500; color: var(--muted); }
+.tour-nav { display: flex; align-items: center; gap: 6px; margin-top: 12px; }
+.tour-nav .ghost:first-child { margin-right: auto; padding: 0 4px; border: 0; color: var(--muted); font-weight: 500; }
+#tour-spot {
+  position: fixed; z-index: 3; pointer-events: none; border-radius: 8px;
+  box-shadow: 0 0 0 3px var(--focus), 0 0 0 100vmax rgb(0 0 0 / .32);
+}
+#tour-spot.clear { box-shadow: 0 0 0 3px var(--focus), 0 0 0 100vmax transparent; }
+@media (prefers-reduced-motion: no-preference) {
+  #tour-spot { transition: left .2s, top .2s, width .2s, height .2s, box-shadow .2s; }
+}
+
 @media (max-width: 860px) {
   body { display: block; height: auto; }
   .brand { width: 100%; }
   .find, .find input { width: 100%; }
   main { display: block; }
-  #stage { height: min(112vw, 72dvh); }
+  #stage { height: calc(min(112vw, 72dvh) + 72px); }
   /* Tree and list grow with the page, so there's only one thing to scroll. */
   body[data-view="tree"] #stage, body[data-view="list"] #stage { height: auto; }
   body[data-view="tree"] #scroller, body[data-view="list"] #scroller { position: static; overflow: visible; }
   #rail { border-left: 0; border-top: 1px solid var(--line); overflow: visible; }
   .note { display: none; }
-  .dock { left: 8px; top: 8px; }
+  .dots { left: 8px; top: 8px; }
+  .lens { top: 8px; right: 8px; max-width: calc(100% - 140px); }
+  #tour { left: 8px; right: 8px; bottom: 8px; width: auto; max-height: 46dvh; overflow: auto; }
 }
 @media (max-width: 560px) {
   #list th:nth-child(3), #list td:nth-child(3), #list th:nth-child(4), #list td:nth-child(4) { display: none; }
@@ -355,6 +385,7 @@ dialog form { text-align: right; margin-top: 12px; }
   .switch input { border: 1px solid ButtonText; }
   .switch input::before { background: ButtonText; }
   .switch input:checked { background: Highlight; }
+  #tour-spot { outline: 3px solid Highlight; }
 }
 </style>
 </head>
@@ -365,16 +396,7 @@ dialog form { text-align: right; margin-top: 12px; }
     <h1>QCB Research Map</h1>
     <p>Who works on what in USC Quantitative and Computational Biology, and who works together</p>
   </div>
-  <div class="lens">
-    <fieldset class="seg">
-      <legend class="sr">Arrange faculty</legend>
-      <label><input type="radio" name="lens" value="field" checked><span>By field</span></label>
-      <label><input type="radio" name="lens" value="technique"><span>By technique</span></label>
-    </fieldset>
-    <label class="switch"><input type="checkbox" id="expand" role="switch">Expand into related fields</label>
-    <span id="expand-msg" role="status"></span>
-  </div>
-  <fieldset class="seg">
+  <fieldset class="seg" id="views">
     <legend class="sr">View</legend>
     <label><input type="radio" name="view" value="tsne" checked><span>t-SNE</span></label>
     <label><input type="radio" name="view" value="alt"><span id="alt-name">UMAP</span></label>
@@ -386,7 +408,7 @@ dialog form { text-align: right; margin-top: 12px; }
     <input id="q" type="search" placeholder="Search people or topics" autocomplete="off">
   </search>
   <div class="filters">
-    <fieldset class="filters">
+    <fieldset class="filters" id="groups">
       <legend class="sr">Show faculty groups</legend>
       <label><input type="checkbox" data-group="core" checked><svg viewBox="-8 -8 16 16" aria-hidden="true"><circle r="7"/></svg>Core</label>
       <label><input type="checkbox" data-group="joint" checked><svg viewBox="-8 -8 16 16" aria-hidden="true"><rect x="-6.5" y="-6.5" width="13" height="13" rx="2"/></svg>Joint</label>
@@ -401,7 +423,10 @@ dialog form { text-align: right; margin-top: 12px; }
       </select>
     </label>
   </div>
-  <button class="ghost" id="about-open" type="button">How this was made</button>
+  <div class="actions">
+    <button class="ghost" id="tour-open" type="button">Tutorial</button>
+    <button class="ghost" id="about-open" type="button">How this was made</button>
+  </div>
 </header>
 <main>
   <section id="stage" aria-label="Research map">
@@ -410,7 +435,19 @@ dialog form { text-align: right; margin-top: 12px; }
       <svg id="tree" role="group" aria-label="Tree of faculty by research similarity" hidden></svg>
       <div id="list" hidden></div>
     </div>
-    <button class="dock" id="throw" type="button" aria-label="Throw a dot onto the map to see who works near that spot"><span class="ball"></span>Throw a dot</button>
+    <div class="dots">
+      <button class="dock" id="throw" type="button" aria-label="Throw a dot onto the map to see who works near that spot"><span class="ball"></span>Throw a dot</button>
+      <button class="undock" id="remove-dot" type="button" hidden>Remove dot</button>
+    </div>
+    <div class="lens">
+      <fieldset class="seg" id="lens-seg">
+        <legend class="sr">Arrange faculty</legend>
+        <label><input type="radio" name="lens" value="field" checked><span>By field</span></label>
+        <label><input type="radio" name="lens" value="technique"><span>By technique</span></label>
+      </fieldset>
+      <label class="switch" id="expand-row"><input type="checkbox" id="expand" role="switch">Expand into related fields</label>
+      <span id="expand-msg" role="status"></span>
+    </div>
     <p class="note" id="note">Nearby means similar research, though distances between far-apart groups don't mean much. Bigger marks are bigger labs.</p>
     <div class="zoom" role="group" aria-label="Zoom the map" id="zoom">
       <button type="button" id="zoom-out" aria-label="Zoom out">−</button>
@@ -430,6 +467,18 @@ dialog form { text-align: right; margin-top: 12px; }
   </aside>
 </main>
 <div id="tip" hidden></div>
+<div id="tour-spot" hidden></div>
+<div id="tour" popover="manual" role="dialog" aria-labelledby="tour-title" hidden>
+  <p class="tour-count" id="tour-count"></p>
+  <h2 id="tour-title" tabindex="-1"></h2>
+  <p class="tour-body" id="tour-body"></p>
+  <p class="tour-try" id="tour-try" role="status"></p>
+  <div class="tour-nav">
+    <button class="ghost" id="tour-end" type="button">End tutorial</button>
+    <button class="ghost" id="tour-back" type="button">Back</button>
+    <button class="solid" id="tour-next" type="button">Next</button>
+  </div>
+</div>
 <p class="sr" id="status" role="status"></p>
 
 <dialog id="about" closedby="any" aria-labelledby="about-title">
@@ -448,7 +497,7 @@ dialog form { text-align: right; margin-top: 12px; }
   <p><b>Demonstrated:</b> the lab does this work, by at least 3 papers making up at least 4% of its weighted papers, or two separate statements on its website. <b>Firsthand:</b> a student who worked there told us, which papers can't show. <b>Potential:</b> the lab generates data this method could use, or mentions the method once. A microscopy lab has computer vision potential even if it has never published on computer vision.</p>
   <p>This is word matching, so labels can be wrong or missing, and labs that don't name their methods in abstracts look less quantitative than they are. Open a label to see the paper or source behind it, so you can check it yourself. In a spot check, about 9 in 10 labels that came from websites alone were right.</p>
   <h3>Related fields</h3>
-  <p>Expanding adds <span id="about-added"></span> faculty from fields QBIO students also do research in: Biostatistics, Biomedical Engineering, Molecular and Cellular Biosciences, Marine and Environmental Biology, Neurobiology and the Brain and Creativity Institute, plus a few labs students have worked in. That makes <span id="about-wide-papers"></span> papers in all. Everyone's position is recalculated, so QCB faculty move too, and the second view uses MDS in place of UMAP, which keeps distances between far-apart groups more honest. <span id="about-wide-counted"></span> of the added labs have sizes counted from their websites. The other <span id="about-wide-unknown"></span> have no count, so their marks stay small, which doesn't mean they have no lab.</p>
+  <p>Expanding adds <span id="about-added"></span> faculty from fields QBIO students also do research in: Biostatistics, Biomedical Engineering, Molecular and Cellular Biosciences, Marine and Environmental Biology, Neurobiology and the Brain and Creativity Institute, plus a few labs students have worked in. That makes <span id="about-wide-papers"></span> papers in all. Everyone's position is recalculated, so QCB faculty move too, and MDS replaces UMAP, which keeps distances between far-apart groups more honest. By field opens on MDS, with t-SNE one click away. <span id="about-wide-counted"></span> of the added labs have sizes counted from their websites. The other <span id="about-wide-unknown"></span> have no count, so their marks stay small, which doesn't mean they have no lab.</p>
   <h3>Lines</h3>
   <p>Two people are joined if they share a paper. Each shared paper adds 1 ÷ (authors − 1) to the pair's strength, so a two-author paper counts 1 and a 100-author consortium paper about 0.01.</p>
   <h3>Finding your match</h3>
@@ -497,7 +546,7 @@ const el = (tag, attrs, ...kids) => build(document.createElement(tag), attrs, ki
 const sv = (tag, attrs, ...kids) => build(document.createElementNS(NS, tag), attrs, kids);
 
 const S = {
-  view: "tsne", sel: null, hover: null, query: "", matches: null, scope: "qcb", lens: "field", method: null,
+  view: "tsne", picked: null, sel: null, hover: null, query: "", matches: null, scope: "qcb", lens: "field", method: null,
   groups: { core: true, joint: true, emeritus: true, related: true }, lines: "0", zoom: 1,
 };
 const isMapView = () => S.view === "tsne" || S.view === "alt";
@@ -531,7 +580,7 @@ const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
 
 /* ---------- Map ---------- */
 
-let W = 0, H_ = 0, ox = 0, oy = 0, scale = 1, pts = [];
+let W = 0, H_ = 0, ox = 0, oy = 0, scale = 1, pts = [], band = 0;
 const edgeLayer = sv("g"), hitLayer = sv("g"), nodeLayer = sv("g"), clusterLayer = sv("g"), linkLayer = sv("g"), orbitLayer = sv("g"), youLayer = sv("g");
 mapSvg.append(edgeLayer, clusterLayer, linkLayer, hitLayer, nodeLayer, orbitLayer, youLayer);
 
@@ -628,6 +677,13 @@ function drawClusterLabels() {
 }
 drawClusterLabels();
 
+// The toggles float over the top of the stage, so everything drawn there starts below them.
+function measureBand() {
+  const lens = $(".lens");
+  band = lens.offsetTop + lens.offsetHeight + 10;
+  $("#stage").style.setProperty("--band", `${band}px`);
+}
+
 function sizeMap() {
   const w = scroller.clientWidth, h = scroller.clientHeight;
   if (!w || !h) return;
@@ -636,10 +692,10 @@ function sizeMap() {
   mapSvg.setAttribute("width", W);
   mapSvg.setAttribute("height", H_);
   mapSvg.setAttribute("viewBox", `0 0 ${W} ${H_}`);
-  const padX = w < 560 ? 22 : 74, padY = 34;
-  scale = Math.max(40, Math.min(W - 2 * padX, H_ - 2 * padY));
+  const padX = w < 560 ? 22 : 74, padY = 34, top = Math.max(padY, band);
+  scale = Math.max(40, Math.min(W - 2 * padX, H_ - top - padY));
   ox = (W - scale) / 2;
-  oy = (H_ - scale) / 2;
+  oy = top + (H_ - top - padY - scale) / 2;
 }
 
 function drawPoints() {
@@ -722,6 +778,13 @@ const inside = (b) => b.x >= 2 && b.y >= 2 && b.x + b.w <= W - 2 && b.y + b.h <=
 let marksAndLabels = [];
 function placeLabels() {
   const taken = marksAndLabels = [];
+  if (S.zoom === 1) {   // names keep clear of the controls floating over the map
+    const box = mapSvg.getBoundingClientRect();
+    document.querySelectorAll(".lens, .dots").forEach((c) => {
+      const r = c.getBoundingClientRect();
+      taken.push({ x: r.left - box.left, y: r.top - box.top, w: r.width, h: r.height });
+    });
+  }
   P.forEach((p, i) => { if (shown(i)) { const [x, y] = pts[i], r = reach[i] + 2; taken.push({ x: x - r, y: y - r, w: 2 * r, h: 2 * r }); } });
   if (S.you && !S.you.live) { const [x, y] = dotPoint(); taken.push({ x: x - 20, y: y - 32, w: 40, h: 46 }); }
   const forced = emphasisSet() || new Set();
@@ -958,6 +1021,7 @@ function emphasize() {
   document.querySelectorAll(".legend-list button").forEach((b, ci) => {
     b.setAttribute("aria-pressed", String(!!S.sel && S.sel.kind === "cluster" && S.sel.c === ci));
   });
+  $("#remove-dot").hidden = !S.you;
   drawOrbit();
 }
 function clearHover() { S.hover = null; hideTip(); emphasize(); }
@@ -1121,8 +1185,7 @@ function personPanel(i) {
         el("div", { class: "links" }, links))),
     statTiles(p),
     labNote(p),
-    el("h3", {}, "Methods"),
-    methodSection(p),
+    el("section", { id: "methods" }, el("h3", {}, "Methods"), methodSection(p)),
     el("h3", {}, "Papers per year"),
     yearChart(p),
     el("h3", {}, "Research focus"),
@@ -1467,7 +1530,7 @@ function settleDot() {
         if (d < room) { x += (dx || 1) / d * (room - d); y += dy / d * (room - d); }
       });
     }
-    you.at = { view: S.view, xy: fromPx([Math.max(16, Math.min(x, W - 16)), Math.max(30, Math.min(y, H_ - 16))]) };
+    you.at = { view: S.view, xy: fromPx([Math.max(16, Math.min(x, W - 16)), Math.max(band, Math.min(y, H_ - 16))]) };
   }
   drawYou();
 }
@@ -1502,7 +1565,7 @@ function showYou(fresh) {
 }
 
 function land(point, fresh) {
-  const x = Math.max(12, Math.min(point[0], W - 12)), y = Math.max(12, Math.min(point[1], H_ - 12));
+  const x = Math.max(12, Math.min(point[0], W - 12)), y = Math.max(band, Math.min(point[1], H_ - 12));
   const you = spotDot([x, y]);
   you.at = { view: S.view, xy: fromPx([x, y]) };
   S.you = you;
@@ -1573,7 +1636,7 @@ function glide([x, y], vx, vy) {
     vx *= drag;
     vy *= drag;
     if (x < 12 || x > W - 12) { vx *= -0.6; x = Math.max(12, Math.min(x, W - 12)); }
-    if (y < 12 || y > H_ - 12) { vy *= -0.6; y = Math.max(12, Math.min(y, H_ - 12)); }
+    if ((y < band && vy < 0) || (y > H_ - 12 && vy > 0)) { vy *= -0.6; y = Math.max(band, Math.min(y, H_ - 12)); }
     S.you = Object.assign(spotDot([x, y]), { live: [x, y] });
     emphasize();
     drawYou();
@@ -1633,6 +1696,7 @@ function toss() {
 const dockButton = $("#throw");
 dockButton.addEventListener("pointerdown", (ev) => startDrag(ev, dockButton));
 dockButton.addEventListener("click", (ev) => { if (ev.detail === 0) toss(); });   // keyboard
+$("#remove-dot").addEventListener("click", () => { clearYou(); dockButton.focus(); });
 
 const meBox = el("textarea", {
   id: "me", rows: 3, maxlength: 4000,
@@ -1642,7 +1706,7 @@ const meBox = el("textarea", {
 const meMsg = el("span", { class: "me-msg", role: "status" });
 function showLoadError() { meMsg.textContent = "Couldn't load the matching data. Try reloading the page."; }
 const matchForm = el("form", {
-  class: "me",
+  id: "me-form", class: "me",
   onsubmit: (ev) => {
     ev.preventDefault();
     if (!meBox.value.trim()) { meBox.focus(); return; }
@@ -1652,7 +1716,7 @@ const matchForm = el("form", {
       const { found, missing } = readText(meBox.value);
       if (!found.length) { meMsg.textContent = "None of those words appear in these papers. Try naming a topic, like “cancer genomics”."; return; }
       if (M.n !== WORLD.n) return;   // the map changed while the table loaded
-      if (!isMapView()) { $('input[value="tsne"]').checked = true; setView("tsne"); }
+      backToMap();
       S.you = textDot(found, missing, meBox.value);
       S.sel = null;
       if (S.query) setQuery("");
@@ -1695,13 +1759,35 @@ function youPanel() {
     el("h3", {}, "Closest faculty"),
     el("ul", { class: "rows" }, you.links.filter((l) => l.rel > 0).map(matchRow)),
     el("p", { class: "foot" }, "Percentages compare each person with your closest match. Think of this as a place to start reading, not a recommendation."),
-    el("div", { class: "me-row" }, el("button", { type: "button", class: "ghost", onclick: clearYou }, "Remove my dot")),
     typed ? matchForm : el("p", { class: "foot" }, "Drag or throw the dot somewhere else to keep exploring."),
     typed ? null : matchForm,
   ];
 }
 
 /* ---------- Views and controls ---------- */
+
+// Each map opens on its own layout. One someone picked stays, on any map that has it.
+const OPENS_ON = { "all/field": "alt" };
+const opensOn = () => OPENS_ON[`${S.scope}/${S.lens}`] || "tsne";
+function openingView() {
+  const n = WORLD.views.findIndex(([key]) => key === S.picked);
+  return n < 0 ? opensOn() : n ? "alt" : "tsne";
+}
+function pickView(view) {
+  if (view === "tsne" || view === "alt") S.picked = view === opensOn() ? null : WORLD.views[view === "alt" ? 1 : 0][0];
+  setView(view);
+}
+function backToMap() {
+  if (isMapView()) return;
+  const view = openingView();
+  $(`input[value="${view}"]`).checked = true;
+  setView(view);
+}
+
+function showNote() {
+  const how = byTechnique() ? "methods" : "research";
+  $("#note").textContent = `Nearby means similar ${how}, ${layoutKey() === "mds" ? "and MDS keeps far-apart groups roughly the right distance apart" : "though distances between far-apart groups don't mean much"}. Bigger marks are bigger labs.`;
+}
 
 function setView(view) {
   const wasMap = isMapView();
@@ -1713,6 +1799,7 @@ function setView(view) {
   listBox.hidden = view !== "list";
   $("#zoom").hidden = !map;
   $("#note").hidden = !map || S.zoom > 1;
+  showNote();
   $("#throw").hidden = !map;
   hideTip();
   if (S.you) S.you.at = null;
@@ -1764,11 +1851,11 @@ function setWorld() {
   drawClusterLabels();
   drawLegend();
   orbitOf = -2;
-  const how = byTechnique() ? "methods" : "research";
   $("#alt-name").textContent = WORLD.views[1][1];
+  if (isMapView()) { S.view = openingView(); $(`input[value="${S.view}"]`).checked = true; }
+  showNote();
   $("#related-filter").hidden = scope !== "all";
   $("#legend-title").textContent = byTechnique() ? "Technique clusters" : "Research clusters";
-  $("#note").textContent = `Nearby means similar ${how}, though distances between far-apart groups don't mean much. Bigger marks are bigger labs.`;
   scroller.setAttribute("aria-label", `Map of faculty by ${byTechnique() ? "methods" : "research similarity"}. Use the List view for a table of the same information.`);
   // Clusters are different on every map, and a person or a line may not be on this one.
   const s = S.sel;
@@ -1804,7 +1891,7 @@ function loadExtended() {
   return loadExtended.ready;
 }
 
-document.querySelectorAll('input[name="view"]').forEach((r) => r.addEventListener("change", () => setView(r.value)));
+document.querySelectorAll('input[name="view"]').forEach((r) => r.addEventListener("change", () => pickView(r.value)));
 document.querySelectorAll('input[name="lens"]').forEach((r) => r.addEventListener("change", setWorld));
 $("#expand").addEventListener("change", (ev) => {
   const msg = $("#expand-msg");
@@ -1837,7 +1924,8 @@ scroller.addEventListener("keydown", (ev) => {
 });
 addEventListener("keydown", (ev) => {
   if (ev.key !== "Escape" || $("#about").open) return;
-  if (S.sel) select(null);
+  if (tourAt >= 0) endTour();
+  else if (S.sel) select(null);
   else if (S.query) setQuery("");
   else if (S.you) clearYou();
 });
@@ -1889,14 +1977,130 @@ function drawLegend() {
 }
 drawLegend();
 
-new ResizeObserver(() => {
+/* ---------- Tutorial ----------
+
+A walkthrough of the real page. Each step points at a control and the person can use it
+there and then, so whatever they change stays changed. Next always works, tried or not.
+*/
+
+const tour = $("#tour"), tourSpot = $("#tour-spot");
+const SAMPLE = P.findIndex((p) => p.methods.some((r) => r.l === "firsthand"));   // shows all three kinds of method
+const showSample = () => { if (!S.sel || S.sel.kind !== "person") select({ kind: "person", i: SAMPLE }); };
+const showForm = () => { backToMap(); if (S.query) setQuery(""); select(null); };
+const TOUR = [
+  { at: "#stage", title: "Welcome", before: backToMap,
+    body: "Each mark is a USC faculty member, and people who sit close together work on similar things, whatever department they're in. This tour shows you how to read the map and find labs that fit you." },
+  { at: "#groups", title: "What the marks mean",
+    body: "Shape shows someone's role, and these boxes hide or show each group. Color is their research cluster, a bigger mark is a bigger lab, and a line means two people have published together." },
+  { at: "#stage", title: "Pick someone", before: backToMap,
+    body: "Everything about a person opens from their mark.",
+    try: "Try it: click any mark.", done: () => !!S.sel && S.sel.kind === "person", after: "Their details are in the panel now." },
+  { at: "#methods", side: "left", scroll: "start", title: "See how a lab works", before: showSample,
+    body: "Demonstrated methods show up in a lab's papers or website. Firsthand ones come from students who worked there. Potential means the lab produces data a method could use.",
+    try: "Try it: open a method.", done: () => !!S.method, after: "You can see the evidence, and every lab with that method stays lit on the map." },
+  { at: "#lens-seg", title: "Field or technique", before: () => select(null),
+    body: "By field groups people by what they study. By technique groups them by how they work, like imaging, statistics or modeling, which helps if you know the kind of work you want to do.",
+    try: "Try it: switch to By technique.", done: byTechnique, after: "Now nearby means similar methods, and the clusters changed to match." },
+  { at: "#expand-row", title: "Related fields",
+    body: `The map opens on the ${worlds["qcb/field"].n} QCB faculty. This adds ${D.meta.wide.added} people from fields QBIO students also work in, like biostatistics and biomedical engineering.`,
+    try: "Try it: turn it on.", done: () => S.scope === "all", after: "The new faculty are diamonds. Everyone's position is recalculated, so people move too." },
+  { at: "#views", title: "Other views",
+    body: "t-SNE, UMAP and MDS are different ways of flattening the same data, so trust what they agree on. Tree shows how clusters nest, and List is a plain table." },
+  { at: "#me-form", side: "left", title: "Find your place", before: showForm,
+    body: "Describe what you're into in your own words, and you'll land near your closest matches. What you type stays in your browser.",
+    try: "Try it: type a few interests, then press Place me on the map.", done: () => !!S.you && S.you.kind === "text", after: "Your dot is on the map, and the panel lists your closest faculty." },
+  { at: "#throw", side: "right", clear: true, title: "Explore with a dot", before: backToMap,
+    body: "Not sure what you're into? Drag this dot onto the map and let go to see who works near that spot. Remove dot takes it off again.",
+    try: "Try it: drag the dot onto the map.", done: () => !!S.you && S.you.kind === "spot", after: "The panel shows who's nearby. Keep dragging to explore." },
+  { at: "#q", title: "Search, and you're set",
+    body: "Search finds people, topics and methods. How this was made explains where all of this comes from and how far to trust it. Anything you changed stays as it is." },
+];
+let tourAt = -1, tourFrame = 0, tourTried = null;
+
+function tourTarget(step) {
+  const node = $(step.at);
+  return node && node.getClientRects().length ? node : $("#stage");
+}
+
+// Pages move under the card as people use them, so this runs every frame while it's open.
+function placeTour(step) {
+  const box = tourTarget(step).getBoundingClientRect(), left = Math.max(2, box.left - 4), top = Math.max(2, box.top - 4);
+  tourSpot.style.left = `${left}px`;
+  tourSpot.style.top = `${top}px`;
+  tourSpot.style.width = `${Math.min(innerWidth - 2, box.right + 4) - left}px`;
+  tourSpot.style.height = `${Math.min(innerHeight - 2, box.bottom + 4) - top}px`;
+  if (stacked.matches) { tour.style.left = tour.style.top = ""; return; }   // a sheet along the bottom
+  const w = tour.offsetWidth, h = tour.offsetHeight, gap = 14;
+  const room = { below: innerHeight - box.bottom - gap - h, above: box.top - gap - h, left: box.left - gap - w, right: innerWidth - box.right - gap - w };
+  const spots = { below: [box.left, box.bottom + gap], above: [box.left, box.top - gap - h], left: [box.left - gap - w, box.top], right: [box.right + gap, box.top] };
+  const side = [step.side, "below", "above", "right", "left"].find((s) => room[s] >= 8);
+  const [x, y] = spots[side] || [innerWidth, innerHeight];
+  tour.style.left = `${Math.max(8, Math.min(x, innerWidth - w - 8))}px`;
+  tour.style.top = `${Math.max(8, Math.min(y, innerHeight - h - 8))}px`;
+}
+
+function trackTour() {
+  const step = TOUR[tourAt], tried = !!step.done && step.done();
+  if (tried !== tourTried) {
+    tourTried = tried;
+    const line = $("#tour-try");
+    line.textContent = (tried ? step.after : step.try) || "";
+    line.hidden = !line.textContent;
+    line.classList.toggle("done", tried);
+  }
+  // Once they've done it, the dimming lifts so they can see what changed.
+  tourSpot.classList.toggle("clear", tried || !!step.clear);
+  placeTour(step);
+  tourFrame = requestAnimationFrame(trackTour);
+}
+
+function showStep(n) {
+  cancelAnimationFrame(tourFrame);
+  tourAt = n;
+  tourTried = null;
+  const step = TOUR[n];
+  if (step.before) step.before();
+  $("#tour-count").textContent = `Step ${n + 1} of ${TOUR.length}`;
+  $("#tour-title").textContent = step.title;
+  $("#tour-body").textContent = step.body;
+  $("#tour-back").hidden = n === 0;
+  $("#tour-next").textContent = n === TOUR.length - 1 ? "Finish" : "Next";
+  trackTour();
+  tourTarget(step).scrollIntoView({ block: step.scroll || (stacked.matches ? "center" : "nearest"), behavior: reducedMotion.matches ? "auto" : "smooth" });
+  $("#tour-title").focus({ preventScroll: true });
+}
+
+function endTour() {
+  cancelAnimationFrame(tourFrame);
+  tourAt = -1;
+  if (tour.hidePopover) tour.hidePopover();
+  tour.hidden = tourSpot.hidden = true;
+  $("#tour-open").focus();
+}
+
+$("#tour-open").addEventListener("click", () => {
+  if (tourAt < 0) {
+    tour.hidden = tourSpot.hidden = false;
+    if (tour.showPopover) tour.showPopover();
+  }
+  showStep(0);
+});
+$("#tour-next").addEventListener("click", () => { if (tourAt === TOUR.length - 1) endTour(); else showStep(tourAt + 1); });
+$("#tour-back").addEventListener("click", () => showStep(tourAt - 1));
+$("#tour-end").addEventListener("click", endTour);
+
+const resized = new ResizeObserver(() => {
+  measureBand();
   if (isMapView()) { cancelAnimationFrame(tween); mapSvg.classList.remove("moving"); settle(); }
   else if (S.view === "tree") drawTree();
-}).observe(scroller);
+});
+resized.observe(scroller);
+resized.observe($(".lens"));
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (isMapView() && pts.length) placeLabels(); });
 
 applyFilters();
 renderDetail();
+measureBand();
 settle();
 emphasize();
 })();

@@ -5,6 +5,7 @@ An interactive map of USC's Quantitative and Computational Biology faculty (core
 - **Two map views, t-SNE and UMAP**, animate between each other. Nearby means similar research; distances between far-apart groups don't mean much.
 - **Tree** shows the full hierarchy of who is similar to whom, cut into 9 clusters. **List** has everyone in a table.
 - **Mark size** shows lab size, so bigger marks are bigger labs.
+- **Tutorial** walks through the real page in 10 steps, and people can try each control as they go.
 - **Click a person** for their photo, lab size, h-index, citations, papers per year, research terms, QCB co-authors, most similar colleagues, and recent papers. **Click a line** for the papers a pair share.
 - **QCB PhD students** fan out around their lab's mark when it's selected, and the panel lists them with their papers.
 - **Search** by name or topic, such as "cancer" or "MRI", to light up who works on it. A PhD student's name finds their lab.
@@ -183,6 +184,8 @@ The page opens on the QCB faculty by field, as it always has. Two controls chang
 
 - **By field / By technique** swaps what positions and clusters are built from: SPECTER2 embeddings of papers, or the method profiles from `scripts/build_methods.py`.
 - **Expand into related fields** adds the other 113 people in `scripts/combined.py`. `map-data-extended.js` and `match-data-extended.js` load on first use, so the default page doesn't pay for them.
+
+Both controls float over the top of the map. Each map opens on its own layout: expanded By field opens on MDS, and the others on t-SNE (`OPENS_ON` in `index.html`). A layout someone picks stays on any map that has it.
 
 Each combination is a "world" in the data, with its own positions, clusters, tree and similarity matrix. People are numbered QCB first, so a person keeps their number in every world and a selection survives a switch. Everyone is laid out again on the expanded map, so QCB faculty move. The expanded maps use the t-SNE and MDS that were chosen for them, where the QCB maps use t-SNE and UMAP.
 
