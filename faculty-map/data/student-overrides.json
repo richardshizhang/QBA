@@ -1,0 +1,35 @@
+{
+  "peijun-lin": {
+    "openalex": [
+      "A5102171535"
+    ],
+    "note": "CENO genome model paper lists USC; no paper with the advisor yet. Earlier work elsewhere is filtered out."
+  },
+  "jonathan-martinez": {
+    "openalex": [
+      "A5134995488"
+    ],
+    "note": "Single-paper profile, USC, mathematical cancer modeling, which is the MacLean lab's area."
+  },
+  "ishaan-thota": {
+    "openalex": [
+      "A5103311020"
+    ],
+    "note": "Both papers are USC genomics; matches the Chaisson lab's members page."
+  },
+  "zijin-xiang": {
+    "openalex": [
+      "A5027491488"
+    ],
+    "note": "Profile merges a glioma researcher at Central South University; only the USC papers (with MacLean and Tavaré) are kept."
+  },
+  "yao-xiao": {
+    "drop": [
+      "W3157574776",
+      "W4312233641",
+      "W3211816430",
+      "W3131867864"
+    ],
+    "note": "Four 2021 and 2022 USC computer vision and speech papers on this profile can't be tied to the QCB student, and it's a common name."
+  }
+}

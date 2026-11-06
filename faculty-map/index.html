@@ -136,6 +136,14 @@ main { display: grid; grid-template-columns: minmax(0, 1fr) 372px; min-height: 0
 .clabel .sw { fill: var(--hue); stroke: none; }
 .clabel.hollow .sw { fill: var(--surface); stroke: var(--hue); stroke-width: 2.5; }
 #map.moving .lab, #map.moving .clabel { opacity: 0; }
+.sline { stroke: var(--hue); stroke-width: 1.2; stroke-opacity: .7; pointer-events: none; }
+.sdot { cursor: pointer; }
+.spot { fill: var(--hue); stroke: var(--surface); stroke-width: 1.5; }
+.sdot.on .spot, .sdot:hover .spot { stroke: var(--ink); }
+@media (prefers-reduced-motion: no-preference) {
+  .spot { animation: pop .22s ease-out backwards; transform-box: fill-box; transform-origin: center; }
+  @keyframes pop { from { transform: scale(0); } }
+}
 
 /* The student's dot */
 .dock {
@@ -215,6 +223,33 @@ main { display: grid; grid-template-columns: minmax(0, 1fr) 372px; min-height: 0
 .row .sub { display: block; font-size: 12.5px; }
 .papers li { margin-top: 7px; font-size: 13px; line-height: 1.35; }
 .papers .sub { display: block; font-size: 12px; }
+.who { display: flex; gap: 12px; align-items: flex-start; }
+.who > div { min-width: 0; }
+.face { flex: none; width: 96px; height: 120px; object-fit: cover; border-radius: var(--r); background: var(--sunk); }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 12px 0 0; }
+.stats div { padding: 6px 8px; background: var(--bg); border-radius: var(--r); min-width: 0; }
+.stats dt { color: var(--muted); font-size: 11.5px; white-space: nowrap; }
+.stats dd { margin: 0; font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.years { position: relative; margin: 0; }   /* keeps its hidden table inside the rail's scrolling */
+.years svg { display: block; width: 100%; height: auto; overflow: visible; }
+.ybase { stroke: var(--edge); }
+.ycol { fill: transparent; }
+.ycol:hover { fill: var(--sunk); }
+.ybar { fill: var(--hue); pointer-events: none; }
+.ybar.partial { fill-opacity: .45; }
+.ytext { fill: var(--muted); font-size: 11.5px; font-variant-numeric: tabular-nums; }
+.ytext.peak { fill: var(--ink); font-weight: 650; }
+.student { display: block; padding: 3px 6px; margin: 0 -6px; border-radius: 4px; }
+.student.on { background: var(--sunk); }
+.student summary { cursor: pointer; }
+.student b { font-weight: 600; }
+.student .sub { display: block; font-size: 12.5px; }
+.student summary > .sub { margin-left: 15px; }
+div.student { padding-left: 21px; }
+.student > .papers { padding: 0 0 6px 15px; }
+.sizes { display: flex; align-items: center; gap: 10px; }
+.sizes svg { flex: none; }
+.sizes circle { fill: none; stroke: var(--muted); stroke-width: 1.5; }
 .swatch { display: inline-block; width: 11px; height: 11px; border-radius: 50%; background: var(--hue); flex: none; }
 .swatch.hollow { background: none; border: 2.5px solid var(--hue); }
 .tag { display: inline-flex; align-items: center; gap: 6px; background: none; border: 0; padding: 0; margin-top: 4px; font-weight: 600; text-align: left; }
@@ -328,7 +363,7 @@ dialog form { text-align: right; margin-top: 12px; }
       <div id="list" hidden></div>
     </div>
     <button class="dock" id="throw" type="button" aria-label="Throw a dot onto the map to see who works near that spot"><span class="ball"></span>Throw a dot</button>
-    <p class="note" id="note">Nearby means similar research. Distances between far-apart groups don't mean much.</p>
+    <p class="note" id="note">Nearby means similar research, though distances between far-apart groups don't mean much. Bigger marks are bigger labs.</p>
     <div class="zoom" role="group" aria-label="Zoom the map" id="zoom">
       <button type="button" id="zoom-out" aria-label="Zoom out">−</button>
       <button type="button" id="zoom-in" aria-label="Zoom in">+</button>
@@ -341,7 +376,8 @@ dialog form { text-align: right; margin-top: 12px; }
       <h2>Research clusters</h2>
       <ul class="legend-list" id="legend-list"></ul>
       <p class="key">Lines join people who have published together; thicker means a closer collaboration. Papers with many authors count for little.</p>
-      <p class="foot">Unofficial, made by QBA, USC's Quantitative Biology Association. Papers from <a href="https://openalex.org">OpenAlex</a>, roster from the <a href="https://www.qcb-dornsife.usc.edu/faculty">QCB faculty page</a>, as of October 2026.</p>
+      <p class="key sizes"><svg viewBox="0 0 76 34" width="76" height="34" aria-hidden="true"><circle cx="7" cy="17" r="5.4"/><circle cx="26" cy="17" r="10.7"/><circle cx="59" cy="17" r="15.2"/></svg><span>Bigger marks are bigger labs: about 5, 20 and 40 people. Many sizes are rough estimates.</span></p>
+      <p class="foot">Unofficial, made by QBA, USC's Quantitative Biology Association. Papers from <a href="https://openalex.org">OpenAlex</a>, roster and photos from the <a href="https://www.qcb-dornsife.usc.edu/faculty">QCB website</a>, as of fall 2026.</p>
     </section>
   </aside>
 </main>
@@ -363,6 +399,12 @@ dialog form { text-align: right; margin-top: 12px; }
   <p>Two people are joined if they share a paper. Each shared paper adds 1 ÷ (authors − 1) to the pair's strength, so a two-author paper counts 1 and a 100-author consortium paper about 0.01.</p>
   <h3>Finding your match</h3>
   <p>The model above is too big to run in your browser, so each of about 7,700 research terms comes with a precomputed score for every faculty member, from how much they use the term and how close the papers using it are to theirs. Your words are looked up and averaged, so nothing you type leaves your browser. Given only the title of a paper it hadn't seen, this finds the real author in the top 5 about 88% of the time, but your own words will be vaguer than a title. Your dot sits at the weighted average of your closest matches, which is an estimate: t-SNE and UMAP have no exact way to add a new point. A thrown dot works in reverse, blending the people nearest where it lands.</p>
+  <h3>Lab sizes</h3>
+  <p>A mark's area shows the size of the lab. For <span id="about-counted"></span> labs that's everyone the lab's own website lists, including the PI and any undergraduates. Labs differ in who they list and how often they update, so compare these loosely. The other <span id="about-estimated"></span> are estimates: USC co-authors on the person's senior-author papers since 2023, plus anyone QCB lists in the lab, plus the PI. Checked against the labs we could count, these are about right on average, but about a quarter are off by more than a factor of two. <span id="about-unknown"></span> faculty have no count and too few recent USC papers to estimate, so their marks stay small, which doesn't mean they have no lab.</p>
+  <h3>Stats</h3>
+  <p>The h-index, citations and papers per year come from the same OpenAlex papers as the map. Early work in another field gets filtered out along with other people's papers, so these numbers can run lower than OpenAlex's own profile pages, and usually lower than Google Scholar's.</p>
+  <h3>PhD students</h3>
+  <p>The QCB website lists <span id="about-students"></span> PhD students in labs. <span id="about-nolab"></span> more haven't joined a lab yet, and students from other programs aren't listed, so a lab can have more students than you see here. Common names make papers hard to match, so a student's OpenAlex profile only counts if it appears on a paper by their advisor or has been checked by hand, and only papers listing USC or a QCB faculty co-author are shown. Some students will have papers that aren't found.</p>
   <h3>What it can't tell you</h3>
   <p>It only sees published work, so new collaborations and unpublished projects won't appear, and some papers will be missing or misattributed. It says nothing about who is taking students. Check with faculty directly.</p>
   <h3>Visit counts</h3>
@@ -414,41 +456,50 @@ const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
 /* ---------- Map ---------- */
 
 let W = 0, H_ = 0, ox = 0, oy = 0, scale = 1, pts = [];
-const edgeLayer = sv("g"), nodeLayer = sv("g"), clusterLayer = sv("g"), linkLayer = sv("g"), youLayer = sv("g");
-mapSvg.append(edgeLayer, clusterLayer, linkLayer, nodeLayer, youLayer);
+const edgeLayer = sv("g"), hitLayer = sv("g"), nodeLayer = sv("g"), clusterLayer = sv("g"), linkLayer = sv("g"), orbitLayer = sv("g"), youLayer = sv("g");
+mapSvg.append(edgeLayer, clusterLayer, linkLayer, hitLayer, nodeLayer, orbitLayer, youLayer);
 
 const toPx = ([x, y]) => [ox + x * scale, oy + (1 - y) * scale];
 const fromPx = ([x, y]) => [(x - ox) / scale, 1 - (y - oy) / scale];
 const target = () => P.map((p) => toPx(p[S.view]));
 const edgeWidth = (s) => 0.8 + 1.1 * Math.log10(1 + 10 * s);
 
-function shape(group) {
-  if (group === "core") return sv("circle", { r: 6 });
-  if (group === "joint") return sv("rect", { x: -5.5, y: -5.5, width: 11, height: 11, rx: 2 });
-  return sv("polygon", { points: "0,-7.5 7,5 -7,5" });
+// A mark's area shows lab size. Labs of about four or fewer share the smallest mark.
+const markR = P.map((p) => Math.max(4.5, 2.4 * Math.sqrt(p.lab.size)));
+const reach = P.map((p, i) => markR[i] * (p.group === "core" ? 1 : 1.25));   // squares and triangles stick out further
+
+function shape(group, r = 6) {
+  if (group === "core") return sv("circle", { r });
+  const side = r * 1.77, tall = r * 1.555;   // the same area as the circle
+  if (group === "joint") return sv("rect", { x: -side / 2, y: -side / 2, width: side, height: side, rx: 2 });
+  return sv("polygon", { points: `0,${-tall} ${tall * 0.866},${tall / 2} ${-tall * 0.866},${tall / 2}` });
 }
 const hueClass = (c) => `h-${C[c].color}`;
 
 const nodes = P.map((p, i) => {
   const c = C[p.cluster];
   const label = sv("text", { class: "lab" }, p.label);
-  const g = sv("g", {
-    class: "node", tabindex: 0, role: "button", "aria-label": `${p.name}, ${c.name}`,
+  const pointer = {
     onclick: () => select({ kind: "person", i }),
-    onkeydown: (ev) => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); select({ kind: "person", i }, true); } },
     onpointerenter: (ev) => { S.hover = { kind: "person", i }; emphasize(); showTip(personTip(i), ev.clientX, ev.clientY); },
     onpointermove: (ev) => moveTip(ev.clientX, ev.clientY),
     onpointerleave: clearHover,
+  };
+  // Tap areas sit below every mark, so one person's can't cover a neighbor's mark.
+  const hit = sv("circle", { class: "hit", r: Math.max(14, reach[i] + 4), ...pointer });
+  const g = sv("g", {
+    class: "node", tabindex: 0, role: "button", "aria-label": `${p.name}, ${c.name}`, ...pointer,
+    onkeydown: (ev) => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); select({ kind: "person", i }, true); } },
     onfocus: () => { const r = g.getBoundingClientRect(); S.hover = { kind: "person", i }; emphasize(); showTip(personTip(i), r.right, r.top); },
     onblur: clearHover,
   },
-    sv("circle", { class: "hit", r: 14 }),
-    sv("circle", { class: "ring", r: 11 }),
-    sv("g", { class: `mark ${hueClass(p.cluster)}${c.hollow ? " hollow" : ""}` }, shape(p.group)),
+    sv("circle", { class: "ring", r: reach[i] + 5 }),
+    sv("g", { class: `mark ${hueClass(p.cluster)}${c.hollow ? " hollow" : ""}` }, shape(p.group, markR[i])),
     label);
-  nodeLayer.append(g);
-  return { g, label };
+  return { g, hit, label };
 });
+// Biggest marks at the back, so small ones beside them can still be clicked.
+P.map((_, i) => i).sort((a, b) => markR[b] - markR[a]).forEach((i) => { hitLayer.append(nodes[i].hit); nodeLayer.append(nodes[i].g); });
 
 const edgeEls = E.map((e, k) => {
   const line = sv("line", { class: "edge", "stroke-width": edgeWidth(e.s) });
@@ -492,7 +543,11 @@ function sizeMap() {
 }
 
 function drawPoints() {
-  pts.forEach(([x, y], i) => nodes[i].g.setAttribute("transform", `translate(${x.toFixed(1)} ${y.toFixed(1)})`));
+  pts.forEach(([x, y], i) => {
+    nodes[i].g.setAttribute("transform", `translate(${x.toFixed(1)} ${y.toFixed(1)})`);
+    nodes[i].hit.setAttribute("cx", x);
+    nodes[i].hit.setAttribute("cy", y);
+  });
   E.forEach((e, k) => {
     const [x1, y1] = pts[e.a], [x2, y2] = pts[e.b];
     for (const line of [edgeEls[k].line, edgeEls[k].hit]) {
@@ -500,11 +555,56 @@ function drawPoints() {
       line.setAttribute("x2", x2); line.setAttribute("y2", y2);
     }
   });
+  drawOrbit();
   drawYou();
 }
 
+// Selecting someone sends their QCB PhD students out around their mark. The same people
+// are listed in the panel, which is the way in for keyboards and screen readers.
+let orbitOf = -1, orbitDots = [];
+function drawOrbit() {
+  const i = isMapView() && S.sel && S.sel.kind === "person" ? S.sel.i : -1;
+  if (i !== orbitOf) {
+    orbitOf = i;
+    orbitDots = (i < 0 ? [] : P[i].students).map((s, n) => ({
+      line: sv("line", { class: `sline ${hueClass(P[i].cluster)}` }),
+      g: sv("g", {
+        class: `sdot ${hueClass(P[i].cluster)}`, onclick: () => openStudent(n),
+        onpointerenter: (ev) => { lightStudent(n, true); showTip([el("b", {}, s.name), el("span", {}, s.n ? plural(s.n, "paper") : "PhD student")], ev.clientX, ev.clientY); },
+        onpointermove: (ev) => moveTip(ev.clientX, ev.clientY),
+        onpointerleave: () => { lightStudent(n, false); hideTip(); },
+      }, sv("circle", { class: "hit", r: 12 }), sv("circle", { class: "spot", r: 5 })),
+    }));
+    orbitLayer.setAttribute("aria-hidden", "true");
+    orbitLayer.replaceChildren(...orbitDots.flatMap((d) => [d.line, d.g]));
+  }
+  if (i < 0) return;
+  // Spread them around the circle, leaving a gap where the person's name sits.
+  const [x, y] = pts[i], r = reach[i] + 24, gap = 0.9, [name] = nameBox(i);
+  const toName = name ? Math.atan2(name.y + name.h / 2 - y, name.x + name.w / 2 - x) : Math.PI / 2;
+  orbitDots.forEach(({ line, g }, n) => {
+    const a = toName + gap + (2 * Math.PI - 2 * gap) * (n + 0.5) / orbitDots.length;
+    const dx = Math.max(10, Math.min(x + r * Math.cos(a), W - 10)), dy = Math.max(10, Math.min(y + r * Math.sin(a), H_ - 10));
+    g.setAttribute("transform", `translate(${dx.toFixed(1)} ${dy.toFixed(1)})`);
+    line.setAttribute("x1", x); line.setAttribute("y1", y);
+    line.setAttribute("x2", dx); line.setAttribute("y2", dy);
+  });
+}
+
+function lightStudent(n, on) {
+  orbitDots[n]?.g.classList.toggle("on", on);
+  detail.querySelectorAll(".student")[n]?.classList.toggle("on", on);
+}
+
+function openStudent(n) {
+  const row = detail.querySelectorAll(".student")[n];
+  if (!row) return;
+  if (row.tagName === "DETAILS") row.open = true;
+  row.scrollIntoView({ block: "nearest", behavior: reducedMotion.matches ? "auto" : "smooth" });
+}
+
 function applyFilters() {
-  P.forEach((p, i) => { nodes[i].g.style.display = shown(i) ? "" : "none"; });
+  P.forEach((p, i) => { nodes[i].g.style.display = nodes[i].hit.style.display = shown(i) ? "" : "none"; });
   E.forEach((e, k) => {
     const on = edgeShown(e) ? "" : "none";
     edgeEls[k].line.style.display = on;
@@ -522,7 +622,7 @@ const inside = (b) => b.x >= 2 && b.y >= 2 && b.x + b.w <= W - 2 && b.y + b.h <=
 let marksAndLabels = [];
 function placeLabels() {
   const taken = marksAndLabels = [];
-  P.forEach((p, i) => { if (shown(i)) { const [x, y] = pts[i]; taken.push({ x: x - 8, y: y - 8, w: 16, h: 16 }); } });
+  P.forEach((p, i) => { if (shown(i)) { const [x, y] = pts[i], r = reach[i] + 2; taken.push({ x: x - r, y: y - r, w: 2 * r, h: 2 * r }); } });
   if (S.you && !S.you.live) { const [x, y] = dotPoint(); taken.push({ x: x - 20, y: y - 32, w: 40, h: 46 }); }
   const forced = emphasisSet() || new Set();
 
@@ -554,10 +654,10 @@ function placeLabels() {
   const font = `500 11.5px ${FONT}`;
   for (const i of order) {
     const [x, y] = pts[i], { label } = nodes[i];
-    const w = textWidth(P[i].label, font) + 2, h = 13;
+    const w = textWidth(P[i].label, font) + 2, h = 13, d = reach[i] - 6;
     const slots = [
-      [13, -h / 2, "start"], [-13 - w, -h / 2, "end"], [-w / 2, -24, "middle"], [-w / 2, 11, "middle"],
-      [9, -20, "start"], [-9 - w, -20, "end"], [9, 7, "start"], [-9 - w, 7, "end"],
+      [13 + d, -h / 2, "start"], [-13 - d - w, -h / 2, "end"], [-w / 2, -24 - d, "middle"], [-w / 2, 11 + d, "middle"],
+      [9 + d, -20 - d, "start"], [-9 - d - w, -20 - d, "end"], [9 + d, 7 + d, "start"], [-9 - d - w, 7 + d, "end"],
     ];
     let done = false;
     for (const [dx, dy, anchor] of slots) {
@@ -574,12 +674,13 @@ function placeLabels() {
       }
     }
     if (!done && forced.has(i)) {
-      label.setAttribute("x", 13); label.setAttribute("y", 4); label.setAttribute("text-anchor", "start");
+      label.setAttribute("x", (13 + reach[i] - 6).toFixed(1)); label.setAttribute("y", 4); label.setAttribute("text-anchor", "start");
       label.style.display = "";
     } else if (!done) {
       label.style.display = "none";
     }
   }
+  drawOrbit();
 }
 
 let tween = 0;
@@ -692,7 +793,7 @@ function drawList() {
       .sort((a, b) => P[a].label.localeCompare(P[b].label));
     if (!members.length) return;
     body.push(el("tbody", {},
-      el("tr", {}, el("th", { colspan: 5, scope: "colgroup", class: hueClass(ci) },
+      el("tr", {}, el("th", { colspan: 7, scope: "colgroup", class: hueClass(ci) },
         el("span", { class: `swatch${c.hollow ? " hollow" : ""}` }), " ", c.name)),
       members.map((i) => {
         const p = P[i];
@@ -700,6 +801,8 @@ function drawList() {
           el("td", {}, el("button", { type: "button", class: "namebtn", onclick: () => select({ kind: "person", i }, true) }, p.name)),
           el("td", {}, p.dept),
           el("td", {}, GROUP_NAMES[p.group].split(" ")[0]),
+          el("td", { class: "num" }, labSize(p)),
+          el("td", { class: "num" }, p.h),
           el("td", { class: "num" }, p.n),
           el("td", { class: "num" }, coauthors(i)));
       })));
@@ -708,6 +811,7 @@ function drawList() {
     el("caption", { class: "sr" }, "Faculty by research cluster"),
     el("thead", {}, el("tr", {},
       el("th", { scope: "col" }, "Name"), el("th", { scope: "col" }, "Home department"), el("th", { scope: "col" }, "Group"),
+      el("th", { scope: "col", class: "num" }, "Lab size"), el("th", { scope: "col", class: "num" }, "h-index"),
       el("th", { scope: "col", class: "num" }, "Papers"), el("th", { scope: "col", class: "num" }, "QCB co-authors"))),
     body));
   if (!body.length) listBox.replaceChildren(el("p", { class: "sub" }, "Nobody matches."));
@@ -750,6 +854,7 @@ function emphasize() {
   document.querySelectorAll(".legend-list button").forEach((b, ci) => {
     b.setAttribute("aria-pressed", String(!!S.sel && S.sel.kind === "cluster" && S.sel.c === ci));
   });
+  drawOrbit();
 }
 function clearHover() { S.hover = null; hideTip(); emphasize(); }
 
@@ -757,7 +862,8 @@ function clearHover() { S.hover = null; hideTip(); emphasize(); }
 
 function personTip(i) {
   const p = P[i];
-  return [el("b", {}, p.name), el("span", {}, C[p.cluster].name), el("span", {}, p.terms.slice(0, 3).join(", "))];
+  return [el("b", {}, p.name), el("span", {}, C[p.cluster].name), el("span", {}, p.terms.slice(0, 3).join(", ")),
+    p.lab.source ? el("span", {}, `Lab of ${p.lab.source === "estimate" ? "about " : ""}${p.lab.size}`) : null].filter(Boolean);
 }
 function edgeTip(k) {
   const e = E[k];
@@ -790,6 +896,61 @@ function paperItem(x, extra) {
   return el("li", {}, el("a", { href: x.u, target: "_blank", rel: "noopener" }, x.t), el("span", { class: "sub" }, bits));
 }
 
+const labSize = (p) => (p.lab.source ? `${p.lab.source === "estimate" ? "~" : ""}${p.lab.size}` : "–");
+
+function statTiles(p) {
+  const tile = (name, value) => el("div", {}, el("dt", {}, name), el("dd", {}, value));
+  return el("dl", { class: "stats" }, tile("Lab size", labSize(p)), tile("h-index", p.h), tile("Papers", p.n.toLocaleString("en-US")),
+    tile("Citations", p.cites.toLocaleString("en-US", { notation: "compact", maximumFractionDigits: 1 })));
+}
+
+function labNote(p) {
+  if (p.lab.source === "website") {
+    return el("p", { class: "sub" }, "Lab size from ", el("a", { href: p.lab.url, target: "_blank", rel: "noopener" }, "the lab's website"), `, counting everyone it lists, PI included.${p.lab.note ? ` ${p.lab.note}` : ""}`);
+  }
+  return el("p", { class: "sub" }, p.lab.source ? "Lab size is a rough estimate from recent USC co-authors." : "Lab size unknown: no count, and too few recent USC papers to estimate.");
+}
+
+function yearChart(p) {
+  const [first, counts] = p.years, last = D.meta.through, most = Math.max(...counts);
+  const w = 340, base = 76, roof = 16, step = Math.min(22, w / counts.length), bar = Math.max(2, step * 0.72), left = w - step * counts.length;
+  const peak = counts.lastIndexOf(most), col = (n) => left + n * step + (step - bar) / 2;
+  const columns = counts.flatMap((c, n) => {
+    const year = first + n, x = col(n), top = base - (c / most) * (base - roof), r = Math.min(3, bar / 2, base - top);
+    const tipKids = () => [el("b", {}, year === last ? `${year} so far` : `${year}`), el("span", {}, plural(c, "paper"))];
+    return [
+      sv("rect", {
+        class: "ycol", x: left + n * step, y: 0, width: step, height: base,
+        onpointerenter: (ev) => showTip(tipKids(), ev.clientX, ev.clientY), onpointermove: (ev) => moveTip(ev.clientX, ev.clientY), onpointerleave: hideTip,
+      }),
+      c ? sv("path", {
+        class: `ybar${year === last ? " partial" : ""}`,
+        d: `M${x} ${base}V${top + r}Q${x} ${top} ${x + r} ${top}H${x + bar - r}Q${x + bar} ${top} ${x + bar} ${top + r}V${base}Z`,
+      }) : null,
+    ];
+  });
+  const peakX = Math.max(10, Math.min(col(peak) + bar / 2, w - 10));
+  return el("figure", { class: `years ${hueClass(p.cluster)}` },
+    sv("svg", { viewBox: `0 0 ${w} 94`, "aria-hidden": "true" }, columns,
+      sv("line", { class: "ybase", x1: left, x2: w, y1: base + 0.5, y2: base + 0.5 }),
+      sv("text", { class: "ytext peak", x: peakX, y: roof - 4, "text-anchor": "middle" }, `${most}`),
+      sv("text", { class: "ytext", x: left, y: 91 }, `${first}`),
+      sv("text", { class: "ytext", x: w, y: 91, "text-anchor": "end" }, `${last} so far`)),
+    el("figcaption", { class: "sub" }, `Busiest year: ${first + peak}, with ${plural(most, "paper")}.`),
+    el("div", { class: "sr" }, el("table", {}, el("caption", {}, `Papers per year for ${p.name}`),
+      el("tr", {}, el("th", { scope: "col" }, "Year"), el("th", { scope: "col" }, "Papers")),
+      counts.map((c, n) => el("tr", {}, el("td", {}, first + n), el("td", {}, c))))));
+}
+
+function studentRow(s, n) {
+  const head = [el("b", {}, s.name), el("span", { class: "sub" }, s.n ? plural(s.n, "paper") : "No papers found yet")];
+  return el("li", { onpointerenter: () => lightStudent(n, true), onpointerleave: () => lightStudent(n, false) }, s.p.length
+    ? el("details", { class: "student" }, el("summary", {}, head),
+      el("ul", { class: "papers" }, s.p.map((x) => paperItem(x, x.first ? "First author" : null)),
+        s.n > s.p.length ? el("li", { class: "sub" }, `and ${s.n - s.p.length} more`) : null))
+    : el("div", { class: "student" }, head));
+}
+
 function personPanel(i) {
   const p = P[i], links = [];
   if (p.website) links.push(el("a", { href: p.website, target: "_blank", rel: "noopener" }, "Lab website"));
@@ -798,10 +959,17 @@ function personPanel(i) {
   const partners = new Set(edgesOf[i].map((k) => other(E[k], i)));
   return [
     backButton(),
-    el("h2", { tabindex: -1 }, p.name),
-    clusterTag(p.cluster),
-    el("p", { class: "sub" }, `${GROUP_NAMES[p.group]} · ${p.dept}`),
-    el("div", { class: "links" }, links),
+    el("div", { class: "who" },
+      p.photo ? el("img", { class: "face", src: p.photo, alt: `Photo of ${p.name}`, width: 96, height: 120, referrerpolicy: "no-referrer", onerror: (ev) => ev.target.remove() }) : null,
+      el("div", {},
+        el("h2", { tabindex: -1 }, p.name),
+        clusterTag(p.cluster),
+        el("p", { class: "sub" }, `${GROUP_NAMES[p.group]} · ${p.dept}`),
+        el("div", { class: "links" }, links))),
+    statTiles(p),
+    labNote(p),
+    el("h3", {}, "Papers per year"),
+    yearChart(p),
     el("h3", {}, "Research focus"),
     el("div", { class: "chips" }, p.terms.slice(0, 9).map((t) => el("button", { type: "button", class: "chip", onclick: () => setQuery(t), "aria-label": `Search for ${t}` }, t))),
     el("h3", {}, `QCB co-authors (${collaborators.length})`),
@@ -814,11 +982,13 @@ function personPanel(i) {
         }, el("b", {}, P[j].name), el("span", { class: "sub" }, `${plural(e.n, "shared paper")}, ${years(e)}`)));
       }))
       : el("p", { class: "sub" }, "No shared papers with other QCB faculty in this data."),
+    p.students.length ? el("h3", {}, `QCB PhD students (${p.students.length})`) : null,
+    p.students.length ? el("ul", {}, p.students.map(studentRow)) : null,
     el("h3", {}, "Most similar research"),
     el("ul", { class: "rows" }, p.similar.filter(shown).map((j) => el("li", {}, person(j, partners.has(j) ? "Has published with them" : "No shared papers yet")))),
     el("h3", {}, "Recent papers"),
     el("ul", { class: "papers" }, p.papers.map((x) => paperItem(x))),
-    el("p", { class: "foot" }, `Based on ${plural(p.n, "paper")}.`),
+    el("p", { class: "foot" }, `Based on ${plural(p.n, "paper")} in OpenAlex. Google Scholar's counts usually run higher.`),
   ];
 }
 
@@ -904,7 +1074,9 @@ function search(raw) {
   const out = [];
   P.forEach((p, i) => {
     let score = 0, why = "";
+    const student = p.students.find((s) => word.test(s.name.toLowerCase()));
     if (word.test(p.name.toLowerCase())) score = 1000;
+    else if (student) { score = 500; why = `PhD student: ${student.name}`; }
     else {
       const t = p.terms.findIndex((x) => word.test(x));
       if (t >= 0) { score = 100 - t; why = p.terms[t]; }
@@ -1083,7 +1255,7 @@ function drawYou() {
   ripple.setAttribute("cy", y);
   const shownLinks = you.links.slice(0, 5).filter((l) => l.rel >= 0.3);
   const boxes = [{ x: x - 20, y: y - 32, w: 40, h: 46 }];
-  shownLinks.forEach(({ j }) => boxes.push({ x: pts[j][0] - 8, y: pts[j][1] - 8, w: 16, h: 16 }, ...nameBox(j)));
+  shownLinks.forEach(({ j }) => { const r = reach[j] + 2; boxes.push({ x: pts[j][0] - r, y: pts[j][1] - r, w: 2 * r, h: 2 * r }, ...nameBox(j)); });
   you.links.slice(0, 5).forEach((link, n) => {
     if (link.rel < 0.3) return;
     const parts = linkEls[n], [tx, ty] = pts[link.j], g = parts.grow;
@@ -1100,9 +1272,9 @@ function drawYou() {
     // Tuck the label under or over the person's name, so it reads as theirs. If it
     // won't fit, leave it to the panel, which lists the same thing.
     const [name] = nameBox(link.j);
-    const cx = name ? name.x + name.w / 2 : tx, top = name ? name.y : ty - 8, bottom = name ? name.y + name.h : ty + 8;
-    const box = [[cx - w / 2, bottom + 1], [cx - w / 2, top - h - 1], [tx - w / 2, ty + 11], [tx - w / 2, ty - h - 11],
-      [tx + 12, ty + 9], [tx - w - 12, ty + 9], [tx + 12, ty - h - 9], [tx - w - 12, ty - h - 9]]
+    const r = reach[link.j] + 4, cx = name ? name.x + name.w / 2 : tx, top = name ? name.y : ty - r, bottom = name ? name.y + name.h : ty + r;
+    const box = [[cx - w / 2, bottom + 1], [cx - w / 2, top - h - 1], [tx - w / 2, ty + r], [tx - w / 2, ty - h - r],
+      [tx + r + 2, ty + r - 2], [tx - w - r - 2, ty + r - 2], [tx + r + 2, ty - h - r + 2], [tx - w - r - 2, ty - h - r + 2]]
       .map(([bx, by]) => ({ x: bx, y: by, w, h })).find((b) => inside(b) && !boxes.some((o) => hits(b, o)));
     if (!box) return;
     boxes.push(box);
@@ -1122,8 +1294,8 @@ function settleDot() {
     for (let pass = 0; pass < 10; pass++) {
       pts.forEach(([px, py], i) => {
         if (!shown(i)) return;
-        const dx = x - px, dy = y - py, d = Math.hypot(dx, dy) || 1;
-        if (d < 24) { x += (dx || 1) / d * (24 - d); y += dy / d * (24 - d); }
+        const dx = x - px, dy = y - py, d = Math.hypot(dx, dy) || 1, room = reach[i] + 18;
+        if (d < room) { x += (dx || 1) / d * (room - d); y += dy / d * (room - d); }
       });
     }
     you.at = { view: S.view, xy: fromPx([Math.max(16, Math.min(x, W - 16)), Math.max(30, Math.min(y, H_ - 16))]) };
@@ -1436,6 +1608,11 @@ window.addEventListener("click", (ev) => { if (dragged) { ev.stopPropagation(); 
 
 const about = $("#about");
 $("#about-papers").textContent = D.meta.papers.toLocaleString("en-US");
+$("#about-counted").textContent = D.meta.labSources.website;
+$("#about-estimated").textContent = D.meta.labSources.estimate;
+$("#about-unknown").textContent = D.meta.labSources.none;
+$("#about-students").textContent = D.meta.students;
+$("#about-nolab").textContent = D.meta.noLab;
 $("#about-open").addEventListener("click", () => about.showModal());
 about.addEventListener("click", (ev) => { if (ev.target === about) about.close(); });
 

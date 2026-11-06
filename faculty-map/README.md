@@ -4,8 +4,10 @@ An interactive map of USC's Quantitative and Computational Biology faculty (core
 
 - **Two map views, t-SNE and UMAP**, animate between each other. Nearby means similar research; distances between far-apart groups don't mean much.
 - **Tree** shows the full hierarchy of who is similar to whom, cut into 9 clusters. **List** has everyone in a table.
-- **Click a person** for their research terms, QCB co-authors, most similar colleagues, and recent papers. **Click a line** for the papers a pair share.
-- **Search** by name or topic, such as "cancer" or "MRI", to light up who works on it.
+- **Mark size** shows lab size, so bigger marks are bigger labs.
+- **Click a person** for their photo, lab size, h-index, citations, papers per year, research terms, QCB co-authors, most similar colleagues, and recent papers. **Click a line** for the papers a pair share.
+- **QCB PhD students** fan out around their lab's mark when it's selected, and the panel lists them with their papers.
+- **Search** by name or topic, such as "cancer" or "MRI", to light up who works on it. A PhD student's name finds their lab.
 - **Filter** by core, joint and emeritus faculty, and show all collaborations, the closest only, or none.
 - **Find your place on the map.** Type your interests and experience and a "You" dot flies in, with lines to your closest faculty labeled with shared keywords. Or throw a dot: flick it from the corner, or drag it anywhere, to see who works near that spot and what the area is about. It all runs in the browser, so nothing typed is sent anywhere.
 
@@ -39,6 +41,10 @@ Emeriti are included. The adjunct member (UCLA) is left out.
 | `scripts/scrape_departments.py` | Reads five more departments, the Brain and Creativity Institute and hand-picked labs, and merges them with the QCB roster into `data/roster-extended.json` and the review page `data/roster-report.md`. QCB records always win. |
 | `scripts/scrape_lab_sizes.py` | Counts each lab's current members from its website into `data/lab-sizes.json` and `data/lab-size-report.md`. |
 | `scripts/webfetch.py` | Shared polite fetching for those two: reads robots.txt, waits the site's crawl delay, caches pages, and stops at a bot challenge rather than retrying. |
+| `scripts/scrape_students.py` | Scrapes the QCB PhD student and postdoc pages into `data/raw/students.json`: names, roles and labs only. |
+| `scripts/fetch_coauthors.py` | Downloads full author lists for faculty papers since 2018 into `data/papers/coauthors.json`. |
+| `scripts/fetch_student_papers.py` | Finds students' and postdocs' OpenAlex profiles through their advisors' papers, and downloads their USC papers into `data/papers/student-works.json`. |
+| `scripts/build_labs.py` | Works out each lab's size and its students' paper lists into `data/labs.json` and `data/lab-report.md`. |
 | `scripts/resolve_authors.py` | Matches each person to OpenAlex author IDs. Writes `data/openalex-authors.json` and the review page `data/id-review.md`. |
 | `scripts/fetch_papers.py` | Downloads everyone's papers as trimmed records into `data/papers/papers.json`, filters them, and writes `data/paper-report.md`. |
 | `scripts/build_edges.py` | Builds collaboration edges from the kept papers into `data/edges.json` and writes `data/collaboration-report.md`. |
@@ -60,6 +66,9 @@ Emeriti are included. The adjunct member (UCLA) is left out.
 | `data/collaboration-report.md` | All edges in a table, the most connected faculty, and those with no QCB co-authors. |
 | `data/features/faculty-features.npz` | The 48 faculty's feature matrices (`tfidf`, `topics`, `subfields`, `fields`, `specter`) with vocabularies and topic names. Committed (about 1.3 MB) so the notebook runs from a fresh clone. |
 | `data/features/features-report.md` | Top terms, top topics and nearest neighbours per person under each representation, and how much the representations agree. |
+| `data/student-overrides.json` | Hand decisions on students' profiles and papers: `{"person-id": {"openalex": [...], "drop": [...], "note": "why"}}`. |
+| `data/labs.json` | Size and source for every lab, plus PhD students in a lab and their papers. Generated. |
+| `data/lab-report.md` | Website counts next to estimates, and every student's papers, for checking by eye. |
 | `data/edges-extended.json` | Collaboration edges across QCB and the extended roster, from `scripts/build_edges.py --extended`, with `data/collaboration-report-extended.md` beside it. Same format as `data/edges.json`. |
 | `data/features/extended-features.npz` | Feature matrices for all 161 people, from `scripts/build_features.py --extended`, with `extended-features-report.md` beside it. Same format as `faculty-features.npz`. New paper embeddings are in the gitignored `data/papers/specter2-extended.npz`. |
 | `data/cluster-names.json` | Hand-written cluster names and colors. Each entry names one member as its `anchor`, so a name stays with its group if cluster numbers change. |
@@ -156,6 +165,28 @@ The browser pulls the known terms out of the text, matching two-word phrases fir
 **Where the dot goes.** t-SNE and UMAP have no exact way to add a new point, so the dot sits at the weighted average of its closest matches, nudged off any mark it would cover. That's an estimate of where it belongs. A thrown dot works in reverse: it blends the people nearest where it lands, and is compared with everyone by cosine similarity using the faculty similarity matrix.
 
 **Percentages** compare each person with the dot's closest match, who is always 100%. A typed dot's scores come from word matches and a thrown dot's from cosine similarity, so the two aren't comparable with each other.
+
+### Lab sizes
+
+A mark's area shows lab size. QCB's own rosters place people in only 13 of the 48 labs, because students from other programs aren't listed, and not every lab has a website that can be read. So each size comes from the best source available:
+
+- **Lab website (25 labs):** everyone the lab's website lists as a current member, PI and undergraduates included, from `data/lab-sizes.json`. 21 of these were checked by hand. Labs differ in who they list and how often they update, so compare them loosely. A lab is never smaller than the people QCB places in it plus the PI, which adds one to Edge, MacLean and Sun. `CAVEATS` in `build_labs.py` adds a warning on the page for three counts: Thompson's and Nakano's are whole centers, and Chiang's is probably high.
+- **Estimate (18 labs):** USC co-authors on the person's senior-author papers since 2023 who appear on at least two of them or as first author on one, plus anyone QCB lists in the lab, plus the PI. People with three or more senior-author papers of their own are treated as collaborators. Across the 21 labs with both, the median estimate matches the website count, but 5 are off by more than a factor of two. Estimates run high for labs with turnover and low for new labs.
+- **Unknown (5 labs):** no website count and too few recent USC papers, so the mark stays at its smallest. That doesn't mean there's no lab.
+
+Labs of up to three people share the smallest mark. Above that, area is proportional to size.
+
+### PhD students and their papers
+
+Names alone can't be trusted here: the roster has a Wei Liu and a Yue Huang. So `fetch_student_papers.py` accepts an OpenAlex profile only if it appears on a paper by the student's advisor or has been checked by hand in `data/student-overrides.json`. It then keeps papers where the student listed USC or a QCB faculty member is a co-author, which removes namesakes on merged profiles but also earlier work elsewhere. `build_labs.py` removes conference abstracts, data deposits and repeat records.
+
+26 of the 38 students in labs have papers, and those titles were read through by hand once for anything that didn't fit the lab. Students who haven't joined a lab aren't shown. Postdocs count toward lab size but aren't listed on the page.
+
+### Photos and stats
+
+Photos load from the department's Wix site rather than being copied here, so they follow its updates. If one fails to load, the panel simply leaves it out.
+
+The h-index, citations and papers per year use the same filtered papers as the map. That filter also removes real early work in another field, so a few people score well below their OpenAlex profile: Michael Edge 16 against 21, Christoph Haselwandter 15 against 20, and Ruishan Liu 8 against 14. In other cases the filter is what removes a namesake's papers, as with April Shu (14 against 25).
 
 ### Visit counts
 

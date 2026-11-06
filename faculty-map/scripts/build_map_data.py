@@ -3,7 +3,8 @@
 
 Combines data/layout.json (positions, clusters, tree), data/faculty.json (who they
 are), data/edges.json (collaborations), data/features/faculty-features.npz (research
-terms, topics, similarity) and data/papers/papers.json (recent papers).
+terms, topics, similarity), data/papers/papers.json (recent papers, citations, papers
+by year) and data/labs.json (lab sizes and PhD students, from scripts/build_labs.py).
 
 Cluster names and colors come from data/cluster-names.json, which is written by hand.
 Each entry names one member as its "anchor", so names stay with the right group if
@@ -17,8 +18,10 @@ clusters in the notebook, this script tells you which clusters need a name.
 Needs numpy, plus the paper records from scripts/fetch_papers.py.
 """
 
+import datetime as dt
 import json
 import os
+import re
 import sys
 
 import numpy as np
@@ -32,6 +35,8 @@ N_TOPICS = 5
 N_PAPERS = 5
 N_SIMILAR = 5
 N_EXAMPLES = 8   # shared papers listed per collaboration
+N_STUDENT_PAPERS = 6
+PHOTO_SIZE = (240, 300)   # twice the size it's shown at, for sharp screens
 # Conference abstracts and preprints are fine as evidence but poor reading suggestions.
 LISTED_TYPES = {"article", "review", "book-chapter", "letter", "conference-paper", "preprint"}
 
@@ -72,6 +77,41 @@ def recent_papers(pid, works):
             for w in theirs[:N_PAPERS]]
 
 
+def photo_url(src):
+    """Many scraped links are blurred loading placeholders, but Wix serves any size of
+    the same file. Photos stay on the department's site, so they follow its updates."""
+    m = re.search(r"/media/([^/]+?\.(?:jpe?g|png|webp|avif))", src or "", re.I)
+    if not m:
+        return None
+    w, h = PHOTO_SIZE
+    return f"https://static.wixstatic.com/media/{m.group(1)}/v1/fill/w_{w},h_{h},al_c,q_85/{m.group(1)}"
+
+
+def career(pid, works, through):
+    """h-index, citations and papers per year, from the same papers as the rest of the
+    map. A preprint and its journal version count once, with the higher citation count."""
+    cited, year = {}, {}
+    for w in works:
+        if (w["faculty"].get(pid) or {}).get("keep"):
+            key = w["duplicate_of"] or w["id"]
+            cited[key] = max(cited.get(key, 0), w["cited_by"] or 0)
+            if w["year"]:
+                year[key] = min(year.get(key, w["year"]), w["year"])
+    ranked = sorted(cited.values(), reverse=True)
+    first = min(year.values())
+    counts = [0] * (through - first + 1)
+    for y in year.values():
+        if y <= through:
+            counts[y - first] += 1
+    return {"h": sum(c >= i + 1 for i, c in enumerate(ranked)), "cites": sum(ranked), "years": [first, counts]}
+
+
+def student_entry(student):
+    return {"name": student["name"], "n": len(student["papers"]),
+            "p": [{"t": x["title"], "y": x["year"], "v": x["venue"], "u": paper_link(x["doi"], x["id"]),
+                   "first": x["position"] == "first"} for x in student["papers"][:N_STUDENT_PAPERS]]}
+
+
 def name_clusters(layout, ids):
     """Cluster number -> entry in cluster-names.json, checked against the layout."""
     entries = load_json("cluster-names.json")
@@ -108,6 +148,8 @@ def main():
     edges = load_json("edges.json")["edges"]
     works = list(load_json("papers", "papers.json")["works"].values())
     feats = np.load(os.path.join(DATA, "features", "faculty-features.npz"))
+    labs = load_json("labs.json")
+    through = dt.date.fromtimestamp(os.path.getmtime(os.path.join(DATA, "papers", "papers.json"))).year
 
     people = layout["faculty"]
     ids = [p["id"] for p in people]
@@ -140,6 +182,10 @@ def main():
             "topics": [[str(topic_names[k]), round(float(topics[i][k]), 3)] for k in top_topics],
             "papers": recent_papers(p["id"], works),
             "similar": [int(k) for k in np.argsort(-sim[i])[:N_SIMILAR]],
+            "photo": photo_url(r["photo"]),
+            "lab": {k: labs["labs"][p["id"]][k] for k in ("size", "source", "url", "note")},
+            "students": [student_entry(s) for s in labs["students"] if p["id"] in s["labs"]],
+            **career(p["id"], works, through),
         }
         person.update({v: p[v] for v in views})
         out_people.append(person)
@@ -177,6 +223,10 @@ def main():
                 i["keep"] and pid in index for pid, i in w["faculty"].items())),
             "representation": layout["representation"],
             "layouts": layout["layouts"],
+            "through": through,
+            "students": len(labs["students"]),
+            "noLab": labs["no_lab_yet"],
+            "labSources": {k or "none": sum(v["source"] == k for v in labs["labs"].values()) for k in ("website", "estimate", None)},
         },
         "clusters": clusters,
         "people": out_people,
