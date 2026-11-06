@@ -18,7 +18,8 @@ Each file holds "worlds", one for each way of arranging its people:
     all/field        data/layout-extended.json        data/cluster-names-extended.json
     all/technique    data/layout-extended-methods.json   data/cluster-names-extended-methods.json
 
-Layouts come from the notebooks. Cluster names and colors are written by hand. Each
+Layouts come from the notebooks, and their 3D twins from scripts/build_layouts_3d.py.
+Cluster names and colors are written by hand. Each
 entry names one member as its "anchor", so names stay with the right group if the
 cluster numbers change. Hues are assigned so that clusters sitting next to each other
 on the map are the easiest to tell apart, and "hollow" gives a cluster past the eighth
@@ -187,6 +188,7 @@ def build_world(layout_file, names, ids, X, apart, stats, labels=None):
     X is one row of features per person. apart(members) says what sets a cluster apart.
     """
     layout = load_json(layout_file)
+    solid = load_json("layouts-3d.json")[layout_file]
     by_id = {f["id"]: f for f in layout["faculty"]}
     if set(by_id) != set(ids):
         sys.exit(f"{layout_file} has different people from the map")
@@ -216,6 +218,7 @@ def build_world(layout_file, names, ids, X, apart, stats, labels=None):
         "n": len(ids),
         "views": [[v, layout["layouts"][v]["name"]] for v in views],
         "xy": {v: [f[v] for f in people] for v in views},
+        "xyz": {v: [solid[v]["people"][pid] for pid in ids] for v in views},
         "cluster": [f["cluster"] for f in people],
         "labels": labels or [f["label"] for f in people],
         "similar": [[int(k) for k in np.argsort(-sim[i])[:N_SIMILAR]] for i in range(len(ids))],
@@ -255,7 +258,7 @@ def person_entry(pid, r, tfidf, vocab, topics, topic_names, n_papers, works, thr
     top_topics = np.argsort(-topics)[:N_TOPICS]
     return {
         "id": pid, "name": r["name"], "dept": r["home_department"], "title": r["title"],
-        "profile": r["profile"], "n": int(n_papers),
+        "profile": r["profile"], "email": r.get("email"), "n": int(n_papers),
         "terms": distinct_terms(vocab[np.argsort(-tfidf)[:N_TERMS * 3]], N_TERMS),
         "topics": [[str(topic_names[k]), round(float(topics[k]), 3)] for k in top_topics],
         "papers": recent_papers(pid, works),

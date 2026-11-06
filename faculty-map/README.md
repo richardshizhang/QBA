@@ -3,11 +3,14 @@
 An interactive map of USC's Quantitative and Computational Biology faculty (core, joint and emeritus). Faculty who work on similar problems or use similar techniques sit close together, and lines connect people who have published together.
 
 - **Two map views, t-SNE and UMAP**, animate between each other. Nearby means similar research; distances between far-apart groups don't mean much.
+- **3D** turns either map view into a globe that spins slowly. Drag to turn it, Pause stops it, and marks in front are bigger and darker.
 - **Tree** shows the full hierarchy of who is similar to whom, cut into 9 clusters. **List** has everyone in a table.
 - **Mark size** shows lab size, so bigger marks are bigger labs.
-- **Tutorial** walks through the real page in 10 steps, and people can try each control as they go.
+- **Tutorial** walks through the real page in 12 steps, and people can try each control as they go.
 - **Click a person** for their photo, lab size, h-index, citations, papers per year, research terms, QCB co-authors, most similar colleagues, and recent papers. **Click a line** for the papers a pair share.
 - **QCB PhD students** fan out around their lab's mark when it's selected, and the panel lists them with their papers.
+- **Randomize** highlights someone at random, working through everyone on show before anyone repeats.
+- **Save** faculty to a list with their emails and lab websites, marked with a star on the map. It stays in the browser, and Copy list takes it elsewhere.
 - **Search** by name or topic, such as "cancer" or "MRI", to light up who works on it. A PhD student's name finds their lab.
 - **Filter** by core, joint and emeritus faculty, and show all collaborations, the closest only, or none.
 - **Find your place on the map.** Type your interests and experience and a "You" dot flies in, with lines to your closest faculty labeled with shared keywords. Or throw a dot: flick it from the corner, or drag it anywhere, to see who works near that spot and what the area is about. It all runs in the browser, so nothing typed is sent anywhere.
@@ -36,10 +39,12 @@ Emeriti are included. The adjunct member (UCLA) is left out.
 | `index.html` | The whole page: layout, drawing and interaction. |
 | `map-data.js` | Generated data (`window.QCB_MAP`): the QCB faculty, arranged by field and by technique. Don't edit by hand. |
 | `map-data-extended.js` | Generated data (`window.QCB_MAP_EXTENDED`), about 930 KB: everyone else on the expanded map, loaded when someone turns on "Expand into related fields". |
-| `match-data.js` | Generated table for matching typed text (`window.QCB_MATCH`), about 600 KB. The page loads it only when someone clicks into the text box. |
-| `match-data-extended.js` | The same table for all 161 people (`window.QCB_MATCH_EXTENDED`), about 1.8 MB, loaded the first time someone matches text on the expanded map. |
+| `match-data.js` | Generated table for matching typed text (`window.QCB_MATCH`), about 3 MB, or 1.4 MB as sent. The page loads it only when someone clicks into the text box. |
+| `match-data-extended.js` | The same table for all 161 people (`window.QCB_MATCH_EXTENDED`), about 4 MB, or 2 MB as sent, loaded the first time someone matches text on the expanded map. |
 | `scripts/build_map_data.py` | Combines the layouts, rosters, edges, features, papers and methods into `map-data.js` and `map-data-extended.js`. |
-| `scripts/build_match_data.py` | Builds `match-data.js`, or `match-data-extended.js` with `--extended`. With `--evaluate`, also measures accuracy on held-out papers. |
+| `scripts/build_match_data.py` | Builds `match-data.js` and `match-data-extended.js`. Needs the `.venv`, as it runs SPECTER2 on every term. With `--evaluate`, also measures accuracy on held-out papers. |
+| `scripts/fetch_keywords.py` | Downloads OpenAlex's 30,000 most used keywords into `data/raw/openalex-keywords.json`, for `build_match_data.py`. |
+| `scripts/build_layouts_3d.py` | Works out a 3D twin of every flat layout into `data/layouts-3d.json`, with the same method and settings. |
 | `scripts/scrape_faculty.py` | Scrapes the faculty page into `data/faculty.json`: group, title, departments, rank, contact details and links. |
 | `scripts/scrape_departments.py` | Reads five more departments, the Brain and Creativity Institute and hand-picked labs, and merges them with the QCB roster into `data/roster-extended.json` and the review page `data/roster-report.md`. QCB records always win. |
 | `scripts/scrape_lab_sizes.py` | Counts each lab's current members from its website into `data/lab-sizes.json` and `data/lab-size-report.md`. |
@@ -80,6 +85,7 @@ Emeriti are included. The adjunct member (UCLA) is left out.
 | `data/lab-method-notes.json` | Firsthand reports of what people did in a lab, which papers can't show: `{"person-id": {"methods": ["computer-vision"], "note": "why"}}`. The notes appear on the page, so keep them anonymous. |
 | `data/lab-methods.json` | Each lab's methods with their level and evidence, for the page: share of papers, an example paper, whether its website says so, and any firsthand note. It holds no website text. |
 | `data/cluster-names.json` | Hand-written cluster names and colors. Each entry names one member as its `anchor`, so a name stays with its group if cluster numbers change. `cluster-names-methods.json`, `cluster-names-extended.json` and `cluster-names-extended-methods.json` do the same for the other three maps. |
+| `data/layouts-3d.json` | The 3D twin of every layout in `data/layout*.json`, with its trustworthiness flat and in 3D. People sit inside a unit sphere. |
 | `data/layout.json` | Positions and the tree, written by the notebook's last cell. `faculty` has each person's cluster and one `[x, y]` per layout (0–1, same scale on both axes, layouts rotated to line up). `tree` holds the full average-linkage tree: in `merges`, node numbers below the faculty count are people in `faculty` order, and n+i is `merges[i]`. |
 | `data/layout-extended.json` | The same for all 161 people. `layout-methods.json` and `layout-extended-methods.json` are the technique layouts for the QCB faculty and for everyone. |
 | `analysis-extended.ipynb` | A copy of `analysis.ipynb` for all 161 people, reading the `-extended` files. `REP` and `SCOPE` pick which layout its last cell writes, and it never writes `data/layout.json`. Saved without outputs. |
@@ -107,8 +113,9 @@ python3 -m venv --system-site-packages .venv
 Then run `analysis.ipynb` to export `data/layout.json`, and build the page's data:
 
 ```bash
+.venv/bin/python scripts/build_layouts_3d.py
 python3 scripts/build_map_data.py
-python3 scripts/build_match_data.py
+.venv/bin/python scripts/build_match_data.py
 ```
 
 If you change the number of clusters, `build_map_data.py` lists any groups that still need an entry in `data/cluster-names.json`.
@@ -137,8 +144,9 @@ Then export the layouts from `analysis-extended.ipynb` and build the page's data
 | `"methods"` | `"qcb"` | 7 | `data/layout-methods.json` |
 
 ```bash
+.venv/bin/python scripts/build_layouts_3d.py
 python3 scripts/build_map_data.py
-.venv/bin/python scripts/build_match_data.py --extended
+.venv/bin/python scripts/build_match_data.py
 ```
 
 The scrapers read saved pages from `data/raw/web/` first and need only the standard library. `--offline` uses saved pages alone. A few limits are worth knowing:
@@ -193,15 +201,45 @@ Clicking someone shows their methods in the panel, strongest evidence first. Ope
 
 ### Matching a student to faculty
 
-SPECTER2 is far too big to run in a browser, and the page has no server, so what someone types can't be embedded the way the papers were. Instead, `build_match_data.py` precomputes one row of 48 numbers for each of about 7,700 research terms, saying how strongly the term points at each person. Each number averages two signals: how much that person's papers use the term (TF-IDF), and how close the papers using the term are to that person in SPECTER2 space. The second reaches people who work on a topic in different words. Both are z-scored across faculty, then stored as one byte each.
+SPECTER2 is far too big to run in a browser, and the page has no server, so what someone types can't be embedded the way the papers were. Instead, `build_match_data.py` runs it ahead of time on about 66,000 research words and phrases, and stores how strongly each one points at each person. Each score averages two signals, both z-scored across faculty:
 
-The browser pulls the known terms out of the text, matching two-word phrases first, and averages their rows, weighting rarer terms more. Generic words ("does", "changes", "research") are ignored. Words it doesn't know ("python", "premed") are shown to the student rather than silently dropped.
+- **Meaning:** SPECTER2's embedding of the term itself, compared with each person's. This knows what "metabolic engineering" means even though no paper here uses those words.
+- **Evidence:** how much of a person's work uses the term. A title, a keyword or repeated use counts in full, and one mention in an abstract counts for 0.2. It's divided by the square root of their papers, so a specialist can beat someone prolific, with a floor of 50 weighted papers so one paper can't look like a specialty for someone with very few. Meaning alone reads "directed evolution" as evolution, and this is what puts Warshel first.
 
-**Accuracy.** Given only the title of a held-out paper, with the table built without it, the real author ranks first 68% of the time, in the top 3 85%, and in the top 5 88% (chance for top 5 is 10%). Averaging the two signals beat either alone: word use got 91% and meaning 86% top 5 on the full vocabulary, against 93% for the combined table, before shrinking it to fit a web page. Titles are written in the author's own vocabulary, though, so a student's words will do worse than these numbers suggest.
+**Phrases.** "Protein engineering" isn't protein plus engineering, so the browser splits text into the fewest known terms, and a phrase is never read as its words. Phrases are runs of up to four words with no punctuation or function word between them, seen in at least 5 papers across all 161 people, so the QCB table knows phrases only related fields use. Filler is dropped if its words don't sit together more than chance, or if its papers aren't about anything. OpenAlex's 30,000 most used keywords add 5,700 standard phrases no paper here uses, as long as all their words are familiar here. scikit-learn's stop list includes "computer" and "system", so `FUNCTION_WORDS` is a shorter list, or "computer vision" and "immune system" could never be phrases.
+
+If two words aren't a known phrase, they're matched separately, and on a short query the panel says so. Generic words ("does", "changes", "research") are ignored. Words it doesn't know ("python", "premed") are shown to the student rather than silently dropped.
+
+Each term stores only the people it points at most, 10 on the QCB map and 16 on the expanded one, with one floor for everyone else. Held-out accuracy doesn't change, and it's what lets this many terms fit a web page.
+
+**Accuracy.** Given only the title of a held-out paper, with the tables built without it, the real author ranks first 78% of the time, in the top 3 90%, and in the top 5 93%. On the expanded map that's 70%, 84% and 88%. Before phrases and term meanings, the QCB figures were 68%, 85% and 88%, and the expanded top 5 was 82%. Given a phrase, someone with at least two held-out papers on it makes the top 5 94% of the time, or 89% on the expanded map. Titles are written in the author's own vocabulary, though, so a student's words will do worse than these numbers suggest, and a rare phrase can still put someone first on a single paper: Judith Kribelbauer leads "gene therapy" that way.
 
 **Where the dot goes.** t-SNE and UMAP have no exact way to add a new point, so the dot sits at the weighted average of its closest matches, nudged off any mark it would cover. That's an estimate of where it belongs. A thrown dot works in reverse: it blends the people nearest where it lands, and is compared with everyone by cosine similarity using the faculty similarity matrix.
 
 **Percentages** compare each person with the dot's closest match, who is always 100%. A typed dot's scores come from word matches and a thrown dot's from cosine similarity, so the two aren't comparable with each other.
+
+### 3D
+
+`build_layouts_3d.py` reads each layout file's method and settings and reruns them with a third component, so changing a layout in a notebook and rerunning keeps the two views in step. Each result is turned to line up with its flat map (orthogonal Procrustes), so 3D starts out looking like the map it came from.
+
+| Map | Layout | Trustworthiness, flat | In 3D |
+| --- | --- | ---: | ---: |
+| QCB by field | t-SNE | 0.936 | 0.955 |
+| QCB by field | UMAP | 0.948 | 0.956 |
+| QCB by technique | t-SNE | 0.911 | 0.925 |
+| QCB by technique | UMAP | 0.902 | 0.926 |
+| Expanded by field | t-SNE | 0.980 | 0.983 |
+| Expanded by field | MDS | 0.914 | 0.942 |
+| Expanded by technique | t-SNE | 0.975 | 0.980 |
+| Expanded by technique | MDS | 0.895 | 0.947 |
+
+t-SNE needs different settings in 3D. scikit-learn's defaults stall at a poor map with this few people (0.79 on the QCB map), so it uses the exact method at learning rate 25 and keeps the best of 5 runs by KL divergence. That method squares a precomputed distance matrix in place, so every run needs its own copy.
+
+The page draws 3D with the same SVG marks as the flat map: rotating and projecting just gives every person a new position, size and depth. That keeps clicks, student dots and your dot working, at 60 frames a second with 161 people, or about 26 on a CPU slowed 4x. The globe stops while someone is pointing at a mark, reading a panel or has a dot out, and people who ask their system for less motion start with it still. A dot sits at the front of the globe, so people on the far side count as further from it.
+
+### Saved faculty
+
+The list is ids in `localStorage`, so it lasts in that browser and survives a rebuild of the data. Nothing is sent anywhere. If storage fails, as in a private window, it lasts until the page closes. Someone saved from the related fields makes the Saved panel load `map-data-extended.js`, and opening them switches the map on. Emails come from the rosters, which have them for 47 of the 48 QCB faculty and 82 of the 113 others.
 
 ### Lab sizes
 
