@@ -79,6 +79,19 @@ button { cursor: pointer; }
 .seg span { display: block; padding: 4px 12px; border-radius: 4px; font-weight: 600; color: var(--muted); }
 .seg input:checked + span { background: var(--surface); color: var(--ink); box-shadow: 0 0 0 1px var(--line); }
 .seg input:focus-visible + span { outline: 2px solid var(--focus); outline-offset: 1px; }
+.lens { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+.switch { display: inline-flex; align-items: center; gap: 8px; min-height: 32px; font-weight: 600; cursor: pointer; }
+.switch input {
+  appearance: none; position: relative; flex: none; width: 34px; height: 20px; margin: 0; border-radius: 10px;
+  background: var(--edge); cursor: pointer; transition: background .15s;
+}
+.switch input::before {
+  content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%;
+  background: var(--surface); transition: transform .15s;
+}
+.switch input:checked { background: var(--ink); }
+.switch input:checked::before { transform: translateX(14px); }
+#expand-msg { color: var(--muted); font-size: 12.5px; }
 .find input {
   width: 250px; max-width: 100%; height: 32px; padding: 0 10px; background: var(--surface);
   border: 1px solid var(--edge); border-radius: var(--r);
@@ -115,6 +128,10 @@ main { display: grid; grid-template-columns: minmax(0, 1fr) 372px; min-height: 0
 .edge.hot { stroke: var(--ink); stroke-opacity: .85; }
 .node { cursor: pointer; outline: none; transition: opacity .15s; }
 .node.dim { opacity: .2; }
+@media (prefers-reduced-motion: no-preference) {
+  #map.arriving .node.related { animation: arrive .65s ease-out backwards; }
+  @keyframes arrive { from { opacity: 0; } }
+}
 .hit { fill: transparent; }
 .mark > * { fill: var(--hue); stroke: var(--surface); stroke-width: 2; }
 .mark.hollow > * { fill: var(--surface); stroke: var(--hue); stroke-width: 2.5; }
@@ -247,6 +264,24 @@ main { display: grid; grid-template-columns: minmax(0, 1fr) 372px; min-height: 0
 .student summary > .sub { margin-left: 15px; }
 div.student { padding-left: 21px; }
 .student > .papers { padding: 0 0 6px 15px; }
+.level { margin-top: 10px; color: var(--muted); font-size: 12.5px; }
+.level b { color: var(--ink); font-weight: 650; }
+.method summary {
+  display: grid; grid-template-columns: 12px minmax(0, 1fr) auto; column-gap: 3px; align-items: baseline; padding: 3px 6px; margin: 0 -6px;
+  border-radius: 4px; list-style: none; cursor: pointer;
+}
+.method summary::-webkit-details-marker { display: none; }
+.method summary::before { content: "▸"; color: var(--muted); font-size: 11px; }
+.method[open] summary::before { content: "▾"; }
+.method summary:hover, .method[open] summary { background: var(--sunk); }
+.method b { font-weight: 600; font-size: 13px; line-height: 1.3; }
+.method .val { margin-left: 8px; color: var(--muted); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.method summary .sub { grid-column: 2 / -1; font-size: 12px; }
+.method .more { padding: 2px 0 8px 15px; }
+.share { grid-column: 2 / -1; display: block; height: 6px; margin-top: 3px; background: var(--sunk); border-radius: 3px; overflow: hidden; }
+.method summary:hover .share, .method[open] .share { background: var(--surface); }
+.share i { display: block; height: 100%; min-width: 4px; background: var(--hue); border-radius: 3px; }
+.share.could i { background: none; box-shadow: inset 0 0 0 1.5px var(--hue); }
 .sizes { display: flex; align-items: center; gap: 10px; }
 .sizes svg { flex: none; }
 .sizes circle { fill: none; stroke: var(--muted); stroke-width: 1.5; }
@@ -316,7 +351,10 @@ dialog form { text-align: right; margin-top: 12px; }
   #list th[colspan] { display: table-cell; }
 }
 @media (forced-colors: active) {
-  .mark > *, .clabel .sw { forced-color-adjust: none; }
+  .mark > *, .clabel .sw, .share i { forced-color-adjust: none; }
+  .switch input { border: 1px solid ButtonText; }
+  .switch input::before { background: ButtonText; }
+  .switch input:checked { background: Highlight; }
 }
 </style>
 </head>
@@ -327,10 +365,19 @@ dialog form { text-align: right; margin-top: 12px; }
     <h1>QCB Research Map</h1>
     <p>Who works on what in USC Quantitative and Computational Biology, and who works together</p>
   </div>
+  <div class="lens">
+    <fieldset class="seg">
+      <legend class="sr">Arrange faculty</legend>
+      <label><input type="radio" name="lens" value="field" checked><span>By field</span></label>
+      <label><input type="radio" name="lens" value="technique"><span>By technique</span></label>
+    </fieldset>
+    <label class="switch"><input type="checkbox" id="expand" role="switch">Expand into related fields</label>
+    <span id="expand-msg" role="status"></span>
+  </div>
   <fieldset class="seg">
     <legend class="sr">View</legend>
     <label><input type="radio" name="view" value="tsne" checked><span>t-SNE</span></label>
-    <label><input type="radio" name="view" value="umap"><span>UMAP</span></label>
+    <label><input type="radio" name="view" value="alt"><span id="alt-name">UMAP</span></label>
     <label><input type="radio" name="view" value="tree"><span>Tree</span></label>
     <label><input type="radio" name="view" value="list"><span>List</span></label>
   </fieldset>
@@ -344,6 +391,7 @@ dialog form { text-align: right; margin-top: 12px; }
       <label><input type="checkbox" data-group="core" checked><svg viewBox="-8 -8 16 16" aria-hidden="true"><circle r="7"/></svg>Core</label>
       <label><input type="checkbox" data-group="joint" checked><svg viewBox="-8 -8 16 16" aria-hidden="true"><rect x="-6.5" y="-6.5" width="13" height="13" rx="2"/></svg>Joint</label>
       <label><input type="checkbox" data-group="emeritus" checked><svg viewBox="-8 -8 16 16" aria-hidden="true"><polygon points="0,-7.5 7.5,6 -7.5,6"/></svg>Emeritus</label>
+      <label id="related-filter" hidden><input type="checkbox" data-group="related" checked><svg viewBox="-8 -8 16 16" aria-hidden="true"><polygon points="0,-7.5 7.5,0 0,7.5 -7.5,0"/></svg>Related fields</label>
     </fieldset>
     <label>Lines
       <select id="lines">
@@ -373,11 +421,11 @@ dialog form { text-align: right; margin-top: 12px; }
   <aside id="rail" tabindex="-1" aria-label="Details">
     <div id="detail"></div>
     <section id="legend" aria-label="Research clusters">
-      <h2>Research clusters</h2>
+      <h2 id="legend-title">Research clusters</h2>
       <ul class="legend-list" id="legend-list"></ul>
       <p class="key">Lines join people who have published together; thicker means a closer collaboration. Papers with many authors count for little.</p>
       <p class="key sizes"><svg viewBox="0 0 76 34" width="76" height="34" aria-hidden="true"><circle cx="7" cy="17" r="5.4"/><circle cx="26" cy="17" r="10.7"/><circle cx="59" cy="17" r="15.2"/></svg><span>Bigger marks are bigger labs: about 5, 20 and 40 people. Many sizes are rough estimates.</span></p>
-      <p class="foot">Unofficial, made by QBA, USC's Quantitative Biology Association. Papers from <a href="https://openalex.org">OpenAlex</a>, roster and photos from the <a href="https://www.qcb-dornsife.usc.edu/faculty">QCB website</a>, as of fall 2026.</p>
+      <p class="foot">Unofficial, made by QBA, USC's Quantitative Biology Association. Papers from <a href="https://openalex.org">OpenAlex</a>, roster and photos from the <a href="https://www.qcb-dornsife.usc.edu/faculty">QCB website</a> and department websites, as of fall 2026.</p>
     </section>
   </aside>
 </main>
@@ -386,7 +434,7 @@ dialog form { text-align: right; margin-top: 12px; }
 
 <dialog id="about" closedby="any" aria-labelledby="about-title">
   <h2 id="about-title">How this was made</h2>
-  <p>Everything here comes from what faculty have published, not from what anyone reported about their own work.</p>
+  <p>Most of this comes from what faculty have published. The technique view also reads labs' own websites and adds what students who worked there have told us.</p>
   <h3>Papers</h3>
   <p>Each person on the QCB faculty page was matched by hand to their records in OpenAlex, a free catalog of scholarly papers. Peer reviews, corrections and supplementary files were dropped, along with papers by other people who share their name. That left <span id="about-papers"></span> papers.</p>
   <h3>Research similarity</h3>
@@ -395,10 +443,16 @@ dialog form { text-align: right; margin-top: 12px; }
   <p>t-SNE and UMAP squeeze those 768 dimensions into two. Both keep each person near their closest research neighbors, at the cost of distances between distant groups, which don't mean much. The two views are different summaries of the same data, so trust what they agree on.</p>
   <h3>Clusters</h3>
   <p>Average-linkage hierarchical clustering on the same numbers; the Tree view shows the full hierarchy. The cluster names were written by hand.</p>
+  <h3>By technique</h3>
+  <p>By field arranges people by what they study. By technique arranges them by how they work, using a hand-written list of <span id="about-methods"></span> quantitative and computational methods, matched against each lab's paper titles, abstracts and keywords, and against its own website and faculty profile where those could be read (<span id="about-read"></span> of <span id="about-all"></span> labs). The technique positions and clusters use the same t-SNE, UMAP, MDS and clustering steps as the field view, on those method profiles. Each method appears at one level for a lab:</p>
+  <p><b>Demonstrated:</b> the lab does this work, by at least 3 papers making up at least 4% of its weighted papers, or two separate statements on its website. <b>Firsthand:</b> a student who worked there told us, which papers can't show. <b>Potential:</b> the lab generates data this method could use, or mentions the method once. A microscopy lab has computer vision potential even if it has never published on computer vision.</p>
+  <p>This is word matching, so labels can be wrong or missing, and labs that don't name their methods in abstracts look less quantitative than they are. Open a label to see the paper or source behind it, so you can check it yourself. In a spot check, about 9 in 10 labels that came from websites alone were right.</p>
+  <h3>Related fields</h3>
+  <p>Expanding adds <span id="about-added"></span> faculty from fields QBIO students also do research in: Biostatistics, Biomedical Engineering, Molecular and Cellular Biosciences, Marine and Environmental Biology, Neurobiology and the Brain and Creativity Institute, plus a few labs students have worked in. That makes <span id="about-wide-papers"></span> papers in all. Everyone's position is recalculated, so QCB faculty move too, and the second view uses MDS in place of UMAP, which keeps distances between far-apart groups more honest. <span id="about-wide-counted"></span> of the added labs have sizes counted from their websites. The other <span id="about-wide-unknown"></span> have no count, so their marks stay small, which doesn't mean they have no lab.</p>
   <h3>Lines</h3>
   <p>Two people are joined if they share a paper. Each shared paper adds 1 ÷ (authors − 1) to the pair's strength, so a two-author paper counts 1 and a 100-author consortium paper about 0.01.</p>
   <h3>Finding your match</h3>
-  <p>The model above is too big to run in your browser, so each of about 7,700 research terms comes with a precomputed score for every faculty member, from how much they use the term and how close the papers using it are to theirs. Your words are looked up and averaged, so nothing you type leaves your browser. Given only the title of a paper it hadn't seen, this finds the real author in the top 5 about 88% of the time, but your own words will be vaguer than a title. Your dot sits at the weighted average of your closest matches, which is an estimate: t-SNE and UMAP have no exact way to add a new point. A thrown dot works in reverse, blending the people nearest where it lands.</p>
+  <p>The model above is too big to run in your browser, so each of about 7,700 research terms comes with a precomputed score for every faculty member, from how much they use the term and how close the papers using it are to theirs. Your words are looked up and averaged, so nothing you type leaves your browser. Given only the title of a paper it hadn't seen, this finds the real author in the top 5 about 88% of the time (82% with related fields added, where there are more people to choose from), but your own words will be vaguer than a title. Your dot sits at the weighted average of your closest matches, which is an estimate: t-SNE and UMAP have no exact way to add a new point. A thrown dot works in reverse, blending the people nearest where it lands.</p>
   <h3>Lab sizes</h3>
   <p>A mark's area shows the size of the lab. For <span id="about-counted"></span> labs that's everyone the lab's own website lists, including the PI and any undergraduates. Labs differ in who they list and how often they update, so compare these loosely. The other <span id="about-estimated"></span> are estimates: USC co-authors on the person's senior-author papers since 2023, plus anyone QCB lists in the lab, plus the PI. Checked against the labs we could count, these are about right on average, but about a quarter are off by more than a factor of two. <span id="about-unknown"></span> faculty have no count and too few recent USC papers to estimate, so their marks stay small, which doesn't mean they have no lab.</p>
   <h3>Stats</h3>
@@ -406,7 +460,7 @@ dialog form { text-align: right; margin-top: 12px; }
   <h3>PhD students</h3>
   <p>The QCB website lists <span id="about-students"></span> PhD students in labs. <span id="about-nolab"></span> more haven't joined a lab yet, and students from other programs aren't listed, so a lab can have more students than you see here. Common names make papers hard to match, so a student's OpenAlex profile only counts if it appears on a paper by their advisor or has been checked by hand, and only papers listing USC or a QCB faculty co-author are shown. Some students will have papers that aren't found.</p>
   <h3>What it can't tell you</h3>
-  <p>It only sees published work, so new collaborations and unpublished projects won't appear, and some papers will be missing or misattributed. It says nothing about who is taking students. Check with faculty directly.</p>
+  <p>It only sees published work and what labs post online, so new collaborations and unpublished projects won't appear, and some papers will be missing or misattributed. It says nothing about who is taking students. Check with faculty directly.</p>
   <h3>Visit counts</h3>
   <p>Visits to this page are counted with <a href="https://www.goatcounter.com" target="_blank" rel="noopener">GoatCounter</a>, which uses no cookies and collects no personal data. What you type never leaves your browser.</p>
   <form method="dialog"><button class="ghost">Close</button></form>
@@ -416,12 +470,15 @@ dialog form { text-align: right; margin-top: 12px; }
 <script>
 (() => {
 "use strict";
-const D = window.QCB_MAP, P = D.people, E = D.edges, C = D.clusters, T = D.tree;
+const D = window.QCB_MAP, P = D.people, E = D.edges, METHODS = D.methods, worlds = D.worlds;
+// A world is one way of arranging people. People are numbered QCB first, so a world holds
+// the first WORLD.n of them, and a person keeps their number from one world to the next.
+let WORLD = worlds["qcb/field"], C = WORLD.clusters, T = WORLD.tree;
 const NS = "http://www.w3.org/2000/svg";
 const $ = (s) => document.querySelector(s);
 const scroller = $("#scroller"), mapSvg = $("#map"), treeSvg = $("#tree"), listBox = $("#list");
 const detail = $("#detail"), tip = $("#tip");
-const GROUP_NAMES = { core: "Core faculty", joint: "Joint faculty", emeritus: "Emeritus faculty" };
+const GROUP_NAMES = { core: "Core faculty", joint: "Joint faculty", emeritus: "Emeritus faculty", related: "Related field" };
 const FONT = getComputedStyle(document.body).fontFamily;
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
 const stacked = matchMedia("(max-width: 860px)");   // details sit below the map
@@ -440,15 +497,34 @@ const el = (tag, attrs, ...kids) => build(document.createElement(tag), attrs, ki
 const sv = (tag, attrs, ...kids) => build(document.createElementNS(NS, tag), attrs, kids);
 
 const S = {
-  view: "tsne", sel: null, hover: null, query: "", matches: null,
-  groups: { core: true, joint: true, emeritus: true }, lines: "0", zoom: 1,
+  view: "tsne", sel: null, hover: null, query: "", matches: null, scope: "qcb", lens: "field", method: null,
+  groups: { core: true, joint: true, emeritus: true, related: true }, lines: "0", zoom: 1,
 };
-const isMapView = () => S.view === "tsne" || S.view === "umap";
-const shown = (i) => S.groups[P[i].group];
+const isMapView = () => S.view === "tsne" || S.view === "alt";
+const byTechnique = () => S.lens === "technique";
+const shown = (i) => i < WORLD.n && S.groups[P[i].group];
+const inWorld = (e) => e.a < WORLD.n && e.b < WORLD.n;
 const edgeShown = (e) => S.lines !== "none" && e.s >= +S.lines && shown(e.a) && shown(e.b);
-const edgesOf = P.map(() => []);
-E.forEach((e, k) => { edgesOf[e.a].push(k); edgesOf[e.b].push(k); });
-edgesOf.forEach((list) => list.sort((x, y) => E[y].s - E[x].s));
+let edgesOf = [];
+function indexEdges() {
+  edgesOf = P.map(() => []);
+  E.forEach((e, k) => { edgesOf[e.a].push(k); edgesOf[e.b].push(k); });
+  edgesOf.forEach((list) => list.sort((x, y) => E[y].s - E[x].s));
+}
+indexEdges();
+// What depends on the world is copied onto each person, so the rest of the page can ask them.
+function fitPeople() {
+  P.forEach((p, i) => {
+    const on = i < WORLD.n;
+    p.cluster = on ? WORLD.cluster[i] : -1;
+    p.similar = on ? WORLD.similar[i] : [];
+    if (on) p.label = WORLD.labels[i];
+  });
+}
+fitPeople();
+const methodName = (r) => METHODS[r.m].name;
+// What to say about someone in a line: their words by field, their strongest methods by technique.
+const focus = (p, n = 3) => (byTechnique() ? p.methods.slice(0, n).map(methodName) : p.terms.slice(0, n));
 const other = (e, i) => (e.a === i ? e.b : e.a);
 const years = (e) => (e.y0 === e.y1 ? `${e.y0}` : `${e.y0}–${e.y1}`);
 const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
@@ -461,24 +537,28 @@ mapSvg.append(edgeLayer, clusterLayer, linkLayer, hitLayer, nodeLayer, orbitLaye
 
 const toPx = ([x, y]) => [ox + x * scale, oy + (1 - y) * scale];
 const fromPx = ([x, y]) => [(x - ox) / scale, 1 - (y - oy) / scale];
-const target = () => P.map((p) => toPx(p[S.view]));
+const layoutKey = () => WORLD.views[S.view === "alt" ? 1 : 0][0];
+const target = () => { const xy = WORLD.xy[layoutKey()]; return P.map((_, i) => toPx(xy[i] || [0.5, 0.5])); };
 const edgeWidth = (s) => 0.8 + 1.1 * Math.log10(1 + 10 * s);
 
 // A mark's area shows lab size. Labs of about four or fewer share the smallest mark.
-const markR = P.map((p) => Math.max(4.5, 2.4 * Math.sqrt(p.lab.size)));
-const reach = P.map((p, i) => markR[i] * (p.group === "core" ? 1 : 1.25));   // squares and triangles stick out further
+const markR = [], reach = [];
 
 function shape(group, r = 6) {
   if (group === "core") return sv("circle", { r });
   const side = r * 1.77, tall = r * 1.555;   // the same area as the circle
   if (group === "joint") return sv("rect", { x: -side / 2, y: -side / 2, width: side, height: side, rx: 2 });
+  if (group === "related") { const d = r * 1.25; return sv("polygon", { points: `0,${-d} ${d},0 0,${d} ${-d},0` }); }
   return sv("polygon", { points: `0,${-tall} ${tall * 0.866},${tall / 2} ${-tall * 0.866},${tall / 2}` });
 }
 const hueClass = (c) => `h-${C[c].color}`;
 
-const nodes = P.map((p, i) => {
-  const c = C[p.cluster];
+const nodes = [];
+function addPerson(p, i) {
+  markR[i] = Math.max(4.5, 2.4 * Math.sqrt(p.lab.size));
+  reach[i] = markR[i] * (p.group === "core" ? 1 : 1.25);   // the other shapes stick out further
   const label = sv("text", { class: "lab" }, p.label);
+  const mark = sv("g", {}, shape(p.group, markR[i]));
   const pointer = {
     onclick: () => select({ kind: "person", i }),
     onpointerenter: (ev) => { S.hover = { kind: "person", i }; emphasize(); showTip(personTip(i), ev.clientX, ev.clientY); },
@@ -488,20 +568,35 @@ const nodes = P.map((p, i) => {
   // Tap areas sit below every mark, so one person's can't cover a neighbor's mark.
   const hit = sv("circle", { class: "hit", r: Math.max(14, reach[i] + 4), ...pointer });
   const g = sv("g", {
-    class: "node", tabindex: 0, role: "button", "aria-label": `${p.name}, ${c.name}`, ...pointer,
+    class: `node${p.group === "related" ? " related" : ""}`, tabindex: 0, role: "button", ...pointer,
     onkeydown: (ev) => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); select({ kind: "person", i }, true); } },
     onfocus: () => { const r = g.getBoundingClientRect(); S.hover = { kind: "person", i }; emphasize(); showTip(personTip(i), r.right, r.top); },
     onblur: clearHover,
   },
     sv("circle", { class: "ring", r: reach[i] + 5 }),
-    sv("g", { class: `mark ${hueClass(p.cluster)}${c.hollow ? " hollow" : ""}` }, shape(p.group, markR[i])),
+    mark,
     label);
-  return { g, hit, label };
-});
+  nodes[i] = { g, hit, label, mark };
+}
+P.forEach(addPerson);
 // Biggest marks at the back, so small ones beside them can still be clicked.
-P.map((_, i) => i).sort((a, b) => markR[b] - markR[a]).forEach((i) => { hitLayer.append(nodes[i].hit); nodeLayer.append(nodes[i].g); });
+function stackNodes() {
+  P.map((_, i) => i).sort((a, b) => markR[b] - markR[a]).forEach((i) => { hitLayer.append(nodes[i].hit); nodeLayer.append(nodes[i].g); });
+}
+stackNodes();
+function paintNodes() {
+  P.forEach((p, i) => {
+    if (i >= WORLD.n) return;
+    const { g, mark, label } = nodes[i], c = C[p.cluster];
+    mark.setAttribute("class", `mark ${hueClass(p.cluster)}${c.hollow ? " hollow" : ""}`);
+    g.setAttribute("aria-label", `${p.name}, ${c.name}`);
+    label.textContent = p.label;
+  });
+}
+paintNodes();
 
-const edgeEls = E.map((e, k) => {
+const edgeEls = [];
+function addEdge(e, k) {
   const line = sv("line", { class: "edge", "stroke-width": edgeWidth(e.s) });
   const hit = sv("line", {
     class: "ehit",
@@ -511,22 +606,27 @@ const edgeEls = E.map((e, k) => {
     onpointerleave: clearHover,
   });
   edgeLayer.append(line, hit);
-  return { line, hit };
-});
+  edgeEls[k] = { line, hit };
+}
+E.forEach(addEdge);
 
-const clusterEls = C.map((c, ci) => {
-  const text = sv("text", {}, c.name);
-  const g = sv("g", {
-    class: `clabel ${hueClass(ci)}${c.hollow ? " hollow" : ""}`,
-    onclick: () => select({ kind: "cluster", c: ci }),
-    onpointerenter: () => { S.hover = { kind: "cluster", c: ci }; emphasize(); },
-    onpointerleave: clearHover,
-  }, sv("circle", { class: "sw", r: 4.5, cx: 5, cy: 8 }), text);
-  text.setAttribute("x", 15);
-  text.setAttribute("y", 12);
-  clusterLayer.append(g);
-  return g;
-});
+let clusterEls = [];
+function drawClusterLabels() {
+  clusterEls = C.map((c, ci) => {
+    const text = sv("text", {}, c.name);
+    const g = sv("g", {
+      class: `clabel ${hueClass(ci)}${c.hollow ? " hollow" : ""}`,
+      onclick: () => select({ kind: "cluster", c: ci }),
+      onpointerenter: () => { S.hover = { kind: "cluster", c: ci }; emphasize(); },
+      onpointerleave: clearHover,
+    }, sv("circle", { class: "sw", r: 4.5, cx: 5, cy: 8 }), text);
+    text.setAttribute("x", 15);
+    text.setAttribute("y", 12);
+    return g;
+  });
+  clusterLayer.replaceChildren(...clusterEls);
+}
+drawClusterLabels();
 
 function sizeMap() {
   const w = scroller.clientWidth, h = scroller.clientHeight;
@@ -628,7 +728,7 @@ function placeLabels() {
 
   const labelBoxes = [];
   C.forEach((c, ci) => {
-    const [ax, ay] = toPx(c.anchor[S.view]);
+    const [ax, ay] = toPx(c.anchor[layoutKey()]);
     const near = P.flatMap((p, i) => (p.cluster === ci && shown(i) && Math.hypot(pts[i][0] - ax, pts[i][1] - ay) <= 0.2 * scale + 1 ? [pts[i]] : []));
     const g = clusterEls[ci];
     if (!near.length) { g.style.display = "none"; return; }
@@ -691,17 +791,20 @@ function settle() {
   placeLabels();
   settleDot();
 }
-function animateTo(next) {
+// People numbered from `placed` on are joining the map, so they appear where they belong.
+function animateTo(next, placed = next.length) {
   cancelAnimationFrame(tween);
   if (reducedMotion.matches || !pts.length) { pts = next; drawPoints(); placeLabels(); settleDot(); return; }
-  const from = pts.map((q) => q.slice()), start = performance.now(), ms = 650;
+  const from = next.map((q, i) => (i < placed ? pts[i] : q).slice()), start = performance.now(), ms = 650;
+  pts = from;
   mapSvg.classList.add("moving");
+  mapSvg.classList.toggle("arriving", placed < WORLD.n);
   const step = (now) => {
     const t = Math.min(1, (now - start) / ms), e = t < .5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2;
     pts = from.map(([x, y], i) => [x + (next[i][0] - x) * e, y + (next[i][1] - y) * e]);
     drawPoints();
     if (t < 1) tween = requestAnimationFrame(step);
-    else { placeLabels(); mapSvg.classList.remove("moving"); settleDot(); }
+    else { placeLabels(); mapSvg.classList.remove("moving", "arriving"); settleDot(); }
   };
   tween = requestAnimationFrame(step);
 }
@@ -724,7 +827,7 @@ function setZoom(z) {
 
 function drawTree() {
   treeSvg.replaceChildren();
-  const n = P.length, row = 20, top = 44;
+  const n = T.order.length, row = 20, top = 44;
   const width = Math.max(scroller.clientWidth, 320);
   const wide = width >= 760, nameW = wide ? 112 : 92, clusterW = wide ? 236 : 8;
   const x0 = 16, x1 = width - nameW - clusterW;
@@ -787,7 +890,7 @@ function drawTree() {
 
 function drawList() {
   const body = [];
-  const coauthors = (i) => edgesOf[i].length;
+  const coauthors = (i) => edgesOf[i].filter((k) => inWorld(E[k])).length;
   C.forEach((c, ci) => {
     const members = P.map((_, i) => i).filter((i) => P[i].cluster === ci && shown(i) && (!S.matches || S.matches.has(i)))
       .sort((a, b) => P[a].label.localeCompare(P[b].label));
@@ -800,7 +903,7 @@ function drawList() {
         return el("tr", {},
           el("td", {}, el("button", { type: "button", class: "namebtn", onclick: () => select({ kind: "person", i }, true) }, p.name)),
           el("td", {}, p.dept),
-          el("td", {}, GROUP_NAMES[p.group].split(" ")[0]),
+          el("td", {}, byTechnique() ? focus(p, 2).join("; ") : GROUP_NAMES[p.group].split(" ")[0]),
           el("td", { class: "num" }, labSize(p)),
           el("td", { class: "num" }, p.h),
           el("td", { class: "num" }, p.n),
@@ -810,9 +913,9 @@ function drawList() {
   listBox.replaceChildren(el("table", {},
     el("caption", { class: "sr" }, "Faculty by research cluster"),
     el("thead", {}, el("tr", {},
-      el("th", { scope: "col" }, "Name"), el("th", { scope: "col" }, "Home department"), el("th", { scope: "col" }, "Group"),
+      el("th", { scope: "col" }, "Name"), el("th", { scope: "col" }, "Home department"), el("th", { scope: "col" }, byTechnique() ? "Main methods" : "Group"),
       el("th", { scope: "col", class: "num" }, "Lab size"), el("th", { scope: "col", class: "num" }, "h-index"),
-      el("th", { scope: "col", class: "num" }, "Papers"), el("th", { scope: "col", class: "num" }, "QCB co-authors"))),
+      el("th", { scope: "col", class: "num" }, "Papers"), el("th", { scope: "col", class: "num" }, coauthorName()))),
     body));
   if (!body.length) listBox.replaceChildren(el("p", { class: "sub" }, "Nobody matches."));
 }
@@ -823,9 +926,10 @@ function setFor(item) {
   if (!item) return null;
   if (item.kind === "person") return new Set([item.i, ...edgesOf[item.i].filter((k) => edgeShown(E[k])).map((k) => other(E[k], item.i))]);
   if (item.kind === "edge") return new Set([E[item.k].a, E[item.k].b]);
+  if (item.kind === "method") return new Set(P.flatMap((p, i) => (i < WORLD.n && p.methods.some((r) => r.m === item.m) ? [i] : [])));
   return new Set(P.flatMap((p, i) => (p.cluster === item.c ? [i] : [])));
 }
-function emphasisSet() { return setFor(S.hover) || setFor(S.sel) || S.matches || (S.you && S.you.set); }
+function emphasisSet() { return setFor(S.hover) || setFor(S.method) || setFor(S.sel) || S.matches || (S.you && S.you.set); }
 
 function emphasize() {
   const item = S.hover || S.sel, set = emphasisSet();
@@ -862,7 +966,7 @@ function clearHover() { S.hover = null; hideTip(); emphasize(); }
 
 function personTip(i) {
   const p = P[i];
-  return [el("b", {}, p.name), el("span", {}, C[p.cluster].name), el("span", {}, p.terms.slice(0, 3).join(", ")),
+  return [el("b", {}, p.name), el("span", {}, C[p.cluster].name), el("span", {}, focus(p).join(byTechnique() ? "; " : ", ")),
     p.lab.source ? el("span", {}, `Lab of ${p.lab.source === "estimate" ? "about " : ""}${p.lab.size}`) : null].filter(Boolean);
 }
 function edgeTip(k) {
@@ -908,8 +1012,57 @@ function labNote(p) {
   if (p.lab.source === "website") {
     return el("p", { class: "sub" }, "Lab size from ", el("a", { href: p.lab.url, target: "_blank", rel: "noopener" }, "the lab's website"), `, counting everyone it lists, PI included.${p.lab.note ? ` ${p.lab.note}` : ""}`);
   }
+  if (p.group === "related") return el("p", { class: "sub" }, "Lab size unknown: we couldn't count this lab from a website.");
   return el("p", { class: "sub" }, p.lab.source ? "Lab size is a rough estimate from recent USC co-authors." : "Lab size unknown: no count, and too few recent USC papers to estimate.");
 }
+
+// Methods, strongest evidence first. Opening a row lights up every lab with that method.
+const LEVELS = [
+  ["demonstrated", "Demonstrated", "in its papers or on its website"],
+  ["firsthand", "Firsthand", "from students who worked here"],
+  ["potential", "Potential", "it makes data this could use"],
+];
+
+function methodRow(r) {
+  const item = { kind: "method", m: r.m }, counted = r.n >= 3 && r.l !== "firsthand";
+  const share = `${Math.max(1, Math.round(r.s * 100))}%`;
+  const told = r.f && r.l !== "firsthand";
+  return el("li", {
+    onpointerenter: () => { S.hover = item; emphasize(); }, onpointerleave: clearHover,
+  }, el("details", {
+    class: "method", name: "method",
+    ontoggle: (ev) => {
+      if (ev.newState === "open") S.method = item;
+      else if (S.method && S.method.m === r.m) S.method = null;
+      emphasize();
+      if (isMapView()) placeLabels();
+    },
+  },
+  el("summary", {}, el("b", {}, methodName(r)), el("span", { class: "val" }, counted ? share : r.l === "firsthand" ? "" : "website"),
+    told ? el("span", { class: "sub" }, "Also reported firsthand") : null,
+    counted ? el("span", { class: `share${r.l === "potential" ? " could" : ""}` }, el("i", { style: `width:${Math.round(r.s * 100)}%` })) : null),
+  el("div", { class: "more" },
+    counted ? el("p", { class: "sub" }, `${r.n} of ${plural(r.of, "paper")}${r.l === "potential" ? " use data this could work with" : ""}.`) : null,
+    r.w ? el("p", { class: "sub" }, r.l === "potential" ? "Mentioned on the lab's website or profile." : "Stated on the lab's website or profile.") : null,
+    r.f ? el("p", { class: "sub" }, r.f) : null,
+    r.x ? el("ul", { class: "papers" }, paperItem(r.x)) : null)));
+}
+
+function methodSection(p) {
+  if (!p.methods.length) return el("p", { class: "sub" }, "No method shows up clearly in this lab's papers or website, which doesn't mean there's no quantitative work here.");
+  return el("div", { class: hueClass(p.cluster) }, LEVELS.flatMap(([level, name, says]) => {
+    const rows = p.methods.filter((r) => r.l === level);
+    return rows.length ? [el("p", { class: "level" }, el("b", {}, name), ` ${says}`), el("ul", {}, rows.map(methodRow))] : [];
+  }), el("p", { class: "foot" }, "Percentages are shares of the lab's papers, counting recent ones more. Open a method to see the evidence and light up every lab that has it."));
+}
+
+// In the technique view, what two people have in common.
+function sharedMethods(i, j) {
+  const theirs = new Set(P[j].methods.filter((r) => r.l !== "potential").map((r) => r.m));
+  const both = P[i].methods.filter((r) => r.l !== "potential" && theirs.has(r.m)).slice(0, 2).map(methodName);
+  return both.length ? `Both: ${both.join("; ")}` : "Similar mix of methods";
+}
+const coauthorName = () => (S.scope === "all" ? "Co-authors on this map" : "QCB co-authors");
 
 function yearChart(p) {
   const [first, counts] = p.years, last = D.meta.through, most = Math.max(...counts);
@@ -968,11 +1121,13 @@ function personPanel(i) {
         el("div", { class: "links" }, links))),
     statTiles(p),
     labNote(p),
+    el("h3", {}, "Methods"),
+    methodSection(p),
     el("h3", {}, "Papers per year"),
     yearChart(p),
     el("h3", {}, "Research focus"),
     el("div", { class: "chips" }, p.terms.slice(0, 9).map((t) => el("button", { type: "button", class: "chip", onclick: () => setQuery(t), "aria-label": `Search for ${t}` }, t))),
-    el("h3", {}, `QCB co-authors (${collaborators.length})`),
+    el("h3", {}, `${coauthorName()} (${collaborators.length})`),
     collaborators.length
       ? el("ul", { class: "rows" }, collaborators.map((k) => {
         const e = E[k], j = other(e, i);
@@ -981,11 +1136,11 @@ function personPanel(i) {
           onpointerenter: () => { S.hover = { kind: "edge", k }; emphasize(); }, onpointerleave: clearHover,
         }, el("b", {}, P[j].name), el("span", { class: "sub" }, `${plural(e.n, "shared paper")}, ${years(e)}`)));
       }))
-      : el("p", { class: "sub" }, "No shared papers with other QCB faculty in this data."),
+      : el("p", { class: "sub" }, `No shared papers with ${S.scope === "all" ? "anyone else on this map" : "other QCB faculty"} in this data.`),
     p.students.length ? el("h3", {}, `QCB PhD students (${p.students.length})`) : null,
     p.students.length ? el("ul", {}, p.students.map(studentRow)) : null,
-    el("h3", {}, "Most similar research"),
-    el("ul", { class: "rows" }, p.similar.filter(shown).map((j) => el("li", {}, person(j, partners.has(j) ? "Has published with them" : "No shared papers yet")))),
+    el("h3", {}, byTechnique() ? "Most similar methods" : "Most similar research"),
+    el("ul", { class: "rows" }, p.similar.filter(shown).map((j) => el("li", {}, person(j, byTechnique() ? sharedMethods(i, j) : partners.has(j) ? "Has published with them" : "No shared papers yet")))),
     el("h3", {}, "Recent papers"),
     el("ul", { class: "papers" }, p.papers.map((x) => paperItem(x))),
     el("p", { class: "foot" }, `Based on ${plural(p.n, "paper")} in OpenAlex. Google Scholar's counts usually run higher.`),
@@ -1016,10 +1171,10 @@ function clusterPanel(ci) {
     backButton(),
     el("h2", { tabindex: -1 }, c.name),
     el("p", { class: "sub" }, `${plural(c.size, "person").replace("persons", "people")}, ${plural(inside, "collaboration")} within the group`),
-    el("h3", {}, "Words that set this group apart"),
+    el("h3", {}, byTechnique() ? "Methods that set this group apart" : "Words that set this group apart"),
     el("div", { class: "chips" }, c.terms.map((t) => el("button", { type: "button", class: "chip", onclick: () => setQuery(t), "aria-label": `Search for ${t}` }, t))),
     el("h3", {}, "People"),
-    el("ul", { class: "rows" }, members.map((i) => el("li", {}, person(i, P[i].terms.slice(0, 3).join(", "))))),
+    el("ul", { class: "rows" }, members.map((i) => el("li", {}, person(i, focus(P[i]).join(byTechnique() ? "; " : ", "))))),
   ];
 }
 
@@ -1035,9 +1190,11 @@ function resultsPanel() {
 
 function introPanel() {
   return [
-    el("h2", { tabindex: -1 }, "Who works on what"),
-    el("p", {}, "Each mark is a faculty member. People who sit close together publish on similar things, whatever department they're in."),
-    el("p", { class: "sub" }, `${D.meta.faculty} faculty · ${D.meta.papers.toLocaleString("en-US")} papers · ${E.length} collaborations`),
+    el("h2", { tabindex: -1 }, byTechnique() ? "Who uses which methods" : "Who works on what"),
+    el("p", {}, byTechnique()
+      ? "Each mark is a faculty member. People who sit close together use similar quantitative and computational methods, whatever they study."
+      : "Each mark is a faculty member. People who sit close together publish on similar things, whatever department they're in."),
+    el("p", { class: "sub" }, `${WORLD.n} faculty · ${WORLD.papers.toLocaleString("en-US")} papers · ${WORLD.edges} collaborations`),
     el("p", { class: "sub" }, "Pick a person or a cluster, or search for a topic you're curious about."),
     matchForm,
   ];
@@ -1045,6 +1202,7 @@ function introPanel() {
 
 function renderDetail(moveFocus) {
   const s = S.sel;
+  S.method = null;   // its row is about to go
   const kids = !s ? (S.matches ? resultsPanel() : S.you ? youPanel() : introPanel())
     : s.kind === "person" ? personPanel(s.i)
       : s.kind === "edge" ? edgePanel(s.k)
@@ -1066,6 +1224,11 @@ function select(item, moveFocus) {
 
 /* ---------- Search ---------- */
 
+function searchWorld() {
+  S.results = search(S.query);
+  S.matches = S.query.trim().length >= 2 ? new Set(S.results.map((r) => r.i)) : null;
+}
+
 function search(raw) {
   const q = raw.trim().toLowerCase();
   if (q.length < 2) return [];
@@ -1073,6 +1236,7 @@ function search(raw) {
   const word = new RegExp(`(^|[\\s-])${esc}`);
   const out = [];
   P.forEach((p, i) => {
+    if (i >= WORLD.n) return;
     let score = 0, why = "";
     const student = p.students.find((s) => word.test(s.name.toLowerCase()));
     if (word.test(p.name.toLowerCase())) score = 1000;
@@ -1082,6 +1246,8 @@ function search(raw) {
       if (t >= 0) { score = 100 - t; why = p.terms[t]; }
       const topic = p.topics.find(([name]) => word.test(name.toLowerCase()));
       if (topic && score < 90) { score = 90; why = topic[0]; }
+      const method = p.methods.find((r) => word.test(methodName(r).toLowerCase()));
+      if (method && (byTechnique() || !score)) { score = method.l === "potential" ? 85 : 105; why = `${methodName(method)}: ${method.l}`; }
       if (!score && word.test(p.dept.toLowerCase())) { score = 10; why = p.dept; }
     }
     if (score) out.push({ i, score, why });
@@ -1092,8 +1258,7 @@ function search(raw) {
 function setQuery(text) {
   $("#q").value = text;
   S.query = text;
-  S.results = search(text);
-  S.matches = text.trim().length >= 2 ? new Set(S.results.map((r) => r.i)) : null;
+  searchWorld();
   S.sel = null;
   renderDetail();
   emphasize();
@@ -1109,19 +1274,22 @@ it holds, which gives its place on either map, and `value` ranks everyone agains
 Typed text sets the blend from word matches. A thrown dot sets it from where it lands.
 */
 
-let M = null;   // match-data.js, loaded the first time someone uses this
+let M = null;   // the table for the people on the map, loaded the first time someone uses it
+const MATCH_FILES = { qcb: ["match-data.js", "QCB_MATCH"], all: ["match-data-extended.js", "QCB_MATCH_EXTENDED"] };
+const matchTables = {};
 function loadMatch() {
-  loadMatch.ready = loadMatch.ready || new Promise((ok, fail) => {
-    document.head.append(el("script", { src: "match-data.js", onload: ok, onerror: fail }));
+  const scope = S.scope, [src, name] = MATCH_FILES[scope];
+  matchTables[scope] = matchTables[scope] || new Promise((ok, fail) => {
+    document.head.append(el("script", { src, onload: ok, onerror: fail }));
   }).then(() => {
-    const raw = window.QCB_MATCH, bytes = (b) => Uint8Array.from(atob(b), (c) => c.charCodeAt(0));
+    const raw = window[name], bytes = (b) => Uint8Array.from(atob(b), (c) => c.charCodeAt(0));
     const terms = raw.terms.split("|");
-    M = {
+    return {
       terms, n: raw.n, unit: raw.range / 127, aliases: raw.aliases, stop: new Set(raw.stop), skip: new Set(raw.skip),
       index: new Map(terms.map((t, k) => [t, k])), rarity: bytes(raw.rarity), table: new Int8Array(bytes(raw.table).buffer),
     };
   });
-  return loadMatch.ready;
+  return matchTables[scope].then((table) => { if (scope === S.scope) M = table; });
 }
 const H = (k, i) => M.table[k * M.n + i] * M.unit;   // how strongly term k points at person i
 
@@ -1147,7 +1315,7 @@ function rankLinks(value, why) {
   return order.slice(0, 8).map((j) => ({ j, rel: Math.max(0, value[j]) / best, terms: why(j) }));
 }
 
-function textDot(found, missing) {
+function textDot(found, missing, text) {
   const value = new Float64Array(M.n);
   let total = 0;
   for (const [, k] of found) {
@@ -1161,7 +1329,7 @@ function textDot(found, missing) {
   const w = new Float64Array(M.n), top = value[links[0].j];
   links.slice(0, 5).forEach(({ j }) => { w[j] = Math.exp((value[j] - top) / 0.4); });
   const terms = found.slice().sort((a, b) => M.rarity[b[1]] - M.rarity[a[1]]).map(([t]) => t);
-  return { kind: "text", found, missing, terms, w, links, set: new Set(links.slice(0, 5).map((l) => l.j)) };
+  return { kind: "text", text, found, missing, terms, w, links, set: new Set(links.slice(0, 5).map((l) => l.j)) };
 }
 
 function spotDot([x, y]) {
@@ -1169,7 +1337,7 @@ function spotDot([x, y]) {
   // a dot that lands far from anyone still blends its few nearest people.
   const near = P.map((_, i) => i).filter(shown).map((i) => [i, Math.hypot(pts[i][0] - x, pts[i][1] - y) / scale])
     .sort((a, b) => a[1] - b[1]).slice(0, 6);
-  const reach = Math.max(0.06, near[0][1] * 1.3), n = P.length, Sim = D.similarity;
+  const reach = Math.max(0.06, near[0][1] * 1.3), n = WORLD.n, Sim = WORLD.similarity;
   const w = new Float64Array(n);
   near.forEach(([i, d]) => { w[i] = Math.exp(-((d / reach) ** 2)); });
   // Cosine between the blend and each person, from the faculty similarity matrix.
@@ -1180,12 +1348,13 @@ function spotDot([x, y]) {
   for (let j = 0; j < n; j++) value[j] /= Math.sqrt(Math.max(norm, 1e-9));
   // What this spot is about: the top terms of the people around it, closest first.
   const pull = new Map();
-  for (const [i] of near) P[i].terms.slice(0, 30).forEach((t, r) => pull.set(t, (pull.get(t) || 0) + w[i] / (r + 4)));
+  const talksOf = (i) => (byTechnique() ? P[i].methods.map(methodName) : P[i].terms);
+  for (const [i] of near) talksOf(i).slice(0, 30).forEach((t, r) => pull.set(t, (pull.get(t) || 0) + w[i] / (r + 4)));
   const about = [...pull].sort((a, b) => b[1] - a[1]).map(([t]) => t);
   const shortlist = new Set(about.slice(0, 40));
   const why = (j) => {   // in each person's own order, so the lines don't all say the same thing
-    const shared = P[j].terms.filter((t) => shortlist.has(t)).slice(0, 3);
-    return shared.length ? shared : P[j].terms.slice(0, 3);
+    const shared = talksOf(j).filter((t) => shortlist.has(t)).slice(0, 3);
+    return shared.length ? shared : talksOf(j).slice(0, 3);
   };
   const links = rankLinks(value, why);
   return { kind: "spot", w, links, terms: about.slice(0, 9), set: new Set(links.slice(0, 5).map((l) => l.j)) };
@@ -1353,7 +1522,7 @@ function refreshYou() {
   const you = S.you;
   if (!you) return;
   if (you.kind === "text") {
-    S.you = textDot(you.found, you.missing);
+    S.you = textDot(you.found, you.missing, you.text);
     if (isMapView()) settleDot();
   } else if (you.at) {
     const at = you.at;
@@ -1479,10 +1648,12 @@ const matchForm = el("form", {
     if (!meBox.value.trim()) { meBox.focus(); return; }
     meMsg.textContent = "";
     loadMatch().then(() => {
+      if (!M) return;
       const { found, missing } = readText(meBox.value);
       if (!found.length) { meMsg.textContent = "None of those words appear in these papers. Try naming a topic, like “cancer genomics”."; return; }
+      if (M.n !== WORLD.n) return;   // the map changed while the table loaded
       if (!isMapView()) { $('input[value="tsne"]').checked = true; setView("tsne"); }
-      S.you = textDot(found, missing);
+      S.you = textDot(found, missing, meBox.value);
       S.sel = null;
       if (S.query) setQuery("");
       renderDetail();
@@ -1533,7 +1704,7 @@ function youPanel() {
 /* ---------- Views and controls ---------- */
 
 function setView(view) {
-  const was = S.view;
+  const wasMap = isMapView();
   S.view = view;
   document.body.dataset.view = view;
   const map = isMapView();
@@ -1547,7 +1718,7 @@ function setView(view) {
   if (S.you) S.you.at = null;
   if (map) {
     scroller.scrollTo(0, 0);
-    if (was === "tsne" || was === "umap") animateTo(target());
+    if (wasMap) animateTo(target());
     else settle();
   } else {
     scroller.scrollTo(0, 0);
@@ -1558,7 +1729,92 @@ function setView(view) {
   emphasize();
 }
 
+// A typed dot survives a change of map: on the same people it keeps its matches, and on
+// different people it's matched again. A thrown dot marked a spot on a map that has gone.
+function moveDot(sameTable) {
+  const you = S.you;
+  if (!you) return;
+  cancelAnimationFrame(flight);
+  linkEls.forEach((l) => { l.grow = 1; });
+  if (you.kind !== "text") { S.you = null; return; }
+  you.at = null;
+  you.live = null;
+  if (sameTable) return;
+  S.you = null;
+  loadMatch().then(() => {
+    if (S.you || !M || M.n !== WORLD.n) return;
+    const { found, missing } = readText(you.text);
+    S.you = textDot(found, missing, you.text);
+    if (!S.sel) renderDetail();
+    emphasize();
+    if (isMapView()) { placeLabels(); settleDot(); }
+  }, showLoadError);
+}
+
+function setWorld() {
+  const placed = WORLD.n, scope = $("#expand").checked ? "all" : "qcb";
+  const sameTable = scope === S.scope;
+  S.scope = scope;
+  S.lens = $('input[name="lens"]:checked').value;
+  WORLD = worlds[`${S.scope}/${S.lens}`];
+  C = WORLD.clusters;
+  T = WORLD.tree;
+  fitPeople();
+  paintNodes();
+  drawClusterLabels();
+  drawLegend();
+  orbitOf = -2;
+  const how = byTechnique() ? "methods" : "research";
+  $("#alt-name").textContent = WORLD.views[1][1];
+  $("#related-filter").hidden = scope !== "all";
+  $("#legend-title").textContent = byTechnique() ? "Technique clusters" : "Research clusters";
+  $("#note").textContent = `Nearby means similar ${how}, though distances between far-apart groups don't mean much. Bigger marks are bigger labs.`;
+  scroller.setAttribute("aria-label", `Map of faculty by ${byTechnique() ? "methods" : "research similarity"}. Use the List view for a table of the same information.`);
+  // Clusters are different on every map, and a person or a line may not be on this one.
+  const s = S.sel;
+  if (s && (s.kind === "cluster" || (s.kind === "person" ? s.i >= WORLD.n : !inWorld(E[s.k])))) S.sel = null;
+  S.hover = null;
+  if (S.query) searchWorld();
+  moveDot(sameTable);
+  applyFilters();
+  renderDetail();
+  if (isMapView()) animateTo(target(), placed);
+  else {
+    pts = target();
+    if (S.view === "tree") drawTree(); else drawList();
+  }
+  emphasize();
+  $("#status").textContent = `Showing ${WORLD.n} faculty by ${byTechnique() ? "technique" : "field"}`;
+}
+
+// The related fields load the first time someone asks for them.
+function loadExtended() {
+  loadExtended.ready = loadExtended.ready || new Promise((ok, fail) => {
+    document.head.append(el("script", { src: "map-data-extended.js", onload: ok, onerror: fail }));
+  }).then(() => {
+    const more = window.QCB_MAP_EXTENDED, people = P.length, edges = E.length;
+    Object.assign(worlds, more.worlds);
+    P.push(...more.people);
+    E.push(...more.edges);
+    more.people.forEach((p, k) => addPerson(p, people + k));
+    more.edges.forEach((e, k) => addEdge(e, edges + k));
+    indexEdges();
+    stackNodes();
+  }, (err) => { loadExtended.ready = null; throw err; });
+  return loadExtended.ready;
+}
+
 document.querySelectorAll('input[name="view"]').forEach((r) => r.addEventListener("change", () => setView(r.value)));
+document.querySelectorAll('input[name="lens"]').forEach((r) => r.addEventListener("change", setWorld));
+$("#expand").addEventListener("change", (ev) => {
+  const msg = $("#expand-msg");
+  if (!ev.target.checked || worlds["all/field"]) { setWorld(); return; }
+  msg.textContent = "Loading…";
+  loadExtended().then(() => { msg.textContent = ""; setWorld(); }, () => {
+    ev.target.checked = false;
+    msg.textContent = "Couldn't load the related fields. Try again.";
+  });
+});
 document.querySelectorAll("[data-group]").forEach((box) => box.addEventListener("change", () => {
   S.groups[box.dataset.group] = box.checked;
   applyFilters();
@@ -1607,7 +1863,14 @@ mapSvg.addEventListener("click", (ev) => {
 window.addEventListener("click", (ev) => { if (dragged) { ev.stopPropagation(); ev.preventDefault(); dragged = false; } }, true);
 
 const about = $("#about");
-$("#about-papers").textContent = D.meta.papers.toLocaleString("en-US");
+$("#about-papers").textContent = WORLD.papers.toLocaleString("en-US");
+$("#about-methods").textContent = METHODS.length;
+$("#about-read").textContent = D.meta.wide.readLabs;
+$("#about-all").textContent = D.meta.wide.faculty;
+$("#about-added").textContent = D.meta.wide.added;
+$("#about-wide-papers").textContent = D.meta.wide.papers.toLocaleString("en-US");
+$("#about-wide-counted").textContent = D.meta.wide.counted;
+$("#about-wide-unknown").textContent = D.meta.wide.unknown;
 $("#about-counted").textContent = D.meta.labSources.website;
 $("#about-estimated").textContent = D.meta.labSources.estimate;
 $("#about-unknown").textContent = D.meta.labSources.none;
@@ -1616,12 +1879,15 @@ $("#about-nolab").textContent = D.meta.noLab;
 $("#about-open").addEventListener("click", () => about.showModal());
 about.addEventListener("click", (ev) => { if (ev.target === about) about.close(); });
 
-$("#legend-list").append(...C.map((c, ci) => el("li", {}, el("button", {
-  type: "button", class: hueClass(ci), "aria-pressed": "false",
-  onclick: () => select(S.sel && S.sel.kind === "cluster" && S.sel.c === ci ? null : { kind: "cluster", c: ci }),
-  onpointerenter: () => { S.hover = { kind: "cluster", c: ci }; emphasize(); },
-  onpointerleave: clearHover,
-}, el("span", { class: `swatch${c.hollow ? " hollow" : ""}` }), c.name, el("span", { class: "count" }, c.size)))));
+function drawLegend() {
+  $("#legend-list").replaceChildren(...C.map((c, ci) => el("li", {}, el("button", {
+    type: "button", class: hueClass(ci), "aria-pressed": "false",
+    onclick: () => select(S.sel && S.sel.kind === "cluster" && S.sel.c === ci ? null : { kind: "cluster", c: ci }),
+    onpointerenter: () => { S.hover = { kind: "cluster", c: ci }; emphasize(); },
+    onpointerleave: clearHover,
+  }, el("span", { class: `swatch${c.hollow ? " hollow" : ""}` }), c.name, el("span", { class: "count" }, c.size)))));
+}
+drawLegend();
 
 new ResizeObserver(() => {
   if (isMapView()) { cancelAnimationFrame(tween); mapSvg.classList.remove("moving"); settle(); }

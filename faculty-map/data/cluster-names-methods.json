@@ -1,0 +1,9 @@
+[
+  {"anchor": "mark-chaisson", "name": "Genomics & statistical genetics", "color": "green"},
+  {"anchor": "remo-rohs", "name": "Structure & molecular simulation", "color": "magenta"},
+  {"anchor": "eva-kanso", "name": "Physics-based modeling", "color": "blue"},
+  {"anchor": "stacey-finley", "name": "Systems biology & single cells", "color": "yellow"},
+  {"anchor": "paul-thompson", "name": "Neuroimaging analysis", "color": "aqua"},
+  {"anchor": "yan-liu", "name": "Machine learning & health data", "color": "red"},
+  {"anchor": "naomi-levine", "name": "Ecosystem modeling", "color": "orange"}
+]

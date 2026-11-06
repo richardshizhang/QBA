@@ -1,0 +1,21 @@
+{
+  "julia-schwartzman": {
+    "methods": [
+      "computer-vision",
+      "systems-biology"
+    ],
+    "note": "A QBIO student did computer vision and systems biology work in this lab."
+  },
+  "noelle-held": {
+    "methods": [
+      "proteomics"
+    ],
+    "note": "Known among QBIO students for its proteomics."
+  },
+  "xiaojiang-chen": {
+    "methods": [
+      "structure-determination"
+    ],
+    "note": "A QBIO student did structural biology work in this lab."
+  }
+}

@@ -1,0 +1,986 @@
+{
+ "representation": "methods",
+ "include_emeriti": true,
+ "layouts": {
+  "tsne": {
+   "name": "t-SNE",
+   "settings": {
+    "perplexity": 4
+   }
+  },
+  "umap": {
+   "name": "UMAP",
+   "settings": {
+    "n_neighbors": 6,
+    "min_dist": 0.3
+   }
+  }
+ },
+ "tree": {
+  "representation": "methods",
+  "linkage": "average",
+  "distance": "cosine",
+  "k": 7,
+  "silhouette": 0.336,
+  "merges": [
+   {
+    "left": 31,
+    "right": 46,
+    "height": 0.0706,
+    "size": 2
+   },
+   {
+    "left": 17,
+    "right": 43,
+    "height": 0.0793,
+    "size": 2
+   },
+   {
+    "left": 6,
+    "right": 34,
+    "height": 0.0835,
+    "size": 2
+   },
+   {
+    "left": 5,
+    "right": 15,
+    "height": 0.0908,
+    "size": 2
+   },
+   {
+    "left": 9,
+    "right": 30,
+    "height": 0.0925,
+    "size": 2
+   },
+   {
+    "left": 44,
+    "right": 49,
+    "height": 0.1125,
+    "size": 3
+   },
+   {
+    "left": 8,
+    "right": 51,
+    "height": 0.1333,
+    "size": 3
+   },
+   {
+    "left": 7,
+    "right": 48,
+    "height": 0.1402,
+    "size": 3
+   },
+   {
+    "left": 42,
+    "right": 47,
+    "height": 0.1481,
+    "size": 2
+   },
+   {
+    "left": 52,
+    "right": 54,
+    "height": 0.1619,
+    "size": 5
+   },
+   {
+    "left": 14,
+    "right": 32,
+    "height": 0.1778,
+    "size": 2
+   },
+   {
+    "left": 21,
+    "right": 50,
+    "height": 0.1825,
+    "size": 3
+   },
+   {
+    "left": 24,
+    "right": 35,
+    "height": 0.184,
+    "size": 2
+   },
+   {
+    "left": 38,
+    "right": 60,
+    "height": 0.2124,
+    "size": 3
+   },
+   {
+    "left": 25,
+    "right": 26,
+    "height": 0.2131,
+    "size": 2
+   },
+   {
+    "left": 28,
+    "right": 57,
+    "height": 0.2152,
+    "size": 6
+   },
+   {
+    "left": 27,
+    "right": 29,
+    "height": 0.2194,
+    "size": 2
+   },
+   {
+    "left": 10,
+    "right": 20,
+    "height": 0.2248,
+    "size": 2
+   },
+   {
+    "left": 11,
+    "right": 18,
+    "height": 0.2568,
+    "size": 2
+   },
+   {
+    "left": 2,
+    "right": 41,
+    "height": 0.2809,
+    "size": 2
+   },
+   {
+    "left": 3,
+    "right": 56,
+    "height": 0.289,
+    "size": 3
+   },
+   {
+    "left": 4,
+    "right": 37,
+    "height": 0.2941,
+    "size": 2
+   },
+   {
+    "left": 63,
+    "right": 67,
+    "height": 0.3172,
+    "size": 8
+   },
+   {
+    "left": 40,
+    "right": 61,
+    "height": 0.3176,
+    "size": 4
+   },
+   {
+    "left": 12,
+    "right": 45,
+    "height": 0.3191,
+    "size": 2
+   },
+   {
+    "left": 19,
+    "right": 55,
+    "height": 0.3253,
+    "size": 4
+   },
+   {
+    "left": 1,
+    "right": 59,
+    "height": 0.3284,
+    "size": 4
+   },
+   {
+    "left": 16,
+    "right": 58,
+    "height": 0.3489,
+    "size": 3
+   },
+   {
+    "left": 39,
+    "right": 53,
+    "height": 0.3546,
+    "size": 4
+   },
+   {
+    "left": 68,
+    "right": 71,
+    "height": 0.3558,
+    "size": 7
+   },
+   {
+    "left": 66,
+    "right": 75,
+    "height": 0.3845,
+    "size": 5
+   },
+   {
+    "left": 64,
+    "right": 65,
+    "height": 0.4328,
+    "size": 4
+   },
+   {
+    "left": 22,
+    "right": 62,
+    "height": 0.4359,
+    "size": 3
+   },
+   {
+    "left": 13,
+    "right": 77,
+    "height": 0.4433,
+    "size": 8
+   },
+   {
+    "left": 69,
+    "right": 81,
+    "height": 0.4613,
+    "size": 10
+   },
+   {
+    "left": 70,
+    "right": 82,
+    "height": 0.5041,
+    "size": 18
+   },
+   {
+    "left": 36,
+    "right": 72,
+    "height": 0.5108,
+    "size": 3
+   },
+   {
+    "left": 79,
+    "right": 84,
+    "height": 0.5213,
+    "size": 7
+   },
+   {
+    "left": 73,
+    "right": 74,
+    "height": 0.5296,
+    "size": 8
+   },
+   {
+    "left": 33,
+    "right": 80,
+    "height": 0.5376,
+    "size": 4
+   },
+   {
+    "left": 0,
+    "right": 85,
+    "height": 0.6076,
+    "size": 8
+   },
+   {
+    "left": 76,
+    "right": 87,
+    "height": 0.6614,
+    "size": 8
+   },
+   {
+    "left": 78,
+    "right": 88,
+    "height": 0.6632,
+    "size": 13
+   },
+   {
+    "left": 83,
+    "right": 89,
+    "height": 0.6747,
+    "size": 26
+   },
+   {
+    "left": 90,
+    "right": 91,
+    "height": 0.7167,
+    "size": 39
+   },
+   {
+    "left": 23,
+    "right": 92,
+    "height": 0.7799,
+    "size": 40
+   },
+   {
+    "left": 86,
+    "right": 93,
+    "height": 0.8008,
+    "size": 48
+   }
+  ],
+  "leaf_order": [
+   "vsevolod-katritch",
+   "rosa-di-felice",
+   "aiichiro-nakano",
+   "arieh-warshel",
+   "helen-berman",
+   "judith-kribelbauer",
+   "tsu-pei-chiu",
+   "remo-rohs",
+   "naomi-levine",
+   "peter-foster",
+   "eva-kanso",
+   "christoph-haselwandter",
+   "krishna-garikipati",
+   "paul-newton",
+   "don-b-arnold",
+   "adam-maclean",
+   "andrew-mcmahon",
+   "stacey-finley",
+   "steve-kay",
+   "julia-schwartzman",
+   "scott-fraser",
+   "peter-yingxiao-wang",
+   "nicholas-mancuso",
+   "michael-edge",
+   "jazlyn-mooney",
+   "arun-durvasula",
+   "charleston-chiang",
+   "steven-gazal",
+   "peter-calabrese",
+   "simon-tavare",
+   "liang-chen",
+   "chang-shu",
+   "geoffrey-fudenberg",
+   "mark-chaisson",
+   "paul-thomas",
+   "michael-waterman",
+   "fengzhu-sun",
+   "andrew-smith",
+   "sheng-li",
+   "bodour-salhia",
+   "rory-spence",
+   "arthur-toga",
+   "andrei-irimia",
+   "paul-thompson",
+   "meisam-razaviyayn",
+   "jerry-s-h-lee",
+   "ruishan-liu",
+   "yan-liu"
+  ]
+ },
+ "faculty": [
+  {
+   "id": "don-b-arnold",
+   "label": "Arnold",
+   "cluster": 2,
+   "tsne": [
+    0.4686,
+    0.3718
+   ],
+   "umap": [
+    0.525,
+    0.8575
+   ]
+  },
+  {
+   "id": "helen-berman",
+   "label": "Berman",
+   "cluster": 0,
+   "tsne": [
+    0.4241,
+    0.0204
+   ],
+   "umap": [
+    0.7977,
+    0.0947
+   ]
+  },
+  {
+   "id": "peter-calabrese",
+   "label": "Calabrese",
+   "cluster": 3,
+   "tsne": [
+    0.2148,
+    0.7598
+   ],
+   "umap": [
+    0.1952,
+    0.9628
+   ]
+  },
+  {
+   "id": "mark-chaisson",
+   "label": "Chaisson",
+   "cluster": 3,
+   "tsne": [
+    0.2381,
+    0.3611
+   ],
+   "umap": [
+    0.2382,
+    0.7003
+   ]
+  },
+  {
+   "id": "liang-chen",
+   "label": "Liang Chen",
+   "cluster": 3,
+   "tsne": [
+    0.308,
+    0.54
+   ],
+   "umap": [
+    0.3569,
+    0.8787
+   ]
+  },
+  {
+   "id": "charleston-chiang",
+   "label": "Chiang",
+   "cluster": 3,
+   "tsne": [
+    0.2586,
+    0.6721
+   ],
+   "umap": [
+    0.1511,
+    0.9275
+   ]
+  },
+  {
+   "id": "tsu-pei-chiu",
+   "label": "Chiu",
+   "cluster": 0,
+   "tsne": [
+    0.4103,
+    0.054
+   ],
+   "umap": [
+    0.8394,
+    0.0793
+   ]
+  },
+  {
+   "id": "rosa-di-felice",
+   "label": "Di Felice",
+   "cluster": 0,
+   "tsne": [
+    0.5275,
+    0.0218
+   ],
+   "umap": [
+    0.7373,
+    0.0
+   ]
+  },
+  {
+   "id": "arun-durvasula",
+   "label": "Durvasula",
+   "cluster": 3,
+   "tsne": [
+    0.2275,
+    0.6773
+   ],
+   "umap": [
+    0.1269,
+    0.909
+   ]
+  },
+  {
+   "id": "michael-edge",
+   "label": "Edge",
+   "cluster": 3,
+   "tsne": [
+    0.244,
+    0.7086
+   ],
+   "umap": [
+    0.1234,
+    0.9695
+   ]
+  },
+  {
+   "id": "stacey-finley",
+   "label": "Finley",
+   "cluster": 2,
+   "tsne": [
+    0.4695,
+    0.4956
+   ],
+   "umap": [
+    0.4318,
+    0.7763
+   ]
+  },
+  {
+   "id": "peter-foster",
+   "label": "Foster",
+   "cluster": 1,
+   "tsne": [
+    0.7627,
+    0.3101
+   ],
+   "umap": [
+    0.434,
+    0.3606
+   ]
+  },
+  {
+   "id": "scott-fraser",
+   "label": "Fraser",
+   "cluster": 2,
+   "tsne": [
+    0.4997,
+    0.397
+   ],
+   "umap": [
+    0.5405,
+    0.8137
+   ]
+  },
+  {
+   "id": "geoffrey-fudenberg",
+   "label": "Fudenberg",
+   "cluster": 3,
+   "tsne": [
+    0.1978,
+    0.4267
+   ],
+   "umap": [
+    0.8766,
+    0.1705
+   ]
+  },
+  {
+   "id": "krishna-garikipati",
+   "label": "Garikipati",
+   "cluster": 1,
+   "tsne": [
+    0.7508,
+    0.3796
+   ],
+   "umap": [
+    0.3922,
+    0.4384
+   ]
+  },
+  {
+   "id": "steven-gazal",
+   "label": "Gazal",
+   "cluster": 3,
+   "tsne": [
+    0.2668,
+    0.6444
+   ],
+   "umap": [
+    0.2085,
+    0.9116
+   ]
+  },
+  {
+   "id": "christoph-haselwandter",
+   "label": "Haselwandter",
+   "cluster": 1,
+   "tsne": [
+    0.8022,
+    0.3664
+   ],
+   "umap": [
+    0.3948,
+    0.3974
+   ]
+  },
+  {
+   "id": "andrei-irimia",
+   "label": "Irimia",
+   "cluster": 4,
+   "tsne": [
+    0.3887,
+    0.98
+   ],
+   "umap": [
+    0.6743,
+    0.7974
+   ]
+  },
+  {
+   "id": "eva-kanso",
+   "label": "Kanso",
+   "cluster": 1,
+   "tsne": [
+    0.7656,
+    0.3356
+   ],
+   "umap": [
+    0.4514,
+    0.4067
+   ]
+  },
+  {
+   "id": "vsevolod-katritch",
+   "label": "Katritch",
+   "cluster": 0,
+   "tsne": [
+    0.4944,
+    0.0201
+   ],
+   "umap": [
+    0.7511,
+    0.0401
+   ]
+  },
+  {
+   "id": "steve-kay",
+   "label": "Kay",
+   "cluster": 2,
+   "tsne": [
+    0.4647,
+    0.5188
+   ],
+   "umap": [
+    0.4103,
+    0.7256
+   ]
+  },
+  {
+   "id": "judith-kribelbauer",
+   "label": "Kribelbauer",
+   "cluster": 0,
+   "tsne": [
+    0.4069,
+    0.0837
+   ],
+   "umap": [
+    0.8689,
+    0.1133
+   ]
+  },
+  {
+   "id": "jerry-s-h-lee",
+   "label": "Lee",
+   "cluster": 5,
+   "tsne": [
+    0.2541,
+    0.5028
+   ],
+   "umap": [
+    0.4825,
+    0.673
+   ]
+  },
+  {
+   "id": "naomi-levine",
+   "label": "Levine",
+   "cluster": 6,
+   "tsne": [
+    0.3594,
+    0.3755
+   ],
+   "umap": [
+    0.3195,
+    0.7623
+   ]
+  },
+  {
+   "id": "sheng-li",
+   "label": "S. Li",
+   "cluster": 3,
+   "tsne": [
+    0.2883,
+    0.4524
+   ],
+   "umap": [
+    0.3773,
+    0.8082
+   ]
+  },
+  {
+   "id": "ruishan-liu",
+   "label": "R. Liu",
+   "cluster": 5,
+   "tsne": [
+    0.677,
+    0.4664
+   ],
+   "umap": [
+    0.4462,
+    0.614
+   ]
+  },
+  {
+   "id": "yan-liu",
+   "label": "Y. Liu",
+   "cluster": 5,
+   "tsne": [
+    0.6971,
+    0.4519
+   ],
+   "umap": [
+    0.4389,
+    0.5386
+   ]
+  },
+  {
+   "id": "adam-maclean",
+   "label": "MacLean",
+   "cluster": 2,
+   "tsne": [
+    0.4597,
+    0.4464
+   ],
+   "umap": [
+    0.4316,
+    0.8516
+   ]
+  },
+  {
+   "id": "nicholas-mancuso",
+   "label": "Mancuso",
+   "cluster": 3,
+   "tsne": [
+    0.2975,
+    0.6578
+   ],
+   "umap": [
+    0.1781,
+    0.8689
+   ]
+  },
+  {
+   "id": "andrew-mcmahon",
+   "label": "McMahon",
+   "cluster": 2,
+   "tsne": [
+    0.4679,
+    0.4206
+   ],
+   "umap": [
+    0.4861,
+    0.8283
+   ]
+  },
+  {
+   "id": "jazlyn-mooney",
+   "label": "Mooney",
+   "cluster": 3,
+   "tsne": [
+    0.2258,
+    0.7302
+   ],
+   "umap": [
+    0.1503,
+    1.0
+   ]
+  },
+  {
+   "id": "aiichiro-nakano",
+   "label": "Nakano",
+   "cluster": 0,
+   "tsne": [
+    0.5593,
+    0.0249
+   ],
+   "umap": [
+    0.698,
+    0.0288
+   ]
+  },
+  {
+   "id": "paul-newton",
+   "label": "Newton",
+   "cluster": 1,
+   "tsne": [
+    0.7724,
+    0.3855
+   ],
+   "umap": [
+    0.4398,
+    0.4428
+   ]
+  },
+  {
+   "id": "meisam-razaviyayn",
+   "label": "Razaviyayn",
+   "cluster": 5,
+   "tsne": [
+    0.7378,
+    0.4216
+   ],
+   "umap": [
+    0.4115,
+    0.4904
+   ]
+  },
+  {
+   "id": "remo-rohs",
+   "label": "Rohs",
+   "cluster": 0,
+   "tsne": [
+    0.4374,
+    0.0512
+   ],
+   "umap": [
+    0.8073,
+    0.0437
+   ]
+  },
+  {
+   "id": "bodour-salhia",
+   "label": "Salhia",
+   "cluster": 3,
+   "tsne": [
+    0.2705,
+    0.4729
+   ],
+   "umap": [
+    0.406,
+    0.6727
+   ]
+  },
+  {
+   "id": "julia-schwartzman",
+   "label": "Schwartzman",
+   "cluster": 2,
+   "tsne": [
+    0.3568,
+    0.3344
+   ],
+   "umap": [
+    0.3617,
+    0.7667
+   ]
+  },
+  {
+   "id": "chang-shu",
+   "label": "Shu",
+   "cluster": 3,
+   "tsne": [
+    0.2863,
+    0.6003
+   ],
+   "umap": [
+    0.2678,
+    0.8967
+   ]
+  },
+  {
+   "id": "andrew-smith",
+   "label": "Smith",
+   "cluster": 3,
+   "tsne": [
+    0.26,
+    0.4308
+   ],
+   "umap": [
+    0.3201,
+    0.6486
+   ]
+  },
+  {
+   "id": "rory-spence",
+   "label": "Spence",
+   "cluster": 4,
+   "tsne": [
+    0.3419,
+    1.0
+   ],
+   "umap": [
+    0.6822,
+    0.8241
+   ]
+  },
+  {
+   "id": "fengzhu-sun",
+   "label": "Sun",
+   "cluster": 3,
+   "tsne": [
+    0.3233,
+    0.3562
+   ],
+   "umap": [
+    0.2974,
+    0.7223
+   ]
+  },
+  {
+   "id": "simon-tavare",
+   "label": "Tavaré",
+   "cluster": 3,
+   "tsne": [
+    0.3161,
+    0.4368
+   ],
+   "umap": [
+    0.2834,
+    0.7942
+   ]
+  },
+  {
+   "id": "paul-thomas",
+   "label": "Thomas",
+   "cluster": 3,
+   "tsne": [
+    0.2671,
+    0.3243
+   ],
+   "umap": [
+    0.2548,
+    0.6482
+   ]
+  },
+  {
+   "id": "paul-thompson",
+   "label": "Thompson",
+   "cluster": 4,
+   "tsne": [
+    0.379,
+    0.9546
+   ],
+   "umap": [
+    0.7042,
+    0.7697
+   ]
+  },
+  {
+   "id": "arthur-toga",
+   "label": "Toga",
+   "cluster": 4,
+   "tsne": [
+    0.3592,
+    0.9733
+   ],
+   "umap": [
+    0.6528,
+    0.8158
+   ]
+  },
+  {
+   "id": "peter-yingxiao-wang",
+   "label": "Wang",
+   "cluster": 2,
+   "tsne": [
+    0.5278,
+    0.392
+   ],
+   "umap": [
+    0.5108,
+    0.7653
+   ]
+  },
+  {
+   "id": "arieh-warshel",
+   "label": "Warshel",
+   "cluster": 0,
+   "tsne": [
+    0.5484,
+    0.0
+   ],
+   "umap": [
+    0.7068,
+    0.003
+   ]
+  },
+  {
+   "id": "michael-waterman",
+   "label": "Waterman",
+   "cluster": 3,
+   "tsne": [
+    0.268,
+    0.3496
+   ],
+   "umap": [
+    0.2563,
+    0.6758
+   ]
+  }
+ ]
+}

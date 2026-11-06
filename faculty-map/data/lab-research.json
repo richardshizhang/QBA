@@ -1,0 +1,2240 @@
+{
+ "fetched": "2026-11-05",
+ "labs": {
+  "todd-alonzo": {
+   "name": "Todd A. Alonzo",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "oscar-aparicio": {
+   "name": "Oscar Aparicio",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/oscar-aparicio/",
+     "kind": "profile",
+     "words": 114
+    }
+   ],
+   "problem": null
+  },
+  "don-b-arnold": {
+   "name": "Don B. Arnold",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/donald-arnold/",
+     "kind": "profile",
+     "words": 140
+    },
+    {
+     "url": "https://dornsife.usc.edu/arnold/",
+     "kind": "home",
+     "words": 241
+    },
+    {
+     "url": "https://dornsife.usc.edu/arnold/research-topics/",
+     "kind": "research",
+     "words": 402
+    }
+   ],
+   "problem": null
+  },
+  "lisa-aziz-zadeh": {
+   "name": "Lisa Aziz-Zadeh",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/cenec/",
+     "kind": "home",
+     "words": 723
+    },
+    {
+     "url": "https://dornsife.usc.edu/cenec/research/",
+     "kind": "research",
+     "words": 2584
+    }
+   ],
+   "problem": null
+  },
+  "donald-barkauskas": {
+   "name": "Donald A. Barkauskas",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "antoine-bechara": {
+   "name": "Antoine Bechara",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "berenice-benayoun": {
+   "name": "Berenice Benayoun",
+   "pages": [
+    {
+     "url": "https://gero.usc.edu/labs/benayounlab/",
+     "kind": "home",
+     "words": 491
+    },
+    {
+     "url": "https://gero.usc.edu/labs/benayounlab/research-interests/",
+     "kind": "research",
+     "words": 1245
+    }
+   ],
+   "problem": null
+  },
+  "helen-berman": {
+   "name": "Helen Berman",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "james-boedicker": {
+   "name": "James Boedicker",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/james-boedicker/",
+     "kind": "profile",
+     "words": 108
+    },
+    {
+     "url": "https://dornsife.usc.edu/boedickerlab/",
+     "kind": "home",
+     "words": 215
+    },
+    {
+     "url": "https://dornsife.usc.edu/boedickerlab/research/",
+     "kind": "research",
+     "words": 469
+    }
+   ],
+   "problem": null
+  },
+  "sarah-bottjer": {
+   "name": "Sarah Bottjer",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/sarah-bottjer/",
+     "kind": "profile",
+     "words": 207
+    }
+   ],
+   "problem": "website is gone or needs a login"
+  },
+  "jean-bouteiller": {
+   "name": "Jean Marie Charles Bouteiller",
+   "pages": [
+    {
+     "url": "https://sites.usc.edu/synapse/research/",
+     "kind": "research",
+     "words": 204
+    },
+    {
+     "url": "https://sites.usc.edu/synapse/about/",
+     "kind": "research",
+     "words": 273
+    }
+   ],
+   "problem": null
+  },
+  "jonathan-buckley": {
+   "name": "Jonathan David Buckley",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "peter-calabrese": {
+   "name": "Peter Calabrese",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/peter-calabrese/",
+     "kind": "profile",
+     "words": 96
+    },
+    {
+     "url": "https://dornsife.usc.edu/petercalabrese/",
+     "kind": "home",
+     "words": 130
+    }
+   ],
+   "problem": null
+  },
+  "paula-cannon": {
+   "name": "Paula Cannon",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "douglas-capone": {
+   "name": "Douglas Capone",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/douglas-capone/",
+     "kind": "profile",
+     "words": 129
+    }
+   ],
+   "problem": null
+  },
+  "david-caron": {
+   "name": "David Caron",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/david-caron/",
+     "kind": "profile",
+     "words": 77
+    }
+   ],
+   "problem": null
+  },
+  "mark-chaisson": {
+   "name": "Mark Chaisson",
+   "pages": [
+    {
+     "url": "http://chaissonlab.usc.edu/",
+     "kind": "home",
+     "words": 54
+    },
+    {
+     "url": "https://chaissonlab.usc.edu/",
+     "kind": "research",
+     "words": 54
+    }
+   ],
+   "problem": null
+  },
+  "liang-chen": {
+   "name": "Liang Chen",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/liang-chen/",
+     "kind": "profile",
+     "words": 304
+    }
+   ],
+   "problem": "could not connect from this machine"
+  },
+  "lin-chen": {
+   "name": "Lin Chen",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/lin-chen/",
+     "kind": "profile",
+     "words": 256
+    }
+   ],
+   "problem": null
+  },
+  "xiaojiang-chen": {
+   "name": "Xiaojiang Chen",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/xiaojiang-chen/",
+     "kind": "profile",
+     "words": 133
+    }
+   ],
+   "problem": null
+  },
+  "xianrui-cheng": {
+   "name": "Xianrui Cheng",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/xianrui-cheng/",
+     "kind": "profile",
+     "words": 123
+    },
+    {
+     "url": "https://xianruichenglab.weebly.com/",
+     "kind": "home",
+     "words": 440
+    }
+   ],
+   "problem": null
+  },
+  "charleston-chiang": {
+   "name": "Charleston Chiang",
+   "pages": [
+    {
+     "url": "https://chianglab.usc.edu/",
+     "kind": "home",
+     "words": 3080
+    },
+    {
+     "url": "https://chianglab.usc.edu/research.html",
+     "kind": "research",
+     "words": 3096
+    }
+   ],
+   "problem": null
+  },
+  "irene-chiolo": {
+   "name": "Irene Chiolo",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/irene-chiolo/",
+     "kind": "profile",
+     "words": 179
+    }
+   ],
+   "problem": null
+  },
+  "tsu-pei-chiu": {
+   "name": "Tsu-Pei Chiu",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/tsu-pei-chiu/",
+     "kind": "profile",
+     "words": 26
+    }
+   ],
+   "problem": null
+  },
+  "vasileios-christopoulos": {
+   "name": "Vasileios N. Christopoulos",
+   "pages": [
+    {
+     "url": "https://bme.usc.edu/directory/faculty/profile/?lname=Christopoulos&fname=Vasileios",
+     "kind": "profile",
+     "words": 107
+    },
+    {
+     "url": "https://www.christopouloslab.com/",
+     "kind": "home",
+     "words": 1344
+    },
+    {
+     "url": "https://www.christopouloslab.com/research",
+     "kind": "research",
+     "words": 1338
+    }
+   ],
+   "problem": null
+  },
+  "eun-chung": {
+   "name": "Eun Ji Chung",
+   "pages": [
+    {
+     "url": "https://bme.usc.edu/directory/faculty/profile/?lname=Chung&fname=Eun-Ji",
+     "kind": "profile",
+     "words": 164
+    },
+    {
+     "url": "https://chunglaboratory.com/",
+     "kind": "home",
+     "words": 175
+    },
+    {
+     "url": "https://chunglaboratory.com/research/",
+     "kind": "research",
+     "words": 221
+    },
+    {
+     "url": "https://chunglaboratory.com/principal-investigator/",
+     "kind": "research",
+     "words": 611
+    },
+    {
+     "url": "https://chunglaboratory.com/postdoctoral-researchers/",
+     "kind": "research",
+     "words": 113
+    }
+   ],
+   "problem": null
+  },
+  "willem-collier": {
+   "name": "Willem H. Collier",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "francesco-cutrale": {
+   "name": "Francesco Cutrale",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "david-d-argenio": {
+   "name": "David Z D'Argenio",
+   "pages": [
+    {
+     "url": "https://bme.usc.edu/directory/faculty/profile/?lname=DArgenio&fname=David",
+     "kind": "profile",
+     "words": 232
+    },
+    {
+     "url": "https://bmsr.usc.edu/",
+     "kind": "home",
+     "words": 233
+    },
+    {
+     "url": "https://bmsr.usc.edu/about/graduate-research-assistants/",
+     "kind": "research",
+     "words": 1707
+    },
+    {
+     "url": "https://bmsr.usc.edu/about/postdoctoral-research-fellows/",
+     "kind": "research",
+     "words": 574
+    },
+    {
+     "url": "https://bmsr.usc.edu/core-research/",
+     "kind": "research",
+     "words": 233
+    }
+   ],
+   "problem": null
+  },
+  "antonio-damasio": {
+   "name": "Antonio Damasio",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/antonio-damasio/",
+     "kind": "profile",
+     "words": 70
+    }
+   ],
+   "problem": null
+  },
+  "hanna-damasio": {
+   "name": "Hanna Damasio",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/hanna-damasio/",
+     "kind": "profile",
+     "words": 131
+    }
+   ],
+   "problem": null
+  },
+  "matt-dean": {
+   "name": "Matt Dean",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/dean-lab/research/",
+     "kind": "research",
+     "words": 668
+    }
+   ],
+   "problem": null
+  },
+  "morteza-dehghani": {
+   "name": "Morteza Dehghani",
+   "pages": [
+    {
+     "url": "https://www.calm-lab.org/",
+     "kind": "home",
+     "words": 38
+    },
+    {
+     "url": "https://www.calm-lab.org/research",
+     "kind": "research",
+     "words": 629
+    }
+   ],
+   "problem": null
+  },
+  "natalie-delrocco": {
+   "name": "Natalie Delrocco",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "rosa-di-felice": {
+   "name": "Rosa Di Felice",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/rosa-di-felice/",
+     "kind": "profile",
+     "words": 468
+    },
+    {
+     "url": "https://dornsife.usc.edu/compbionano/difelice/",
+     "kind": "home",
+     "words": 1042
+    },
+    {
+     "url": "https://dornsife.usc.edu/compbionano/research-interests/",
+     "kind": "research",
+     "words": 457
+    },
+    {
+     "url": "https://dornsife.usc.edu/compbionano/research/",
+     "kind": "research",
+     "words": 1824
+    }
+   ],
+   "problem": null
+  },
+  "dion-dickman": {
+   "name": "Dion Dickman",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/dickmanlab/",
+     "kind": "home",
+     "words": 34
+    },
+    {
+     "url": "https://dornsife.usc.edu/dickmanlab/content/",
+     "kind": "research",
+     "words": 277
+    }
+   ],
+   "problem": null
+  },
+  "arun-durvasula": {
+   "name": "Arun Durvasula",
+   "pages": [
+    {
+     "url": "https://durvasula-lab.usc.edu/",
+     "kind": "home",
+     "words": 141
+    },
+    {
+     "url": "https://durvasula-lab.usc.edu/research/",
+     "kind": "research",
+     "words": 463
+    }
+   ],
+   "problem": null
+  },
+  "sandrah-eckel": {
+   "name": "Sandrah Proctor Eckel",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "michael-edge": {
+   "name": "Michael \"Doc\" Edge",
+   "pages": [
+    {
+     "url": "https://edgepopgen.github.io/edgelab/",
+     "kind": "home",
+     "words": 241
+    },
+    {
+     "url": "https://edgepopgen.github.io/edgelab/research/",
+     "kind": "research",
+     "words": 309
+    },
+    {
+     "url": "https://edgepopgen.github.io/edgelab/aboutwebsite.html",
+     "kind": "research",
+     "words": 146
+    }
+   ],
+   "problem": null
+  },
+  "suzanne-edmands": {
+   "name": "Suzanne Edmands",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/suzanne-edmands/",
+     "kind": "profile",
+     "words": 86
+    }
+   ],
+   "problem": null
+  },
+  "ian-ehrenreich": {
+   "name": "Ian Ehrenreich",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/ehrenreich-lab/",
+     "kind": "home",
+     "words": 80
+    },
+    {
+     "url": "https://dornsife.usc.edu/ehrenreich-lab/research/",
+     "kind": "research",
+     "words": 255
+    }
+   ],
+   "problem": null
+  },
+  "moh-el-naggar": {
+   "name": "Moh El-Naggar",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/moh-el-naggar/",
+     "kind": "profile",
+     "words": 307
+    },
+    {
+     "url": "http://www.elnaggarlab.org",
+     "kind": "home",
+     "words": 43
+    },
+    {
+     "url": "http://www.elnaggarlab.org/research",
+     "kind": "research",
+     "words": 355
+    }
+   ],
+   "problem": null
+  },
+  "steven-finkel": {
+   "name": "Steven Finkel",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/steven-finkel/",
+     "kind": "profile",
+     "words": 179
+    }
+   ],
+   "problem": null
+  },
+  "stacey-finley": {
+   "name": "Stacey Finley",
+   "pages": [
+    {
+     "url": "https://bme.usc.edu/directory/faculty/profile/?lname=Finley&fname=Stacey",
+     "kind": "profile",
+     "words": 236
+    },
+    {
+     "url": "https://csbl.usc.edu/",
+     "kind": "home",
+     "words": 78
+    },
+    {
+     "url": "https://csbl.usc.edu/research/",
+     "kind": "research",
+     "words": 203
+    },
+    {
+     "url": "https://csbl.usc.edu/about/",
+     "kind": "research",
+     "words": 92
+    }
+   ],
+   "problem": null
+  },
+  "susan-forsburg": {
+   "name": "Susan L Forsburg",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/susan-l-forsburg/",
+     "kind": "profile",
+     "words": 119
+    },
+    {
+     "url": "https://dornsife.usc.edu/pombenet/",
+     "kind": "home",
+     "words": 272
+    },
+    {
+     "url": "https://dornsife.usc.edu/pombenet/research-opportunities/",
+     "kind": "research",
+     "words": 844
+    },
+    {
+     "url": "https://dornsife.usc.edu/pombenet/mcm-proteins/",
+     "kind": "research",
+     "words": 2264
+    },
+    {
+     "url": "https://dornsife.usc.edu/pombenet/forsburg-lab-research-meiosis/",
+     "kind": "research",
+     "words": 929
+    }
+   ],
+   "problem": null
+  },
+  "peter-foster": {
+   "name": "Peter Foster",
+   "pages": [
+    {
+     "url": "https://www.peterfosterlab.com/",
+     "kind": "home",
+     "words": 63
+    },
+    {
+     "url": "https://www.peterfosterlab.com/research.html",
+     "kind": "research",
+     "words": 305
+    }
+   ],
+   "problem": null
+  },
+  "scott-fraser": {
+   "name": "Scott Fraser",
+   "pages": [],
+   "problem": "could not connect from this machine"
+  },
+  "geoffrey-fudenberg": {
+   "name": "Geoffrey Fudenberg",
+   "pages": [
+    {
+     "url": "https://fudenberg.team/",
+     "kind": "home",
+     "words": 157
+    }
+   ],
+   "problem": null
+  },
+  "jed-fuhrman": {
+   "name": "Jed Fuhrman",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/jed-fuhrman/",
+     "kind": "profile",
+     "words": 170
+    },
+    {
+     "url": "https://dornsife.usc.edu/fuhrmanlab/",
+     "kind": "home",
+     "words": 225
+    },
+    {
+     "url": "https://dornsife.usc.edu/fuhrmanlab/research/",
+     "kind": "research",
+     "words": 1183
+    },
+    {
+     "url": "https://dornsife.usc.edu/fuhrmanlab/research/515-926-primers-and-mock-communities/",
+     "kind": "research",
+     "words": 528
+    },
+    {
+     "url": "https://dornsife.usc.edu/fuhrmanlab/research/cbiomes/",
+     "kind": "research",
+     "words": 355
+    }
+   ],
+   "problem": null
+  },
+  "krishna-garikipati": {
+   "name": "Krishna Garikipati",
+   "pages": [
+    {
+     "url": "https://sites.usc.edu/compphys/",
+     "kind": "home",
+     "words": 101
+    },
+    {
+     "url": "https://sites.usc.edu/compphys/research/",
+     "kind": "research",
+     "words": 950
+    }
+   ],
+   "problem": null
+  },
+  "cornelius-gati": {
+   "name": "Cornelius Gati",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/cornelius-gati/",
+     "kind": "profile",
+     "words": 347
+    },
+    {
+     "url": "https://www.gati-lab.com",
+     "kind": "home",
+     "words": 39
+    },
+    {
+     "url": "https://www.gati-lab.com/research",
+     "kind": "research",
+     "words": 461
+    }
+   ],
+   "problem": null
+  },
+  "william-gauderman": {
+   "name": "William Gauderman",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "steven-gazal": {
+   "name": "Steven Gazal",
+   "pages": [
+    {
+     "url": "https://gazal-lab.org/research",
+     "kind": "research",
+     "words": 90
+    }
+   ],
+   "problem": null
+  },
+  "myron-goodman": {
+   "name": "Myron Goodman",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/myron-goodman/",
+     "kind": "profile",
+     "words": 121
+    }
+   ],
+   "problem": null
+  },
+  "andrew-gracey": {
+   "name": "Andrew Gracey",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/andrew-gracey/",
+     "kind": "profile",
+     "words": 210
+    }
+   ],
+   "problem": "website is gone or needs a login"
+  },
+  "assal-habibi": {
+   "name": "Assal Habibi",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/assal-habibi/",
+     "kind": "profile",
+     "words": 122
+    },
+    {
+     "url": "https://dornsife.usc.edu/brainandmusic/",
+     "kind": "home",
+     "words": 217
+    },
+    {
+     "url": "https://dornsife.usc.edu/brainandmusic/research-2/",
+     "kind": "research",
+     "words": 74
+    },
+    {
+     "url": "https://dornsife.usc.edu/brainandmusic/current-research/",
+     "kind": "research",
+     "words": 874
+    },
+    {
+     "url": "https://dornsife.usc.edu/brainandmusic/past-research/",
+     "kind": "research",
+     "words": 858
+    }
+   ],
+   "problem": null
+  },
+  "joel-hahn": {
+   "name": "Joel Hahn",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/joel-hahn/",
+     "kind": "profile",
+     "words": 61
+    }
+   ],
+   "problem": null
+  },
+  "justin-haldar": {
+   "name": "Justin Haldar",
+   "pages": [],
+   "problem": "could not connect from this machine"
+  },
+  "christoph-haselwandter": {
+   "name": "Christoph Haselwandter",
+   "pages": [],
+   "problem": "robots.txt asks crawlers to stay out"
+  },
+  "john-heidelberg": {
+   "name": "John Heidelberg",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/john-heidelberg/",
+     "kind": "profile",
+     "words": 93
+    }
+   ],
+   "problem": null
+  },
+  "noelle-held": {
+   "name": "Noelle Held",
+   "pages": [
+    {
+     "url": "https://proteoceanlab.github.io/",
+     "kind": "home",
+     "words": 255
+    },
+    {
+     "url": "https://proteoceanlab.github.io/about.html",
+     "kind": "research",
+     "words": 145
+    }
+   ],
+   "problem": null
+  },
+  "bruce-herring": {
+   "name": "Bruce Herring",
+   "pages": [],
+   "problem": "could not connect from this machine"
+  },
+  "james-hicks": {
+   "name": "James Hicks",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "s-hires": {
+   "name": "S. Andrew Hires",
+   "pages": [
+    {
+     "url": "https://www.hireslab.org/",
+     "kind": "home",
+     "words": 234
+    },
+    {
+     "url": "https://www.hireslab.org/papers",
+     "kind": "research",
+     "words": 1378
+    }
+   ],
+   "problem": null
+  },
+  "judith-hirsch": {
+   "name": "Judith Hirsch",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "david-hutchins": {
+   "name": "David Hutchins",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/david-hutchins/",
+     "kind": "profile",
+     "words": 160
+    }
+   ],
+   "problem": null
+  },
+  "mary-immordino-yang": {
+   "name": "Mary Helen Immordino-Yang",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "andrei-irimia": {
+   "name": "Andrei Irimia",
+   "pages": [
+    {
+     "url": "https://gero.usc.edu/labs/irimialab/research/",
+     "kind": "research",
+     "words": 871
+    }
+   ],
+   "problem": null
+  },
+  "hossein-jadvar": {
+   "name": "Hossein Jadvar",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "lingyun-ji": {
+   "name": "Lingyun Ji",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "anand-joshi": {
+   "name": "Anand Joshi",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "eva-kanso": {
+   "name": "Eva Kanso",
+   "pages": [
+    {
+     "url": "https://sites.usc.edu/kansolab/",
+     "kind": "home",
+     "words": 78
+    },
+    {
+     "url": "https://sites.usc.edu/kansolab/research/",
+     "kind": "research",
+     "words": 40
+    }
+   ],
+   "problem": null
+  },
+  "jonas-kaplan": {
+   "name": "Jonas Kaplan",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/jonas-kaplan/",
+     "kind": "profile",
+     "words": 46
+    },
+    {
+     "url": "http://www.jonaskaplan.com",
+     "kind": "home",
+     "words": 153
+    }
+   ],
+   "problem": null
+  },
+  "vsevolod-katritch": {
+   "name": "Vsevolod \"Seva\" Katritch",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/vsevolod-katritch/",
+     "kind": "profile",
+     "words": 167
+    },
+    {
+     "url": "https://katritch.usc.edu/",
+     "kind": "home",
+     "words": 3013
+    },
+    {
+     "url": "https://katritch.usc.edu/research.html",
+     "kind": "research",
+     "words": 374
+    }
+   ],
+   "problem": null
+  },
+  "eric-kawaguchi": {
+   "name": "Eric Kawaguchi",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "steve-kay": {
+   "name": "Steve Kay",
+   "pages": [
+    {
+     "url": "https://kaylab.usc.edu/",
+     "kind": "home",
+     "words": 237
+    },
+    {
+     "url": "https://kaylab.usc.edu/research/",
+     "kind": "research",
+     "words": 210
+    },
+    {
+     "url": "https://kaylab.usc.edu/research/plant-research/",
+     "kind": "research",
+     "words": 294
+    },
+    {
+     "url": "https://kaylab.usc.edu/about-us/",
+     "kind": "research",
+     "words": 116
+    }
+   ],
+   "problem": null
+  },
+  "carly-kenkel": {
+   "name": "Carly Kenkel",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/carly-kenkel/",
+     "kind": "profile",
+     "words": 98
+    },
+    {
+     "url": "https://dornsife.usc.edu/carlslab/",
+     "kind": "home",
+     "words": 929
+    },
+    {
+     "url": "https://dornsife.usc.edu/carlslab/research/",
+     "kind": "research",
+     "words": 394
+    }
+   ],
+   "problem": null
+  },
+  "michael-khoo": {
+   "name": "Michael C.K. Khoo",
+   "pages": [
+    {
+     "url": "https://bme.usc.edu/directory/faculty/profile/?lname=Khoo&fname=Michael",
+     "kind": "profile",
+     "words": 237
+    },
+    {
+     "url": "https://crsl.usc.edu/",
+     "kind": "home",
+     "words": 154
+    },
+    {
+     "url": "https://crsl.usc.edu/research1/",
+     "kind": "research",
+     "words": 259
+    },
+    {
+     "url": "https://crsl.usc.edu/research2/",
+     "kind": "research",
+     "words": 225
+    },
+    {
+     "url": "https://crsl.usc.edu/research3/",
+     "kind": "research",
+     "words": 254
+    }
+   ],
+   "problem": null
+  },
+  "dale-kiefer": {
+   "name": "Dale Kiefer",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/dale-kiefer/",
+     "kind": "profile",
+     "words": 785
+    }
+   ],
+   "problem": null
+  },
+  "zhengchang-kou": {
+   "name": "Zhengchang Kou",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "judith-kribelbauer": {
+   "name": "Judith Kribelbauer",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/judith-kribelbauer/",
+     "kind": "profile",
+     "words": 119
+    },
+    {
+     "url": "https://dornsife.usc.edu/kribelbauer/",
+     "kind": "home",
+     "words": 238
+    },
+    {
+     "url": "https://dornsife.usc.edu/kribelbauer/content/",
+     "kind": "research",
+     "words": 568
+    }
+   ],
+   "problem": null
+  },
+  "peter-kuhn": {
+   "name": "Peter Kuhn",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/kuhn/",
+     "kind": "home",
+     "words": 529
+    },
+    {
+     "url": "https://dornsife.usc.edu/kuhn/research-programs/",
+     "kind": "research",
+     "words": 352
+    },
+    {
+     "url": "https://dornsife.usc.edu/kuhn/about/",
+     "kind": "research",
+     "words": 510
+    }
+   ],
+   "problem": null
+  },
+  "jerry-s-h-lee": {
+   "name": "Jerry S.H. Lee",
+   "pages": [],
+   "problem": "website is gone or needs a login"
+  },
+  "naomi-levine": {
+   "name": "Naomi Levine",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/naomi-levine/",
+     "kind": "profile",
+     "words": 116
+    },
+    {
+     "url": "https://dornsife.usc.edu/levine/",
+     "kind": "home",
+     "words": 361
+    },
+    {
+     "url": "https://dornsife.usc.edu/levine/research-projects/",
+     "kind": "research",
+     "words": 865
+    }
+   ],
+   "problem": null
+  },
+  "juan-lewinger": {
+   "name": "Juan Pablo Lewinger",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "chun-li": {
+   "name": "Chun Li",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "sheng-li": {
+   "name": "Sheng Li",
+   "pages": [
+    {
+     "url": "https://www.shenglilab.com/",
+     "kind": "home",
+     "words": 568
+    }
+   ],
+   "problem": null
+  },
+  "michael-lieber": {
+   "name": "Michael Lieber",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "emily-liman": {
+   "name": "Emily Liman",
+   "pages": [
+    {
+     "url": "https://limanlab.com/",
+     "kind": "home",
+     "words": 330
+    },
+    {
+     "url": "https://limanlab.com/research-focus/",
+     "kind": "research",
+     "words": 1129
+    }
+   ],
+   "problem": null
+  },
+  "ruishan-liu": {
+   "name": "Ruishan Liu",
+   "pages": [],
+   "problem": "could not connect from this machine"
+  },
+  "yan-liu": {
+   "name": "Yan Liu",
+   "pages": [
+    {
+     "url": "https://usc-melady.github.io/melady_website/people/",
+     "kind": "home",
+     "words": 123
+    }
+   ],
+   "problem": null
+  },
+  "karen-lloyd": {
+   "name": "Karen Lloyd",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/lloyd/",
+     "kind": "home",
+     "words": 207
+    },
+    {
+     "url": "https://dornsife.usc.edu/lloyd/projects/",
+     "kind": "research",
+     "words": 633
+    }
+   ],
+   "problem": null
+  },
+  "gerald-loeb": {
+   "name": "Gerald E. Loeb",
+   "pages": [
+    {
+     "url": "https://bme.usc.edu/directory/faculty/profile/?lname=Loeb&fname=Gerald",
+     "kind": "profile",
+     "words": 205
+    },
+    {
+     "url": "https://mddf.usc.edu/",
+     "kind": "home",
+     "words": 433
+    },
+    {
+     "url": "https://mddf.usc.edu/projects/",
+     "kind": "research",
+     "words": 38
+    },
+    {
+     "url": "https://mddf.usc.edu/projects/musculoskeletal-physiology-modeling/",
+     "kind": "research",
+     "words": 1861
+    }
+   ],
+   "problem": null
+  },
+  "rong-lu": {
+   "name": "Rong Lu",
+   "pages": [
+    {
+     "url": "https://ronglulab.usc.edu/",
+     "kind": "home",
+     "words": 124
+    },
+    {
+     "url": "https://ronglulab.usc.edu/research/",
+     "kind": "research",
+     "words": 543
+    }
+   ],
+   "problem": null
+  },
+  "adam-maclean": {
+   "name": "Adam MacLean",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/adam-maclean/",
+     "kind": "profile",
+     "words": 116
+    },
+    {
+     "url": "https://macleanlab.usc.edu/",
+     "kind": "home",
+     "words": 273
+    },
+    {
+     "url": "https://macleanlab.usc.edu/research/",
+     "kind": "research",
+     "words": 909
+    },
+    {
+     "url": "https://macleanlab.usc.edu/research/",
+     "kind": "research",
+     "words": 909
+    }
+   ],
+   "problem": null
+  },
+  "wendy-mack": {
+   "name": "Wendy Jean Mack",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "donal-manahan": {
+   "name": "Donal Manahan",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "nicholas-mancuso": {
+   "name": "Nicholas Mancuso",
+   "pages": [],
+   "problem": "could not connect from this machine"
+  },
+  "francesca-mariani": {
+   "name": "Francesca Mariani",
+   "pages": [
+    {
+     "url": "https://marianilab.usc.edu/",
+     "kind": "home",
+     "words": 230
+    },
+    {
+     "url": "https://marianilab.usc.edu/research/",
+     "kind": "research",
+     "words": 411
+    }
+   ],
+   "problem": null
+  },
+  "vasilis-marmarelis": {
+   "name": "Vasilis Marmarelis",
+   "pages": [
+    {
+     "url": "https://bme.usc.edu/directory/faculty/profile/?lname=Marmarelis&fname=Vasilis",
+     "kind": "profile",
+     "words": 230
+    },
+    {
+     "url": "https://bmsr.usc.edu/",
+     "kind": "home",
+     "words": 233
+    },
+    {
+     "url": "https://bmsr.usc.edu/about/graduate-research-assistants/",
+     "kind": "research",
+     "words": 1707
+    },
+    {
+     "url": "https://bmsr.usc.edu/about/postdoctoral-research-fellows/",
+     "kind": "research",
+     "words": 574
+    },
+    {
+     "url": "https://bmsr.usc.edu/core-research/",
+     "kind": "research",
+     "words": 233
+    }
+   ],
+   "problem": null
+  },
+  "lauren-mcelvain": {
+   "name": "Lauren McElvain",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/lauren-mcelvain/",
+     "kind": "profile",
+     "words": 71
+    },
+    {
+     "url": "https://www.mcelvainlab.org/",
+     "kind": "home",
+     "words": 141
+    },
+    {
+     "url": "https://www.mcelvainlab.org/research",
+     "kind": "research",
+     "words": 525
+    }
+   ],
+   "problem": null
+  },
+  "david-mckemy": {
+   "name": "David McKemy",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/david-mckemy/",
+     "kind": "profile",
+     "words": 155
+    },
+    {
+     "url": "https://dornsife.usc.edu/mckemy/",
+     "kind": "home",
+     "words": 36
+    },
+    {
+     "url": "https://dornsife.usc.edu/mckemy/research/",
+     "kind": "research",
+     "words": 161
+    }
+   ],
+   "problem": null
+  },
+  "andrew-mcmahon": {
+   "name": "Andrew McMahon",
+   "pages": [
+    {
+     "url": "https://mcmahonlab.caltech.edu/",
+     "kind": "home",
+     "words": 68
+    },
+    {
+     "url": "https://mcmahonlab.caltech.edu/research",
+     "kind": "research",
+     "words": 522
+    }
+   ],
+   "problem": null
+  },
+  "bartlett-mel": {
+   "name": "Bartlett W. Mel",
+   "pages": [
+    {
+     "url": "https://bme.usc.edu/directory/faculty/profile/?lname=Mel&fname=Bartlett",
+     "kind": "profile",
+     "words": 220
+    }
+   ],
+   "problem": null
+  },
+  "ellis-meng": {
+   "name": "Ellis Fan-Chuin Meng",
+   "pages": [
+    {
+     "url": "https://bme.usc.edu/directory/faculty/profile/?lname=Meng&fname=Ellis",
+     "kind": "profile",
+     "words": 52
+    },
+    {
+     "url": "http://biomems.usc.edu",
+     "kind": "home",
+     "words": 249
+    },
+    {
+     "url": "http://biomems.usc.edu/research.html",
+     "kind": "research",
+     "words": 2879
+    },
+    {
+     "url": "http://biomems.usc.edu/about.html",
+     "kind": "research",
+     "words": 482
+    }
+   ],
+   "problem": null
+  },
+  "huaiyu-mi": {
+   "name": "Huaiyu Mi",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "matthew-michael": {
+   "name": "Matt Michael",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/matthew-michael/",
+     "kind": "profile",
+     "words": 367
+    }
+   ],
+   "problem": null
+  },
+  "joshua-millstein": {
+   "name": "Joshua Millstein",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "james-moffett": {
+   "name": "James Moffett",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/james-moffett/",
+     "kind": "profile",
+     "words": 46
+    },
+    {
+     "url": "https://dornsife.usc.edu/earth/",
+     "kind": "home",
+     "words": 365
+    },
+    {
+     "url": "https://dornsife.usc.edu/earth/undergraduate/research/",
+     "kind": "research",
+     "words": 299
+    },
+    {
+     "url": "https://dornsife.usc.edu/earth/graduate/research-curricula/",
+     "kind": "research",
+     "words": 579
+    },
+    {
+     "url": "https://dornsife.usc.edu/earth/research/",
+     "kind": "research",
+     "words": 291
+    }
+   ],
+   "problem": null
+  },
+  "john-monterosso": {
+   "name": "John Monterosso",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/john-monterosso/",
+     "kind": "profile",
+     "words": 59
+    },
+    {
+     "url": "https://dornsife.usc.edu/monterosso/",
+     "kind": "home",
+     "words": 212
+    }
+   ],
+   "problem": null
+  },
+  "jazlyn-mooney": {
+   "name": "Jazlyn Mooney",
+   "pages": [
+    {
+     "url": "https://mooney-lab.github.io/",
+     "kind": "home",
+     "words": 2973
+    },
+    {
+     "url": "https://mooney-lab.github.io/Cancer_PopGen_Project_Guide_QBIO475.html",
+     "kind": "research",
+     "words": 3410
+    }
+   ],
+   "problem": null
+  },
+  "jeffrey-moore": {
+   "name": "Jeffrey Moore",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/jeffrey-moore/",
+     "kind": "profile",
+     "words": 79
+    },
+    {
+     "url": "https://www.moorelaboratory.org/",
+     "kind": "home",
+     "words": 80
+    },
+    {
+     "url": "https://www.moorelaboratory.org/research",
+     "kind": "research",
+     "words": 225
+    }
+   ],
+   "problem": null
+  },
+  "derrick-morton": {
+   "name": "Derrick Morton",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/derrick-morton/",
+     "kind": "profile",
+     "words": 98
+    },
+    {
+     "url": "https://themortonlab.com/",
+     "kind": "home",
+     "words": 1381
+    },
+    {
+     "url": "https://themortonlab.com/research/",
+     "kind": "research",
+     "words": 1874
+    }
+   ],
+   "problem": null
+  },
+  "maral-mousavi": {
+   "name": "Maral Mousavi",
+   "pages": [
+    {
+     "url": "https://bme.usc.edu/directory/faculty/profile/?lname=Mousavi&fname=Maral",
+     "kind": "profile",
+     "words": 144
+    },
+    {
+     "url": "https://madlab.usc.edu/",
+     "kind": "home",
+     "words": 87
+    },
+    {
+     "url": "https://madlab.usc.edu/our-research",
+     "kind": "research",
+     "words": 67
+    },
+    {
+     "url": "https://madlab.usc.edu/our-research",
+     "kind": "research",
+     "words": 67
+    }
+   ],
+   "problem": null
+  },
+  "aiichiro-nakano": {
+   "name": "Aiichiro Nakano",
+   "pages": [
+    {
+     "url": "https://www.cacs.usc.edu/",
+     "kind": "home",
+     "words": 216
+    },
+    {
+     "url": "https://www.cacs.usc.edu/research/",
+     "kind": "research",
+     "words": 126
+    },
+    {
+     "url": "https://www.cacs.usc.edu/research/",
+     "kind": "research",
+     "words": 126
+    }
+   ],
+   "problem": null
+  },
+  "paul-newton": {
+   "name": "Paul Newton",
+   "pages": [],
+   "problem": "website is gone or needs a login"
+  },
+  "michelle-nuno": {
+   "name": "Michelle Nuno",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "sergey-nuzhdin": {
+   "name": "Sergey Nuzhdin",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/sergey-nuzhdin/",
+     "kind": "profile",
+     "words": 118
+    }
+   ],
+   "problem": null
+  },
+  "phuong-pham": {
+   "name": "Phuong Pham",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/phuong-pham/",
+     "kind": "profile",
+     "words": 269
+    }
+   ],
+   "problem": null
+  },
+  "carolyn-phillips": {
+   "name": "Carolyn Phillips",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/carolyn-phillips/",
+     "kind": "profile",
+     "words": 195
+    },
+    {
+     "url": "https://dornsife.usc.edu/phillips/",
+     "kind": "home",
+     "words": 112
+    },
+    {
+     "url": "https://dornsife.usc.edu/phillips/research/",
+     "kind": "research",
+     "words": 607
+    }
+   ],
+   "problem": null
+  },
+  "jin-piao": {
+   "name": "Jin Piao",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "trevor-pickering": {
+   "name": "Trevor Pickering",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "fabien-pinaud": {
+   "name": "Fabien Pinaud",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/fabien-pinaud/",
+     "kind": "profile",
+     "words": 84
+    },
+    {
+     "url": "https://dornsife.usc.edu/smbg/",
+     "kind": "home",
+     "words": 207
+    },
+    {
+     "url": "https://dornsife.usc.edu/smbg/research/",
+     "kind": "research",
+     "words": 1134
+    }
+   ],
+   "problem": null
+  },
+  "michael-quick": {
+   "name": "Michael Quick",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "meisam-razaviyayn": {
+   "name": "Meisam Razaviyayn",
+   "pages": [],
+   "problem": null
+  },
+  "lindsay-renfro": {
+   "name": "Lindsay Anne Renfro",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "remo-rohs": {
+   "name": "Remo Rohs",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/remo-rohs/",
+     "kind": "profile",
+     "words": 62
+    },
+    {
+     "url": "https://www.rohslab.org/",
+     "kind": "home",
+     "words": 531
+    },
+    {
+     "url": "https://www.rohslab.org/research",
+     "kind": "research",
+     "words": 790
+    }
+   ],
+   "problem": null
+  },
+  "bodour-salhia": {
+   "name": "Bodour Salhia",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "sergio-sanudo-wilhelmy": {
+   "name": "Sergio Sanudo-Wilhelmy",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/sergio-sanudo-wilhelmy/",
+     "kind": "profile",
+     "words": 102
+    }
+   ],
+   "problem": null
+  },
+  "julia-schwartzman": {
+   "name": "Julia Schwartzman",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/julia-schwartzman/",
+     "kind": "profile",
+     "words": 138
+    },
+    {
+     "url": "https://schwartzmanlab.org/",
+     "kind": "home",
+     "words": 120
+    },
+    {
+     "url": "https://schwartzmanlab.org/research/",
+     "kind": "research",
+     "words": 509
+    }
+   ],
+   "problem": null
+  },
+  "keyue-shen": {
+   "name": "Keyue Shen",
+   "pages": [
+    {
+     "url": "https://bme.usc.edu/directory/faculty/profile/?lname=Shen&fname=Keyue",
+     "kind": "profile",
+     "words": 117
+    },
+    {
+     "url": "https://shenlab.usc.edu/",
+     "kind": "home",
+     "words": 212
+    },
+    {
+     "url": "https://shenlab.usc.edu/research.html",
+     "kind": "research",
+     "words": 487
+    }
+   ],
+   "problem": null
+  },
+  "chang-shu": {
+   "name": "Chang (April) Shu",
+   "pages": [],
+   "problem": "could not connect from this machine"
+  },
+  "kimberly-siegmund": {
+   "name": "Kimberly Siegmund",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "andrew-smith": {
+   "name": "Andrew Smith",
+   "pages": [
+    {
+     "url": "https://smithlabresearch.org/",
+     "kind": "home",
+     "words": 341
+    }
+   ],
+   "problem": null
+  },
+  "rory-spence": {
+   "name": "Rory Spence",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "andrew-steen": {
+   "name": "Andrew Steen",
+   "pages": [
+    {
+     "url": "https://adsteen.github.io",
+     "kind": "home",
+     "words": 2640
+    },
+    {
+     "url": "https://adsteen.github.io/project/stability/",
+     "kind": "research",
+     "words": 248
+    },
+    {
+     "url": "https://adsteen.github.io/project/meta-analyses/",
+     "kind": "research",
+     "words": 250
+    },
+    {
+     "url": "https://adsteen.github.io/project/extracellular_enzymes/",
+     "kind": "research",
+     "words": 192
+    }
+   ],
+   "problem": null
+  },
+  "daniel-stram": {
+   "name": "Daniel Oscar Stram",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "kelly-street": {
+   "name": "Kelly N. Street",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "fengzhu-sun": {
+   "name": "Fengzhu Sun",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/fengzhu-sun/",
+     "kind": "profile",
+     "words": 184
+    },
+    {
+     "url": "https://dornsife.usc.edu/fsun/",
+     "kind": "home",
+     "words": 386
+    }
+   ],
+   "problem": null
+  },
+  "larry-swanson": {
+   "name": "Larry Swanson",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/larry-swanson/",
+     "kind": "profile",
+     "words": 278
+    },
+    {
+     "url": "https://larrywswanson.com/",
+     "kind": "home",
+     "words": 256
+    },
+    {
+     "url": "https://larrywswanson.com/?page_id=1148",
+     "kind": "research",
+     "words": 1033
+    }
+   ],
+   "problem": null
+  },
+  "simon-tavare": {
+   "name": "Simon Tavaré",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/simon-tavare/",
+     "kind": "profile",
+     "words": 110
+    }
+   ],
+   "problem": "site refused automated requests"
+  },
+  "paul-thomas": {
+   "name": "Paul Thomas",
+   "pages": [
+    {
+     "url": "https://sites.google.com/usc.edu/thomaslab/home",
+     "kind": "home",
+     "words": 461
+    },
+    {
+     "url": "https://sites.google.com/usc.edu/thomaslab/current-projects",
+     "kind": "research",
+     "words": 1372
+    }
+   ],
+   "problem": null
+  },
+  "paul-thompson": {
+   "name": "Paul Thompson",
+   "pages": [
+    {
+     "url": "https://igc.ini.usc.edu/people#faculty",
+     "kind": "home",
+     "words": 920
+    },
+    {
+     "url": "https://igc.ini.usc.edu/projects/neuroscience_medical",
+     "kind": "research",
+     "words": 2752
+    },
+    {
+     "url": "https://igc.ini.usc.edu/projects/connectomics",
+     "kind": "research",
+     "words": 698
+    },
+    {
+     "url": "https://igc.ini.usc.edu/projects/machine_learning",
+     "kind": "research",
+     "words": 861
+    }
+   ],
+   "problem": null
+  },
+  "cameron-thrash": {
+   "name": "Cameron Thrash",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/cameron-thrash/",
+     "kind": "profile",
+     "words": 65
+    },
+    {
+     "url": "https://thethrashlab.com",
+     "kind": "home",
+     "words": 2726
+    },
+    {
+     "url": "https://thethrashlab.com/wp-content/uploads/2025/03/P1090004.jpg",
+     "kind": "research",
+     "words": 921
+    },
+    {
+     "url": "https://thethrashlab.com/wp-content/uploads/2025/03/headshot_riccardo.jpg",
+     "kind": "research",
+     "words": 896
+    },
+    {
+     "url": "https://thethrashlab.com/wp-content/uploads/2025/03/headshot.jpg",
+     "kind": "research",
+     "words": 804
+    }
+   ],
+   "problem": null
+  },
+  "arthur-toga": {
+   "name": "Arthur Toga",
+   "pages": [
+    {
+     "url": "https://loni.usc.edu/about_loni/people#Arthur_Toga",
+     "kind": "home",
+     "words": 2628
+    },
+    {
+     "url": "https://loni.usc.edu/research/projects",
+     "kind": "research",
+     "words": 1982
+    },
+    {
+     "url": "https://loni.usc.edu/research",
+     "kind": "research",
+     "words": 674
+    },
+    {
+     "url": "https://loni.usc.edu/about_loni",
+     "kind": "research",
+     "words": 646
+    }
+   ],
+   "problem": null
+  },
+  "john-tower": {
+   "name": "John Tower",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/john-tower/",
+     "kind": "profile",
+     "words": 180
+    },
+    {
+     "url": "https://dornsife.usc.edu/towerlab/",
+     "kind": "home",
+     "words": 46
+    },
+    {
+     "url": "https://dornsife.usc.edu/towerlab/research/",
+     "kind": "research",
+     "words": 1118
+    }
+   ],
+   "problem": null
+  },
+  "le-trinh": {
+   "name": "Le Trinh",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "thai-truong": {
+   "name": "Thai Truong",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/thai-truong/",
+     "kind": "profile",
+     "words": 274
+    },
+    {
+     "url": "https://dornsife.usc.edu/dsig/",
+     "kind": "home",
+     "words": 379
+    },
+    {
+     "url": "https://dornsife.usc.edu/dsig/content-2/",
+     "kind": "research",
+     "words": 763
+    },
+    {
+     "url": "https://dornsife.usc.edu/dsig/research-zebrafish-neuroscience/",
+     "kind": "research",
+     "words": 54
+    }
+   ],
+   "problem": null
+  },
+  "francisco-valero-cuevas": {
+   "name": "Francisco Valero-Cuevas",
+   "pages": [
+    {
+     "url": "https://bme.usc.edu/directory/faculty/profile/?lname=Valero-Cuevas&fname=Francisco",
+     "kind": "profile",
+     "words": 23
+    },
+    {
+     "url": "https://valerolab.org/",
+     "kind": "home",
+     "words": 168
+    },
+    {
+     "url": "https://valerolab.org/projects/",
+     "kind": "research",
+     "words": 294
+    }
+   ],
+   "problem": null
+  },
+  "peter-yingxiao-wang": {
+   "name": "Peter Yingxiao Wang",
+   "pages": [
+    {
+     "url": "https://wanglab.usc.edu/",
+     "kind": "home",
+     "words": 103
+    },
+    {
+     "url": "https://wanglab.usc.edu/research/",
+     "kind": "research",
+     "words": 510
+    }
+   ],
+   "problem": null
+  },
+  "arieh-warshel": {
+   "name": "Arieh Warshel",
+   "pages": [],
+   "problem": "could not connect from this machine"
+  },
+  "richard-watanabe": {
+   "name": "Richard M. Watanabe",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "michael-waterman": {
+   "name": "Michael Waterman",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/msw/",
+     "kind": "home",
+     "words": 587
+    },
+    {
+     "url": "https://dornsife.usc.edu/msw/research-papers/",
+     "kind": "research",
+     "words": 3073
+    }
+   ],
+   "problem": null
+  },
+  "alan-watts": {
+   "name": "Alan Watts",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/alan-watts/",
+     "kind": "profile",
+     "words": 95
+    }
+   ],
+   "problem": "website is gone or needs a login"
+  },
+  "eric-webb": {
+   "name": "Eric Webb",
+   "pages": [
+    {
+     "url": "https://dornsife.usc.edu/profile/eric-webb/",
+     "kind": "profile",
+     "words": 51
+    },
+    {
+     "url": "https://dornsife.usc.edu/majors/",
+     "kind": "home",
+     "words": 287
+    }
+   ],
+   "problem": null
+  },
+  "xiao-fei-yang": {
+   "name": "Xiao-Fei Yang",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "yaoheng-yang": {
+   "name": "Yaoheng (Mack) Yang",
+   "pages": [
+    {
+     "url": "https://bme.usc.edu/directory/faculty/profile/?lname=Yang&fname=Yaoheng",
+     "kind": "profile",
+     "words": 92
+    },
+    {
+     "url": "https://www.yangbioacousticlab.com/",
+     "kind": "home",
+     "words": 199
+    },
+    {
+     "url": "https://www.yangbioacousticlab.com/research",
+     "kind": "research",
+     "words": 472
+    }
+   ],
+   "problem": null
+  },
+  "jesse-yen": {
+   "name": "Jesse Tong-Pin Yen",
+   "pages": [
+    {
+     "url": "https://bme.usc.edu/directory/faculty/profile/?lname=Yen&fname=Jesse",
+     "kind": "profile",
+     "words": 72
+    }
+   ],
+   "problem": null
+  },
+  "cristina-zavaleta": {
+   "name": "Cristina Zavaleta",
+   "pages": [
+    {
+     "url": "https://www.zavaletalab.com/",
+     "kind": "home",
+     "words": 587
+    },
+    {
+     "url": "https://www.zavaletalab.com/research",
+     "kind": "research",
+     "words": 1561
+    },
+    {
+     "url": "https://www.zavaletalab.com/about-me",
+     "kind": "research",
+     "words": 422
+    }
+   ],
+   "problem": null
+  },
+  "lu-zhang": {
+   "name": "Lu Zhang",
+   "pages": [],
+   "problem": "no lab website"
+  },
+  "qifa-zhou": {
+   "name": "Qifa Zhou",
+   "pages": [
+    {
+     "url": "https://bme.usc.edu/directory/faculty/profile/?lname=Zhou&fname=Qifa",
+     "kind": "profile",
+     "words": 117
+    },
+    {
+     "url": "http://ibt.usc.edu/research-faculty/qifa-zhou-phd/",
+     "kind": "home",
+     "words": 518
+    },
+    {
+     "url": "https://ibt.usc.edu/research/",
+     "kind": "research",
+     "words": 205
+    },
+    {
+     "url": "https://ibt.usc.edu/research-projects/",
+     "kind": "research",
+     "words": 1206
+    },
+    {
+     "url": "https://ibt.usc.edu/research-faculty/",
+     "kind": "research",
+     "words": 133
+    }
+   ],
+   "problem": null
+  }
+ }
+}

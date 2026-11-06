@@ -1,0 +1,14 @@
+[
+  {"anchor": "mark-chaisson", "name": "Genomics & statistical genetics", "color": "green"},
+  {"anchor": "paul-thompson", "name": "Neuroimaging analysis", "color": "aqua"},
+  {"anchor": "remo-rohs", "name": "Structure & molecular simulation", "color": "magenta"},
+  {"anchor": "eva-kanso", "name": "Dynamical modeling & control", "color": "blue"},
+  {"anchor": "naomi-levine", "name": "Microbiome & marine omics", "color": "orange"},
+  {"anchor": "todd-alonzo", "name": "Clinical trials & biostatistics", "color": "violet"},
+  {"anchor": "jesse-yen", "name": "Imaging physics & devices", "color": "yellow"},
+  {"anchor": "peter-kuhn", "name": "Single-cell analysis", "color": "red"},
+  {"anchor": "bartlett-mel", "name": "Neural data & computation", "color": "aqua", "hollow": true},
+  {"anchor": "morteza-dehghani", "name": "Language models & health data", "color": "red", "hollow": true},
+  {"anchor": "dale-kiefer", "name": "Spatial statistics", "color": "blue", "hollow": true},
+  {"anchor": "geoffrey-fudenberg", "name": "Genome folding", "color": "magenta", "hollow": true}
+]

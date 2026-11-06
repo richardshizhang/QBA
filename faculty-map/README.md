@@ -33,10 +33,12 @@ Emeriti are included. The adjunct member (UCLA) is left out.
 | Path | What it is |
 | --- | --- |
 | `index.html` | The whole page: layout, drawing and interaction. |
-| `map-data.js` | Generated data (`window.QCB_MAP`). Don't edit by hand. |
+| `map-data.js` | Generated data (`window.QCB_MAP`): the QCB faculty, arranged by field and by technique. Don't edit by hand. |
+| `map-data-extended.js` | Generated data (`window.QCB_MAP_EXTENDED`), about 930 KB: everyone else on the expanded map, loaded when someone turns on "Expand into related fields". |
 | `match-data.js` | Generated table for matching typed text (`window.QCB_MATCH`), about 600 KB. The page loads it only when someone clicks into the text box. |
-| `scripts/build_map_data.py` | Combines the layout, roster, edges, features and papers into `map-data.js`. |
-| `scripts/build_match_data.py` | Builds `match-data.js`. With `--evaluate`, also measures accuracy on held-out papers. |
+| `match-data-extended.js` | The same table for all 161 people (`window.QCB_MATCH_EXTENDED`), about 1.8 MB, loaded the first time someone matches text on the expanded map. |
+| `scripts/build_map_data.py` | Combines the layouts, rosters, edges, features, papers and methods into `map-data.js` and `map-data-extended.js`. |
+| `scripts/build_match_data.py` | Builds `match-data.js`, or `match-data-extended.js` with `--extended`. With `--evaluate`, also measures accuracy on held-out papers. |
 | `scripts/scrape_faculty.py` | Scrapes the faculty page into `data/faculty.json`: group, title, departments, rank, contact details and links. |
 | `scripts/scrape_departments.py` | Reads five more departments, the Brain and Creativity Institute and hand-picked labs, and merges them with the QCB roster into `data/roster-extended.json` and the review page `data/roster-report.md`. QCB records always win. |
 | `scripts/scrape_lab_sizes.py` | Counts each lab's current members from its website into `data/lab-sizes.json` and `data/lab-size-report.md`. |
@@ -49,6 +51,8 @@ Emeriti are included. The adjunct member (UCLA) is left out.
 | `scripts/fetch_papers.py` | Downloads everyone's papers as trimmed records into `data/papers/papers.json`, filters them, and writes `data/paper-report.md`. |
 | `scripts/build_edges.py` | Builds collaboration edges from the kept papers into `data/edges.json` and writes `data/collaboration-report.md`. |
 | `scripts/build_features.py` | Builds each person's TF-IDF, topic and SPECTER2 vectors into `data/features/faculty-features.npz` and writes `data/features/features-report.md`. |
+| `scripts/scrape_lab_research.py` | Reads each lab's home and research pages and its profile's research statement. The text goes to the gitignored `data/raw/lab-research.json`; `data/lab-research.json` keeps only which pages were read. |
+| `scripts/build_methods.py` | Describes each lab by how it works rather than what it studies, at one level per method: demonstrated by its papers or website, potential from the data it generates, or firsthand. Writes `data/features/methods-features.npz`, `methods-report.md` and `data/lab-methods.json`. |
 | `scripts/combined.py` | Merges the QCB and extended rosters and paper sets for the `--extended` build steps, regrouping duplicates across the two. |
 | `scripts/openalex.py` | Shared OpenAlex API access (key, budget, retries). |
 | `analysis.ipynb` | Dimensionality reduction, clustering and the collaboration overlay. Exports the chosen layouts and tree to `data/layout.json`. Set the representation only in the cell that builds `X`: everything after it reads `X`, `S` and `D` from there, and changing `REP` anywhere else only changes plot titles. |
@@ -71,9 +75,13 @@ Emeriti are included. The adjunct member (UCLA) is left out.
 | `data/lab-report.md` | Website counts next to estimates, and every student's papers, for checking by eye. |
 | `data/edges-extended.json` | Collaboration edges across QCB and the extended roster, from `scripts/build_edges.py --extended`, with `data/collaboration-report-extended.md` beside it. Same format as `data/edges.json`. |
 | `data/features/extended-features.npz` | Feature matrices for all 161 people, from `scripts/build_features.py --extended`, with `extended-features-report.md` beside it. Same format as `faculty-features.npz`. New paper embeddings are in the gitignored `data/papers/specter2-extended.npz`. |
-| `data/cluster-names.json` | Hand-written cluster names and colors. Each entry names one member as its `anchor`, so a name stays with its group if cluster numbers change. |
+| `data/method-taxonomy.json` | The 37 quantitative and computational methods, with the terms that mark `analysis` (the paper does this work) and `data` (the paper generates data this work could use). |
+| `data/lab-method-notes.json` | Firsthand reports of what people did in a lab, which papers can't show: `{"person-id": {"methods": ["computer-vision"], "note": "why"}}`. The notes appear on the page, so keep them anonymous. |
+| `data/lab-methods.json` | Each lab's methods with their level and evidence, for the page: share of papers, an example paper, whether its website says so, and any firsthand note. It holds no website text. |
+| `data/cluster-names.json` | Hand-written cluster names and colors. Each entry names one member as its `anchor`, so a name stays with its group if cluster numbers change. `cluster-names-methods.json`, `cluster-names-extended.json` and `cluster-names-extended-methods.json` do the same for the other three maps. |
 | `data/layout.json` | Positions and the tree, written by the notebook's last cell. `faculty` has each person's cluster and one `[x, y]` per layout (0–1, same scale on both axes, layouts rotated to line up). `tree` holds the full average-linkage tree: in `merges`, node numbers below the faculty count are people in `faculty` order, and n+i is `merges[i]`. |
-| `analysis-extended.ipynb` | A copy of `analysis.ipynb` for all 161 people, reading the `-extended` files. Export is off by default and writes `data/layout-extended.json`, never `data/layout.json`. Saved without outputs. |
+| `data/layout-extended.json` | The same for all 161 people. `layout-methods.json` and `layout-extended-methods.json` are the technique layouts for the QCB faculty and for everyone. |
+| `analysis-extended.ipynb` | A copy of `analysis.ipynb` for all 161 people, reading the `-extended` files. `REP` and `SCOPE` pick which layout its last cell writes, and it never writes `data/layout.json`. Saved without outputs. |
 | `data/roster-extended.json` | Everyone from QCB and the other departments, one record each. `tier` is `qcb`, `named`, `department` or `secondary` (teaching, emeritus, adjunct, and joint or affiliate listings). `affiliations` lists QCB first, so joint faculty read as joint before their other department. `listed_on` shows which pages list them. Not used by the live map yet. |
 | `data/roster-report.md` | Parsed counts for each listing, people to check, missing titles and pages that couldn't be read. |
 | `data/lab-sizes.json` | Member count per lab with its source page and dates, or `null` and a `status` saying why there's no count. Counts only: names stay out of this public repo. |
@@ -106,7 +114,7 @@ If you change the number of clusters, `build_map_data.py` lists any groups that 
 
 The SPECTER2 model download is about 440 MB (into `~/.cache/huggingface`). Embedding all 10,435 papers takes about four minutes on an Apple-silicon GPU. Paper embeddings are cached, so later runs take seconds.
 
-To rebuild the extended roster and lab counts, which aren't on the live map yet:
+To rebuild the extended roster, lab counts and methods:
 
 ```bash
 python3 scripts/scrape_departments.py
@@ -115,9 +123,24 @@ python3 scripts/resolve_authors.py --extended
 python3 scripts/fetch_papers.py --extended
 python3 scripts/build_edges.py --extended
 .venv/bin/python scripts/build_features.py --extended
+python3 scripts/scrape_lab_research.py
+python3 scripts/build_methods.py
 ```
 
-Both read saved pages from `data/raw/web/` first and need only the standard library. `--offline` uses saved pages alone. A few limits are worth knowing:
+Then export the layouts from `analysis-extended.ipynb` and build the page's data:
+
+| `REP` | `SCOPE` | `K` | Writes |
+|---|---|---|---|
+| `"specter"` | `"extended"` | 9 | `data/layout-extended.json` |
+| `"methods"` | `"extended"` | 12 | `data/layout-extended-methods.json` |
+| `"methods"` | `"qcb"` | 7 | `data/layout-methods.json` |
+
+```bash
+python3 scripts/build_map_data.py
+.venv/bin/python scripts/build_match_data.py --extended
+```
+
+The scrapers read saved pages from `data/raw/web/` first and need only the standard library. `--offline` uses saved pages alone. A few limits are worth knowing:
 
 - **Use `analysis-extended.ipynb` for this data.** `analysis.ipynb` reads the QCB files, and its last cell writes `data/layout.json`, which the live map uses.
 - **Keck profiles** (`keck.usc.edu/faculty-search/`) sit behind a Cloudflare bot challenge, so most biostatistics faculty have no title or lab link. Don't try to get past it. Saving those pages from a browser would work.
@@ -153,6 +176,17 @@ Strengths run from 0.01 to about 100: Toga and Thompson share 683 papers going b
 ### Colors on the map
 
 Nine clusters is more than color alone can carry: on a scatter any two hues can sit side by side, and eight hues can't all stay distinct for colorblind readers. So the cluster names are written on the map, hovering a legend entry highlights that cluster, and the List view has everything as text. Hues were assigned by computing which clusters are neighbors in either layout and choosing the arrangement that keeps neighbors most distinct. The ninth cluster reuses a hue as a hollow marker rather than adding a ninth color: "Protein structure & drug design" shares its hue with "Gene regulation & genome structure", its neighbor in the tree.
+
+### Fields, techniques and related fields
+
+The page opens on the QCB faculty by field, as it always has. Two controls change the map:
+
+- **By field / By technique** swaps what positions and clusters are built from: SPECTER2 embeddings of papers, or the method profiles from `scripts/build_methods.py`.
+- **Expand into related fields** adds the other 113 people in `scripts/combined.py`. `map-data-extended.js` and `match-data-extended.js` load on first use, so the default page doesn't pay for them.
+
+Each combination is a "world" in the data, with its own positions, clusters, tree and similarity matrix. People are numbered QCB first, so a person keeps their number in every world and a selection survives a switch. Everyone is laid out again on the expanded map, so QCB faculty move. The expanded maps use the t-SNE and MDS that were chosen for them, where the QCB maps use t-SNE and UMAP.
+
+Clicking someone shows their methods in the panel, strongest evidence first. Opening a method shows its evidence and lights up every lab that has it.
 
 ### Matching a student to faculty
 
