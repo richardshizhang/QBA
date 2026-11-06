@@ -1,0 +1,1386 @@
+{
+ "recent": 2023,
+ "labs": {
+  "helen-berman": {
+   "size": 0,
+   "source": null,
+   "url": null,
+   "note": null,
+   "count": null,
+   "estimate": 0,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "peter-calabrese": {
+   "size": 2,
+   "source": "estimate",
+   "url": null,
+   "note": null,
+   "count": null,
+   "estimate": 2,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "mark-chaisson": {
+   "size": 6,
+   "source": "website",
+   "url": "https://chaissonlab.usc.edu/members/",
+   "note": null,
+   "count": 6,
+   "estimate": 9,
+   "phd": 3,
+   "postdoc": 2
+  },
+  "liang-chen": {
+   "size": 10,
+   "source": "estimate",
+   "url": null,
+   "note": null,
+   "count": null,
+   "estimate": 10,
+   "phd": 3,
+   "postdoc": 0
+  },
+  "tsu-pei-chiu": {
+   "size": 0,
+   "source": null,
+   "url": null,
+   "note": null,
+   "count": null,
+   "estimate": 0,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "michael-edge": {
+   "size": 6,
+   "source": "website",
+   "url": "https://edgepopgen.github.io/edgelab/team/",
+   "note": null,
+   "count": 5,
+   "estimate": 8,
+   "phd": 3,
+   "postdoc": 2
+  },
+  "geoffrey-fudenberg": {
+   "size": 7,
+   "source": "website",
+   "url": "https://fudenberg.team/",
+   "note": null,
+   "count": 7,
+   "estimate": 7,
+   "phd": 2,
+   "postdoc": 3
+  },
+  "vsevolod-katritch": {
+   "size": 11,
+   "source": "website",
+   "url": "https://katritch.usc.edu/people.html",
+   "note": null,
+   "count": 11,
+   "estimate": 17,
+   "phd": 2,
+   "postdoc": 5
+  },
+  "steve-kay": {
+   "size": 6,
+   "source": "website",
+   "url": "https://kaylab.usc.edu/about-ussteve-a-kay-ph-d-d-sc/staff/",
+   "note": null,
+   "count": 6,
+   "estimate": 9,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "adam-maclean": {
+   "size": 8,
+   "source": "website",
+   "url": "https://macleanlab.usc.edu/people/",
+   "note": null,
+   "count": 7,
+   "estimate": 14,
+   "phd": 4,
+   "postdoc": 3
+  },
+  "jazlyn-mooney": {
+   "size": 8,
+   "source": "website",
+   "url": "https://mooney-lab.github.io/",
+   "note": null,
+   "count": 8,
+   "estimate": 6,
+   "phd": 4,
+   "postdoc": 1
+  },
+  "remo-rohs": {
+   "size": 14,
+   "source": "website",
+   "url": "https://www.rohslab.org/team",
+   "note": null,
+   "count": 14,
+   "estimate": 16,
+   "phd": 5,
+   "postdoc": 1
+  },
+  "andrew-smith": {
+   "size": 3,
+   "source": "estimate",
+   "url": null,
+   "note": null,
+   "count": null,
+   "estimate": 3,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "fengzhu-sun": {
+   "size": 8,
+   "source": "website",
+   "url": "https://dornsife.usc.edu/fsun/people/",
+   "note": null,
+   "count": 7,
+   "estimate": 19,
+   "phd": 7,
+   "postdoc": 0
+  },
+  "andrew-mcmahon": {
+   "size": 13,
+   "source": "estimate",
+   "url": null,
+   "note": null,
+   "count": null,
+   "estimate": 13,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "simon-tavare": {
+   "size": 0,
+   "source": null,
+   "url": null,
+   "note": null,
+   "count": null,
+   "estimate": 0,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "michael-waterman": {
+   "size": 0,
+   "source": null,
+   "url": null,
+   "note": null,
+   "count": null,
+   "estimate": 0,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "don-b-arnold": {
+   "size": 7,
+   "source": "website",
+   "url": "https://dornsife.usc.edu/arnold/people/",
+   "note": null,
+   "count": 7,
+   "estimate": 4,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "charleston-chiang": {
+   "size": 21,
+   "source": "website",
+   "url": "https://chianglab.usc.edu/",
+   "note": "Probably high, as the page still lists undergraduates from 2019 to 2021.",
+   "count": 21,
+   "estimate": 10,
+   "phd": 1,
+   "postdoc": 0
+  },
+  "rosa-di-felice": {
+   "size": 3,
+   "source": "estimate",
+   "url": null,
+   "note": null,
+   "count": null,
+   "estimate": 3,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "arun-durvasula": {
+   "size": 5,
+   "source": "website",
+   "url": "https://durvasula-lab.usc.edu/people/",
+   "note": null,
+   "count": 5,
+   "estimate": 0,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "stacey-finley": {
+   "size": 6,
+   "source": "website",
+   "url": "https://csbl.usc.edu/lab-members/",
+   "note": null,
+   "count": 6,
+   "estimate": 14,
+   "phd": 2,
+   "postdoc": 0
+  },
+  "peter-foster": {
+   "size": 7,
+   "source": "website",
+   "url": "https://www.peterfosterlab.com/team.html",
+   "note": null,
+   "count": 7,
+   "estimate": 0,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "scott-fraser": {
+   "size": 4,
+   "source": "estimate",
+   "url": null,
+   "note": null,
+   "count": null,
+   "estimate": 4,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "krishna-garikipati": {
+   "size": 9,
+   "source": "website",
+   "url": "https://sites.usc.edu/compphys/staff/",
+   "note": null,
+   "count": 9,
+   "estimate": 4,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "steven-gazal": {
+   "size": 9,
+   "source": "website",
+   "url": "https://gazal-lab.org/lab-members",
+   "note": null,
+   "count": 9,
+   "estimate": 7,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "christoph-haselwandter": {
+   "size": 3,
+   "source": "estimate",
+   "url": null,
+   "note": null,
+   "count": null,
+   "estimate": 3,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "andrei-irimia": {
+   "size": 19,
+   "source": "website",
+   "url": "https://gero.usc.edu/labs/irimialab/people/",
+   "note": null,
+   "count": 19,
+   "estimate": 22,
+   "phd": 1,
+   "postdoc": 0
+  },
+  "eva-kanso": {
+   "size": 8,
+   "source": "estimate",
+   "url": null,
+   "note": null,
+   "count": null,
+   "estimate": 8,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "judith-kribelbauer": {
+   "size": 8,
+   "source": "website",
+   "url": "https://dornsife.usc.edu/kribelbauer/content-sample-page2/",
+   "note": null,
+   "count": 8,
+   "estimate": 0,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "jerry-s-h-lee": {
+   "size": 3,
+   "source": "estimate",
+   "url": null,
+   "note": null,
+   "count": null,
+   "estimate": 3,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "naomi-levine": {
+   "size": 13,
+   "source": "website",
+   "url": "https://dornsife.usc.edu/levine/our-group/",
+   "note": null,
+   "count": 13,
+   "estimate": 5,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "sheng-li": {
+   "size": 8,
+   "source": "website",
+   "url": "https://www.shenglilab.com/people",
+   "note": null,
+   "count": 8,
+   "estimate": 5,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "ruishan-liu": {
+   "size": 10,
+   "source": "estimate",
+   "url": null,
+   "note": null,
+   "count": null,
+   "estimate": 10,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "yan-liu": {
+   "size": 19,
+   "source": "estimate",
+   "url": null,
+   "note": null,
+   "count": null,
+   "estimate": 19,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "nicholas-mancuso": {
+   "size": 11,
+   "source": "estimate",
+   "url": null,
+   "note": null,
+   "count": null,
+   "estimate": 11,
+   "phd": 1,
+   "postdoc": 0
+  },
+  "aiichiro-nakano": {
+   "size": 11,
+   "source": "website",
+   "url": "https://www.cacs.usc.edu/postdocs-and-students/",
+   "note": "This is CACS, a center shared by four faculty.",
+   "count": 11,
+   "estimate": 11,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "paul-newton": {
+   "size": 6,
+   "source": "estimate",
+   "url": null,
+   "note": null,
+   "count": null,
+   "estimate": 6,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "meisam-razaviyayn": {
+   "size": 4,
+   "source": "estimate",
+   "url": null,
+   "note": null,
+   "count": null,
+   "estimate": 4,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "bodour-salhia": {
+   "size": 19,
+   "source": "estimate",
+   "url": null,
+   "note": null,
+   "count": null,
+   "estimate": 19,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "julia-schwartzman": {
+   "size": 5,
+   "source": "website",
+   "url": "https://schwartzmanlab.org/people/",
+   "note": null,
+   "count": 5,
+   "estimate": 3,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "chang-shu": {
+   "size": 5,
+   "source": "estimate",
+   "url": null,
+   "note": null,
+   "count": null,
+   "estimate": 5,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "rory-spence": {
+   "size": 0,
+   "source": null,
+   "url": null,
+   "note": null,
+   "count": null,
+   "estimate": 0,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "paul-thomas": {
+   "size": 7,
+   "source": "website",
+   "url": "https://sites.google.com/usc.edu/thomaslab/lab-members",
+   "note": null,
+   "count": 7,
+   "estimate": 0,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "paul-thompson": {
+   "size": 40,
+   "source": "website",
+   "url": "https://igc.ini.usc.edu/people",
+   "note": "This is the whole Imaging Genetics Center, which includes other faculty.",
+   "count": 40,
+   "estimate": 42,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "arthur-toga": {
+   "size": 9,
+   "source": "estimate",
+   "url": null,
+   "note": null,
+   "count": null,
+   "estimate": 9,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "peter-yingxiao-wang": {
+   "size": 22,
+   "source": "website",
+   "url": "https://wanglab.usc.edu/members/",
+   "note": null,
+   "count": 22,
+   "estimate": 16,
+   "phd": 0,
+   "postdoc": 0
+  },
+  "arieh-warshel": {
+   "size": 10,
+   "source": "estimate",
+   "url": null,
+   "note": null,
+   "count": null,
+   "estimate": 10,
+   "phd": 0,
+   "postdoc": 0
+  }
+ },
+ "students": [
+  {
+   "id": "handan-cetin",
+   "name": "Handan Cetin",
+   "labs": [
+    "stacey-finley"
+   ],
+   "papers": [
+    {
+     "title": "Cancer-associated fibroblasts drive metabolic heterogeneity in colorectal cancer cells: predictions from metabolic modeling",
+     "year": 2026,
+     "venue": "npj Systems Biology and Applications",
+     "doi": "10.1038/s41540-026-00673-8",
+     "id": "W7133506120",
+     "position": "middle"
+    },
+    {
+     "title": "Metabolic Reprogramming and Therapeutic Vulnerabilities in the Tumor Microenvironment Revealed by Multi-scale Network Geometry",
+     "year": 2025,
+     "venue": "bioRxiv (Cold Spring Harbor Laboratory)",
+     "doi": "10.1101/2025.11.16.688737",
+     "id": "W4416342025",
+     "position": "first"
+    },
+    {
+     "title": "Flux sampling in genome-scale metabolic modeling of microbial communities",
+     "year": 2024,
+     "venue": "BMC Bioinformatics",
+     "doi": "10.1186/s12859-024-05655-3",
+     "id": "W4391322912",
+     "position": "middle"
+    }
+   ]
+  },
+  {
+   "id": "bryan-dinh",
+   "name": "Bryan Dinh",
+   "labs": [
+    "charleston-chiang"
+   ],
+   "papers": [
+    {
+     "title": "Incorporating dietary information to enhance polygenic prediction models with applications to body mass index and type 2 diabetes",
+     "year": 2026,
+     "venue": "Genes & Nutrition",
+     "doi": "10.1186/s12263-026-00811-1",
+     "id": "W4414905073",
+     "position": "middle"
+    },
+    {
+     "title": "Meta-analysis of over 8,000 individuals from Hawai‘i and Samoa for genetic associations to cardiometabolic phenotypes",
+     "year": 2026,
+     "venue": "PLoS Genetics",
+     "doi": "10.1371/journal.pgen.1012342",
+     "id": "W7223109587",
+     "position": "first"
+    },
+    {
+     "title": "Integrating Data-Driven Dietary Scores and Polygenic Risk Models to Enhance BMI Prediction in Multiethnic Populations",
+     "year": 2026,
+     "venue": "Current Developments in Nutrition",
+     "doi": "10.1016/j.cdnut.2026.109221",
+     "id": "W7170519989",
+     "position": "middle"
+    },
+    {
+     "title": "A likelihood-based framework for demographic inference from genealogical trees",
+     "year": 2025,
+     "venue": "Nature Genetics",
+     "doi": "10.1038/s41588-025-02129-x",
+     "id": "W4408673032",
+     "position": "middle"
+    },
+    {
+     "title": "The accuracy of polygenic score models for BMI and Type II diabetes in the Native Hawaiian population",
+     "year": 2025,
+     "venue": "Communications Biology",
+     "doi": "10.1038/s42003-025-08050-7",
+     "id": "W4409722445",
+     "position": "middle"
+    },
+    {
+     "title": "Tree-based QTL mapping with expected local genetic relatedness matrices",
+     "year": 2023,
+     "venue": "The American Journal of Human Genetics",
+     "doi": "10.1016/j.ajhg.2023.10.017",
+     "id": "W4389427563",
+     "position": "middle"
+    },
+    {
+     "title": "Recombination map tailored to Native Hawaiians may improve robustness of genomic scans for positive selection",
+     "year": 2023,
+     "venue": "Human Genetics",
+     "doi": "10.1007/s00439-023-02625-2",
+     "id": "W4390398058",
+     "position": "first"
+    },
+    {
+     "title": "The impact of global and local Polynesian genetic ancestry on complex traits in Native Hawaiians",
+     "year": 2021,
+     "venue": "PLoS Genetics",
+     "doi": "10.1371/journal.pgen.1009273",
+     "id": "W3127402541",
+     "position": "middle"
+    }
+   ]
+  },
+  {
+   "id": "abu-humayed-azim-fahmid",
+   "name": "Abu Humayed Azim Fahmid",
+   "labs": [
+    "liang-chen"
+   ],
+   "papers": []
+  },
+  {
+   "id": "tessa-ferrari",
+   "name": "Tessa Ferrari",
+   "labs": [
+    "jazlyn-mooney"
+   ],
+   "papers": [
+    {
+     "title": "Analytical expectations for ancestry junction accumulation in admixed genomes",
+     "year": 2026,
+     "venue": "Genetics",
+     "doi": "10.1093/genetics/iyag062",
+     "id": "W7134039859",
+     "position": "middle"
+    },
+    {
+     "title": "Parameter Scaling in Population Genetics Simulations may Introduce Unintended Background Selection: Considerations for Scaled Simulation Design",
+     "year": 2025,
+     "venue": "Genome Biology and Evolution",
+     "doi": "10.1093/gbe/evaf097",
+     "id": "W4410617556",
+     "position": "first"
+    },
+    {
+     "title": "A Pipeline and Recommendations for Population and Individual Diagnostic SNP Selection in Non‐Model Species",
+     "year": 2024,
+     "venue": "Molecular Ecology Resources",
+     "doi": "10.1111/1755-0998.14048",
+     "id": "W4404862804",
+     "position": "middle"
+    }
+   ]
+  },
+  {
+   "id": "yongchan-hong",
+   "name": "Yongchan (Chan) Hong",
+   "labs": [
+    "vsevolod-katritch"
+   ],
+   "papers": [
+    {
+     "title": "PLATE-VS: a web server for protein–ligand assay curation and cross-target virtual screening datasets",
+     "year": 2026,
+     "venue": "Nucleic Acids Research",
+     "doi": "10.1093/nar/gkag509",
+     "id": "W7162663378",
+     "position": "middle"
+    },
+    {
+     "title": "Trustworthy Protein-Ligand Binding Affinity Prediction via Reliability-Aware Multi-Engine Fusion",
+     "year": 2026,
+     "venue": "ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD)",
+     "doi": "10.1145/3770855.3818966",
+     "id": "W7197027488",
+     "position": "first"
+    },
+    {
+     "title": "GLACIER: A Multimodal Student-Teacher Foundation Model for Molecular Property Prediction",
+     "year": 2026,
+     "venue": "ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD)",
+     "doi": "10.1145/3770855.3819032",
+     "id": "W7197032924",
+     "position": "middle"
+    },
+    {
+     "title": "When DL-Based Prescreening Meets Synthon-Based Docking: Target-Adapting PharmacoNet via MEL-Steered Correction",
+     "year": 2026,
+     "venue": "bioRxiv (Cold Spring Harbor Laboratory)",
+     "doi": "10.64898/2026.09.02.748684",
+     "id": "W7208782240",
+     "position": "middle"
+    }
+   ]
+  },
+  {
+   "id": "shengmiao-huang",
+   "name": "Shengmiao (Morgan) Huang",
+   "labs": [
+    "jazlyn-mooney"
+   ],
+   "papers": [
+    {
+     "title": "Genotypic and phenotypic consequences of domestication in dogs",
+     "year": 2026,
+     "venue": "G3 Genes Genomes Genetics",
+     "doi": "10.1093/g3journal/jkag195",
+     "id": "W4396654705",
+     "position": "middle"
+    }
+   ]
+  },
+  {
+   "id": "yue-huang",
+   "name": "Yue Huang",
+   "labs": [
+    "fengzhu-sun"
+   ],
+   "papers": [
+    {
+     "title": "Quantifying microbial interactions based on compositional data using an iterative approach for solving generalized Lotka-Volterra equations",
+     "year": 2025,
+     "venue": "PLoS Computational Biology",
+     "doi": "10.1371/journal.pcbi.1013691",
+     "id": "W4416011787",
+     "position": "first"
+    }
+   ]
+  },
+  {
+   "id": "yiping-jia",
+   "name": "Yiping Jia",
+   "labs": [
+    "stacey-finley"
+   ],
+   "papers": [
+    {
+     "title": "Computational modeling of VEGF-A signaling predicts lymphatic junction state",
+     "year": 2026,
+     "venue": "bioRxiv (Cold Spring Harbor Laboratory)",
+     "doi": "10.64898/2026.10.14.759242",
+     "id": "W7222416860",
+     "position": "first"
+    }
+   ]
+  },
+  {
+   "id": "sizhu-jiang",
+   "name": "Sizhu (Evelyn) Jiang",
+   "labs": [
+    "adam-maclean"
+   ],
+   "papers": []
+  },
+  {
+   "id": "aydin-loid-karatas",
+   "name": "Aydin Loid Karatas",
+   "labs": [
+    "jazlyn-mooney"
+   ],
+   "papers": [
+    {
+     "title": "Analytical expectations for ancestry junction accumulation in admixed genomes",
+     "year": 2026,
+     "venue": "Genetics",
+     "doi": "10.1093/genetics/iyag062",
+     "id": "W7134039859",
+     "position": "middle"
+    },
+    {
+     "title": "Central carbon metabolism switching in lytic versus temperate coral reef viral communities",
+     "year": 2025,
+     "venue": "eLife",
+     "doi": "10.1101/2025.09.25.676695",
+     "id": "W4414577557",
+     "position": "middle"
+    },
+    {
+     "title": "Transitions in human gut viral communities from ancient to modern societies",
+     "year": 2025,
+     "venue": "bioRxiv (Cold Spring Harbor Laboratory)",
+     "doi": "10.1101/2025.09.16.676446",
+     "id": "W4414303823",
+     "position": "first"
+    }
+   ]
+  },
+  {
+   "id": "dylan-kemmerer",
+   "name": "Dylan Kemmerer",
+   "labs": [
+    "remo-rohs"
+   ],
+   "papers": []
+  },
+  {
+   "id": "peijun-lin",
+   "name": "Peijun Lin",
+   "labs": [
+    "remo-rohs"
+   ],
+   "papers": [
+    {
+     "title": "CENO: A Genome-Scale World Model for Evolutionary Sequence Interpretation and Programmable Regulatory Design",
+     "year": 2026,
+     "venue": "bioRxiv (Cold Spring Harbor Laboratory)",
+     "doi": "10.64898/2026.07.28.741284",
+     "id": "W7171831319",
+     "position": "middle"
+    }
+   ]
+  },
+  {
+   "id": "fangyun-liu",
+   "name": "Fangyun (Cecilia) Liu",
+   "labs": [
+    "andrei-irimia"
+   ],
+   "papers": [
+    {
+     "title": "Genome-wide analysis of subcortical aging identifies a spatially structured pattern of genetic associations",
+     "year": 2026,
+     "venue": "GeroScience",
+     "doi": "10.1007/s11357-026-02453-y",
+     "id": "W7172137638",
+     "position": "middle"
+    },
+    {
+     "title": "Segmentation and morphometry of intracranial internal carotid artery calcification in relation to brain atrophy",
+     "year": 2026,
+     "venue": "Neuroradiology",
+     "doi": "10.1007/s00234-026-03918-9",
+     "id": "W7135378582",
+     "position": "middle"
+    }
+   ]
+  },
+  {
+   "id": "junjian-liu",
+   "name": "Junjian (Janis) Liu",
+   "labs": [
+    "michael-edge"
+   ],
+   "papers": [
+    {
+     "title": "Error rates in QST–FST comparisons depend on genetic architecture and estimation procedures",
+     "year": 2025,
+     "venue": "Genetics",
+     "doi": "10.1093/genetics/iyaf034",
+     "id": "W4408140848",
+     "position": "first"
+    }
+   ]
+  },
+  {
+   "id": "wei-liu",
+   "name": "Wei Liu",
+   "labs": [
+    "fengzhu-sun"
+   ],
+   "papers": [
+    {
+     "title": "PLMSearch and PLMAlign: Protein Language Model (PLM)-Based Homologous Protein Sequence Search and Alignment",
+     "year": 2025,
+     "venue": "Methods in molecular biology",
+     "doi": "10.1007/978-1-0716-4623-6_14",
+     "id": "W4411869709",
+     "position": "first"
+    },
+    {
+     "title": "Effective binning of metagenomic contigs using contrastive multi-view representation learning",
+     "year": 2024,
+     "venue": "Nature Communications",
+     "doi": "10.1038/s41467-023-44290-z",
+     "id": "W4390935732",
+     "position": "middle"
+    }
+   ]
+  },
+  {
+   "id": "wenjin-liu",
+   "name": "Wenjin Liu",
+   "labs": [
+    "vsevolod-katritch"
+   ],
+   "papers": [
+    {
+     "title": "Trustworthy Protein-Ligand Binding Affinity Prediction via Reliability-Aware Multi-Engine Fusion",
+     "year": 2026,
+     "venue": "ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD)",
+     "doi": "10.1145/3770855.3818966",
+     "id": "W7197027488",
+     "position": "middle"
+    },
+    {
+     "title": "When DL-Based Prescreening Meets Synthon-Based Docking: Target-Adapting PharmacoNet via MEL-Steered Correction",
+     "year": 2026,
+     "venue": "bioRxiv (Cold Spring Harbor Laboratory)",
+     "doi": "10.64898/2026.09.02.748684",
+     "id": "W7208782240",
+     "position": "first"
+    }
+   ]
+  },
+  {
+   "id": "yangyang-liu",
+   "name": "Yangyang Liu",
+   "labs": [
+    "fengzhu-sun"
+   ],
+   "papers": []
+  },
+  {
+   "id": "yingtong-liu",
+   "name": "Yingtong Liu",
+   "labs": [
+    "adam-maclean"
+   ],
+   "papers": [
+    {
+     "title": "Immune Circuit Rewiring by HDAC Inhibition Enables Response to Dual Checkpoint Blockade in Metastatic Breast Cancer",
+     "year": 2026,
+     "venue": "Cancer Research",
+     "doi": "10.1158/0008-5472.can-26-1086",
+     "id": "W7202202548",
+     "position": "middle"
+    },
+    {
+     "title": "Inference of marker genes of subtle cell state changes via iLR: iterative logistic regression",
+     "year": 2026,
+     "venue": "Bioinformatics",
+     "doi": "10.1093/bioinformatics/btag051",
+     "id": "W7127338439",
+     "position": "first"
+    },
+    {
+     "title": "A class act: HDAC1- Malat1 regulates MDSC apoptosis and cell cycling to decrease suppression of T cells",
+     "year": 2026,
+     "venue": "bioRxiv (Cold Spring Harbor Laboratory)",
+     "doi": "10.64898/2026.03.23.713743",
+     "id": "W7140530015",
+     "position": "middle"
+    },
+    {
+     "title": "Cancer systems immunology reveals myeloid—T cell interactions and B cell activation mediate response to checkpoint inhibition in metastatic breast cancer",
+     "year": 2025,
+     "venue": "bioRxiv (Cold Spring Harbor Laboratory)",
+     "doi": "10.1101/2025.06.09.658361",
+     "id": "W4411287875",
+     "position": "middle"
+    },
+    {
+     "title": "A new Neu—a syngeneic model of spontaneously metastatic HER2-positive breast cancer",
+     "year": 2024,
+     "venue": "Clinical & Experimental Metastasis",
+     "doi": "10.1007/s10585-024-10289-z",
+     "id": "W4396741830",
+     "position": "middle"
+    }
+   ]
+  },
+  {
+   "id": "seung-jae-lee",
+   "name": "Seung Jae Lee",
+   "labs": [
+    "mark-chaisson"
+   ],
+   "papers": []
+  },
+  {
+   "id": "wangfei-ma",
+   "name": "Wangfei (Walfred) Ma",
+   "labs": [
+    "mark-chaisson"
+   ],
+   "papers": [
+    {
+     "title": "Genotyping sequence-resolved copy number variation using pangenomes reveals paralog-specific global diversity and expression divergence of duplicated genes",
+     "year": 2025,
+     "venue": "Nature Genetics",
+     "doi": "10.1038/s41588-025-02346-4",
+     "id": "W4415277951",
+     "position": "first"
+    }
+   ]
+  },
+  {
+   "id": "jonathan-martinez",
+   "name": "Jonathan Martinez",
+   "labs": [
+    "adam-maclean"
+   ],
+   "papers": [
+    {
+     "title": "Personalizing Cancer Models under Data Scarcity via Parameter Decomposition",
+     "year": 2026,
+     "venue": "arXiv (Cornell University)",
+     "doi": "10.48550/arxiv.2604.27408",
+     "id": "W7159593043",
+     "position": "middle"
+    },
+    {
+     "title": "Gene regulatory network inference with popInfer reveals the dynamic regulation of hematopoietic stem cell quiescence",
+     "year": 2025,
+     "venue": "iScience",
+     "doi": "10.1016/j.isci.2025.114010",
+     "id": "W4416185399",
+     "position": "middle"
+    },
+    {
+     "title": "Beyond RECIST: mathematical modeling and Bayesian inference reveal the importance of immune suppressive parameters in metastatic breast cancer",
+     "year": 2025,
+     "venue": "bioRxiv (Cold Spring Harbor Laboratory)",
+     "doi": "10.1101/2025.08.11.669777",
+     "id": "W4413127757",
+     "position": "middle"
+    }
+   ]
+  },
+  {
+   "id": "meilu-mcdermott",
+   "name": "Meilu McDermott",
+   "labs": [
+    "adam-maclean"
+   ],
+   "papers": [
+    {
+     "title": "A Mecom—Cdk6 toggle switch governs hematopoietic stem-to-multipotent fate transitions via distinct multistable landscapes",
+     "year": 2026,
+     "venue": "bioRxiv (Cold Spring Harbor Laboratory)",
+     "doi": "10.64898/2026.06.26.734844",
+     "id": "W7166517484",
+     "position": "middle"
+    },
+    {
+     "title": "Modeling the dynamics of EMT reveals genes associated with pan-cancer intermediate states and plasticity",
+     "year": 2025,
+     "venue": "npj Systems Biology and Applications",
+     "doi": "10.1038/s41540-025-00512-2",
+     "id": "W4409331998",
+     "position": "first"
+    },
+    {
+     "title": "Data-driven model discovery and model selection for noisy biological systems",
+     "year": 2025,
+     "venue": "PLoS Computational Biology",
+     "doi": "10.1371/journal.pcbi.1012762",
+     "id": "W4406657284",
+     "position": "middle"
+    },
+    {
+     "title": "APIR: Aggregating Universal Proteomics Database Search Algorithms for Peptide Identification with FDR Control",
+     "year": 2024,
+     "venue": "Genomics Proteomics & Bioinformatics",
+     "doi": "10.1093/gpbjnl/qzae042",
+     "id": "W4399280596",
+     "position": "middle"
+    },
+    {
+     "title": "Clipper: p-value-free FDR control on high-throughput data from two conditions",
+     "year": 2021,
+     "venue": "Genome biology",
+     "doi": "10.1186/s13059-021-02506-9",
+     "id": "W3205366548",
+     "position": "middle"
+    }
+   ]
+  },
+  {
+   "id": "obadiah-mulder",
+   "name": "Obadiah Mulder",
+   "labs": [
+    "michael-edge"
+   ],
+   "papers": [
+    {
+     "title": "Evaluating ARG-estimation methods in the context of estimating population-mean polygenic score histories",
+     "year": 2025,
+     "venue": "Genetics",
+     "doi": "10.1093/genetics/iyaf033",
+     "id": "W4408180614",
+     "position": "middle"
+    },
+    {
+     "title": "An agent-based model of metabolic signaling oscillations in Bacillus subtilis biofilms",
+     "year": 2025,
+     "venue": "PLoS Computational Biology",
+     "doi": "10.1371/journal.pcbi.1013746",
+     "id": "W4417003875",
+     "position": "first"
+    },
+    {
+     "title": "Examining the Effect of Beech Bark Disease on Radial Growth in American Beech",
+     "year": 2023,
+     "venue": "Forests",
+     "doi": "10.3390/f14020312",
+     "id": "W4319316219",
+     "position": "middle"
+    },
+    {
+     "title": "The global value of coastal wetlands for storm protection",
+     "year": 2021,
+     "venue": "Global Environmental Change",
+     "doi": "10.1016/j.gloenvcha.2021.102328",
+     "id": "W3192399578",
+     "position": "middle"
+    }
+   ]
+  },
+  {
+   "id": "shirin-nataneli",
+   "name": "Shirin Nataneli",
+   "labs": [
+    "jazlyn-mooney"
+   ],
+   "papers": [
+    {
+     "title": "Analytical expectations for ancestry junction accumulation in admixed genomes",
+     "year": 2026,
+     "venue": "Genetics",
+     "doi": "10.1093/genetics/iyag062",
+     "id": "W7134039859",
+     "position": "first"
+    },
+    {
+     "title": "Genotypic and phenotypic consequences of domestication in dogs",
+     "year": 2026,
+     "venue": "G3 Genes Genomes Genetics",
+     "doi": "10.1093/g3journal/jkag195",
+     "id": "W4396654705",
+     "position": "middle"
+    },
+    {
+     "title": "Echoes of eugenics: confronting its effects in indigenous genomics",
+     "year": 2025,
+     "venue": "Genetics",
+     "doi": "10.1093/genetics/iyaf127",
+     "id": "W4413114300",
+     "position": "middle"
+    }
+   ]
+  },
+  {
+   "id": "feriel-ouerghi",
+   "name": "Feriel Ouerghi",
+   "labs": [
+    "michael-edge"
+   ],
+   "papers": [
+    {
+     "title": "On forensic likelihood ratios from low-coverage sequencing",
+     "year": 2024,
+     "venue": "Forensic Science International Genetics",
+     "doi": "10.1016/j.fsigen.2025.103302",
+     "id": "W4410774577",
+     "position": "first"
+    },
+    {
+     "title": "Subsets of IFN Signaling Predict Response to Immune Checkpoint Blockade in Patients with Melanoma",
+     "year": 2023,
+     "venue": "Clinical Cancer Research",
+     "doi": "10.1158/1078-0432.ccr-23-0215",
+     "id": "W4378348559",
+     "position": "middle"
+    }
+   ]
+  },
+  {
+   "id": "md-rownok-zahan-ratul",
+   "name": "Md Rownok Zahan Ratul",
+   "labs": [
+    "geoffrey-fudenberg"
+   ],
+   "papers": []
+  },
+  {
+   "id": "alexandra-shewchuk",
+   "name": "Alexandra (Lexi) Shewchuk",
+   "labs": [
+    "remo-rohs"
+   ],
+   "papers": [
+    {
+     "title": "Readout of intrinsic and induced DNA shape by homeodomain transcription factor complexes",
+     "year": 2026,
+     "venue": "Biophysical Journal",
+     "doi": "10.1016/j.bpj.2026.03.036",
+     "id": "W7138865111",
+     "position": "middle"
+    }
+   ]
+  },
+  {
+   "id": "peiyu-shi",
+   "name": "Peiyu Shi",
+   "labs": [
+    "remo-rohs"
+   ],
+   "papers": []
+  },
+  {
+   "id": "shreyash-sinha",
+   "name": "Shreyash Sinha",
+   "labs": [
+    "fengzhu-sun"
+   ],
+   "papers": []
+  },
+  {
+   "id": "wei-yu-tang",
+   "name": "Wei Yu Tang",
+   "labs": [
+    "remo-rohs"
+   ],
+   "papers": [
+    {
+     "title": "DNA breathing and shape encode distinct mechanisms of transcription factor binding",
+     "year": 2026,
+     "venue": "Bioinformatics Advances",
+     "doi": "10.1093/bioadv/vbag287",
+     "id": "W7214299273",
+     "position": "middle"
+    },
+    {
+     "title": "Sampling-based Continuous Optimization for Messenger RNA Design",
+     "year": 2026,
+     "venue": "arXiv (Cornell University)",
+     "doi": "10.48550/arxiv.2603.06559",
+     "id": "W7134276052",
+     "position": "middle"
+    },
+    {
+     "title": "RNAproDB: A Webserver and Interactive Database for Analyzing Protein–RNA Interactions",
+     "year": 2025,
+     "venue": "Journal of Molecular Biology",
+     "doi": "10.1016/j.jmb.2025.169012",
+     "id": "W4407596333",
+     "position": "middle"
+    },
+    {
+     "title": "Scalable and Interpretable Identification of Minimal Undesignable RNA Structure Motifs with Rotational Invariance",
+     "year": 2025,
+     "venue": "Lecture notes in computer science",
+     "doi": "10.1007/978-3-031-90252-9_10",
+     "id": "W4409739430",
+     "position": "middle"
+    }
+   ]
+  },
+  {
+   "id": "ishaan-thota",
+   "name": "Ishaan Thota",
+   "labs": [
+    "mark-chaisson"
+   ],
+   "papers": [
+    {
+     "title": "A new LUCApedia database for data-driven research on early evolutionary history",
+     "year": 2025,
+     "venue": "Bioinformatics Advances",
+     "doi": "10.1093/bioadv/vbaf309",
+     "id": "W4417029745",
+     "position": "middle"
+    },
+    {
+     "title": "The fifth international hackathon for developing computational cloud-based tools and resources for pan-structural variation and genomics",
+     "year": 2024,
+     "venue": "F1000Research",
+     "doi": "10.12688/f1000research.148237.1",
+     "id": "W4400537635",
+     "position": "middle"
+    }
+   ]
+  },
+  {
+   "id": "hanyi-wang",
+   "name": "Hanyi Wang",
+   "labs": [
+    "liang-chen"
+   ],
+   "papers": []
+  },
+  {
+   "id": "kexin-wang",
+   "name": "Kexin Wang",
+   "labs": [
+    "fengzhu-sun"
+   ],
+   "papers": []
+  },
+  {
+   "id": "yumin-wang",
+   "name": "Yumin Wang",
+   "labs": [
+    "nicholas-mancuso"
+   ],
+   "papers": []
+  },
+  {
+   "id": "yuqiu-wang",
+   "name": "Yuqiu Wang",
+   "labs": [
+    "fengzhu-sun"
+   ],
+   "papers": [
+    {
+     "title": "Benchmarking alignment strategies for Hi-C reads in metagenomic Hi-C data",
+     "year": 2026,
+     "venue": "Genome biology",
+     "doi": "10.1186/s13059-026-03970-x",
+     "id": "W7126155440",
+     "position": "first"
+    },
+    {
+     "title": "Metagenomic Hi‑C Protocols for Viral Genome Binning, Taxonomic Annotation, and Interaction Network Visualization",
+     "year": 2026,
+     "venue": "Current Protocols",
+     "doi": "10.1002/cpz1.70341",
+     "id": "W7133235628",
+     "position": "middle"
+    },
+    {
+     "title": "Bidirectional subsethood of shared marker profiles enables accurate virus classification",
+     "year": 2025,
+     "venue": "Microbiome",
+     "doi": "10.1186/s40168-025-02159-x",
+     "id": "W4412631453",
+     "position": "middle"
+    }
+   ]
+  },
+  {
+   "id": "zijin-xiang",
+   "name": "Zijin Xiang",
+   "labs": [
+    "liang-chen"
+   ],
+   "papers": [
+    {
+     "title": "Approximate Bayesian computation sequential Monte Carlo via random forests",
+     "year": 2025,
+     "venue": "Statistics and Computing",
+     "doi": "10.1007/s11222-025-10748-x",
+     "id": "W4415464127",
+     "position": "middle"
+    },
+    {
+     "title": "Gene regulatory network inference with popInfer reveals the dynamic regulation of hematopoietic stem cell quiescence",
+     "year": 2025,
+     "venue": "iScience",
+     "doi": "10.1016/j.isci.2025.114010",
+     "id": "W4416185399",
+     "position": "middle"
+    }
+   ]
+  },
+  {
+   "id": "yao-xiao",
+   "name": "Yao Xiao",
+   "labs": [
+    "geoffrey-fudenberg"
+   ],
+   "papers": [
+    {
+     "title": "Antibody background in ChIP-seq skews estimates of cohesin positioning by CTCF barriers",
+     "year": 2026,
+     "venue": "bioRxiv (Cold Spring Harbor Laboratory)",
+     "doi": "10.64898/2026.02.26.708306",
+     "id": "W7131907731",
+     "position": "first"
+    },
+    {
+     "title": "Recipes and ingredients for deep learning models of 3D genome folding",
+     "year": 2025,
+     "venue": "Current Opinion in Genetics & Development",
+     "doi": "10.1016/j.gde.2024.102308",
+     "id": "W4406792949",
+     "position": "middle"
+    },
+    {
+     "title": "Dynamic barriers modulate cohesin positioning and genome folding at fixed occupancy",
+     "year": 2025,
+     "venue": "Genome Research",
+     "doi": "10.1101/gr.280108.124",
+     "id": "W4412157138",
+     "position": "middle"
+    },
+    {
+     "title": "Cooltools: Enabling high-resolution Hi-C analysis in Python",
+     "year": 2024,
+     "venue": "PLoS Computational Biology",
+     "doi": "10.1371/journal.pcbi.1012067",
+     "id": "W4396667339",
+     "position": "last"
+    }
+   ]
+  },
+  {
+   "id": "yuhao-zhang",
+   "name": "Yuhao Zhang",
+   "labs": [
+    "fengzhu-sun"
+   ],
+   "papers": []
+  }
+ ],
+ "no_lab_yet": 8
+}
