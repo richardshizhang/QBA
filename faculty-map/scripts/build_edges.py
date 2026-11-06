@@ -14,20 +14,28 @@ makes the very largest papers count slightly more than they should.
 Writes data/edges.json (used by the map) and data/collaboration-report.md.
 
     python3 scripts/build_edges.py
+    python3 scripts/build_edges.py --extended   # QCB and the extended roster together
+
+With --extended, the edges cover everyone in scripts/combined.py and go to
+data/edges-extended.json and data/collaboration-report-extended.md instead.
 
 Only the standard library is used.
 """
 
+import argparse
 import collections
 import itertools
 import json
 import os
+import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FACULTY = os.path.join(ROOT, "data", "faculty.json")
 PAPERS = os.path.join(ROOT, "data", "papers", "papers.json")
 EDGES = os.path.join(ROOT, "data", "edges.json")
 REPORT = os.path.join(ROOT, "data", "collaboration-report.md")
+EXTENDED_EDGES = os.path.join(ROOT, "data", "edges-extended.json")
+EXTENDED_REPORT = os.path.join(ROOT, "data", "collaboration-report-extended.md")
 
 GROUPS = ("core", "joint", "emeritus")
 SIZE_BINS = [("2-10", 10), ("11-50", 50), ("51+", float("inf"))]
@@ -43,10 +51,21 @@ def paper_weight(n_authors):
 
 
 def main():
-    with open(FACULTY, encoding="utf-8") as f:
-        faculty = [p for p in json.load(f)["faculty"] if p["group"] in GROUPS]
-    with open(PAPERS, encoding="utf-8") as f:
-        works = json.load(f)["works"]
+    ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    ap.add_argument("--extended", action="store_true", help="QCB and the extended roster together")
+    args = ap.parse_args()
+
+    global EDGES, REPORT
+    if args.extended:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import combined
+        EDGES, REPORT = EXTENDED_EDGES, EXTENDED_REPORT
+        faculty, works = combined.people(), combined.works()
+    else:
+        with open(FACULTY, encoding="utf-8") as f:
+            faculty = [p for p in json.load(f)["faculty"] if p["group"] in GROUPS]
+        with open(PAPERS, encoding="utf-8") as f:
+            works = json.load(f)["works"]
     names = {p["id"]: p["name"] for p in faculty}
 
     shared = collections.defaultdict(list)
@@ -92,13 +111,13 @@ def main():
     with open(EDGES, "w", encoding="utf-8") as f:
         json.dump(out, f, indent=1, ensure_ascii=False)
         f.write("\n")
-    write_report(edges, summary, faculty, names)
+    write_report(edges, summary, faculty, names, "" if args.extended else "QCB ")
     linked = sum(1 for s in summary.values() if s["collaborators"])
     print(f"wrote {len(edges)} edges among {linked} of {len(faculty)} faculty to "
           f"{os.path.relpath(EDGES, ROOT)}; report in {os.path.relpath(REPORT, ROOT)}")
 
 
-def write_report(edges, summary, faculty, names):
+def write_report(edges, summary, faculty, names, scope):
     lines = [
         "# Collaboration report",
         "",
@@ -125,11 +144,11 @@ def write_report(edges, summary, faculty, names):
                     key=lambda p: (-summary[p["id"]]["collaborators"], -summary[p["id"]]["strength"]))
     alone = [p["name"] for p in faculty if not summary[p["id"]]["collaborators"]]
     lines += ["", "## Most connected", "",
-              "| Faculty | QCB co-authors | Total strength |", "|---|---|---|"]
+              f"| Faculty | {scope}co-authors | Total strength |", "|---|---|---|"]
     for p in ranked[:15]:
         s = summary[p["id"]]
         lines.append(f"| {p['name']} | {s['collaborators']} | {s['strength']:.2f} |")
-    lines += ["", f"## No co-authored papers with other QCB faculty ({len(alone)})", "",
+    lines += ["", f"## No co-authored papers with other {scope}faculty ({len(alone)})", "",
               ", ".join(alone) + ".", ""]
     with open(REPORT, "w", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")

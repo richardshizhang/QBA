@@ -1,0 +1,178 @@
+{
+  "adam-maclean": {
+    "members": 7
+  },
+  "aiichiro-nakano": {
+    "members": 11,
+    "status": "counted",
+    "people_page": "https://www.cacs.usc.edu/postdocs-and-students/",
+    "note": "CACS, a center shared by 4 faculty, with 2 postdocs and 5 graduate students."
+  },
+  "andrei-irimia": {
+    "members": 19
+  },
+  "andrew-steen": {
+    "members": 11
+  },
+  "antonio-damasio": {
+    "members": null,
+    "status": "page lists a whole institute",
+    "method": null,
+    "people_page": null,
+    "note": "The Brain and Creativity Institute page lists 44 people across 13 faculty, so it isn't one lab's size."
+  },
+  "arun-durvasula": {
+    "members": 5
+  },
+  "assal-habibi": {
+    "members": 33,
+    "note": "Brain and Music Lab. Leaves out 3 faculty collaborators listed on the page, including Antonio and Hanna Damasio."
+  },
+  "berenice-benayoun": {
+    "members": 28,
+    "note": "One card per person. Quoted nicknames hid five people from the parser."
+  },
+  "bodour-salhia": {
+    "members": null,
+    "status": "website is not a lab site",
+    "people_page": null,
+    "method": null,
+    "note": "The link leads to the Norris advancement team."
+  },
+  "cameron-thrash": {
+    "members": 17,
+    "people_page": "https://thethrashlab.com/#Team",
+    "note": "Team section of the home page."
+  },
+  "carly-kenkel": {
+    "members": 16
+  },
+  "carolyn-phillips": {
+    "members": 13,
+    "note": "Left out the lab mascot."
+  },
+  "charleston-chiang": {
+    "members": 21,
+    "people_page": "https://chianglab.usc.edu/",
+    "note": "Counted from bios above the alumni section. Some undergraduates are listed from 2019-2021, so this is probably high."
+  },
+  "derrick-morton": {
+    "members": 14
+  },
+  "ellis-meng": {
+    "members": 8
+  },
+  "eun-chung": {
+    "members": null,
+    "status": "people page is a photo gallery",
+    "method": null
+  },
+  "fengzhu-sun": {
+    "members": 7
+  },
+  "francesca-mariani": {
+    "members": 16
+  },
+  "francisco-valero-cuevas": {
+    "members": 11
+  },
+  "ian-ehrenreich": {
+    "members": 10,
+    "note": "Current Lab Members section of the page."
+  },
+  "jazlyn-mooney": {
+    "members": 8,
+    "status": "counted",
+    "people_page": "https://mooney-lab.github.io/",
+    "note": "The Team section of the home page."
+  },
+  "jean-bouteiller": {
+    "members": 3,
+    "status": "counted",
+    "note": "PI and 2 PhD candidates."
+  },
+  "john-monterosso": {
+    "members": 15,
+    "note": "A quoted nickname hid one person from the parser."
+  },
+  "john-tower": {
+    "members": 9
+  },
+  "judith-kribelbauer": {
+    "members": 8
+  },
+  "julia-schwartzman": {
+    "members": 5
+  },
+  "krishna-garikipati": {
+    "members": 9
+  },
+  "lisa-aziz-zadeh": {
+    "members": 20,
+    "note": "The page writes the PI's name without a hyphen, so the parser counted the PI twice."
+  },
+  "maral-mousavi": {
+    "members": 37
+  },
+  "mark-chaisson": {
+    "members": 6
+  },
+  "matt-dean": {
+    "members": null,
+    "status": "people page has no names in its text",
+    "method": null
+  },
+  "michael-edge": {
+    "members": 5
+  },
+  "moh-el-naggar": {
+    "members": null,
+    "status": "people page lists alumni only",
+    "method": null
+  },
+  "naomi-levine": {
+    "members": 13
+  },
+  "paul-thomas": {
+    "members": 7
+  },
+  "paul-thompson": {
+    "checked": false,
+    "note": "Imaging Genetics Center, which includes other faculty. No sections on the page to separate them."
+  },
+  "peter-foster": {
+    "members": 7,
+    "status": "counted",
+    "note": "PI, 3 PhD students and 3 undergraduates."
+  },
+  "peter-kuhn": {
+    "members": 33,
+    "note": "CSI-Cancer, an institute rather than one lab. The page lists 37; this leaves out 4 institute fellows."
+  },
+  "peter-yingxiao-wang": {
+    "members": 22
+  },
+  "remo-rohs": {
+    "members": 14
+  },
+  "rong-lu": {
+    "members": 16
+  },
+  "sheng-li": {
+    "members": 8
+  },
+  "stacey-finley": {
+    "members": 6
+  },
+  "steve-kay": {
+    "members": 6
+  },
+  "steven-gazal": {
+    "members": 9
+  },
+  "xianrui-cheng": {
+    "members": 5,
+    "status": "counted",
+    "note": "PI, 3 graduate students and 1 undergraduate."
+  }
+}

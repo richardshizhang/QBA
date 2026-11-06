@@ -40,6 +40,15 @@ Corrections go in data/paper-overrides.json (optional, hand-edited):
     python3 scripts/fetch_papers.py                       # fetch anyone not yet fetched
     python3 scripts/fetch_papers.py --refresh remo-rohs   # refetch some people
     python3 scripts/fetch_papers.py --refilter            # no API calls; reapply filters
+    python3 scripts/fetch_papers.py --extended            # the extended roster instead
+
+With --extended, this reads data/roster-extended.json and
+data/openalex-authors-extended.json and writes data/papers/papers-extended.json and
+data/paper-report-extended.md, with corrections in data/paper-overrides-extended.json.
+The QCB files behind the live map don't change. Anyone not yet verified is skipped.
+
+Papers on a person's "dois" list were picked by hand, so they anchor the filter the
+same way USC-affiliated papers do, even for someone who also has OpenAlex profiles.
 
 A full run costs about 120 OpenAlex credits (one per page of 200 papers).
 Only the standard library is used.
@@ -64,6 +73,11 @@ OVERRIDES = os.path.join(ROOT, "data", "paper-overrides.json")
 OUT_DIR = os.path.join(ROOT, "data", "papers")
 PAPERS = os.path.join(OUT_DIR, "papers.json")
 REPORT = os.path.join(ROOT, "data", "paper-report.md")
+EXTENDED_FACULTY = os.path.join(ROOT, "data", "roster-extended.json")
+EXTENDED_MAPPING = os.path.join(ROOT, "data", "openalex-authors-extended.json")
+EXTENDED_OVERRIDES = os.path.join(ROOT, "data", "paper-overrides-extended.json")
+EXTENDED_PAPERS = os.path.join(OUT_DIR, "papers-extended.json")
+EXTENDED_REPORT = os.path.join(ROOT, "data", "paper-report-extended.md")
 
 GROUPS = ("core", "joint", "emeritus")
 USC = "https://openalex.org/I1174212"
@@ -162,15 +176,16 @@ def trim_work(w):
     }
 
 
-def faculty_authorship(w, profile_ids, last_name):
-    """This faculty member's authorship on a work: by profile ID, else by name."""
+def faculty_authorship(w, profile_ids, last_name, by_name=False):
+    """This faculty member's authorship on a work: by profile ID, else by name when
+    the work came from their DOI list."""
     for a in w.get("authorships") or []:
         if openalex.short((a.get("author") or {}).get("id")) in profile_ids:
             return a
-    if not profile_ids:
+    if by_name or not profile_ids:
         for a in w.get("authorships") or []:
             name = (a.get("raw_author_name") or (a.get("author") or {}).get("display_name") or "")
-            if last_name.lower() in name.lower():
+            if re.search(rf"\b{re.escape(last_name)}\b", name, re.I):
                 return a
     return None
 
@@ -197,8 +212,11 @@ def fetch_person(person, entry):
         for i in range(0, len(ids), 50):
             raw += fetch_all("author.id:" + "|".join(ids[i:i + 50]))
     dois = entry.get("dois") or []
+    listed = set()
     for i in range(0, len(dois), 50):
-        raw += fetch_all("doi:" + "|".join(dois[i:i + 50]))
+        batch = fetch_all("doi:" + "|".join(dois[i:i + 50]))
+        listed.update(openalex.short(w["id"]) for w in batch)
+        raw += batch
 
     seen, works, coauthors = set(), [], {}
     for w in raw:
@@ -207,12 +225,13 @@ def fetch_person(person, entry):
             continue
         seen.add(wid)
         rec = trim_work(w)
-        a = faculty_authorship(w, profile_ids, person["last"])
+        a = faculty_authorship(w, profile_ids, person["last"], by_name=wid in listed)
         insts = (a or {}).get("institutions") or []
         rec["faculty"][person["id"]] = {
             "position": a["author_position"] if a else None,
             "institutions": [i["display_name"] for i in insts][:3],
             "usc": any(USC in (i.get("lineage") or [i.get("id")]) for i in insts),
+            "listed": wid in listed,
         }
         if rec["n_authors"] <= NETWORK_MAX_AUTHORS:
             coauthors[wid] = {openalex.short((x.get("author") or {}).get("id"))
@@ -296,7 +315,8 @@ def label_network(pid, ws):
             w["faculty"][pid]["network"] = "curated"
         return
     sizes = collections.Counter(w["faculty"][pid]["component"] for w in ws)
-    main = {w["faculty"][pid]["component"] for w in research if w["faculty"][pid]["usc"]}
+    main = {w["faculty"][pid]["component"] for w in research
+            if w["faculty"][pid]["usc"] or w["faculty"][pid].get("listed")}
     # Thin USC record (teaching faculty, brand-new hires): also trust the largest cluster.
     in_main = sum(1 for w in research if w["faculty"][pid]["component"] in main)
     if research and in_main < max(MIN_CORE, 0.2 * len(research)):
@@ -355,7 +375,11 @@ def apply_filters(works, overrides):
         for info in w["faculty"].values():
             info["keep"] = info["reason"] is None
 
-    # Duplicates: one representative per title, standing in for everyone on the group.
+    mark_duplicates(works)
+
+
+def mark_duplicates(works):
+    """One representative per title, standing in for everyone on the group."""
     groups = collections.defaultdict(list)
     for w in works.values():
         w["duplicate_of"] = None
@@ -409,7 +433,7 @@ def write_report(works, faculty, fetched):
         "paper the person published at USC, and sit outside the topics of those that are:",
         "mostly namesakes' papers in merged OpenAlex profiles, sometimes the person's own",
         "early work in another field. Fix mistakes in",
-        "`data/paper-overrides.json`, then rerun with `--refilter`.",
+        f"`data/{os.path.basename(OVERRIDES)}`, then rerun with `--refilter`.",
         "",
         "| Faculty | Fetched | Kept | With abstract | Duplicates | Not research | Off-profile | By hand |",
         "|---|---|---|---|---|---|---|---|",
@@ -469,10 +493,18 @@ def main():
     ap.add_argument("--refresh", nargs="*", default=[], help="faculty ids to refetch")
     ap.add_argument("--refilter", action="store_true", help="no API calls; reapply filters")
     ap.add_argument("--only", nargs="*", help="fetch just these faculty ids (for testing)")
+    ap.add_argument("--extended", action="store_true", help="use the extended roster and its files")
     args = ap.parse_args()
 
+    global FACULTY, MAPPING, OVERRIDES, PAPERS, REPORT, GROUPS
+    if args.extended:
+        FACULTY, MAPPING, OVERRIDES = EXTENDED_FACULTY, EXTENDED_MAPPING, EXTENDED_OVERRIDES
+        PAPERS, REPORT, GROUPS = EXTENDED_PAPERS, EXTENDED_REPORT, ("named", "department")
     with open(FACULTY, encoding="utf-8") as f:
-        faculty = [p for p in json.load(f)["faculty"] if p["group"] in GROUPS]
+        roster = json.load(f)["faculty"]
+    if args.extended:
+        roster = [{**p, "group": p["tier"]} for p in roster]
+    faculty = [p for p in roster if p["group"] in GROUPS]
     with open(MAPPING, encoding="utf-8") as f:
         mapping = json.load(f)
     overrides = {}
@@ -486,7 +518,10 @@ def main():
     works, fetched = store["works"], store["fetched"]
 
     unverified = [p["name"] for p in faculty if mapping.get(p["id"], {}).get("status") != "verified"]
-    if unverified:
+    if unverified and args.extended:
+        print("Skipping, not verified yet: " + ", ".join(unverified))
+        faculty = [p for p in faculty if mapping.get(p["id"], {}).get("status") == "verified"]
+    elif unverified:
         sys.exit("Check these OpenAlex matches first (scripts/resolve_authors.py): " + ", ".join(unverified))
 
     for pid in args.refresh:  # forget this person's papers

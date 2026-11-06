@@ -36,25 +36,41 @@ Emeriti are included. The adjunct member (UCLA) is left out.
 | `scripts/build_map_data.py` | Combines the layout, roster, edges, features and papers into `map-data.js`. |
 | `scripts/build_match_data.py` | Builds `match-data.js`. With `--evaluate`, also measures accuracy on held-out papers. |
 | `scripts/scrape_faculty.py` | Scrapes the faculty page into `data/faculty.json`: group, title, departments, rank, contact details and links. |
+| `scripts/scrape_departments.py` | Reads five more departments, the Brain and Creativity Institute and hand-picked labs, and merges them with the QCB roster into `data/roster-extended.json` and the review page `data/roster-report.md`. QCB records always win. |
+| `scripts/scrape_lab_sizes.py` | Counts each lab's current members from its website into `data/lab-sizes.json` and `data/lab-size-report.md`. |
+| `scripts/webfetch.py` | Shared polite fetching for those two: reads robots.txt, waits the site's crawl delay, caches pages, and stops at a bot challenge rather than retrying. |
 | `scripts/resolve_authors.py` | Matches each person to OpenAlex author IDs. Writes `data/openalex-authors.json` and the review page `data/id-review.md`. |
 | `scripts/fetch_papers.py` | Downloads everyone's papers as trimmed records into `data/papers/papers.json`, filters them, and writes `data/paper-report.md`. |
 | `scripts/build_edges.py` | Builds collaboration edges from the kept papers into `data/edges.json` and writes `data/collaboration-report.md`. |
 | `scripts/build_features.py` | Builds each person's TF-IDF, topic and SPECTER2 vectors into `data/features/faculty-features.npz` and writes `data/features/features-report.md`. |
+| `scripts/combined.py` | Merges the QCB and extended rosters and paper sets for the `--extended` build steps, regrouping duplicates across the two. |
 | `scripts/openalex.py` | Shared OpenAlex API access (key, budget, retries). |
 | `analysis.ipynb` | Dimensionality reduction, clustering and the collaboration overlay. Exports the chosen layouts and tree to `data/layout.json`. Set the representation only in the cell that builds `X`: everything after it reads `X`, `S` and `D` from there, and changing `REP` anywhere else only changes plot titles. |
 | `data/faculty.json` | Generated roster. Don't edit by hand; rerun the scraper. |
 | `data/openalex-authors.json` | Faculty → OpenAlex author IDs. Entries with `"status": "verified"` were checked by hand and survive reruns. `openalex` lists every profile that belongs to the person, since OpenAlex often splits one career across several profiles. `dois` lists papers for anyone OpenAlex never linked to a profile. |
+| `data/openalex-authors-extended.json` | The same mapping for the named and department tiers, from `scripts/resolve_authors.py --extended`. Kept apart so the QCB mapping behind the live map doesn't change. Same fields, with `dois` for people whose papers OpenAlex never linked to a profile and `status: "unresolved"` for anyone still unmatched. |
+| `data/id-review-extended.md` | The review page for that mapping. |
 | `data/id-review.md` | Most-cited and most-recent papers for each match, plus the possible extra profiles, for checking by eye. |
 | `data/paper-overrides.json` | Hand corrections to the paper filter: `{"person-id": {"keep": [...], "drop": [...]}}` with OpenAlex work IDs. |
+| `data/paper-overrides-extended.json` | Hand corrections to the paper filter for the extended roster, in the same format as `data/paper-overrides.json`. |
+| `data/paper-report-extended.md` | The paper report for the extended roster, from `scripts/fetch_papers.py --extended`. Its papers are in the gitignored `data/papers/papers-extended.json`, about 38 MB. |
 | `data/paper-report.md` | Papers kept and dropped per person: off-profile drops, plus kept papers with unusual topics to check. |
 | `data/papers/` | Downloaded paper records and cached SPECTER2 paper embeddings (gitignored, about 40 MB). Rebuild with `scripts/fetch_papers.py` and `scripts/build_features.py`. |
 | `data/edges.json` | One entry per pair of faculty who share papers: strength, paper counts by author-list size, papers where both list USC, years, and up to 8 example papers. Also each person's number of QCB co-authors and total strength. |
 | `data/collaboration-report.md` | All edges in a table, the most connected faculty, and those with no QCB co-authors. |
 | `data/features/faculty-features.npz` | The 48 faculty's feature matrices (`tfidf`, `topics`, `subfields`, `fields`, `specter`) with vocabularies and topic names. Committed (about 1.3 MB) so the notebook runs from a fresh clone. |
 | `data/features/features-report.md` | Top terms, top topics and nearest neighbours per person under each representation, and how much the representations agree. |
+| `data/edges-extended.json` | Collaboration edges across QCB and the extended roster, from `scripts/build_edges.py --extended`, with `data/collaboration-report-extended.md` beside it. Same format as `data/edges.json`. |
+| `data/features/extended-features.npz` | Feature matrices for all 161 people, from `scripts/build_features.py --extended`, with `extended-features-report.md` beside it. Same format as `faculty-features.npz`. New paper embeddings are in the gitignored `data/papers/specter2-extended.npz`. |
 | `data/cluster-names.json` | Hand-written cluster names and colors. Each entry names one member as its `anchor`, so a name stays with its group if cluster numbers change. |
 | `data/layout.json` | Positions and the tree, written by the notebook's last cell. `faculty` has each person's cluster and one `[x, y]` per layout (0–1, same scale on both axes, layouts rotated to line up). `tree` holds the full average-linkage tree: in `merges`, node numbers below the faculty count are people in `faculty` order, and n+i is `merges[i]`. |
-| `data/raw/` | Cached page and author-search responses (gitignored). |
+| `analysis-extended.ipynb` | A copy of `analysis.ipynb` for all 161 people, reading the `-extended` files. Export is off by default and writes `data/layout-extended.json`, never `data/layout.json`. Saved without outputs. |
+| `data/roster-extended.json` | Everyone from QCB and the other departments, one record each. `tier` is `qcb`, `named`, `department` or `secondary` (teaching, emeritus, adjunct, and joint or affiliate listings). `affiliations` lists QCB first, so joint faculty read as joint before their other department. `listed_on` shows which pages list them. Not used by the live map yet. |
+| `data/roster-report.md` | Parsed counts for each listing, people to check, missing titles and pages that couldn't be read. |
+| `data/lab-sizes.json` | Member count per lab with its source page and dates, or `null` and a `status` saying why there's no count. Counts only: names stay out of this public repo. |
+| `data/lab-size-overrides.json` | Hand-checked counts: `{"person-id": {"members": 12}}`. These replace the automatic count on every run. |
+| `data/lab-size-report.md` | All labs by size, with how many are counted and checked. |
+| `data/raw/` | Cached pages, author-search responses and the names behind lab counts (gitignored). |
 
 ## Running
 
@@ -80,6 +96,25 @@ python3 scripts/build_match_data.py
 If you change the number of clusters, `build_map_data.py` lists any groups that still need an entry in `data/cluster-names.json`.
 
 The SPECTER2 model download is about 440 MB (into `~/.cache/huggingface`). Embedding all 10,435 papers takes about four minutes on an Apple-silicon GPU. Paper embeddings are cached, so later runs take seconds.
+
+To rebuild the extended roster and lab counts, which aren't on the live map yet:
+
+```bash
+python3 scripts/scrape_departments.py
+python3 scripts/scrape_lab_sizes.py
+python3 scripts/resolve_authors.py --extended
+python3 scripts/fetch_papers.py --extended
+python3 scripts/build_edges.py --extended
+.venv/bin/python scripts/build_features.py --extended
+```
+
+Both read saved pages from `data/raw/web/` first and need only the standard library. `--offline` uses saved pages alone. A few limits are worth knowing:
+
+- **Use `analysis-extended.ipynb` for this data.** `analysis.ipynb` reads the QCB files, and its last cell writes `data/layout.json`, which the live map uses.
+- **Keck profiles** (`keck.usc.edu/faculty-search/`) sit behind a Cloudflare bot challenge, so most biostatistics faculty have no title or lab link. Don't try to get past it. Saving those pages from a browser would work.
+- **MCB and the Brain and Creativity Institute** are read from browser copies in `../other_department_faculty/`, because Dornsife's `Disallow: /*/page/` covers MCB pages 2–4. That folder isn't in the repo. Without it, the roster loses 31 of MCB's 43 people, and `data/roster-report.md` says so.
+- **BME asks for 10 seconds between requests**, so its profile pages take a few minutes.
+- **`data/lab-sizes.json` is the source for lab size.** It includes the PI and undergraduates.
 
 After editing `data/paper-overrides.json`, reapply the filters without downloading again:
 

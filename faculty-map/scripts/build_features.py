@@ -35,6 +35,10 @@ environment so it can't disturb other Python work:
 
 Without `adapters` (and no cache), the script builds tfidf and topics and skips
 specter. The model download is about 440 MB, cached in ~/.cache/huggingface.
+
+With --extended, this covers everyone in scripts/combined.py and writes
+data/features/extended-features.npz and extended-features-report.md. New embeddings go
+to data/papers/specter2-extended.npz; the QCB cache is read but never changed.
 """
 
 import argparse
@@ -63,6 +67,10 @@ EMBED_CACHE = os.path.join(ROOT, "data", "papers", "specter2.npz")
 OUT_DIR = os.path.join(ROOT, "data", "features")
 FEATURES = os.path.join(OUT_DIR, "faculty-features.npz")
 REPORT = os.path.join(OUT_DIR, "features-report.md")
+QCB_EMBED_CACHE = EMBED_CACHE
+EXTENDED_EMBED_CACHE = os.path.join(ROOT, "data", "papers", "specter2-extended.npz")
+EXTENDED_FEATURES = os.path.join(OUT_DIR, "extended-features.npz")
+EXTENDED_REPORT = os.path.join(OUT_DIR, "extended-features-report.md")
 
 GROUPS = ("core", "joint", "emeritus")
 HALF_LIFE = 10  # years
@@ -96,11 +104,16 @@ STOP_WORDS = sorted(ENGLISH_STOP_WORDS | EXTRA_STOP)
 
 # ---------------------------------------------------------------- inputs
 
-def load():
-    with open(FACULTY, encoding="utf-8") as f:
-        faculty = [p for p in json.load(f)["faculty"] if p["group"] in GROUPS]
-    with open(PAPERS, encoding="utf-8") as f:
-        works = json.load(f)["works"]
+def load(extended=False):
+    if extended:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import combined
+        faculty, works = combined.people(), combined.works()
+    else:
+        with open(FACULTY, encoding="utf-8") as f:
+            faculty = [p for p in json.load(f)["faculty"] if p["group"] in GROUPS]
+        with open(PAPERS, encoding="utf-8") as f:
+            works = json.load(f)["works"]
     papers = [w for w in works.values()
               if not w["duplicate_of"] and any(i["keep"] for i in w["faculty"].values())]
     papers.sort(key=lambda w: w["id"])
@@ -196,9 +209,10 @@ def build_topics(papers, W):
 def embed_papers(papers, batch_size=32):
     """SPECTER2 vectors for every paper, reusing cached ones. None if unavailable."""
     cached = {}
-    if os.path.exists(EMBED_CACHE):
-        z = np.load(EMBED_CACHE)
-        cached = dict(zip(z["ids"].tolist(), z["vectors"]))
+    for path in dict.fromkeys((QCB_EMBED_CACHE, EMBED_CACHE)):
+        if os.path.exists(path):
+            z = np.load(path)
+            cached.update(zip(z["ids"].tolist(), z["vectors"]))
     todo = [w for w in papers if w["id"] not in cached]
     if todo:
         try:
@@ -318,9 +332,13 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--half-life", type=float, default=HALF_LIFE, help="recency half-life in years")
     ap.add_argument("--no-embed", action="store_true", help="skip SPECTER2 embeddings")
+    ap.add_argument("--extended", action="store_true", help="QCB and the extended roster together")
     args = ap.parse_args()
 
-    faculty, papers = load()
+    global EMBED_CACHE, FEATURES, REPORT
+    if args.extended:
+        EMBED_CACHE, FEATURES, REPORT = EXTENDED_EMBED_CACHE, EXTENDED_FEATURES, EXTENDED_REPORT
+    faculty, papers = load(args.extended)
     W, now = weight_matrix(faculty, papers, args.half_life)
     n_papers = (W > 0).sum(axis=1)
     print(f"{len(papers)} papers, {len(faculty)} faculty")

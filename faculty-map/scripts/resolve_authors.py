@@ -26,6 +26,13 @@ API responses are cached in data/raw/openalex/, so reruns cost nothing. A full f
 run uses roughly 1,200 OpenAlex credits (see scripts/openalex.py for budgets and the
 API key). If the budget runs out midway, everything finished so far is still written;
 rerun after midnight UTC. Only the standard library is used.
+
+With --extended, this matches the named and department tiers of
+data/roster-extended.json instead. Those results go to their own files,
+data/openalex-authors-extended.json and data/id-review-extended.md, so the QCB mapping
+that the live map is built from doesn't change.
+
+    python3 scripts/resolve_authors.py --extended
 """
 
 import argparse
@@ -45,6 +52,9 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FACULTY = os.path.join(ROOT, "data", "faculty.json")
 MAPPING = os.path.join(ROOT, "data", "openalex-authors.json")
 REVIEW = os.path.join(ROOT, "data", "id-review.md")
+EXTENDED_FACULTY = os.path.join(ROOT, "data", "roster-extended.json")
+EXTENDED_MAPPING = os.path.join(ROOT, "data", "openalex-authors-extended.json")
+EXTENDED_REVIEW = os.path.join(ROOT, "data", "id-review-extended.md")
 CACHE = os.path.join(ROOT, "data", "raw", "openalex")
 
 AUTHOR_FIELDS = ("id,display_name,display_name_alternatives,orcid,works_count,cited_by_count,"
@@ -81,6 +91,16 @@ DEPT_FIELDS = {
     "Psychiatry and Behavioral Sciences": ["Psychology", "Neuroscience", "Medicine"],
     "Radiology": ["Medicine", "Neuroscience"],
     "Stem Cell Biology and Regenerative Medicine": [BIO, "Medicine"],
+    "Molecular and Cellular Biosciences": [BIO, "Immunology and Microbiology", "Agricultural and Biological Sciences", "Neuroscience"],
+    "Marine and Environmental Biology": ["Environmental Science", "Agricultural and Biological Sciences", "Earth and Planetary Sciences", "Immunology and Microbiology", BIO],
+    "Neurobiology": ["Neuroscience", BIO],
+    "Neuroscience": ["Neuroscience", BIO, "Psychology"],
+    "Human and Evolutionary Biology": ["Neuroscience", "Agricultural and Biological Sciences", BIO],
+    "Biostatistics and Health Data Science": ["Medicine", BIO, "Mathematics", "Decision Sciences", "Computer Science"],
+    "Psychology": ["Psychology", "Neuroscience"],
+    "Brain and Creativity Institute": ["Psychology", "Neuroscience", "Medicine"],
+    "Pathology": ["Medicine", BIO, "Immunology and Microbiology"],
+    "Biochemistry and Molecular Medicine": [BIO, "Medicine"],
 }
 
 # Extra search strings for people who publish under a different form of their name.
@@ -437,10 +457,18 @@ def main():
     ap.add_argument("--only", nargs="*", help="faculty ids to (re)resolve")
     ap.add_argument("--workers", type=int, default=2)
     ap.add_argument("--review-only", action="store_true", help="no API calls; rewrite the review")
+    ap.add_argument("--extended", action="store_true", help="match the new people in the extended roster")
     args = ap.parse_args()
 
+    global FACULTY, MAPPING, REVIEW, GROUPS
+    if args.extended:
+        FACULTY, MAPPING, REVIEW = EXTENDED_FACULTY, EXTENDED_MAPPING, EXTENDED_REVIEW
+        GROUPS = ("named", "department")
     with open(FACULTY, encoding="utf-8") as f:
-        faculty = [p for p in json.load(f)["faculty"] if p["group"] in GROUPS]
+        roster = json.load(f)["faculty"]
+    if args.extended:
+        roster = [{**p, "group": p["tier"]} for p in roster]
+    faculty = [p for p in roster if p["group"] in GROUPS]
     mapping = {}
     if os.path.exists(MAPPING):
         with open(MAPPING, encoding="utf-8") as f:

@@ -1,0 +1,3245 @@
+{
+ "representation": "specter",
+ "include_emeriti": true,
+ "layouts": {
+  "tsne": {
+   "name": "t-SNE",
+   "settings": {
+    "perplexity": 5
+   }
+  },
+  "mds": {
+   "name": "MDS",
+   "settings": {
+    "distance": "cosine"
+   }
+  }
+ },
+ "tree": {
+  "representation": "specter",
+  "linkage": "average",
+  "distance": "cosine",
+  "k": 9,
+  "silhouette": 0.251,
+  "merges": [
+   {
+    "left": 23,
+    "right": 126,
+    "height": 0.0309,
+    "size": 2
+   },
+   {
+    "left": 142,
+    "right": 144,
+    "height": 0.0344,
+    "size": 2
+   },
+   {
+    "left": 66,
+    "right": 155,
+    "height": 0.0454,
+    "size": 2
+   },
+   {
+    "left": 56,
+    "right": 139,
+    "height": 0.0553,
+    "size": 2
+   },
+   {
+    "left": 59,
+    "right": 143,
+    "height": 0.0726,
+    "size": 2
+   },
+   {
+    "left": 53,
+    "right": 118,
+    "height": 0.0741,
+    "size": 2
+   },
+   {
+    "left": 29,
+    "right": 30,
+    "height": 0.0833,
+    "size": 2
+   },
+   {
+    "left": 79,
+    "right": 157,
+    "height": 0.0975,
+    "size": 2
+   },
+   {
+    "left": 60,
+    "right": 154,
+    "height": 0.0986,
+    "size": 2
+   },
+   {
+    "left": 52,
+    "right": 97,
+    "height": 0.0993,
+    "size": 2
+   },
+   {
+    "left": 5,
+    "right": 109,
+    "height": 0.0998,
+    "size": 2
+   },
+   {
+    "left": 108,
+    "right": 128,
+    "height": 0.1032,
+    "size": 2
+   },
+   {
+    "left": 62,
+    "right": 81,
+    "height": 0.1042,
+    "size": 2
+   },
+   {
+    "left": 91,
+    "right": 135,
+    "height": 0.1047,
+    "size": 2
+   },
+   {
+    "left": 67,
+    "right": 162,
+    "height": 0.1067,
+    "size": 3
+   },
+   {
+    "left": 48,
+    "right": 165,
+    "height": 0.1114,
+    "size": 3
+   },
+   {
+    "left": 105,
+    "right": 141,
+    "height": 0.1149,
+    "size": 2
+   },
+   {
+    "left": 92,
+    "right": 148,
+    "height": 0.1194,
+    "size": 2
+   },
+   {
+    "left": 4,
+    "right": 11,
+    "height": 0.1217,
+    "size": 2
+   },
+   {
+    "left": 69,
+    "right": 125,
+    "height": 0.1255,
+    "size": 2
+   },
+   {
+    "left": 46,
+    "right": 146,
+    "height": 0.1257,
+    "size": 2
+   },
+   {
+    "left": 14,
+    "right": 65,
+    "height": 0.1288,
+    "size": 2
+   },
+   {
+    "left": 72,
+    "right": 167,
+    "height": 0.1337,
+    "size": 3
+   },
+   {
+    "left": 120,
+    "right": 180,
+    "height": 0.1375,
+    "size": 3
+   },
+   {
+    "left": 82,
+    "right": 173,
+    "height": 0.1515,
+    "size": 3
+   },
+   {
+    "left": 80,
+    "right": 161,
+    "height": 0.1594,
+    "size": 3
+   },
+   {
+    "left": 33,
+    "right": 184,
+    "height": 0.1646,
+    "size": 4
+   },
+   {
+    "left": 169,
+    "right": 182,
+    "height": 0.1685,
+    "size": 4
+   },
+   {
+    "left": 51,
+    "right": 84,
+    "height": 0.1811,
+    "size": 2
+   },
+   {
+    "left": 36,
+    "right": 38,
+    "height": 0.183,
+    "size": 2
+   },
+   {
+    "left": 0,
+    "right": 179,
+    "height": 0.1841,
+    "size": 3
+   },
+   {
+    "left": 1,
+    "right": 44,
+    "height": 0.1844,
+    "size": 2
+   },
+   {
+    "left": 15,
+    "right": 176,
+    "height": 0.1851,
+    "size": 4
+   },
+   {
+    "left": 160,
+    "right": 168,
+    "height": 0.1891,
+    "size": 3
+   },
+   {
+    "left": 107,
+    "right": 127,
+    "height": 0.1916,
+    "size": 2
+   },
+   {
+    "left": 64,
+    "right": 103,
+    "height": 0.1927,
+    "size": 2
+   },
+   {
+    "left": 21,
+    "right": 170,
+    "height": 0.1946,
+    "size": 3
+   },
+   {
+    "left": 110,
+    "right": 190,
+    "height": 0.201,
+    "size": 3
+   },
+   {
+    "left": 163,
+    "right": 183,
+    "height": 0.2014,
+    "size": 5
+   },
+   {
+    "left": 187,
+    "right": 191,
+    "height": 0.2015,
+    "size": 7
+   },
+   {
+    "left": 70,
+    "right": 175,
+    "height": 0.2028,
+    "size": 4
+   },
+   {
+    "left": 174,
+    "right": 193,
+    "height": 0.207,
+    "size": 6
+   },
+   {
+    "left": 83,
+    "right": 188,
+    "height": 0.2139,
+    "size": 5
+   },
+   {
+    "left": 147,
+    "right": 181,
+    "height": 0.2149,
+    "size": 3
+   },
+   {
+    "left": 132,
+    "right": 136,
+    "height": 0.229,
+    "size": 2
+   },
+   {
+    "left": 34,
+    "right": 114,
+    "height": 0.2347,
+    "size": 2
+   },
+   {
+    "left": 129,
+    "right": 202,
+    "height": 0.2417,
+    "size": 7
+   },
+   {
+    "left": 3,
+    "right": 199,
+    "height": 0.243,
+    "size": 6
+   },
+   {
+    "left": 40,
+    "right": 117,
+    "height": 0.2534,
+    "size": 2
+   },
+   {
+    "left": 86,
+    "right": 133,
+    "height": 0.2535,
+    "size": 2
+   },
+   {
+    "left": 87,
+    "right": 166,
+    "height": 0.261,
+    "size": 3
+   },
+   {
+    "left": 203,
+    "right": 207,
+    "height": 0.262,
+    "size": 12
+   },
+   {
+    "left": 98,
+    "right": 102,
+    "height": 0.2621,
+    "size": 2
+   },
+   {
+    "left": 50,
+    "right": 73,
+    "height": 0.2652,
+    "size": 2
+   },
+   {
+    "left": 2,
+    "right": 35,
+    "height": 0.2689,
+    "size": 2
+   },
+   {
+    "left": 22,
+    "right": 192,
+    "height": 0.2711,
+    "size": 3
+   },
+   {
+    "left": 63,
+    "right": 111,
+    "height": 0.2714,
+    "size": 2
+   },
+   {
+    "left": 85,
+    "right": 189,
+    "height": 0.2724,
+    "size": 3
+   },
+   {
+    "left": 106,
+    "right": 216,
+    "height": 0.283,
+    "size": 4
+   },
+   {
+    "left": 61,
+    "right": 215,
+    "height": 0.2857,
+    "size": 3
+   },
+   {
+    "left": 156,
+    "right": 194,
+    "height": 0.2872,
+    "size": 4
+   },
+   {
+    "left": 54,
+    "right": 96,
+    "height": 0.2873,
+    "size": 2
+   },
+   {
+    "left": 94,
+    "right": 137,
+    "height": 0.291,
+    "size": 2
+   },
+   {
+    "left": 55,
+    "right": 208,
+    "height": 0.2916,
+    "size": 7
+   },
+   {
+    "left": 104,
+    "right": 113,
+    "height": 0.2935,
+    "size": 2
+   },
+   {
+    "left": 90,
+    "right": 124,
+    "height": 0.3023,
+    "size": 2
+   },
+   {
+    "left": 19,
+    "right": 211,
+    "height": 0.3037,
+    "size": 4
+   },
+   {
+    "left": 8,
+    "right": 42,
+    "height": 0.311,
+    "size": 2
+   },
+   {
+    "left": 130,
+    "right": 149,
+    "height": 0.3137,
+    "size": 2
+   },
+   {
+    "left": 24,
+    "right": 178,
+    "height": 0.3143,
+    "size": 3
+   },
+   {
+    "left": 205,
+    "right": 218,
+    "height": 0.3146,
+    "size": 5
+   },
+   {
+    "left": 197,
+    "right": 198,
+    "height": 0.3196,
+    "size": 6
+   },
+   {
+    "left": 27,
+    "right": 204,
+    "height": 0.3197,
+    "size": 4
+   },
+   {
+    "left": 185,
+    "right": 195,
+    "height": 0.3218,
+    "size": 5
+   },
+   {
+    "left": 88,
+    "right": 101,
+    "height": 0.3228,
+    "size": 2
+   },
+   {
+    "left": 116,
+    "right": 200,
+    "height": 0.3298,
+    "size": 8
+   },
+   {
+    "left": 100,
+    "right": 217,
+    "height": 0.3329,
+    "size": 3
+   },
+   {
+    "left": 10,
+    "right": 99,
+    "height": 0.3384,
+    "size": 2
+   },
+   {
+    "left": 138,
+    "right": 152,
+    "height": 0.3435,
+    "size": 2
+   },
+   {
+    "left": 172,
+    "right": 212,
+    "height": 0.3445,
+    "size": 14
+   },
+   {
+    "left": 74,
+    "right": 121,
+    "height": 0.3484,
+    "size": 2
+   },
+   {
+    "left": 12,
+    "right": 140,
+    "height": 0.3512,
+    "size": 2
+   },
+   {
+    "left": 150,
+    "right": 206,
+    "height": 0.3526,
+    "size": 3
+   },
+   {
+    "left": 6,
+    "right": 145,
+    "height": 0.3535,
+    "size": 2
+   },
+   {
+    "left": 153,
+    "right": 164,
+    "height": 0.3627,
+    "size": 3
+   },
+   {
+    "left": 171,
+    "right": 224,
+    "height": 0.3637,
+    "size": 9
+   },
+   {
+    "left": 41,
+    "right": 228,
+    "height": 0.3756,
+    "size": 3
+   },
+   {
+    "left": 123,
+    "right": 220,
+    "height": 0.3802,
+    "size": 4
+   },
+   {
+    "left": 16,
+    "right": 210,
+    "height": 0.3882,
+    "size": 3
+   },
+   {
+    "left": 71,
+    "right": 115,
+    "height": 0.3888,
+    "size": 2
+   },
+   {
+    "left": 47,
+    "right": 186,
+    "height": 0.3902,
+    "size": 4
+   },
+   {
+    "left": 45,
+    "right": 58,
+    "height": 0.3909,
+    "size": 2
+   },
+   {
+    "left": 25,
+    "right": 158,
+    "height": 0.4031,
+    "size": 2
+   },
+   {
+    "left": 234,
+    "right": 236,
+    "height": 0.4173,
+    "size": 13
+   },
+   {
+    "left": 57,
+    "right": 201,
+    "height": 0.4259,
+    "size": 5
+   },
+   {
+    "left": 9,
+    "right": 237,
+    "height": 0.4273,
+    "size": 4
+   },
+   {
+    "left": 131,
+    "right": 231,
+    "height": 0.4307,
+    "size": 6
+   },
+   {
+    "left": 32,
+    "right": 246,
+    "height": 0.4328,
+    "size": 10
+   },
+   {
+    "left": 39,
+    "right": 76,
+    "height": 0.4365,
+    "size": 2
+   },
+   {
+    "left": 89,
+    "right": 226,
+    "height": 0.4367,
+    "size": 3
+   },
+   {
+    "left": 49,
+    "right": 250,
+    "height": 0.4385,
+    "size": 3
+   },
+   {
+    "left": 17,
+    "right": 249,
+    "height": 0.4412,
+    "size": 4
+   },
+   {
+    "left": 196,
+    "right": 256,
+    "height": 0.4483,
+    "size": 6
+   },
+   {
+    "left": 93,
+    "right": 223,
+    "height": 0.4596,
+    "size": 3
+   },
+   {
+    "left": 122,
+    "right": 252,
+    "height": 0.4607,
+    "size": 3
+   },
+   {
+    "left": 78,
+    "right": 240,
+    "height": 0.463,
+    "size": 15
+   },
+   {
+    "left": 95,
+    "right": 241,
+    "height": 0.4655,
+    "size": 3
+   },
+   {
+    "left": 230,
+    "right": 238,
+    "height": 0.4745,
+    "size": 5
+   },
+   {
+    "left": 37,
+    "right": 267,
+    "height": 0.4756,
+    "size": 4
+   },
+   {
+    "left": 222,
+    "right": 259,
+    "height": 0.4799,
+    "size": 4
+   },
+   {
+    "left": 177,
+    "right": 239,
+    "height": 0.4861,
+    "size": 4
+   },
+   {
+    "left": 247,
+    "right": 266,
+    "height": 0.4914,
+    "size": 18
+   },
+   {
+    "left": 26,
+    "right": 28,
+    "height": 0.4934,
+    "size": 2
+   },
+   {
+    "left": 119,
+    "right": 219,
+    "height": 0.4949,
+    "size": 5
+   },
+   {
+    "left": 232,
+    "right": 257,
+    "height": 0.495,
+    "size": 12
+   },
+   {
+    "left": 242,
+    "right": 262,
+    "height": 0.4984,
+    "size": 6
+   },
+   {
+    "left": 18,
+    "right": 214,
+    "height": 0.4999,
+    "size": 3
+   },
+   {
+    "left": 13,
+    "right": 227,
+    "height": 0.509,
+    "size": 5
+   },
+   {
+    "left": 229,
+    "right": 253,
+    "height": 0.5094,
+    "size": 4
+   },
+   {
+    "left": 263,
+    "right": 268,
+    "height": 0.5302,
+    "size": 11
+   },
+   {
+    "left": 7,
+    "right": 277,
+    "height": 0.5699,
+    "size": 4
+   },
+   {
+    "left": 20,
+    "right": 265,
+    "height": 0.573,
+    "size": 4
+   },
+   {
+    "left": 151,
+    "right": 275,
+    "height": 0.5781,
+    "size": 13
+   },
+   {
+    "left": 68,
+    "right": 254,
+    "height": 0.579,
+    "size": 14
+   },
+   {
+    "left": 270,
+    "right": 272,
+    "height": 0.5997,
+    "size": 22
+   },
+   {
+    "left": 221,
+    "right": 225,
+    "height": 0.6031,
+    "size": 6
+   },
+   {
+    "left": 43,
+    "right": 264,
+    "height": 0.6048,
+    "size": 4
+   },
+   {
+    "left": 276,
+    "right": 283,
+    "height": 0.6053,
+    "size": 19
+   },
+   {
+    "left": 245,
+    "right": 280,
+    "height": 0.607,
+    "size": 14
+   },
+   {
+    "left": 75,
+    "right": 274,
+    "height": 0.6102,
+    "size": 6
+   },
+   {
+    "left": 235,
+    "right": 248,
+    "height": 0.6121,
+    "size": 6
+   },
+   {
+    "left": 251,
+    "right": 278,
+    "height": 0.6267,
+    "size": 9
+   },
+   {
+    "left": 31,
+    "right": 209,
+    "height": 0.6268,
+    "size": 3
+   },
+   {
+    "left": 159,
+    "right": 260,
+    "height": 0.6271,
+    "size": 4
+   },
+   {
+    "left": 279,
+    "right": 286,
+    "height": 0.6484,
+    "size": 10
+   },
+   {
+    "left": 233,
+    "right": 282,
+    "height": 0.6545,
+    "size": 8
+   },
+   {
+    "left": 243,
+    "right": 261,
+    "height": 0.6589,
+    "size": 6
+   },
+   {
+    "left": 269,
+    "right": 273,
+    "height": 0.6654,
+    "size": 6
+   },
+   {
+    "left": 290,
+    "right": 292,
+    "height": 0.6662,
+    "size": 15
+   },
+   {
+    "left": 284,
+    "right": 287,
+    "height": 0.667,
+    "size": 18
+   },
+   {
+    "left": 77,
+    "right": 289,
+    "height": 0.6723,
+    "size": 15
+   },
+   {
+    "left": 255,
+    "right": 258,
+    "height": 0.6763,
+    "size": 15
+   },
+   {
+    "left": 112,
+    "right": 244,
+    "height": 0.6866,
+    "size": 3
+   },
+   {
+    "left": 301,
+    "right": 302,
+    "height": 0.6955,
+    "size": 30
+   },
+   {
+    "left": 134,
+    "right": 291,
+    "height": 0.6975,
+    "size": 7
+   },
+   {
+    "left": 271,
+    "right": 288,
+    "height": 0.7258,
+    "size": 23
+   },
+   {
+    "left": 293,
+    "right": 306,
+    "height": 0.7405,
+    "size": 26
+   },
+   {
+    "left": 295,
+    "right": 296,
+    "height": 0.761,
+    "size": 18
+   },
+   {
+    "left": 213,
+    "right": 303,
+    "height": 0.7687,
+    "size": 5
+   },
+   {
+    "left": 298,
+    "right": 300,
+    "height": 0.7871,
+    "size": 24
+   },
+   {
+    "left": 281,
+    "right": 299,
+    "height": 0.7986,
+    "size": 19
+   },
+   {
+    "left": 304,
+    "right": 305,
+    "height": 0.8361,
+    "size": 37
+   },
+   {
+    "left": 297,
+    "right": 308,
+    "height": 0.8369,
+    "size": 24
+   },
+   {
+    "left": 307,
+    "right": 310,
+    "height": 0.8449,
+    "size": 50
+   },
+   {
+    "left": 309,
+    "right": 311,
+    "height": 0.8744,
+    "size": 24
+   },
+   {
+    "left": 314,
+    "right": 315,
+    "height": 0.9377,
+    "size": 74
+   },
+   {
+    "left": 294,
+    "right": 312,
+    "height": 0.9407,
+    "size": 41
+   },
+   {
+    "left": 313,
+    "right": 317,
+    "height": 1.0034,
+    "size": 65
+   },
+   {
+    "left": 285,
+    "right": 316,
+    "height": 1.1029,
+    "size": 96
+   },
+   {
+    "left": 318,
+    "right": 319,
+    "height": 1.1285,
+    "size": 161
+   }
+  ],
+  "leaf_order": [
+   "arieh-warshel",
+   "rosa-di-felice",
+   "aiichiro-nakano",
+   "krishna-garikipati",
+   "eva-kanso",
+   "paul-newton",
+   "keyue-shen",
+   "peter-yingxiao-wang",
+   "eun-chung",
+   "cristina-zavaleta",
+   "yaoheng-yang",
+   "qifa-zhou",
+   "zhengchang-kou",
+   "jesse-yen",
+   "ellis-meng",
+   "maral-mousavi",
+   "francesco-cutrale",
+   "thai-truong",
+   "scott-fraser",
+   "le-trinh",
+   "xianrui-cheng",
+   "fabien-pinaud",
+   "peter-foster",
+   "christoph-haselwandter",
+   "lu-zhang",
+   "ruishan-liu",
+   "yan-liu",
+   "meisam-razaviyayn",
+   "michael-khoo",
+   "alan-watts",
+   "joel-hahn",
+   "larry-swanson",
+   "judith-hirsch",
+   "bartlett-mel",
+   "sarah-bottjer",
+   "lauren-mcelvain",
+   "s-hires",
+   "jeffrey-moore",
+   "vasileios-christopoulos",
+   "gerald-loeb",
+   "francisco-valero-cuevas",
+   "jean-bouteiller",
+   "vasilis-marmarelis",
+   "justin-haldar",
+   "anand-joshi",
+   "andrei-irimia",
+   "paul-thompson",
+   "arthur-toga",
+   "morteza-dehghani",
+   "antoine-bechara",
+   "john-monterosso",
+   "assal-habibi",
+   "lisa-aziz-zadeh",
+   "mary-immordino-yang",
+   "xiao-fei-yang",
+   "jonas-kaplan",
+   "antonio-damasio",
+   "hanna-damasio",
+   "rory-spence",
+   "emily-liman",
+   "david-mckemy",
+   "michael-quick",
+   "bruce-herring",
+   "don-b-arnold",
+   "dion-dickman",
+   "andrew-gracey",
+   "donal-manahan",
+   "suzanne-edmands",
+   "carly-kenkel",
+   "moh-el-naggar",
+   "james-boedicker",
+   "steven-finkel",
+   "dale-kiefer",
+   "james-moffett",
+   "sergio-sanudo-wilhelmy",
+   "naomi-levine",
+   "noelle-held",
+   "eric-webb",
+   "douglas-capone",
+   "david-hutchins",
+   "julia-schwartzman",
+   "karen-lloyd",
+   "andrew-steen",
+   "david-caron",
+   "jed-fuhrman",
+   "john-heidelberg",
+   "cameron-thrash",
+   "matt-dean",
+   "ian-ehrenreich",
+   "sergey-nuzhdin",
+   "huaiyu-mi",
+   "paul-thomas",
+   "fengzhu-sun",
+   "michael-waterman",
+   "peter-calabrese",
+   "simon-tavare",
+   "liang-chen",
+   "mark-chaisson",
+   "sheng-li",
+   "andrew-smith",
+   "richard-watanabe",
+   "charleston-chiang",
+   "steven-gazal",
+   "nicholas-mancuso",
+   "jazlyn-mooney",
+   "arun-durvasula",
+   "michael-edge",
+   "chang-shu",
+   "kimberly-siegmund",
+   "daniel-stram",
+   "chun-li",
+   "william-gauderman",
+   "juan-lewinger",
+   "sandrah-eckel",
+   "wendy-mack",
+   "eric-kawaguchi",
+   "trevor-pickering",
+   "willem-collier",
+   "david-d-argenio",
+   "hossein-jadvar",
+   "jerry-s-h-lee",
+   "james-hicks",
+   "peter-kuhn",
+   "joshua-millstein",
+   "bodour-salhia",
+   "michelle-nuno",
+   "natalie-delrocco",
+   "jin-piao",
+   "lingyun-ji",
+   "lindsay-renfro",
+   "todd-alonzo",
+   "donald-barkauskas",
+   "jonathan-buckley",
+   "stacey-finley",
+   "rong-lu",
+   "adam-maclean",
+   "kelly-street",
+   "francesca-mariani",
+   "andrew-mcmahon",
+   "derrick-morton",
+   "berenice-benayoun",
+   "john-tower",
+   "helen-berman",
+   "lin-chen",
+   "cornelius-gati",
+   "vsevolod-katritch",
+   "steve-kay",
+   "carolyn-phillips",
+   "matthew-michael",
+   "irene-chiolo",
+   "oscar-aparicio",
+   "susan-forsburg",
+   "geoffrey-fudenberg",
+   "judith-kribelbauer",
+   "tsu-pei-chiu",
+   "remo-rohs",
+   "paula-cannon",
+   "xiaojiang-chen",
+   "michael-lieber",
+   "myron-goodman",
+   "phuong-pham"
+  ]
+ },
+ "faculty": [
+  {
+   "id": "todd-alonzo",
+   "label": "Alonzo",
+   "cluster": 6,
+   "tsne": [
+    0.4143,
+    0.7832
+   ],
+   "mds": [
+    0.603,
+    0.9064
+   ]
+  },
+  {
+   "id": "oscar-aparicio",
+   "label": "Aparicio",
+   "cluster": 8,
+   "tsne": [
+    0.6487,
+    0.3185
+   ],
+   "mds": [
+    0.9199,
+    0.5588
+   ]
+  },
+  {
+   "id": "don-b-arnold",
+   "label": "Arnold",
+   "cluster": 3,
+   "tsne": [
+    0.0716,
+    0.2194
+   ],
+   "mds": [
+    0.1674,
+    0.1785
+   ]
+  },
+  {
+   "id": "lisa-aziz-zadeh",
+   "label": "Aziz-Zadeh",
+   "cluster": 3,
+   "tsne": [
+    0.0587,
+    0.6761
+   ],
+   "mds": [
+    0.0213,
+    0.5873
+   ]
+  },
+  {
+   "id": "donald-barkauskas",
+   "label": "Barkauskas",
+   "cluster": 6,
+   "tsne": [
+    0.4223,
+    0.8039
+   ],
+   "mds": [
+    0.5777,
+    0.9032
+   ]
+  },
+  {
+   "id": "antoine-bechara",
+   "label": "Bechara",
+   "cluster": 3,
+   "tsne": [
+    0.0768,
+    0.6239
+   ],
+   "mds": [
+    0.0524,
+    0.69
+   ]
+  },
+  {
+   "id": "berenice-benayoun",
+   "label": "Benayoun",
+   "cluster": 7,
+   "tsne": [
+    0.692,
+    0.3737
+   ],
+   "mds": [
+    0.6299,
+    0.6981
+   ]
+  },
+  {
+   "id": "helen-berman",
+   "label": "Berman",
+   "cluster": 8,
+   "tsne": [
+    0.5343,
+    0.2968
+   ],
+   "mds": [
+    0.8902,
+    0.397
+   ]
+  },
+  {
+   "id": "james-boedicker",
+   "label": "Boedicker",
+   "cluster": 4,
+   "tsne": [
+    0.9791,
+    0.3518
+   ],
+   "mds": [
+    0.7461,
+    0.1065
+   ]
+  },
+  {
+   "id": "sarah-bottjer",
+   "label": "Bottjer",
+   "cluster": 3,
+   "tsne": [
+    0.0472,
+    0.2943
+   ],
+   "mds": [
+    0.0879,
+    0.3744
+   ]
+  },
+  {
+   "id": "jean-bouteiller",
+   "label": "Bouteiller",
+   "cluster": 3,
+   "tsne": [
+    0.1222,
+    0.3383
+   ],
+   "mds": [
+    0.0871,
+    0.2495
+   ]
+  },
+  {
+   "id": "jonathan-buckley",
+   "label": "Buckley",
+   "cluster": 6,
+   "tsne": [
+    0.4105,
+    0.8025
+   ],
+   "mds": [
+    0.6393,
+    0.9117
+   ]
+  },
+  {
+   "id": "peter-calabrese",
+   "label": "Calabrese",
+   "cluster": 5,
+   "tsne": [
+    0.7066,
+    0.5712
+   ],
+   "mds": [
+    0.8532,
+    0.7989
+   ]
+  },
+  {
+   "id": "paula-cannon",
+   "label": "Cannon",
+   "cluster": 8,
+   "tsne": [
+    0.5535,
+    0.264
+   ],
+   "mds": [
+    0.7375,
+    0.6187
+   ]
+  },
+  {
+   "id": "douglas-capone",
+   "label": "Capone",
+   "cluster": 4,
+   "tsne": [
+    0.9596,
+    0.4736
+   ],
+   "mds": [
+    0.7929,
+    0.083
+   ]
+  },
+  {
+   "id": "david-caron",
+   "label": "Caron",
+   "cluster": 4,
+   "tsne": [
+    0.9808,
+    0.4288
+   ],
+   "mds": [
+    0.8231,
+    0.1064
+   ]
+  },
+  {
+   "id": "mark-chaisson",
+   "label": "Chaisson",
+   "cluster": 5,
+   "tsne": [
+    0.6571,
+    0.5733
+   ],
+   "mds": [
+    0.9084,
+    0.7835
+   ]
+  },
+  {
+   "id": "liang-chen",
+   "label": "Liang Chen",
+   "cluster": 5,
+   "tsne": [
+    0.7021,
+    0.6201
+   ],
+   "mds": [
+    0.7645,
+    0.8541
+   ]
+  },
+  {
+   "id": "lin-chen",
+   "label": "Lin Chen",
+   "cluster": 8,
+   "tsne": [
+    0.5163,
+    0.2708
+   ],
+   "mds": [
+    0.6403,
+    0.5361
+   ]
+  },
+  {
+   "id": "xiaojiang-chen",
+   "label": "X. Chen",
+   "cluster": 8,
+   "tsne": [
+    0.5523,
+    0.2818
+   ],
+   "mds": [
+    0.8991,
+    0.5852
+   ]
+  },
+  {
+   "id": "xianrui-cheng",
+   "label": "Cheng",
+   "cluster": 1,
+   "tsne": [
+    0.3538,
+    0.3261
+   ],
+   "mds": [
+    0.5595,
+    0.1867
+   ]
+  },
+  {
+   "id": "charleston-chiang",
+   "label": "Chiang",
+   "cluster": 5,
+   "tsne": [
+    0.7432,
+    0.6201
+   ],
+   "mds": [
+    0.6933,
+    0.9667
+   ]
+  },
+  {
+   "id": "irene-chiolo",
+   "label": "Chiolo",
+   "cluster": 8,
+   "tsne": [
+    0.6554,
+    0.2989
+   ],
+   "mds": [
+    0.8672,
+    0.4859
+   ]
+  },
+  {
+   "id": "tsu-pei-chiu",
+   "label": "Chiu",
+   "cluster": 8,
+   "tsne": [
+    0.6371,
+    0.2391
+   ],
+   "mds": [
+    0.9547,
+    0.6037
+   ]
+  },
+  {
+   "id": "vasileios-christopoulos",
+   "label": "Christopoulos",
+   "cluster": 3,
+   "tsne": [
+    0.0993,
+    0.3651
+   ],
+   "mds": [
+    0.0108,
+    0.3855
+   ]
+  },
+  {
+   "id": "eun-chung",
+   "label": "Chung",
+   "cluster": 1,
+   "tsne": [
+    0.3448,
+    0.41
+   ],
+   "mds": [
+    0.4989,
+    0.4173
+   ]
+  },
+  {
+   "id": "willem-collier",
+   "label": "Collier",
+   "cluster": 6,
+   "tsne": [
+    0.4754,
+    0.7796
+   ],
+   "mds": [
+    0.3866,
+    0.8849
+   ]
+  },
+  {
+   "id": "francesco-cutrale",
+   "label": "Cutrale",
+   "cluster": 1,
+   "tsne": [
+    0.3653,
+    0.4488
+   ],
+   "mds": [
+    0.395,
+    0.1063
+   ]
+  },
+  {
+   "id": "david-d-argenio",
+   "label": "D'Argenio",
+   "cluster": 6,
+   "tsne": [
+    0.5019,
+    0.7769
+   ],
+   "mds": [
+    0.3292,
+    0.7184
+   ]
+  },
+  {
+   "id": "antonio-damasio",
+   "label": "A. Damasio",
+   "cluster": 3,
+   "tsne": [
+    0.0738,
+    0.6541
+   ],
+   "mds": [
+    0.0048,
+    0.5277
+   ]
+  },
+  {
+   "id": "hanna-damasio",
+   "label": "H. Damasio",
+   "cluster": 3,
+   "tsne": [
+    0.0641,
+    0.6602
+   ],
+   "mds": [
+    0.0,
+    0.5482
+   ]
+  },
+  {
+   "id": "matt-dean",
+   "label": "Dean",
+   "cluster": 5,
+   "tsne": [
+    0.7581,
+    0.5631
+   ],
+   "mds": [
+    0.6671,
+    0.5857
+   ]
+  },
+  {
+   "id": "morteza-dehghani",
+   "label": "Dehghani",
+   "cluster": 3,
+   "tsne": [
+    0.1236,
+    0.6684
+   ],
+   "mds": [
+    0.1723,
+    0.7955
+   ]
+  },
+  {
+   "id": "natalie-delrocco",
+   "label": "Delrocco",
+   "cluster": 6,
+   "tsne": [
+    0.4395,
+    0.7983
+   ],
+   "mds": [
+    0.4773,
+    0.9264
+   ]
+  },
+  {
+   "id": "rosa-di-felice",
+   "label": "Di Felice",
+   "cluster": 0,
+   "tsne": [
+    0.4243,
+    0.2832
+   ],
+   "mds": [
+    0.601,
+    0.1301
+   ]
+  },
+  {
+   "id": "dion-dickman",
+   "label": "Dickman",
+   "cluster": 3,
+   "tsne": [
+    0.0822,
+    0.2245
+   ],
+   "mds": [
+    0.2631,
+    0.1877
+   ]
+  },
+  {
+   "id": "arun-durvasula",
+   "label": "Durvasula",
+   "cluster": 5,
+   "tsne": [
+    0.7458,
+    0.6005
+   ],
+   "mds": [
+    0.8274,
+    0.8802
+   ]
+  },
+  {
+   "id": "sandrah-eckel",
+   "label": "Eckel",
+   "cluster": 6,
+   "tsne": [
+    0.6651,
+    0.7095
+   ],
+   "mds": [
+    0.2712,
+    0.8601
+   ]
+  },
+  {
+   "id": "michael-edge",
+   "label": "Edge",
+   "cluster": 5,
+   "tsne": [
+    0.7578,
+    0.5945
+   ],
+   "mds": [
+    0.7876,
+    0.9061
+   ]
+  },
+  {
+   "id": "suzanne-edmands",
+   "label": "Edmands",
+   "cluster": 4,
+   "tsne": [
+    0.8548,
+    0.522
+   ],
+   "mds": [
+    0.8919,
+    0.323
+   ]
+  },
+  {
+   "id": "ian-ehrenreich",
+   "label": "Ehrenreich",
+   "cluster": 5,
+   "tsne": [
+    0.8221,
+    0.5386
+   ],
+   "mds": [
+    0.972,
+    0.5065
+   ]
+  },
+  {
+   "id": "moh-el-naggar",
+   "label": "El-Naggar",
+   "cluster": 4,
+   "tsne": [
+    0.9775,
+    0.3384
+   ],
+   "mds": [
+    0.6783,
+    0.0429
+   ]
+  },
+  {
+   "id": "steven-finkel",
+   "label": "Finkel",
+   "cluster": 4,
+   "tsne": [
+    0.9917,
+    0.3672
+   ],
+   "mds": [
+    0.8922,
+    0.219
+   ]
+  },
+  {
+   "id": "stacey-finley",
+   "label": "Finley",
+   "cluster": 6,
+   "tsne": [
+    0.5234,
+    0.7704
+   ],
+   "mds": [
+    0.4796,
+    0.6989
+   ]
+  },
+  {
+   "id": "susan-forsburg",
+   "label": "Forsburg",
+   "cluster": 8,
+   "tsne": [
+    0.657,
+    0.3126
+   ],
+   "mds": [
+    0.9298,
+    0.4632
+   ]
+  },
+  {
+   "id": "peter-foster",
+   "label": "Foster",
+   "cluster": 1,
+   "tsne": [
+    0.3661,
+    0.3274
+   ],
+   "mds": [
+    0.5196,
+    0.0562
+   ]
+  },
+  {
+   "id": "scott-fraser",
+   "label": "Fraser",
+   "cluster": 1,
+   "tsne": [
+    0.3801,
+    0.4566
+   ],
+   "mds": [
+    0.3419,
+    0.0999
+   ]
+  },
+  {
+   "id": "geoffrey-fudenberg",
+   "label": "Fudenberg",
+   "cluster": 8,
+   "tsne": [
+    0.6499,
+    0.2756
+   ],
+   "mds": [
+    0.9362,
+    0.5762
+   ]
+  },
+  {
+   "id": "jed-fuhrman",
+   "label": "Fuhrman",
+   "cluster": 4,
+   "tsne": [
+    0.9744,
+    0.4112
+   ],
+   "mds": [
+    0.9093,
+    0.1922
+   ]
+  },
+  {
+   "id": "krishna-garikipati",
+   "label": "Garikipati",
+   "cluster": 0,
+   "tsne": [
+    0.3943,
+    0.2844
+   ],
+   "mds": [
+    0.3502,
+    0.0659
+   ]
+  },
+  {
+   "id": "cornelius-gati",
+   "label": "Gati",
+   "cluster": 8,
+   "tsne": [
+    0.493,
+    0.2763
+   ],
+   "mds": [
+    0.4953,
+    0.2301
+   ]
+  },
+  {
+   "id": "william-gauderman",
+   "label": "Gauderman",
+   "cluster": 5,
+   "tsne": [
+    0.6702,
+    0.6933
+   ],
+   "mds": [
+    0.4852,
+    0.9777
+   ]
+  },
+  {
+   "id": "steven-gazal",
+   "label": "Gazal",
+   "cluster": 5,
+   "tsne": [
+    0.7277,
+    0.6214
+   ],
+   "mds": [
+    0.7323,
+    0.9404
+   ]
+  },
+  {
+   "id": "myron-goodman",
+   "label": "Goodman",
+   "cluster": 8,
+   "tsne": [
+    0.5694,
+    0.2927
+   ],
+   "mds": [
+    0.9711,
+    0.439
+   ]
+  },
+  {
+   "id": "andrew-gracey",
+   "label": "Gracey",
+   "cluster": 4,
+   "tsne": [
+    0.9027,
+    0.5054
+   ],
+   "mds": [
+    0.7972,
+    0.2275
+   ]
+  },
+  {
+   "id": "assal-habibi",
+   "label": "Habibi",
+   "cluster": 3,
+   "tsne": [
+    0.0768,
+    0.6915
+   ],
+   "mds": [
+    0.0474,
+    0.6269
+   ]
+  },
+  {
+   "id": "joel-hahn",
+   "label": "Hahn",
+   "cluster": 3,
+   "tsne": [
+    0.0138,
+    0.283
+   ],
+   "mds": [
+    0.0566,
+    0.5022
+   ]
+  },
+  {
+   "id": "justin-haldar",
+   "label": "Haldar",
+   "cluster": 3,
+   "tsne": [
+    0.1737,
+    0.4697
+   ],
+   "mds": [
+    0.0933,
+    0.4163
+   ]
+  },
+  {
+   "id": "christoph-haselwandter",
+   "label": "Haselwandter",
+   "cluster": 1,
+   "tsne": [
+    0.3763,
+    0.3406
+   ],
+   "mds": [
+    0.5017,
+    0.0481
+   ]
+  },
+  {
+   "id": "john-heidelberg",
+   "label": "Heidelberg",
+   "cluster": 4,
+   "tsne": [
+    0.9614,
+    0.4029
+   ],
+   "mds": [
+    0.9271,
+    0.212
+   ]
+  },
+  {
+   "id": "noelle-held",
+   "label": "Held",
+   "cluster": 4,
+   "tsne": [
+    0.9471,
+    0.451
+   ],
+   "mds": [
+    0.8452,
+    0.1287
+   ]
+  },
+  {
+   "id": "bruce-herring",
+   "label": "Herring",
+   "cluster": 3,
+   "tsne": [
+    0.0794,
+    0.2094
+   ],
+   "mds": [
+    0.1984,
+    0.3843
+   ]
+  },
+  {
+   "id": "james-hicks",
+   "label": "Hicks",
+   "cluster": 6,
+   "tsne": [
+    0.5195,
+    0.6701
+   ],
+   "mds": [
+    0.7524,
+    0.8233
+   ]
+  },
+  {
+   "id": "s-hires",
+   "label": "Hires",
+   "cluster": 3,
+   "tsne": [
+    0.0816,
+    0.3099
+   ],
+   "mds": [
+    0.0978,
+    0.2008
+   ]
+  },
+  {
+   "id": "judith-hirsch",
+   "label": "Hirsch",
+   "cluster": 3,
+   "tsne": [
+    0.1046,
+    0.3073
+   ],
+   "mds": [
+    0.0747,
+    0.265
+   ]
+  },
+  {
+   "id": "david-hutchins",
+   "label": "Hutchins",
+   "cluster": 4,
+   "tsne": [
+    0.9642,
+    0.4649
+   ],
+   "mds": [
+    0.8058,
+    0.0895
+   ]
+  },
+  {
+   "id": "mary-immordino-yang",
+   "label": "Immordino-Yang",
+   "cluster": 3,
+   "tsne": [
+    0.0944,
+    0.6745
+   ],
+   "mds": [
+    0.055,
+    0.656
+   ]
+  },
+  {
+   "id": "andrei-irimia",
+   "label": "Irimia",
+   "cluster": 3,
+   "tsne": [
+    0.1353,
+    0.4919
+   ],
+   "mds": [
+    0.0937,
+    0.6778
+   ]
+  },
+  {
+   "id": "hossein-jadvar",
+   "label": "Jadvar",
+   "cluster": 6,
+   "tsne": [
+    0.4896,
+    0.6893
+   ],
+   "mds": [
+    0.3939,
+    0.7327
+   ]
+  },
+  {
+   "id": "lingyun-ji",
+   "label": "Ji",
+   "cluster": 6,
+   "tsne": [
+    0.4324,
+    0.7828
+   ],
+   "mds": [
+    0.5308,
+    0.9098
+   ]
+  },
+  {
+   "id": "anand-joshi",
+   "label": "Joshi",
+   "cluster": 3,
+   "tsne": [
+    0.1571,
+    0.478
+   ],
+   "mds": [
+    0.0322,
+    0.5528
+   ]
+  },
+  {
+   "id": "eva-kanso",
+   "label": "Kanso",
+   "cluster": 0,
+   "tsne": [
+    0.3701,
+    0.2933
+   ],
+   "mds": [
+    0.4044,
+    0.0105
+   ]
+  },
+  {
+   "id": "jonas-kaplan",
+   "label": "Kaplan",
+   "cluster": 3,
+   "tsne": [
+    0.0794,
+    0.6681
+   ],
+   "mds": [
+    0.0252,
+    0.6353
+   ]
+  },
+  {
+   "id": "vsevolod-katritch",
+   "label": "Katritch",
+   "cluster": 8,
+   "tsne": [
+    0.4854,
+    0.2738
+   ],
+   "mds": [
+    0.3824,
+    0.4433
+   ]
+  },
+  {
+   "id": "eric-kawaguchi",
+   "label": "Kawaguchi",
+   "cluster": 6,
+   "tsne": [
+    0.6951,
+    0.7109
+   ],
+   "mds": [
+    0.4529,
+    0.9678
+   ]
+  },
+  {
+   "id": "steve-kay",
+   "label": "Kay",
+   "cluster": 8,
+   "tsne": [
+    0.6638,
+    0.3597
+   ],
+   "mds": [
+    0.7647,
+    0.4299
+   ]
+  },
+  {
+   "id": "carly-kenkel",
+   "label": "Kenkel",
+   "cluster": 4,
+   "tsne": [
+    0.8766,
+    0.5102
+   ],
+   "mds": [
+    0.82,
+    0.2073
+   ]
+  },
+  {
+   "id": "michael-khoo",
+   "label": "Khoo",
+   "cluster": 3,
+   "tsne": [
+    0.1322,
+    0.3648
+   ],
+   "mds": [
+    0.1058,
+    0.5234
+   ]
+  },
+  {
+   "id": "dale-kiefer",
+   "label": "Kiefer",
+   "cluster": 4,
+   "tsne": [
+    1.0,
+    0.4457
+   ],
+   "mds": [
+    0.6371,
+    0.0283
+   ]
+  },
+  {
+   "id": "zhengchang-kou",
+   "label": "Kou",
+   "cluster": 1,
+   "tsne": [
+    0.226,
+    0.4519
+   ],
+   "mds": [
+    0.1935,
+    0.2425
+   ]
+  },
+  {
+   "id": "judith-kribelbauer",
+   "label": "Kribelbauer",
+   "cluster": 8,
+   "tsne": [
+    0.6458,
+    0.248
+   ],
+   "mds": [
+    0.9002,
+    0.6701
+   ]
+  },
+  {
+   "id": "peter-kuhn",
+   "label": "Kuhn",
+   "cluster": 6,
+   "tsne": [
+    0.5085,
+    0.6771
+   ],
+   "mds": [
+    0.6566,
+    0.8267
+   ]
+  },
+  {
+   "id": "jerry-s-h-lee",
+   "label": "Lee",
+   "cluster": 6,
+   "tsne": [
+    0.517,
+    0.6855
+   ],
+   "mds": [
+    0.6524,
+    0.8688
+   ]
+  },
+  {
+   "id": "naomi-levine",
+   "label": "Levine",
+   "cluster": 4,
+   "tsne": [
+    0.9753,
+    0.4544
+   ],
+   "mds": [
+    0.826,
+    0.1144
+   ]
+  },
+  {
+   "id": "juan-lewinger",
+   "label": "Lewinger",
+   "cluster": 5,
+   "tsne": [
+    0.6811,
+    0.6844
+   ],
+   "mds": [
+    0.5518,
+    0.9865
+   ]
+  },
+  {
+   "id": "chun-li",
+   "label": "C. Li",
+   "cluster": 5,
+   "tsne": [
+    0.7007,
+    0.6829
+   ],
+   "mds": [
+    0.5126,
+    0.9895
+   ]
+  },
+  {
+   "id": "sheng-li",
+   "label": "S. Li",
+   "cluster": 5,
+   "tsne": [
+    0.6628,
+    0.6034
+   ],
+   "mds": [
+    0.8161,
+    0.8402
+   ]
+  },
+  {
+   "id": "michael-lieber",
+   "label": "Lieber",
+   "cluster": 8,
+   "tsne": [
+    0.5852,
+    0.2887
+   ],
+   "mds": [
+    0.8935,
+    0.6187
+   ]
+  },
+  {
+   "id": "emily-liman",
+   "label": "Liman",
+   "cluster": 3,
+   "tsne": [
+    0.133,
+    0.203
+   ],
+   "mds": [
+    0.3353,
+    0.1879
+   ]
+  },
+  {
+   "id": "ruishan-liu",
+   "label": "R. Liu",
+   "cluster": 2,
+   "tsne": [
+    0.1821,
+    0.6769
+   ],
+   "mds": [
+    0.3775,
+    0.9232
+   ]
+  },
+  {
+   "id": "yan-liu",
+   "label": "Y. Liu",
+   "cluster": 2,
+   "tsne": [
+    0.1838,
+    0.6647
+   ],
+   "mds": [
+    0.2002,
+    0.7798
+   ]
+  },
+  {
+   "id": "karen-lloyd",
+   "label": "Lloyd",
+   "cluster": 4,
+   "tsne": [
+    0.9345,
+    0.3935
+   ],
+   "mds": [
+    0.8806,
+    0.1639
+   ]
+  },
+  {
+   "id": "gerald-loeb",
+   "label": "Loeb",
+   "cluster": 3,
+   "tsne": [
+    0.0865,
+    0.3706
+   ],
+   "mds": [
+    0.0476,
+    0.302
+   ]
+  },
+  {
+   "id": "rong-lu",
+   "label": "Lu",
+   "cluster": 6,
+   "tsne": [
+    0.5565,
+    0.7764
+   ],
+   "mds": [
+    0.6778,
+    0.7069
+   ]
+  },
+  {
+   "id": "adam-maclean",
+   "label": "MacLean",
+   "cluster": 6,
+   "tsne": [
+    0.5457,
+    0.7649
+   ],
+   "mds": [
+    0.6634,
+    0.762
+   ]
+  },
+  {
+   "id": "wendy-mack",
+   "label": "Mack",
+   "cluster": 6,
+   "tsne": [
+    0.6909,
+    0.7427
+   ],
+   "mds": [
+    0.2431,
+    0.8734
+   ]
+  },
+  {
+   "id": "donal-manahan",
+   "label": "Manahan",
+   "cluster": 4,
+   "tsne": [
+    0.9108,
+    0.5035
+   ],
+   "mds": [
+    0.7023,
+    0.0893
+   ]
+  },
+  {
+   "id": "nicholas-mancuso",
+   "label": "Mancuso",
+   "cluster": 5,
+   "tsne": [
+    0.7258,
+    0.6314
+   ],
+   "mds": [
+    0.7139,
+    0.9495
+   ]
+  },
+  {
+   "id": "francesca-mariani",
+   "label": "Mariani",
+   "cluster": 7,
+   "tsne": [
+    0.4244,
+    0.4912
+   ],
+   "mds": [
+    0.462,
+    0.4648
+   ]
+  },
+  {
+   "id": "vasilis-marmarelis",
+   "label": "Marmarelis",
+   "cluster": 3,
+   "tsne": [
+    0.1242,
+    0.3544
+   ],
+   "mds": [
+    0.0194,
+    0.4261
+   ]
+  },
+  {
+   "id": "lauren-mcelvain",
+   "label": "McElvain",
+   "cluster": 3,
+   "tsne": [
+    0.0667,
+    0.2913
+   ],
+   "mds": [
+    0.1038,
+    0.2872
+   ]
+  },
+  {
+   "id": "david-mckemy",
+   "label": "McKemy",
+   "cluster": 3,
+   "tsne": [
+    0.1353,
+    0.1961
+   ],
+   "mds": [
+    0.2482,
+    0.3575
+   ]
+  },
+  {
+   "id": "andrew-mcmahon",
+   "label": "McMahon",
+   "cluster": 7,
+   "tsne": [
+    0.4306,
+    0.4959
+   ],
+   "mds": [
+    0.551,
+    0.5744
+   ]
+  },
+  {
+   "id": "bartlett-mel",
+   "label": "Mel",
+   "cluster": 3,
+   "tsne": [
+    0.1096,
+    0.3146
+   ],
+   "mds": [
+    0.0661,
+    0.2848
+   ]
+  },
+  {
+   "id": "ellis-meng",
+   "label": "Meng",
+   "cluster": 1,
+   "tsne": [
+    0.244,
+    0.4066
+   ],
+   "mds": [
+    0.2271,
+    0.1424
+   ]
+  },
+  {
+   "id": "huaiyu-mi",
+   "label": "Mi",
+   "cluster": 5,
+   "tsne": [
+    0.6051,
+    0.5247
+   ],
+   "mds": [
+    0.8874,
+    0.7146
+   ]
+  },
+  {
+   "id": "matthew-michael",
+   "label": "Michael",
+   "cluster": 8,
+   "tsne": [
+    0.6701,
+    0.3192
+   ],
+   "mds": [
+    0.8691,
+    0.5019
+   ]
+  },
+  {
+   "id": "joshua-millstein",
+   "label": "Millstein",
+   "cluster": 6,
+   "tsne": [
+    0.5508,
+    0.6758
+   ],
+   "mds": [
+    0.6122,
+    0.9497
+   ]
+  },
+  {
+   "id": "james-moffett",
+   "label": "Moffett",
+   "cluster": 4,
+   "tsne": [
+    0.9832,
+    0.4979
+   ],
+   "mds": [
+    0.7474,
+    0.0745
+   ]
+  },
+  {
+   "id": "john-monterosso",
+   "label": "Monterosso",
+   "cluster": 3,
+   "tsne": [
+    0.08,
+    0.6158
+   ],
+   "mds": [
+    0.0759,
+    0.715
+   ]
+  },
+  {
+   "id": "jazlyn-mooney",
+   "label": "Mooney",
+   "cluster": 5,
+   "tsne": [
+    0.7502,
+    0.5825
+   ],
+   "mds": [
+    0.8695,
+    0.819
+   ]
+  },
+  {
+   "id": "jeffrey-moore",
+   "label": "Moore",
+   "cluster": 3,
+   "tsne": [
+    0.0696,
+    0.3039
+   ],
+   "mds": [
+    0.0467,
+    0.318
+   ]
+  },
+  {
+   "id": "derrick-morton",
+   "label": "Morton",
+   "cluster": 7,
+   "tsne": [
+    0.7032,
+    0.3395
+   ],
+   "mds": [
+    0.5744,
+    0.6362
+   ]
+  },
+  {
+   "id": "maral-mousavi",
+   "label": "Mousavi",
+   "cluster": 1,
+   "tsne": [
+    0.2492,
+    0.3983
+   ],
+   "mds": [
+    0.3589,
+    0.1514
+   ]
+  },
+  {
+   "id": "aiichiro-nakano",
+   "label": "Nakano",
+   "cluster": 0,
+   "tsne": [
+    0.4113,
+    0.2836
+   ],
+   "mds": [
+    0.4834,
+    0.0534
+   ]
+  },
+  {
+   "id": "paul-newton",
+   "label": "Newton",
+   "cluster": 0,
+   "tsne": [
+    0.3756,
+    0.2839
+   ],
+   "mds": [
+    0.4124,
+    0.3413
+   ]
+  },
+  {
+   "id": "michelle-nuno",
+   "label": "Nuno",
+   "cluster": 6,
+   "tsne": [
+    0.4533,
+    0.7597
+   ],
+   "mds": [
+    0.4338,
+    0.939
+   ]
+  },
+  {
+   "id": "sergey-nuzhdin",
+   "label": "Nuzhdin",
+   "cluster": 5,
+   "tsne": [
+    0.8295,
+    0.5347
+   ],
+   "mds": [
+    1.0,
+    0.5296
+   ]
+  },
+  {
+   "id": "phuong-pham",
+   "label": "Pham",
+   "cluster": 8,
+   "tsne": [
+    0.571,
+    0.2834
+   ],
+   "mds": [
+    0.966,
+    0.4777
+   ]
+  },
+  {
+   "id": "carolyn-phillips",
+   "label": "Phillips",
+   "cluster": 8,
+   "tsne": [
+    0.6861,
+    0.3265
+   ],
+   "mds": [
+    0.807,
+    0.4334
+   ]
+  },
+  {
+   "id": "jin-piao",
+   "label": "Piao",
+   "cluster": 6,
+   "tsne": [
+    0.4365,
+    0.7707
+   ],
+   "mds": [
+    0.5497,
+    0.924
+   ]
+  },
+  {
+   "id": "trevor-pickering",
+   "label": "Pickering",
+   "cluster": 6,
+   "tsne": [
+    0.6894,
+    0.728
+   ],
+   "mds": [
+    0.2867,
+    0.9082
+   ]
+  },
+  {
+   "id": "fabien-pinaud",
+   "label": "Pinaud",
+   "cluster": 1,
+   "tsne": [
+    0.3759,
+    0.3662
+   ],
+   "mds": [
+    0.5363,
+    0.1311
+   ]
+  },
+  {
+   "id": "michael-quick",
+   "label": "Quick",
+   "cluster": 3,
+   "tsne": [
+    0.0912,
+    0.2029
+   ],
+   "mds": [
+    0.2416,
+    0.3216
+   ]
+  },
+  {
+   "id": "meisam-razaviyayn",
+   "label": "Razaviyayn",
+   "cluster": 2,
+   "tsne": [
+    0.1841,
+    0.6535
+   ],
+   "mds": [
+    0.2314,
+    0.7005
+   ]
+  },
+  {
+   "id": "lindsay-renfro",
+   "label": "Renfro",
+   "cluster": 6,
+   "tsne": [
+    0.448,
+    0.7818
+   ],
+   "mds": [
+    0.533,
+    0.927
+   ]
+  },
+  {
+   "id": "remo-rohs",
+   "label": "Rohs",
+   "cluster": 8,
+   "tsne": [
+    0.6325,
+    0.2486
+   ],
+   "mds": [
+    0.9515,
+    0.6073
+   ]
+  },
+  {
+   "id": "bodour-salhia",
+   "label": "Salhia",
+   "cluster": 6,
+   "tsne": [
+    0.5379,
+    0.6762
+   ],
+   "mds": [
+    0.6674,
+    0.902
+   ]
+  },
+  {
+   "id": "sergio-sanudo-wilhelmy",
+   "label": "Sanudo-Wilhelmy",
+   "cluster": 4,
+   "tsne": [
+    0.9814,
+    0.4883
+   ],
+   "mds": [
+    0.777,
+    0.0881
+   ]
+  },
+  {
+   "id": "julia-schwartzman",
+   "label": "Schwartzman",
+   "cluster": 4,
+   "tsne": [
+    0.9754,
+    0.3736
+   ],
+   "mds": [
+    0.8576,
+    0.1476
+   ]
+  },
+  {
+   "id": "keyue-shen",
+   "label": "Shen",
+   "cluster": 1,
+   "tsne": [
+    0.3665,
+    0.3919
+   ],
+   "mds": [
+    0.5403,
+    0.3656
+   ]
+  },
+  {
+   "id": "chang-shu",
+   "label": "Shu",
+   "cluster": 5,
+   "tsne": [
+    0.646,
+    0.6619
+   ],
+   "mds": [
+    0.4293,
+    0.9608
+   ]
+  },
+  {
+   "id": "kimberly-siegmund",
+   "label": "Siegmund",
+   "cluster": 5,
+   "tsne": [
+    0.662,
+    0.6536
+   ],
+   "mds": [
+    0.7292,
+    0.922
+   ]
+  },
+  {
+   "id": "andrew-smith",
+   "label": "Smith",
+   "cluster": 5,
+   "tsne": [
+    0.6653,
+    0.5886
+   ],
+   "mds": [
+    0.9209,
+    0.7522
+   ]
+  },
+  {
+   "id": "rory-spence",
+   "label": "Spence",
+   "cluster": 3,
+   "tsne": [
+    0.0514,
+    0.2104
+   ],
+   "mds": [
+    0.2255,
+    0.5014
+   ]
+  },
+  {
+   "id": "andrew-steen",
+   "label": "Steen",
+   "cluster": 4,
+   "tsne": [
+    0.9391,
+    0.3859
+   ],
+   "mds": [
+    0.8861,
+    0.1755
+   ]
+  },
+  {
+   "id": "daniel-stram",
+   "label": "Stram",
+   "cluster": 5,
+   "tsne": [
+    0.6699,
+    0.6694
+   ],
+   "mds": [
+    0.5983,
+    0.9762
+   ]
+  },
+  {
+   "id": "kelly-street",
+   "label": "Street",
+   "cluster": 6,
+   "tsne": [
+    0.5497,
+    0.7555
+   ],
+   "mds": [
+    0.7218,
+    0.7706
+   ]
+  },
+  {
+   "id": "fengzhu-sun",
+   "label": "Sun",
+   "cluster": 5,
+   "tsne": [
+    0.6372,
+    0.5445
+   ],
+   "mds": [
+    0.9677,
+    0.6975
+   ]
+  },
+  {
+   "id": "larry-swanson",
+   "label": "Swanson",
+   "cluster": 3,
+   "tsne": [
+    0.0194,
+    0.2878
+   ],
+   "mds": [
+    0.0394,
+    0.4767
+   ]
+  },
+  {
+   "id": "simon-tavare",
+   "label": "Tavaré",
+   "cluster": 5,
+   "tsne": [
+    0.6897,
+    0.5761
+   ],
+   "mds": [
+    0.8519,
+    0.8316
+   ]
+  },
+  {
+   "id": "paul-thomas",
+   "label": "Thomas",
+   "cluster": 5,
+   "tsne": [
+    0.6121,
+    0.5275
+   ],
+   "mds": [
+    0.9392,
+    0.6843
+   ]
+  },
+  {
+   "id": "paul-thompson",
+   "label": "Thompson",
+   "cluster": 3,
+   "tsne": [
+    0.1416,
+    0.481
+   ],
+   "mds": [
+    0.1107,
+    0.7498
+   ]
+  },
+  {
+   "id": "cameron-thrash",
+   "label": "Thrash",
+   "cluster": 4,
+   "tsne": [
+    0.9698,
+    0.3944
+   ],
+   "mds": [
+    0.923,
+    0.2134
+   ]
+  },
+  {
+   "id": "arthur-toga",
+   "label": "Toga",
+   "cluster": 3,
+   "tsne": [
+    0.1478,
+    0.4924
+   ],
+   "mds": [
+    0.1098,
+    0.7389
+   ]
+  },
+  {
+   "id": "john-tower",
+   "label": "Tower",
+   "cluster": 7,
+   "tsne": [
+    0.6841,
+    0.3721
+   ],
+   "mds": [
+    0.7139,
+    0.4498
+   ]
+  },
+  {
+   "id": "le-trinh",
+   "label": "Trinh",
+   "cluster": 1,
+   "tsne": [
+    0.3894,
+    0.4633
+   ],
+   "mds": [
+    0.4564,
+    0.1691
+   ]
+  },
+  {
+   "id": "thai-truong",
+   "label": "Truong",
+   "cluster": 1,
+   "tsne": [
+    0.3714,
+    0.4642
+   ],
+   "mds": [
+    0.2959,
+    0.08
+   ]
+  },
+  {
+   "id": "francisco-valero-cuevas",
+   "label": "Valero-Cuevas",
+   "cluster": 3,
+   "tsne": [
+    0.0781,
+    0.3719
+   ],
+   "mds": [
+    0.0467,
+    0.3393
+   ]
+  },
+  {
+   "id": "peter-yingxiao-wang",
+   "label": "Wang",
+   "cluster": 1,
+   "tsne": [
+    0.3714,
+    0.3823
+   ],
+   "mds": [
+    0.4424,
+    0.2349
+   ]
+  },
+  {
+   "id": "arieh-warshel",
+   "label": "Warshel",
+   "cluster": 0,
+   "tsne": [
+    0.4354,
+    0.2838
+   ],
+   "mds": [
+    0.6266,
+    0.1394
+   ]
+  },
+  {
+   "id": "richard-watanabe",
+   "label": "Watanabe",
+   "cluster": 5,
+   "tsne": [
+    0.719,
+    0.6794
+   ],
+   "mds": [
+    0.3667,
+    0.8627
+   ]
+  },
+  {
+   "id": "michael-waterman",
+   "label": "Waterman",
+   "cluster": 5,
+   "tsne": [
+    0.6407,
+    0.5357
+   ],
+   "mds": [
+    0.9845,
+    0.5455
+   ]
+  },
+  {
+   "id": "alan-watts",
+   "label": "Watts",
+   "cluster": 3,
+   "tsne": [
+    0.0,
+    0.2898
+   ],
+   "mds": [
+    0.121,
+    0.479
+   ]
+  },
+  {
+   "id": "eric-webb",
+   "label": "Webb",
+   "cluster": 4,
+   "tsne": [
+    0.9442,
+    0.4409
+   ],
+   "mds": [
+    0.8745,
+    0.1583
+   ]
+  },
+  {
+   "id": "xiao-fei-yang",
+   "label": "X. Yang",
+   "cluster": 3,
+   "tsne": [
+    0.0963,
+    0.6644
+   ],
+   "mds": [
+    0.0674,
+    0.6977
+   ]
+  },
+  {
+   "id": "yaoheng-yang",
+   "label": "Y. Yang",
+   "cluster": 1,
+   "tsne": [
+    0.2425,
+    0.4457
+   ],
+   "mds": [
+    0.1907,
+    0.2019
+   ]
+  },
+  {
+   "id": "jesse-yen",
+   "label": "Yen",
+   "cluster": 1,
+   "tsne": [
+    0.2184,
+    0.4439
+   ],
+   "mds": [
+    0.2142,
+    0.2217
+   ]
+  },
+  {
+   "id": "cristina-zavaleta",
+   "label": "Zavaleta",
+   "cluster": 1,
+   "tsne": [
+    0.3441,
+    0.4207
+   ],
+   "mds": [
+    0.4153,
+    0.293
+   ]
+  },
+  {
+   "id": "lu-zhang",
+   "label": "Zhang",
+   "cluster": 2,
+   "tsne": [
+    0.2009,
+    0.6514
+   ],
+   "mds": [
+    0.243,
+    0.5792
+   ]
+  },
+  {
+   "id": "qifa-zhou",
+   "label": "Zhou",
+   "cluster": 1,
+   "tsne": [
+    0.2319,
+    0.437
+   ],
+   "mds": [
+    0.229,
+    0.126
+   ]
+  }
+ ]
+}
