@@ -44,6 +44,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import build_features as bf  # noqa: E402  (loads torch before scikit-learn when present)
+import stamp_page  # noqa: E402
 
 import numpy as np  # noqa: E402
 import scipy.sparse as sp  # noqa: E402
@@ -418,6 +419,7 @@ def main():
     phrases = sum(" " in k for k in keys)
     unused = int((np.asarray((C > 0).sum(axis=0)).ravel() == 0).sum())
     print(f"{len(keys)} terms: {len(keys) - phrases} words and {phrases} phrases, {unused} of them only from keywords")
+    stamp_page.stamp()
 
 
 if __name__ == "__main__":

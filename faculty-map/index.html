@@ -554,7 +554,7 @@ dialog form { text-align: right; margin-top: 12px; }
   <form method="dialog"><button class="ghost">Close</button></form>
 </dialog>
 
-<script src="map-data.js"></script>
+<script src="map-data.js?v=26efaa3dcc"></script>
 <script>
 (() => {
 "use strict";
@@ -564,6 +564,8 @@ const D = window.QCB_MAP, P = D.people, E = D.edges, METHODS = D.methods, worlds
 let WORLD = worlds["qcb/field"], C = WORLD.clusters, T = WORLD.tree;
 const NS = "http://www.w3.org/2000/svg";
 const $ = (s) => document.querySelector(s);
+// scripts/stamp_page.py sets this. It's on every data file, so this page never gets an old cached copy.
+const VERSION = new URL($('script[src^="map-data.js"]').src).search;
 const scroller = $("#scroller"), mapSvg = $("#map"), treeSvg = $("#tree"), listBox = $("#list");
 const detail = $("#detail"), tip = $("#tip");
 const GROUP_NAMES = { core: "Core faculty", joint: "Joint faculty", emeritus: "Emeritus faculty", related: "Related field" };
@@ -1574,7 +1576,7 @@ Typed text sets the blend from word matches. A thrown dot sets it from where it 
 */
 
 let M = null;   // the table for the people on the map, loaded the first time someone uses it
-const MATCH_FILES = { qcb: ["match-data.js", "QCB_MATCH"], all: ["match-data-extended.js", "QCB_MATCH_EXTENDED"] };
+const MATCH_FILES = { qcb: [`match-data.js${VERSION}`, "QCB_MATCH"], all: [`match-data-extended.js${VERSION}`, "QCB_MATCH_EXTENDED"] };
 const matchTables = {};
 function loadMatch() {
   const scope = S.scope, [src, name] = MATCH_FILES[scope];
@@ -2244,7 +2246,7 @@ function setWorld() {
 // The related fields load the first time someone asks for them.
 function loadExtended() {
   loadExtended.ready = loadExtended.ready || new Promise((ok, fail) => {
-    document.head.append(el("script", { src: "map-data-extended.js", onload: ok, onerror: fail }));
+    document.head.append(el("script", { src: `map-data-extended.js${VERSION}`, onload: ok, onerror: fail }));
   }).then(() => {
     const more = window.QCB_MAP_EXTENDED, people = P.length, edges = E.length;
     Object.assign(worlds, more.worlds);

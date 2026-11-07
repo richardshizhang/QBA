@@ -43,6 +43,7 @@ Emeriti are included. The adjunct member (UCLA) is left out.
 | `match-data-extended.js` | The same table for all 161 people (`window.QCB_MATCH_EXTENDED`), about 4 MB, or 2 MB as sent, loaded the first time someone matches text on the expanded map. |
 | `scripts/build_map_data.py` | Combines the layouts, rosters, edges, features, papers and methods into `map-data.js` and `map-data-extended.js`. |
 | `scripts/build_match_data.py` | Builds `match-data.js` and `match-data-extended.js`. Needs the `.venv`, as it runs SPECTER2 on every term. With `--evaluate`, also measures accuracy on held-out papers. |
+| `scripts/stamp_page.py` | Puts a version of the data files on `index.html`'s data URLs, so a browser can't pair the page with an old cached copy. Both build scripts run it. |
 | `scripts/fetch_keywords.py` | Downloads OpenAlex's 30,000 most used keywords into `data/raw/openalex-keywords.json`, for `build_match_data.py`. |
 | `scripts/build_layouts_3d.py` | Works out a 3D twin of every flat layout into `data/layouts-3d.json`, with the same method and settings. |
 | `scripts/scrape_faculty.py` | Scrapes the faculty page into `data/faculty.json`: group, title, departments, rank, contact details and links. |

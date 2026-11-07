@@ -41,6 +41,7 @@ import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import combined  # noqa: E402
+import stamp_page  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data")
@@ -396,6 +397,7 @@ def main():
     write_js(OUT_EXTENDED, "QCB_MAP_EXTENDED", extended)
     print(f"wrote {os.path.relpath(OUT_EXTENDED, ROOT)} ({os.path.getsize(OUT_EXTENDED) / 1000:.0f} KB): "
           f"{len(all_ids)} faculty, {stats['edges']} edges, {stats['papers']} papers")
+    stamp_page.stamp()
 
 
 if __name__ == "__main__":
