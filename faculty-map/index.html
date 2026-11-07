@@ -178,6 +178,34 @@ body:not([data-three]) #scroller.grab { overscroll-behavior: contain; }
 #map.turning .node, #map.turning .hit { pointer-events: none; }
 body[data-three] #map { touch-action: pan-y; }   /* swiping sideways turns it, swiping up still scrolls the page */
 .badge { fill: var(--ink); stroke: var(--surface); stroke-width: 1.5; paint-order: stroke; pointer-events: none; }
+
+/* Constellation: the 3D map as a night sky. It sits on the dark colors, so cluster hues don't change. */
+body[data-sky] { --bg: #070b1a; --surface: #0b1226; --sunk: #18223f; --ink: #eef1fb; --muted: #a6b3d3; --line: #26324f; --edge: #6072a0; }
+#sky, #arcs { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none; }
+#sky {
+  background: linear-gradient(115deg, transparent 32%, rgb(130 150 255 / .08) 50%, transparent 68%), radial-gradient(ellipse at 50% 48%, #18244d, #0b1226 58%, #050814);
+}
+body[data-sky] #sky, body[data-sky] #arcs { opacity: 1; }
+.star { display: none; pointer-events: none; }
+.star > * { stroke: none; }
+.spark, .star-core { fill: color-mix(in oklab, var(--hue) 30%, white); }
+.mark.hollow .star-core { fill: var(--surface); stroke: color-mix(in oklab, var(--hue) 30%, white); stroke-width: 1; }
+body[data-sky] .mark > :first-child { display: none; }
+body[data-sky] .star { display: block; }
+body[data-sky] .globe { stroke: rgb(150 170 255 / .22); stroke-dasharray: 1 5; }
+body[data-sky] .edge, body[data-sky] .ehit { display: none; }   /* the curves are on the #arcs canvas */
+body[data-sky] #map text { font-family: Georgia, "Times New Roman", serif; font-style: italic; font-weight: 400; }
+body[data-sky] .lab, body[data-sky] .clabel text { stroke: rgb(5 8 20 / .65); }
+body[data-sky] .lab { font-size: 12px; transition: none; }
+body[data-sky] .clabel text { font-size: 13px; fill: #c3cdf0; }
+body[data-sky] .clabel .sw { fill: color-mix(in oklab, var(--hue) 30%, white); }
+body[data-sky] #map.spinning .clabel { opacity: 1; }
+body[data-sky] #map.spinning .clabel.dim { opacity: .25; }
+@media (prefers-reduced-motion: no-preference) {
+  #sky, #arcs { transition: opacity .6s; }
+  body[data-sky] .halo { animation: twinkle 3.5s ease-in-out infinite alternate; }
+  @keyframes twinkle { to { opacity: .55; } }
+}
 @media (prefers-reduced-motion: no-preference) {
   .node.lit .ring { animation: lit .8s ease-out; transform-box: fill-box; transform-origin: center; }
   @keyframes lit { from { transform: scale(3.2); stroke: var(--ink); stroke-opacity: 0; } 40% { stroke-opacity: 1; } }
@@ -473,6 +501,8 @@ dialog form { text-align: right; margin-top: 12px; }
 </header>
 <main>
   <section id="stage" aria-label="Research map">
+    <canvas id="sky" aria-hidden="true"></canvas>
+    <canvas id="arcs" aria-hidden="true"></canvas>
     <div id="scroller" tabindex="0" role="region" aria-label="Map of faculty by research similarity. Use the List view for a table of the same information.">
       <svg id="map" role="group" aria-label="Faculty research map"></svg>
       <svg id="tree" role="group" aria-label="Tree of faculty by research similarity" hidden></svg>
@@ -491,6 +521,7 @@ dialog form { text-align: right; margin-top: 12px; }
       </fieldset>
       <label class="switch" id="expand-row"><input type="checkbox" id="expand" role="switch">Expand into related fields</label>
       <label class="switch" id="three-row"><input type="checkbox" id="three" role="switch">3D</label>
+      <label class="switch" id="sky-row" hidden><input type="checkbox" id="constellation" role="switch">Constellation</label>
       <span id="expand-msg" role="status"></span>
     </div>
     <p class="note" id="note">Nearby means similar research, though distances between far-apart groups don't mean much. Bigger marks are bigger labs.</p>
@@ -538,7 +569,8 @@ dialog form { text-align: right; margin-top: 12px; }
   <h3>The map</h3>
   <p>t-SNE and UMAP squeeze those 768 dimensions into two. Both keep each person near their closest research neighbors, at the cost of distances between distant groups, which don't mean much. The two views are different summaries of the same data, so trust what they agree on.</p>
   <h3>3D</h3>
-  <p>The 3D view runs the same method on the same numbers with a third dimension, so less has to be squeezed. On every map it scores a little better on trustworthiness, a check that people who look close really are: 0.96 against 0.94 for t-SNE on the QCB map. It's still a summary. Marks in front are bigger and darker, and the spin itself means nothing.</p>
+  <p>The 3D view runs the same method on the same numbers with a third dimension, so less has to be squeezed. On every map it scores a little better on trustworthiness, a check that people who look close really are: 0.96 against 0.94 for t-SNE on the QCB map. It's still a summary. Marks in front are bigger and stand out more, and the spin itself means nothing.</p>
+  <p>Constellation draws the same 3D map as a night sky. Faculty are the stars, at the same positions, with size still showing the lab and color the cluster, though shape no longer shows someone's role. The lines are still shared papers, curved over the sphere. The comets on them and the faint stars behind them mean nothing.</p>
   <h3>Clusters</h3>
   <p>Average-linkage hierarchical clustering on the same numbers; the Tree view shows the full hierarchy. The cluster names were written by hand.</p>
   <h3>By technique</h3>
@@ -601,7 +633,7 @@ const sv = (tag, attrs, ...kids) => build(document.createElementNS(NS, tag), att
 const S = {
   view: "tsne", picked: null, sel: null, hover: null, query: "", matches: null, scope: "qcb", lens: "field", method: null,
   groups: { core: true, joint: true, emeritus: true, related: true }, lines: "0", zoom: 1,
-  three: false, spin: !reducedMotion.matches, yaw: 0, pitch: 0.2, fling: 0,
+  three: false, sky: false, spin: !reducedMotion.matches, yaw: 0, pitch: 0.2, fling: 0,
 };
 // Saved faculty, by id so they survive a rebuild of the data. Storage can fail, as in a
 // private window, and then the list lasts until the page closes.
@@ -647,6 +679,9 @@ const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
 let W = 0, H_ = 0, ox = 0, oy = 0, scale = 1, pts = [], band = 0;
 const globeLayer = sv("g", { "aria-hidden": "true" }), edgeLayer = sv("g"), hitLayer = sv("g"), nodeLayer = sv("g"), clusterLayer = sv("g"), linkLayer = sv("g"), orbitLayer = sv("g"), youLayer = sv("g");
 mapSvg.append(globeLayer, edgeLayer, clusterLayer, linkLayer, hitLayer, nodeLayer, orbitLayer, youLayer);
+// A soft glow in each cluster's hue, for the stars in Constellation.
+mapSvg.prepend(sv("defs", {}, ["blue", "orange", "aqua", "yellow", "magenta", "green", "violet", "red"].map((hue) => sv("radialGradient", { id: `glow-${hue}` },
+  [[0, 0.55], [0.35, 0.16], [1, 0]].map(([offset, alpha]) => sv("stop", { offset, style: `stop-color:color-mix(in oklab, var(--s-${hue}) 40%, white);stop-opacity:${alpha}` }))))));
 
 const toPx = ([x, y]) => [ox + x * scale, oy + (1 - y) * scale];
 const fromPx = ([x, y]) => [(x - ox) / scale, 1 - (y - oy) / scale];
@@ -692,7 +727,13 @@ function addPerson(p, i) {
   markR[i] = Math.max(4.5, 2.4 * Math.sqrt(p.lab.size));
   reach[i] = markR[i] * (p.group === "core" ? 1 : 1.25);   // the other shapes stick out further
   const label = sv("text", { class: "lab" }, p.label);
-  const mark = sv("g", {}, shape(p.group, markR[i]));
+  // Its core scales with the mark, so size still shows the lab.
+  const r = markR[i] / 2, tip = r * 1.9;
+  const halo = sv("circle", { class: "halo", r: r * 2.4 + 2, style: `animation-delay:${-(i * 0.73) % 7}s` });
+  const star = sv("g", { class: "star" }, halo,
+    sv("path", { class: "spark", d: `M0 ${-tip}Q0 0 ${tip} 0Q0 0 0 ${tip}Q0 0 ${-tip} 0Q0 0 0 ${-tip}Z` }),
+    sv("circle", { class: "star-core", r: r * 0.62 }));
+  const mark = sv("g", {}, shape(p.group, markR[i]), star);
   const badge = sv("polygon", { class: "badge", points: starPoints(6), transform: `translate(${(reach[i] * 0.8).toFixed(1)} ${(-reach[i] * 0.8).toFixed(1)})` });
   const pointer = {
     onclick: () => select({ kind: "person", i }),
@@ -712,7 +753,7 @@ function addPerson(p, i) {
     mark,
     badge,
     label);
-  nodes[i] = { g, hit, label, mark, badge };
+  nodes[i] = { g, hit, label, mark, badge, halo };
 }
 P.forEach(addPerson);
 // Biggest marks at the back, so small ones beside them can still be clicked. In 3D the
@@ -726,8 +767,9 @@ stackNodes();
 function paintNodes() {
   P.forEach((p, i) => {
     if (i >= WORLD.n) return;
-    const { g, mark, label } = nodes[i], c = C[p.cluster];
+    const { g, mark, label, halo } = nodes[i], c = C[p.cluster];
     mark.setAttribute("class", `mark ${hueClass(p.cluster)}${c.hollow ? " hollow" : ""}`);
+    halo.setAttribute("fill", `url(#glow-${c.color})`);
     g.setAttribute("aria-label", `${p.name}, ${c.name}${saved.has(p.id) ? ", saved" : ""}`);
     label.textContent = p.label;
   });
@@ -797,7 +839,7 @@ function drawPoints() {
     nodes[i].hit.setAttribute("cx", x);
     nodes[i].hit.setAttribute("cy", y);
   });
-  E.forEach((e, k) => {
+  if (!skyShown()) E.forEach((e, k) => {
     const [x1, y1, , d1] = pts[e.a], [x2, y2, , d2] = pts[e.b];
     edgeEls[k].line.setAttribute("opacity", (0.2 + 0.4 * (d1 + d2)).toFixed(2));
     for (const line of spinning ? [edgeEls[k].line] : [edgeEls[k].line, edgeEls[k].hit]) {
@@ -805,9 +847,11 @@ function drawPoints() {
       line.setAttribute("x2", x2); line.setAttribute("y2", y2);
     }
   });
+  if (skyShown()) moveSkyNames();
   drawGlobe();
   drawOrbit();
   drawYou();
+  startArcs();
 }
 
 // An equator and two meridians, which show the turning even where there are few people.
@@ -881,6 +925,7 @@ function applyFilters() {
 // marks keep their tooltip, and zooming in makes room.
 const ruler = document.createElement("canvas").getContext("2d");
 function textWidth(text, font) { ruler.font = font; return ruler.measureText(text).width; }
+const nameFont = () => (skyShown() ? "italic 400 12px Georgia, serif" : `500 11.5px ${FONT}`);
 const hits = (a, b) => a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h;
 const inside = (b) => b.x >= 2 && b.y >= 2 && b.x + b.w <= W - 2 && b.y + b.h <= H_ - 2;
 
@@ -890,7 +935,32 @@ function middleOf(ci) {
 }
 
 let marksAndLabels = [];
+// In Constellation a name stays beside its star, whatever it overlaps, and fades with
+// distance, so nothing jumps as the sky turns.
+function pinNames() {
+  P.forEach((p, i) => {
+    const { label } = nodes[i];
+    label.setAttribute("x", (markR[i] + 3).toFixed(1));
+    label.setAttribute("y", 4);
+    label.setAttribute("text-anchor", "start");
+    label.style.display = "";
+  });
+  clusterEls.forEach((g, ci) => { g.style.display = P.some((p, i) => p.cluster === ci && shown(i)) ? "" : "none"; });
+  drawOrbit();
+}
+function moveSkyNames() {
+  const lit = emphasisSet();
+  pts.forEach(([, , , depth], i) => {
+    nodes[i].label.setAttribute("opacity", lit && lit.has(i) ? 1 : Math.max(0.15, Math.min(1, (depth - 0.15) / 0.45)).toFixed(2));
+  });
+  C.forEach((c, ci) => {
+    const [x, y] = middleOf(ci), w = textWidth(c.name, "italic 400 13px Georgia, serif") + 17;
+    clusterEls[ci].setAttribute("transform", `translate(${(x - w / 2).toFixed(1)} ${(y - 8).toFixed(1)})`);
+  });
+}
+
 function placeLabels() {
+  if (skyShown()) { pinNames(); return; }
   const taken = marksAndLabels = [];
   if (S.zoom === 1 || S.three) {   // names keep clear of the controls floating over the map
     const box = mapSvg.getBoundingClientRect();
@@ -928,7 +998,7 @@ function placeLabels() {
 
   const order = P.map((_, i) => i).filter(shown)
     .sort((a, b) => forced.has(b) - forced.has(a) || pts[b][3] - pts[a][3]);
-  const font = `500 11.5px ${FONT}`;
+  const font = nameFont();
   for (const i of order) {
     const [x, y, size, depth] = pts[i], { label } = nodes[i];
     if (depth < 0.45 && !forced.has(i)) { label.style.display = "none"; continue; }   // the far side of the globe
@@ -1140,6 +1210,7 @@ function emphasize() {
   document.querySelectorAll(".legend-list button").forEach((b, ci) => {
     b.setAttribute("aria-pressed", String(!!S.sel && S.sel.kind === "cluster" && S.sel.c === ci));
   });
+  startArcs();
   $("#remove-dot").hidden = !S.you;
   drawOrbit();
 }
@@ -1503,7 +1574,7 @@ function savedPanel() {
 /* ---------- Randomize ---------- */
 
 // Works through everyone on show in a shuffled order, so nobody comes up twice in a row.
-let shuffled = [];
+let shuffled = [], litTimer = 0;
 function reveal(i) {
   const motion = reducedMotion.matches ? "auto" : "smooth";
   if (S.view === "tree") treeSvg.querySelector(`.leaf[data-i="${i}"]`)?.scrollIntoView({ block: "nearest", behavior: motion });
@@ -1514,6 +1585,8 @@ function reveal(i) {
     nodeLayer.querySelector(".lit")?.classList.remove("lit");
     g.getBoundingClientRect();   // restart the animation
     g.classList.add("lit");
+    clearTimeout(litTimer);
+    litTimer = setTimeout(() => g.classList.remove("lit"), 800);   // or each reorder of the marks would replay it
   }
 }
 function randomize() {
@@ -1764,7 +1837,7 @@ function dotPoint() {
 function nameBox(j) {
   const label = nodes[j].label;
   if (label.style.display === "none" || !label.hasAttribute("x")) return [];
-  const [px, py, size] = pts[j], w = (textWidth(P[j].label, `500 11.5px ${FONT}`) + 2) * size, a = label.getAttribute("text-anchor");
+  const [px, py, size] = pts[j], w = (textWidth(P[j].label, nameFont()) + 2) * size, a = label.getAttribute("text-anchor");
   const lx = px + label.getAttribute("x") * size, ly = py + label.getAttribute("y") * size;
   return [{ x: a === "start" ? lx : a === "end" ? lx - w : lx - w / 2, y: ly - 10 * size, w, h: 13 * size }];
 }
@@ -2082,7 +2155,7 @@ function backToMap() {
 function showNote() {
   const how = byTechnique() ? "methods" : "research";
   $("#note").textContent = S.three
-    ? `Nearby means similar ${how}, and marks in front are bigger and darker. Drag to turn the globe. The spin itself means nothing.`
+    ? `Nearby means similar ${how}, and ${S.sky ? "stars" : "marks"} in front are bigger and ${darkBox.checked ? "brighter" : "darker"}. Drag to turn the ${S.sky ? "sky" : "globe"}. The spin itself means nothing.`
     : `Nearby means similar ${how}, ${layoutKey() === "mds" ? "and MDS keeps far-apart groups roughly the right distance apart" : "though distances between far-apart groups don't mean much"}. Bigger marks are bigger labs.`;
 }
 
@@ -2096,6 +2169,8 @@ function setView(view) {
   listBox.hidden = view !== "list";
   $("#zoom").hidden = !map;
   $("#three-row").hidden = !map;
+  $("#sky-row").hidden = !map || !S.three;
+  paintSky();
   $("#note").hidden = !map || S.zoom > 1;
   showNote();
   $("#throw").hidden = !map;
@@ -2124,7 +2199,7 @@ let spinFrame = 0, spinClock = 0, spinTidied = 0, turn = null, facing = 0;
 const spinHeld = () => !S.spin || !!(S.sel || S.you || S.hover);
 
 function tidyGlobe() {
-  stackNodes();
+  if (!skyShown() || !mapSvg.classList.contains("spinning")) stackNodes();   // moving a star restarts its twinkle
   placeLabels();
 }
 function redrawGlobe() {
@@ -2178,6 +2253,8 @@ function setThree(on) {
   S.three = on;
   document.body.toggleAttribute("data-three", on);
   $("#spin").hidden = !on;
+  $("#sky-row").hidden = !on;
+  if (!on && S.sky) setSky(false);
   if (on) { S.yaw = 0; S.pitch = 0.2; }
   S.fling = 0;
   mapSvg.classList.remove("spinning");
@@ -2190,6 +2267,124 @@ function setThree(on) {
   if (on) startSpin();
   else stackNodes();
   $("#status").textContent = on ? "3D view. Drag to turn it, or use the arrow keys." : "Flat view";
+}
+
+// Constellation shows only on the 3D map, but stays chosen through a look at Tree or List.
+const skyShown = () => S.sky && S.three && isMapView();
+function paintSky() {
+  const on = skyShown();
+  document.body.toggleAttribute("data-sky", on);
+  if (on) { drawSky(); startArcs(); }
+}
+function setSky(on) {
+  S.sky = on;
+  $("#constellation").checked = on;
+  paintSky();
+  if (!on) nodes.forEach(({ label }) => label.removeAttribute("opacity"));
+  if (isMapView()) { drawPoints(); placeLabels(); }   // the flat lines missed every turn while the sky was up
+  applyTheme(chosenTheme);
+  $("#status").textContent = on ? "Constellation view" : "Globe view";
+}
+// The faint stars behind the faculty, with a thicker band of them across the middle. The
+// seed keeps them in place when the window resizes.
+function drawSky() {
+  const sky = $("#sky"), arcs = $("#arcs"), w = sky.clientWidth, h = sky.clientHeight, dpr = Math.min(devicePixelRatio || 1, 2);
+  if (!w || !h) return;
+  sky.width = arcs.width = w * dpr;
+  sky.height = arcs.height = h * dpr;
+  arcs.getContext("2d").scale(dpr, dpr);
+  const pen = sky.getContext("2d");
+  pen.scale(dpr, dpr);
+  let seed = 20261106;
+  const random = () => (seed = seed * 16807 % 2147483647) / 2147483647;
+  for (let n = Math.round(w * h / 2600); n > 0; n--) {
+    let x = random() * w, y = random() * h;
+    if (n % 5 < 2) { y = h * 0.5 + (x - w / 2) * 0.47 + (random() + random() + random() - 1.5) * h * 0.2; }
+    pen.globalAlpha = 0.25 + 0.6 * random() ** 2;
+    pen.fillStyle = "#fff";
+    pen.beginPath();
+    pen.arc(x, y, 0.35 + 0.9 * random() ** 3, 0, 2 * Math.PI);
+    pen.fill();
+  }
+}
+
+// A line between two people follows the great circle between them, rising toward the
+// surface of the sphere the further apart they are.
+const ARC_STEPS = 24, arcSets = new Map();
+function arcBetween(a, b) {
+  const ra = Math.hypot(...a) || 1e-6, rb = Math.hypot(...b) || 1e-6, ua = a.map((v) => v / ra), ub = b.map((v) => v / rb);
+  const angle = Math.acos(Math.max(-1, Math.min(1, ua[0] * ub[0] + ua[1] * ub[1] + ua[2] * ub[2]))), side = Math.sin(angle) || 1e-6;
+  const lift = Math.min(1, angle / 1.2);
+  return Array.from({ length: ARC_STEPS + 1 }, (_, n) => {
+    const t = n / ARC_STEPS, wa = angle > 1e-3 ? Math.sin((1 - t) * angle) / side : 1 - t, wb = angle > 1e-3 ? Math.sin(t * angle) / side : t;
+    const r = ra + (rb - ra) * t, up = r + (1.02 - r) * lift * Math.sin(Math.PI * t);
+    return ua.map((v, d) => (wa * v + wb * ub[d]) * up);
+  });
+}
+function arcsNow() {
+  const key = `${S.scope}/${S.lens}/${layoutKey()}`, xyz = WORLD.xyz[layoutKey()];
+  if (!arcSets.has(key)) arcSets.set(key, E.map((e) => (inWorld(e) ? arcBetween(xyz[e.a], xyz[e.b]) : null)));
+  return arcSets.get(key);
+}
+
+// Each line gets a comet now and then. They run from either end, at their own pace.
+const COMET_EVERY = 12, COMET_TAIL = 0.2, ARC_COLOR = "#dfe6ff";
+function drawComet(pen, path, k, now) {
+  const clock = (now / 1000 + k * 2.39) % COMET_EVERY, run = 3.5 + (k % 5) * 0.5;
+  if (clock >= run) return;
+  const t = clock / run, fade = Math.sin(Math.PI * t);
+  const spot = (u) => {
+    const p = Math.max(0, Math.min(1, k % 2 ? 1 - u : u)) * ARC_STEPS, n = Math.min(ARC_STEPS - 1, Math.floor(p)), f = p - n;
+    return path[n].map((v, d) => v + (path[n + 1][d] - v) * f);
+  };
+  const [x, y, , depth] = spot(t), bright = fade * (0.3 + 0.7 * depth);
+  pen.lineWidth = 1.1;
+  for (let n = 0; n < 6; n++) {
+    const from = spot(t - COMET_TAIL * n / 6), to = spot(t - COMET_TAIL * (n + 1) / 6);
+    pen.globalAlpha = bright * 0.55 * (1 - n / 6);
+    pen.beginPath();
+    pen.moveTo(from[0], from[1]);
+    pen.lineTo(to[0], to[1]);
+    pen.stroke();
+  }
+  pen.globalAlpha = bright * 0.2;
+  pen.beginPath();
+  pen.arc(x, y, 3.6, 0, 2 * Math.PI);
+  pen.fill();
+  pen.globalAlpha = bright;
+  pen.beginPath();
+  pen.arc(x, y, 1.4, 0, 2 * Math.PI);
+  pen.fill();
+}
+
+function drawArcs(now) {
+  const canvas = $("#arcs"), pen = canvas.getContext("2d");
+  pen.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+  if (mapSvg.classList.contains("moving")) return;   // people are between maps, so the curves wait
+  const at = projector(), arcs = arcsNow();
+  pen.strokeStyle = pen.fillStyle = ARC_COLOR;
+  E.forEach((e, k) => {
+    const { line } = edgeEls[k];
+    if (!arcs[k] || line.style.display === "none") return;
+    const hot = line.classList.contains("hot"), dim = line.classList.contains("dim"), path = arcs[k].map(at);
+    pen.globalAlpha = hot ? 0.8 : dim ? 0.03 : 0.07 + 0.2 * path[ARC_STEPS >> 1][3];
+    pen.lineWidth = (hot ? 0.7 : 0.4) * edgeWidth(e.s);
+    pen.beginPath();
+    path.forEach(([x, y], n) => { if (n) pen.lineTo(x, y); else pen.moveTo(x, y); });
+    pen.stroke();
+    if (!dim && !reducedMotion.matches) drawComet(pen, path, k, now);
+  });
+}
+
+let arcFrame = 0;
+function arcStep(now) {
+  arcFrame = 0;
+  if (!skyShown()) return;
+  drawArcs(now);
+  if (!reducedMotion.matches) startArcs();
+}
+function startArcs() {
+  if (!arcFrame && skyShown()) arcFrame = requestAnimationFrame(arcStep);
 }
 
 function setSpin(on) {
@@ -2288,6 +2483,7 @@ $("#expand").addEventListener("change", (ev) => {
   });
 });
 $("#three").addEventListener("change", (ev) => setThree(ev.target.checked));
+$("#constellation").addEventListener("change", (ev) => setSky(ev.target.checked));
 $("#spin").addEventListener("click", () => setSpin(!S.spin));
 $("#random").addEventListener("click", randomize);
 $("#saved-open").addEventListener("click", () => select(S.sel && S.sel.kind === "saved" ? null : { kind: "saved" }, true));
@@ -2410,13 +2606,18 @@ $("#about-open").addEventListener("click", () => about.showModal());
 // system already wants clears the choice instead of pinning it. A choice the system later
 // comes to match stays saved, because plenty of systems change with the time of day.
 const THEME_KEY = "qcb-map-theme", darkBox = $("#dark"), systemDark = matchMedia("(prefers-color-scheme: dark)");
+let chosenTheme = document.documentElement.dataset.theme;
 function applyTheme(theme) {
-  if (theme) document.documentElement.dataset.theme = theme;
+  chosenTheme = theme;
+  const shown = S.sky ? "dark" : theme;   // the night sky needs dark colors, but leaves the choice alone
+  if (shown) document.documentElement.dataset.theme = shown;
   else delete document.documentElement.dataset.theme;
-  $('meta[name="color-scheme"]').content = theme || "light dark";
-  darkBox.checked = theme ? theme === "dark" : systemDark.matches;
+  $('meta[name="color-scheme"]').content = shown || "light dark";
+  darkBox.checked = shown ? shown === "dark" : systemDark.matches;
+  showNote();
 }
 darkBox.addEventListener("change", () => {
+  if (S.sky) setSky(false);
   const theme = darkBox.checked === systemDark.matches ? null : darkBox.checked ? "dark" : "light";
   applyTheme(theme);
   try {
@@ -2424,9 +2625,9 @@ darkBox.addEventListener("change", () => {
     else localStorage.removeItem(THEME_KEY);
   } catch { /* it lasts until the page closes */ }
 });
-systemDark.addEventListener("change", () => applyTheme(document.documentElement.dataset.theme));
+systemDark.addEventListener("change", () => applyTheme(chosenTheme));
 addEventListener("storage", (ev) => { if (ev.key === THEME_KEY) applyTheme(ev.newValue); });
-applyTheme(document.documentElement.dataset.theme);
+applyTheme(chosenTheme);
 about.addEventListener("click", (ev) => { if (ev.target === about) about.close(); });
 
 function drawLegend() {
@@ -2470,7 +2671,7 @@ const TOUR = [
     body: "t-SNE, UMAP and MDS are different ways of flattening the same data, so trust what they agree on. Tree shows how clusters nest, and List is a plain table." },
   { at: "#three-row", title: "Turn it into a globe", before: backToMap,
     body: "3D uses the same data with one more dimension, so less gets squeezed. Drag to turn it, and Pause stops the spin.",
-    try: "Try it: turn on 3D.", done: () => S.three, after: "Marks in front are bigger and darker. It stays on until you turn it off." },
+    try: "Try it: turn on 3D.", done: () => S.three, after: "Marks in front are bigger and stand out more. It stays on until you turn it off." },
   { at: "#me-form", side: "left", title: "Find your place", before: showForm,
     body: "Describe what you're into in your own words, and you'll land near your closest matches. What you type stays in your browser.",
     try: "Try it: type a few interests, then press Place me on the map.", done: () => !!S.you && S.you.kind === "text", after: "Your dot is on the map, and the panel lists your closest faculty." },
@@ -2559,6 +2760,7 @@ $("#tour-end").addEventListener("click", endTour);
 
 const resized = new ResizeObserver(() => {
   measureBand();
+  if (S.sky) drawSky();
   if (isMapView()) { cancelAnimationFrame(tween); mapSvg.classList.remove("moving"); settle(); }
   else if (S.view === "tree") drawTree();
 });
