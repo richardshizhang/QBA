@@ -6,6 +6,7 @@ An interactive map of USC's Quantitative and Computational Biology faculty (core
 - **3D** turns either map view into a globe that spins slowly. Drag to turn it, Pause stops it, and marks in front are bigger and darker.
 - **Tree** shows the full hierarchy of who is similar to whom, cut into 9 clusters. **List** has everyone in a table.
 - **Mark size** shows lab size, so bigger marks are bigger labs.
+- **Dark mode** follows the system until someone flips the switch, and their choice stays in that browser.
 - **Tutorial** walks through the real page in 12 steps, and people can try each control as they go.
 - **Click a person** for their photo, lab size, h-index, citations, papers per year, research terms, QCB co-authors, most similar colleagues, and recent papers. **Click a line** for the papers a pair share.
 - **QCB PhD students** fan out around their lab's mark when it's selected, and the panel lists them with their papers.

@@ -3,6 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<script>
+// Here in the head so a saved theme never flashes the wrong one.
+try {
+  const theme = localStorage.getItem("qcb-map-theme");
+  if (theme) {
+    document.documentElement.dataset.theme = theme;
+    document.querySelector('meta[name="color-scheme"]').content = theme;
+  }
+} catch { /* the page follows the system */ }
+</script>
 <title>QCB Research Map</title>
 <meta name="description" content="A map of USC Quantitative and Computational Biology faculty: who works on similar research and who has published together. Unofficial, made by QBA.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -106,7 +117,7 @@ button { cursor: pointer; }
 .filters select { height: 30px; background: var(--surface); border: 1px solid var(--edge); border-radius: var(--r); padding: 0 4px; color: var(--ink); }
 .ghost { height: 32px; padding: 0 10px; background: none; border: 1px solid var(--edge); border-radius: var(--r); font-weight: 600; white-space: nowrap; }
 .ghost:hover { background: var(--sunk); }
-.actions { display: flex; gap: 8px; }
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 
 main { display: grid; grid-template-columns: minmax(0, 1fr) 372px; min-height: 0; }
 #stage { position: relative; min-width: 0; min-height: 0; background: var(--surface); }
@@ -457,6 +468,7 @@ dialog form { text-align: right; margin-top: 12px; }
     <button class="ghost" id="saved-open" type="button">Saved<span id="saved-count"></span></button>
     <button class="ghost" id="tour-open" type="button">Tutorial</button>
     <button class="ghost" id="about-open" type="button">How this was made</button>
+    <label class="switch"><input type="checkbox" id="dark" role="switch">Dark mode</label>
   </div>
 </header>
 <main>
@@ -2393,6 +2405,28 @@ $("#about-unknown").textContent = D.meta.labSources.none;
 $("#about-students").textContent = D.meta.students;
 $("#about-nolab").textContent = D.meta.noLab;
 $("#about-open").addEventListener("click", () => about.showModal());
+
+// Dark mode. With nothing saved the page follows the system, so switching to what the
+// system already wants clears the choice instead of pinning it. A choice the system later
+// comes to match stays saved, because plenty of systems change with the time of day.
+const THEME_KEY = "qcb-map-theme", darkBox = $("#dark"), systemDark = matchMedia("(prefers-color-scheme: dark)");
+function applyTheme(theme) {
+  if (theme) document.documentElement.dataset.theme = theme;
+  else delete document.documentElement.dataset.theme;
+  $('meta[name="color-scheme"]').content = theme || "light dark";
+  darkBox.checked = theme ? theme === "dark" : systemDark.matches;
+}
+darkBox.addEventListener("change", () => {
+  const theme = darkBox.checked === systemDark.matches ? null : darkBox.checked ? "dark" : "light";
+  applyTheme(theme);
+  try {
+    if (theme) localStorage.setItem(THEME_KEY, theme);
+    else localStorage.removeItem(THEME_KEY);
+  } catch { /* it lasts until the page closes */ }
+});
+systemDark.addEventListener("change", () => applyTheme(document.documentElement.dataset.theme));
+addEventListener("storage", (ev) => { if (ev.key === THEME_KEY) applyTheme(ev.newValue); });
+applyTheme(document.documentElement.dataset.theme);
 about.addEventListener("click", (ev) => { if (ev.target === about) about.close(); });
 
 function drawLegend() {
