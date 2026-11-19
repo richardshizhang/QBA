@@ -1,3 +1,8 @@
 .DS_Store
 .cache/
 __pycache__/
+
+# Saved USC catalogue page (local reference only)
+/Program_ Quantitative Biology (BS) - University of Southern California*
+# Saved department listings (54 MB, local only)
+/other_department_faculty/
