@@ -35,6 +35,7 @@ try {
   --wire: #b9bab4;
   --gold: #ffcc00;
   --on-gold: #16181c;
+  --half-edge: #16181c;  /* the edge of a half-filled "taking now" circle */
   --gold-case: #16181c;   /* gold gets a black edge on light grounds, and none on dark */
   --tint: #fff4c2;
   --dim-bg: #f9f9f7;
@@ -54,7 +55,7 @@ try {
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #0f1012; --surface: #17181b; --sunk: #1f2124; --ink: #e8e8e3; --muted: #a3a5a9; --faint: #8b8e93;
-    --line: #2c2e33; --edge: #5a5d63; --wire: #4a4d52; --gold-case: transparent; --tint: #3b3211;
+    --line: #2c2e33; --edge: #5a5d63; --wire: #4a4d52; --gold-case: transparent; --half-edge: var(--gold); --tint: #3b3211;
     --dim-bg: #131416; --dim-line: #222428; --waived: #6f7277;
     --c-core: #5aa5d6; --c-computing: #9a84dc; --c-specialization: #3fb8a8; --c-capstone: #e58a62;
     --c-research: #8fb24a; --c-electives: #b877c4; --c-outside: #a3a5a9;
@@ -63,7 +64,7 @@ try {
 }
 :root[data-theme="dark"] {
   --bg: #0f1012; --surface: #17181b; --sunk: #1f2124; --ink: #e8e8e3; --muted: #a3a5a9; --faint: #8b8e93;
-  --line: #2c2e33; --edge: #5a5d63; --wire: #4a4d52; --gold-case: transparent; --tint: #3b3211;
+  --line: #2c2e33; --edge: #5a5d63; --wire: #4a4d52; --gold-case: transparent; --half-edge: var(--gold); --tint: #3b3211;
   --dim-bg: #131416; --dim-line: #222428; --waived: #6f7277;
   --c-core: #5aa5d6; --c-computing: #9a84dc; --c-specialization: #3fb8a8; --c-capstone: #e58a62;
   --c-research: #8fb24a; --c-electives: #b877c4; --c-outside: #a3a5a9;
@@ -203,6 +204,10 @@ a:hover { text-decoration-color: currentColor; }
 .lg-tick { width: 13px; height: 13px; box-sizing: border-box; border-radius: 50%; border: 2.5px solid var(--gold); box-shadow: 0 0 0 1px var(--gold-case), inset 0 0 0 1px var(--gold-case); }
 .lg-tick.on { border: 1.2px solid var(--gold-case); background: var(--gold); box-shadow: none; }
 .lg-tick.waived { border: 0; background: var(--waived); box-shadow: none; }
+.lg-tick.cond { border-style: dashed; }
+.lg-tick.doing { border: 1.2px solid var(--half-edge); background: linear-gradient(90deg, var(--gold) 50%, transparent 50%); box-shadow: none; }
+.lg-off { font-style: normal; font-size: 11px; font-weight: 600; color: var(--faint); }
+.term select { height: 26px; padding: 0 4px; border: 1px solid var(--edge); border-radius: var(--r); background: var(--surface); font-size: 13px; }
 .zoom {
   flex: none;
   display: inline-flex;
@@ -347,6 +352,13 @@ a:hover { text-decoration-color: currentColor; }
 .chip[data-status="waived"] .tick::before { border-color: var(--waived); background: var(--waived); }
 .chip[data-status="waived"] .tick::after { opacity: 1; width: 7px; height: 0; border-left: 0; border-bottom-color: var(--surface); transform: none; }
 .chip[data-status="waived"] .code { color: var(--muted); }
+/* Taking now: half filled */
+.chip[data-status="doing"] .tick::before { border: 1.2px solid var(--half-edge); background: linear-gradient(90deg, var(--gold) 50%, var(--surface) 50%); }
+/* Can take, with a condition (a corequisite alongside, or an approval first): a broken ring */
+.marks .chip[data-status="coreq"] .tick::before, .marks .chip[data-status="check"] .tick::before { border: 2.5px dashed var(--gold); box-shadow: 0 0 0 1px var(--gold-case), inset 0 0 0 1px var(--gold-case); }
+/* Not offered in the term being planned: greyed, and never shown as "can take now" */
+.chip.offterm .code, .chip.offterm .title { color: var(--faint); }
+.marks .chip.offterm .tick::before { border: 1.5px solid var(--wire); box-shadow: none; }
 .main {
   flex: 1;
   min-width: 0;
@@ -464,6 +476,17 @@ a:hover { text-decoration-color: currentColor; }
 .status.ready::before { border: 2.5px solid var(--gold); box-shadow: 0 0 0 1px var(--gold-case), inset 0 0 0 1px var(--gold-case); }
 .status.done::before { border: 1.2px solid var(--gold-case); background: var(--gold); }
 .status.waived::before { border: 0; background: var(--waived); }
+.status.cond::before { border: 2.5px dashed var(--gold); box-shadow: 0 0 0 1px var(--gold-case), inset 0 0 0 1px var(--gold-case); }
+.status.doing::before { border: 1.2px solid var(--half-edge); background: linear-gradient(90deg, var(--gold) 50%, var(--surface) 50%); }
+.conds { margin: -4px 0 0 22px; padding: 0; display: flex; flex-direction: column; gap: 6px; font-size: 13.5px; line-height: 1.5; }
+/* Something worth checking before planning around it */
+.flag { margin: 6px 0 0; padding-left: 9px; border-left: 3px solid var(--gold); font-size: 12.5px; line-height: 1.45; }
+.checkline { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; line-height: 1.45; cursor: pointer; }
+.checkline input { flex: none; width: 15px; height: 15px; margin: 2px 0 0; accent-color: var(--ink); }
+.units { display: flex; align-items: center; gap: 8px; font-size: 13.5px; }
+.unit-rows { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 10px; }
+.unit-rows .note { flex-basis: 100%; margin: 0; }
+.units input { width: 58px; height: 30px; box-sizing: border-box; padding: 0 6px; border: 1px solid var(--edge); border-radius: var(--r); background: var(--surface); }
 .reqs { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
 .reqs li { display: flex; gap: 8px; align-items: baseline; line-height: 1.5; }
 .reqs .mark { flex: none; width: 14px; font-weight: 700; }
@@ -540,6 +563,8 @@ h3 .ln.needs { background: var(--surface); }
 .pill.waived { color: var(--muted); font-weight: 400; }
 .pill.waived::before { width: 11px; height: 11px; border: 0; background: var(--waived); }
 .pill.waived::after { content: "waived"; font-size: 10.5px; color: var(--muted); }
+.pill.doing { font-weight: 400; }
+.pill.doing::before { border-color: var(--half-edge); background: linear-gradient(90deg, var(--gold) 50%, var(--surface) 50%); }
 /* Met, but counted toward another requirement (or not needed here) */
 .pill.elsewhere { color: var(--muted); }
 .pill.elsewhere::before { background: none; border: 1.5px solid var(--wire); }
@@ -629,6 +654,7 @@ h3 .ln.needs { background: var(--surface); }
       <label class="toggle"><input id="opt-outside" type="checkbox"> Prerequisites from outside the major</label>
       <label class="toggle" id="credit-toggle" hidden><input id="opt-credit" type="checkbox"> AP and waived <span class="n" id="credit-count"></span></label>
       <label class="toggle" id="taken-toggle" hidden title="Untick to hide courses you've taken and shift the rest left"><input id="opt-taken" type="checkbox"> What I've taken <span class="n" id="taken-count"></span></label>
+      <label class="toggle term" title="Grey out courses that don't run in that term">Planning for <select id="opt-term"><option value="">any term</option><option value="3">Fall</option><option value="1">Spring</option><option value="2">Summer</option></select></label>
       <span class="clear-wrap" id="clear-wrap"></span>
     </div>
     <div id="viewport">
@@ -654,8 +680,11 @@ h3 .ln.needs { background: var(--surface); }
           </div>
           <div class="row"><b>Your marks</b>
             <span><i class="lg-tick on"></i>Taken or AP credit</span>
+            <span><i class="lg-tick doing"></i>Taking now</span>
             <span><i class="lg-tick"></i>Can take now</span>
+            <span><i class="lg-tick cond"></i>Can take, with a corequisite or check</span>
             <span><i class="lg-tick waived"></i>Waived</span>
+            <span id="key-offterm" hidden><i class="lg-off">Aa</i>Not offered in <b id="key-term" style="font-weight:600;margin-left:-2px"></b></span>
             <span><i class="aptag" style="cursor:default;margin:0;font-style:normal">AP</i>AP can waive it</span>
           </div>
           <div class="row"><b>Lines</b>
@@ -754,15 +783,29 @@ h3 .ln.needs { background: var(--surface); }
     (unlocks[x] = unlocks[x] || new Set()).add(code);
   })));
 
+  // Variable-unit courses ("1-8"): the student enters what they earned; until then the minimum counts.
+  const unitRange = code => { const m = String(unitsOf(code)).match(/^(\d+)\s*-\s*(\d+)$/); return m ? [+m[1], +m[2]] : null; };
+  const MAX_UNITS = 16; // a repeatable course (QBIO 490) can total more than one term's maximum
+
   // ---------- state ----------
   const STORE = "qbio-course-map:v1";
   // waived: requirement lines (slot ids) or outside-the-major courses an advisor has waived.
-  const state = { taken: new Set(), waived: new Set(), abroad: new Set(), credit: {}, creditOpen: null, collapsed: new Set(), electives: false, outside: true, showCredit: true, showTaken: true, zoom: 1, focus: null };
+  // cleared: waived requirement lines a department has also accepted as a prerequisite.
+  // doing: courses you're taking this term. units: what you earned in variable-unit courses.
+  // term: the season you're planning for ("3" Fall, "1" Spring, "2" Summer), or "" for any.
+  const state = { taken: new Set(), doing: new Set(), waived: new Set(), cleared: new Set(), abroad: new Set(), credit: {}, units: {}, term: "", creditOpen: null, collapsed: new Set(), electives: false, outside: true, showCredit: true, showTaken: true, zoom: 1, focus: null };
   try {
     const saved = JSON.parse(localStorage.getItem(STORE) || "null");
     if (saved) {
       state.taken = new Set((saved.taken || []).filter(known));
+      state.doing = new Set((saved.doing || []).filter(c => known(c) && !state.taken.has(c)));
       state.waived = new Set((saved.waived || []).filter(id => R.slots[id] || OUTSIDE.has(id)));
+      state.cleared = new Set((saved.cleared || []).filter(id => R.slots[id] && state.waived.has(id)));
+      Object.entries(saved.units || {}).forEach(([c, v]) => {
+        const r = unitRange(c);
+        if (r && Number.isInteger(v) && v >= r[0] && v <= MAX_UNITS) state.units[c] = v;
+      });
+      if (["", "1", "2", "3"].includes(saved.term)) state.term = saved.term;
       if (typeof saved.electives === "boolean") state.electives = saved.electives;
       if (typeof saved.outside === "boolean") state.outside = saved.outside;
       if (typeof saved.showCredit === "boolean") state.showCredit = saved.showCredit;
@@ -777,7 +820,7 @@ h3 .ln.needs { background: var(--surface); }
   } catch (e) { /* storage unavailable: start fresh */ }
   function save() {
     try {
-      localStorage.setItem(STORE, JSON.stringify({ taken: [...state.taken], waived: [...state.waived], credit: state.credit, electives: state.electives, outside: state.outside, showCredit: state.showCredit, showTaken: state.showTaken, collapsed: [...state.collapsed], abroad: [...state.abroad] }));
+      localStorage.setItem(STORE, JSON.stringify({ taken: [...state.taken], doing: [...state.doing], waived: [...state.waived], cleared: [...state.cleared], units: state.units, term: state.term, credit: state.credit, electives: state.electives, outside: state.outside, showCredit: state.showCredit, showTaken: state.showTaken, collapsed: [...state.collapsed], abroad: [...state.abroad] }));
     } catch (e) { /* ignore */ }
   }
 
@@ -796,15 +839,57 @@ h3 .ln.needs { background: var(--surface); }
 
   const waiveKey = code => courseSlot[code] || code;
   const isWaived = code => state.waived.has(waiveKey(code));
-  const done = code => PLACEMENT.has(code) || state.taken.has(code) || CREDIT.has(code) || isWaived(code);
-  const groupMet = g => g.o.filter(b => b.every(done)).length >= g.n;
+  // A requirement waiver counts toward the major, but whether a department accepts it in place
+  // of a prerequisite is a separate decision. Waiving an outside-the-major course (CSCI 102) is a
+  // prerequisite waiver already, so it always counts.
+  const clearedKey = k => !R.slots[k] || state.cleared.has(k);
+  // Courses you're taking now count as done for planning next term (assuming you pass).
+  const earned = code => state.taken.has(code) || state.doing.has(code) || CREDIT.has(code);
+  const done = code => PLACEMENT.has(code) || earned(code) || (isWaived(code) && clearedKey(waiveKey(code)));
+  // Prerequisites that would be met if every waiver is accepted.
+  const assumed = code => done(code) || isWaived(code);
+  const groupMet = (g, met) => g.o.filter(b => b.every(met || done)).length >= g.n;
+  // Restrictions that need someone's say-so or a class standing (BISC 410: seniors or permission).
+  const RESTRICT_CHECK = /permission|approv|consent|senior|junior|sophomore|standing/i;
+  const needsPermission = code => !!(C[code] && C[code].restr && RESTRICT_CHECK.test(C[code].restr));
+  // What stands between you and a course whose prerequisites are met: corequisites to take
+  // before or alongside, waivers a department still has to accept, and permission restrictions.
+  function conditionsOf(code) {
+    const pre = groupsOf(code), co = groupsOf(code, "co");
+    if (!pre.every(g => groupMet(g, assumed))) return { state: "locked", approvals: [], coreq: [], permission: false };
+    const approvals = [...new Set(pre.concat(co).filter(g => !groupMet(g) && groupMet(g, assumed))
+      .flatMap(g => g.o.flat().filter(x => isWaived(x) && !clearedKey(waiveKey(x))).map(waiveKey)))];
+    const coreq = co.filter(g => !groupMet(g, assumed));
+    const permission = needsPermission(code);
+    return { state: approvals.length || permission ? "check" : coreq.length ? "coreq" : "ready", approvals, coreq, permission };
+  }
   function statusOf(code) {
     if (state.taken.has(code)) return "taken";
+    if (state.doing.has(code)) return "doing";
     if (CREDIT.has(code)) return "credit";
     if (isWaived(code)) return "waived";
     if (!hasData(code)) return "unknown";
-    return groupsOf(code).every(groupMet) ? "ready" : "locked";
+    return conditionsOf(code).state;
   }
+  const canTake = st => st === "ready" || st === "coreq" || st === "check";
+  const isDone = st => st === "taken" || st === "doing" || st === "credit" || st === "waived";
+
+  // Planning for a season: a course counts as offered then if it ran that season in the scanned
+  // terms, or, with no history, if the catalogue lists that season.
+  const offeredIn = (code, s) => {
+    const off = (C[code] && C[code].off) || [];
+    if (off.length) return off.some(t => t % 10 === s);
+    const cat = catalogueSeasons(code);
+    return cat.length ? cat.includes(s) : true;
+  };
+  const offTerm = code => !!state.term && hasData(code) && !offeredIn(code, +state.term);
+  const termWord = () => D.seasons[+state.term];
+
+  // Units: a variable-unit course counts what you entered, else its minimum.
+  const earnedUnits = code => {
+    const r = unitRange(code);
+    return r ? (state.units[code] || r[0]) : parseFloat(unitsOf(code)) || 0;
+  };
 
   // ---------- graph ----------
   // Each course sits at its earliest step: one after the slowest prerequisite group it needs,
@@ -836,7 +921,8 @@ h3 .ln.needs { background: var(--surface); }
   // AP credit and waivers mean you won't take the course, so they sit before step 1. So do
   // taken courses while they're hidden, which shifts the rest of the map to start from now.
   const preCredited = code => CREDIT.has(code) || isWaived(code);
-  const atStart = code => preCredited(code) || (!state.showTaken && state.taken.has(code));
+  const takenOrDoing = code => state.taken.has(code) || state.doing.has(code);
+  const atStart = code => preCredited(code) || (!state.showTaken && takenOrDoing(code));
 
   function buildGraph() {
     const visibleSlots = Object.keys(R.slots).filter(id => (state.electives || !electiveOnly(id)) && R.slots[id].courses.some(c => !HIDDEN.has(c)));
@@ -844,7 +930,7 @@ h3 .ln.needs { background: var(--surface); }
     const slotCourses = new Set(visibleSlots.flatMap(shown)); // every option still counts for steps
     // Once one option is taken or credited, the requirement shows just that course, and
     // courses it replaces elsewhere are hidden (taking CSCI 103 hides CSCI 113).
-    const chosen = c => state.taken.has(c) || CREDIT.has(c);
+    const chosen = c => earned(c);
     const replaced = new Set();
     Object.entries((ADJ.hideWhenTaken && ADJ.hideWhenTaken.rules) || {}).forEach(([key, list]) => {
       if (chosen(key)) list.forEach(c => { if (!chosen(c)) replaced.add(c); });
@@ -894,7 +980,7 @@ h3 .ln.needs { background: var(--surface); }
       const courses = displayed(id);
       if (!courses.length) return; // replaced by a course you've taken
       const byStep = new Map();
-      const met = state.waived.has(id) || courses.some(c => CREDIT.has(c) || (!state.showTaken && state.taken.has(c)));
+      const met = state.waived.has(id) || courses.some(c => CREDIT.has(c) || (!state.showTaken && takenOrDoing(c)));
       courses.forEach(c => {
         const t = met ? 0 : stepOf(c);
         if (!byStep.has(t)) byStep.set(t, []);
@@ -1277,32 +1363,39 @@ h3 .ln.needs { background: var(--surface); }
     nodesEl.querySelectorAll(".chip").forEach(ch => {
       const code = ch.dataset.code, st = statusOf(code);
       ch.dataset.status = st;
+      ch.classList.toggle("offterm", !isDone(st) && offTerm(code));
       const tick = ch.querySelector(".tick");
-      tick.setAttribute("aria-pressed", st === "taken" || st === "credit" || st === "waived" ? "true" : "false");
+      tick.setAttribute("aria-pressed", st === "doing" ? "mixed" : st === "taken" || st === "credit" || st === "waived" ? "true" : "false");
       tick.setAttribute("aria-label", st === "credit" ? disp(code) + " waived by " + CREDIT.get(code).join(" and ")
         : st === "waived" ? disp(code) + ": requirement waived"
+        : st === "doing" ? disp(code) + ": taking now. Mark as taken"
         : (st === "taken" ? "Unmark " : "Mark ") + disp(code) + " as taken");
     });
-    // Once anything is marked, emphasise the frontier: courses you can take now, and the
-    // arrows from what you've done into them. With nothing marked all of step 1 would light up.
-    const anyMarks = state.taken.size + CREDIT.size + state.waived.size > 0;
-    const doneCourse = c => state.taken.has(c) || CREDIT.has(c) || isWaived(c);
+    // Once anything is marked, emphasise the frontier: courses you can take now (in the term
+    // you're planning for), and the arrows from what you've done into them. With nothing marked
+    // all of step 1 would light up.
+    const anyMarks = state.taken.size + state.doing.size + CREDIT.size + state.waived.size > 0;
+    const doneCourse = c => earned(c) || isWaived(c);
+    const open = c => canTake(statusOf(c)) && !offTerm(c);
     stage.classList.toggle("marks", anyMarks);
     G.nodes.forEach(n => {
       const el = nodeEls.get(n.id);
-      const earned = n.courses.some(c => state.taken.has(c) || CREDIT.has(c));
-      el.classList.toggle("done", earned || n.courses.some(isWaived));
-      el.classList.toggle("waived", !earned && n.courses.some(isWaived));
-      el.classList.toggle("ready", !n.courses.some(doneCourse) && n.courses.some(c => statusOf(c) === "ready"));
+      const got = n.courses.some(earned);
+      el.classList.toggle("done", got || n.courses.some(isWaived));
+      el.classList.toggle("waived", !got && n.courses.some(isWaived));
+      el.classList.toggle("ready", !n.courses.some(doneCourse) && n.courses.some(open));
     });
     liveEdges = new Set(anyMarks ? G.edges.filter(e =>
-      G.nodes.get(e.from).courses.some(doneCourse) && [...e.courses].some(c => statusOf(c) === "ready")) : []);
+      G.nodes.get(e.from).courses.some(doneCourse) && [...e.courses].some(open)) : []);
     // A toggle stays visible while it's hiding something, even with nothing left to hide.
     const creditMarks = CREDIT.size + state.waived.size;
     document.getElementById("credit-toggle").hidden = !creditMarks && state.showCredit;
     document.getElementById("credit-count").textContent = "(" + creditMarks + ")";
-    document.getElementById("taken-toggle").hidden = !state.taken.size && state.showTaken;
-    document.getElementById("taken-count").textContent = "(" + state.taken.size + ")";
+    const takenMarks = state.taken.size + state.doing.size;
+    document.getElementById("taken-toggle").hidden = !takenMarks && state.showTaken;
+    document.getElementById("taken-count").textContent = "(" + takenMarks + ")";
+    document.getElementById("key-offterm").hidden = !state.term;
+    document.getElementById("key-term").textContent = state.term ? termWord() : "";
     highlight();
     renderPanel();
     renderClear();
@@ -1418,7 +1511,7 @@ h3 .ln.needs { background: var(--surface); }
   }
 
   function crefHTML(code) {
-    const met = state.taken.has(code) || CREDIT.has(code);
+    const met = !PLACEMENT.has(code) && done(code);
     const ap = WAIVERS[code] ? '<span class="aptag" title="' + esc(waiverTitle(code)) + '">AP</span>' : "";
     if (known(code)) {
       return '<button type="button" class="cref' + (met ? " met" : "") + '" data-goto-course="' + esc(code) + '" title="' + esc(titleOf(code)) + '">' + esc(disp(code)) + "</button>" + ap;
@@ -1432,8 +1525,9 @@ h3 .ln.needs { background: var(--surface); }
     let body;
     if (opts.length === 1) body = opts[0];
     else body = (g.n > 1 ? g.n + " of: " : "") + opts.slice(0, -1).join(", ") + " " + joinWord + " " + opts[opts.length - 1];
-    const met = groupMet(g);
-    return '<li><span class="mark" aria-label="' + (met ? "met" : "not met") + '">' + (met ? "✓" : "·") + "</span><span>" + body + "</span></li>";
+    // "?" = met only if a department accepts a requirement waiver as this prerequisite.
+    const met = groupMet(g), maybe = !met && groupMet(g, assumed);
+    return '<li><span class="mark" aria-label="' + (met ? "met" : maybe ? "met if the waiver is accepted" : "not met") + '">' + (met ? "✓" : maybe ? "?" : "·") + "</span><span>" + body + "</span></li>";
   }
 
   function termsHTML(code) {
@@ -1441,6 +1535,31 @@ h3 .ln.needs { background: var(--surface); }
     return '<ol class="terms">' + D.terms.slice().reverse().map(t =>
       '<li class="' + (off.has(t) ? "on" : "") + '" title="' + termName(t) + (off.has(t) ? ": offered" : ": not offered") + '">' + termShort(t) + "</li>"
     ).join("") + "</ol>";
+  }
+
+  const times = n => n === 1 ? "once" : n === 2 ? "twice" : n + " times";
+  const andList = a => a.length < 2 ? a.join("") : a.slice(0, -1).join(", ") + " and " + a[a.length - 1];
+  const scanned = () => termName(D.terms[D.terms.length - 1]) + " and " + termName(D.terms[0]);
+  // The catalogue's "Terms Offered" against what actually ran, for Fall and Spring (summer
+  // listings come and go). QBIO 475 is listed for Spring but has run every Fall.
+  function termFlag(code) {
+    const off = (C[code] && C[code].off) || [];
+    const cat = catalogueSeasons(code).filter(s => s !== 2);
+    if (!off.length || !cat.length) return "";
+    const n = s => off.filter(t => t % 10 === s).length;
+    const seen = [3, 1].filter(n);
+    if (cat.length === seen.length && cat.every(s => seen.includes(s))) return "";
+    const ran = seen.map(s => times(n(s)) + " in " + D.seasons[s]).concat(cat.filter(s => !n(s)).map(s => "never in " + D.seasons[s]));
+    return "The catalogue lists it for " + andList(cat.map(s => D.seasons[s])) + (cat.length === 1 ? " only" : "") +
+      ", but between " + scanned() + " it ran " + andList(ran) + ". Plan around when it actually runs, and check the Schedule of Classes before you register.";
+  }
+
+  // An editable unit count for a variable-unit course you've taken or are taking.
+  function unitsField(code, label) {
+    const r = unitRange(code);
+    const id = "units-" + smashed(code);
+    return '<label class="units" for="' + id + '">' + esc(label) + ' <input id="' + id + '" type="number" inputmode="numeric" min="' + r[0] + '" max="' + MAX_UNITS +
+      '" step="1" value="' + earnedUnits(code) + '" data-units="' + esc(code) + '"></label>';
   }
 
   function courseView(code) {
@@ -1455,6 +1574,7 @@ h3 .ln.needs { background: var(--surface); }
       "<h2>" + esc(titleOf(code) || disp(code)) + "</h2></div>");
     if (known(code) && !PLACEMENT.has(code)) {
       parts.push('<div class="actions"><button type="button" class="take" data-tick="' + esc(code) + '" aria-pressed="' + (st === "taken") + '">' + (st === "taken" ? "Taken ✓" : "Mark as taken") + "</button>" +
+        '<button type="button" class="waive" data-doing="' + esc(code) + '" aria-pressed="' + (st === "doing") + '">' + (st === "doing" ? "✓ Taking now" : "Taking it now") + "</button>" +
         (courseSlot[code] || OUTSIDE.has(code) ? waiveButton(waiveKey(code)) : "") + "</div>");
     }
 
@@ -1464,17 +1584,46 @@ h3 .ln.needs { background: var(--surface); }
       parts.push('<p class="status">There\'s no catalogue entry or recent Schedule of Classes listing for this course, so its prerequisites aren\'t shown here. Check the catalogue.</p>');
     } else if (st === "taken") {
       parts.push('<p class="status done">Marked as taken.</p>');
+    } else if (st === "doing") {
+      parts.push('<p class="status doing">Taking it now. Courses that need it show as open for next term, assuming you pass.</p>');
     } else if (st === "credit") {
       parts.push('<p class="status done">Waived by ' + esc(CREDIT.get(code).join(" and ")) + ". For the major, it counts once your advisor applies the substitution on STARS.</p>");
     } else if (st === "waived") {
-      parts.push('<p class="status waived">' + waivedText(waiveKey(code)) + "</p>");
-    } else if (!pre.length) {
-      parts.push('<p class="status ready">No prerequisites listed.</p>');
-    } else if (st === "ready") {
-      parts.push('<p class="status ready">You can take this now: every prerequisite is met.</p>');
+      parts.push('<p class="status waived">' + waivedText(waiveKey(code)) + "</p>" + clearBox(waiveKey(code)));
+    } else if (st === "locked") {
+      const left = pre.filter(g => !groupMet(g, assumed)).length;
+      parts.push('<p class="status">' + left + " prerequisite" + (left > 1 ? "s" : "") + " still missing. Mark courses as taken to track this.</p>");
     } else {
-      const left = pre.filter(g => !groupMet(g)).length;
-      parts.push('<p class="status">' + left + " prerequisite" + (left > 1 ? "s" : "") + " still to go. Mark courses as taken to track this.</p>");
+      const cond = conditionsOf(code);
+      // Leaning on a course you're taking now means "next term, once you pass it".
+      const viaDoing = pre.some(g => !groupMet(g, c => assumed(c) && !state.doing.has(c)));
+      const after = viaDoing ? ", counting what you're taking now" : "";
+      if (st === "ready") {
+        parts.push('<p class="status ready">' + (pre.length ? "You can take this" + (viaDoing ? " next term" : " now") + ": every prerequisite is met" + after + "." : "No prerequisites listed.") + "</p>");
+      } else {
+        const items = [];
+        cond.coreq.forEach(g => items.push('<li><span class="mark">+</span><span>Take ' +
+          g.o.map(b => b.map(crefHTML).join(' <span class="and">and</span> ')).join(" or ") + " before or alongside it (a corequisite).</span></li>"));
+        cond.approvals.forEach(k => {
+          const multi = R.slots[k].courses.length > 1;
+          const ref = '<button type="button" class="cref" ' + (multi ? 'data-goto-slot="' : 'data-goto-course="') + esc(multi ? k : R.slots[k].courses[0]) + '">' + esc(slotName(k)) + "</button>";
+          items.push('<li><span class="mark">?</span><span>' + ref + " is waived for the major. It stands in for this prerequisite only if the department that offers " + esc(disp(code)) +
+            " accepts it, so ask them first. If they do, tick “Also accepted as a prerequisite” in " + ref + "’s details.</span></li>");
+        });
+        if (cond.permission) items.push('<li><span class="mark">!</span><span>Restricted: “' + esc(rec.restr) + "”. Check that you qualify, or ask for permission.</span></li>");
+        parts.push('<p class="status cond">' + (pre.length ? "Prerequisites met" + after : "No prerequisites listed") + ", but before you register:</p>" +
+          '<ul class="reqs conds">' + items.join("") + "</ul>");
+      }
+    }
+    if (hasData(code) && !isDone(st) && offTerm(code)) {
+      const ran = [3, 1, 2].filter(s => (rec.off || []).some(t => t % 10 === s)).map(s => D.seasons[s]);
+      parts.push('<p class="flag">Not offered in ' + termWord() + (ran.length ? ": between " + scanned() + " it ran only in " + andList(ran)
+        : ": the catalogue lists it for " + andList(catalogueSeasons(code).map(s => D.seasons[s])) + " only") + ".</p>");
+    }
+    if (unitRange(code) && (st === "taken" || st === "doing")) {
+      const r = unitRange(code);
+      parts.push('<div class="stack" style="gap:6px">' + unitsField(code, "Units") +
+        '<p class="note">It runs for ' + r[0] + "–" + r[1] + " units a term. If you take it more than once, enter the total. Until you change it, progress counts " + r[0] + ".</p></div>");
     }
 
     // Show the catalogue's own sentence under the parsed list, so odd wording is visible.
@@ -1516,9 +1665,11 @@ h3 .ln.needs { background: var(--surface); }
       parts.push("<div><h3><span class=\"ln opens\"></span>Opens up</h3><div class=\"pills\" style=\"gap:4px 10px\">" + opens.map(crefHTML).join("") + "</div></div>");
     }
     if (hasData(code)) {
-      const listed = catalogueSeasons(code).map(s => D.seasons[s]).join(" and ");
+      const listed = andList(catalogueSeasons(code).map(s => D.seasons[s]));
+      const flag = termFlag(code);
       parts.push("<div><h3>Offered · " + termShort(D.terms[D.terms.length - 1]) + " to " + termShort(D.terms[0]) + "</h3>" + termsHTML(code) +
-        (rec.cterms ? '<p class="note" style="margin-top:6px">The catalogue lists it for ' + esc(listed || rec.cterms) + ".</p>" : "") + "</div>");
+        (flag ? '<p class="flag">' + esc(flag) + "</p>"
+          : rec.cterms ? '<p class="note" style="margin-top:6px">The catalogue lists it for ' + esc(listed || rec.cterms) + ".</p>" : "") + "</div>");
     }
     if (rec.d) parts.push("<div><h3>Description</h3><p class=\"prose\">" + esc(rec.d) + "</p></div>");
     if (rec.dup) parts.push('<p class="note">Duplicate credit: ' + esc(rec.dup) + "</p>");
@@ -1542,9 +1693,27 @@ h3 .ln.needs { background: var(--surface); }
       : multi ? "Waive " + slotName(key) + " requirement" : "Mark as waived";
     return '<button type="button" class="waive" data-waive="' + esc(key) + '" aria-pressed="' + on + '">' + esc(label) + "</button>";
   }
+  // Courses that list any option of a requirement line as a prerequisite or corequisite.
+  const needersOf = key => {
+    const opts = new Set(R.slots[key] ? R.slots[key].courses : [key]);
+    return Object.keys(C).filter(c => known(c) && !opts.has(c) &&
+      groupsOf(c).concat(groupsOf(c, "co")).some(g => g.o.flat().some(x => opts.has(x)))).sort();
+  };
+  // A waiver of a major requirement counts toward the degree, but it only stands in for a
+  // prerequisite once the department teaching the later course accepts it. Outside courses
+  // (CSCI 102) aren't major requirements, so a waiver of one is a prerequisite waiver.
   function waivedText(key) {
-    const what = R.slots[key] && R.slots[key].courses.length > 1 ? "The " + esc(slotName(key)) + " requirement is" : "Marked as";
-    return what + " waived. Check that STARS shows it as a course or requirement waiver (CW or RW). Courses that list it as a prerequisite show as unlocked here, but their department may still have to approve you.";
+    if (!R.slots[key]) return "Marked as waived, so courses that need it count it as met. Make sure the department that waived it has recorded that on STARS.";
+    const what = R.slots[key].courses.length > 1 ? "The " + esc(slotName(key)) + " requirement is" : "Marked as";
+    const needers = needersOf(key);
+    return what + " waived for the major. Check that STARS shows it as a course or requirement waiver (CW or RW)." + (!needers.length ? ""
+      : " That counts toward your degree, but it doesn't by itself clear the prerequisite for " + esc(andList(needers.map(disp))) +
+        (state.cleared.has(key) ? ". You've marked it as accepted, so they show as open." : ": the departments that teach them decide that, so until you tick the box below they show as open with a condition."));
+  }
+  function clearBox(key) {
+    if (!R.slots[key] || !state.waived.has(key) || !needersOf(key).length) return "";
+    return '<label class="checkline"><input type="checkbox" data-clear-key="' + esc(key) + '"' + (state.cleared.has(key) ? " checked" : "") +
+      "><span>Also accepted as a prerequisite: the department, or your advisor, confirmed it counts in place of the course.</span></label>";
   }
 
   function slotView(id) {
@@ -1554,13 +1723,13 @@ h3 .ln.needs { background: var(--surface); }
       '<div class="stack" style="gap:8px"><div class="kicker">' + tags.join("") + "</div><h2>" + esc(slotName(id)) + "</h2>" +
       '<p class="meta">Take one of these ' + s.courses.length + " options. They count the same for the major.</p></div>",
       '<div class="actions">' + waiveButton(id) + "</div>"];
-    if (state.waived.has(id)) parts.push('<p class="status waived">' + waivedText(id) + "</p>");
+    if (state.waived.has(id)) parts.push('<p class="status waived">' + waivedText(id) + "</p>" + clearBox(id));
     parts.push('<div class="stack" style="gap:8px">' + s.courses.map(c => {
       const pre = groupsOf(c);
       const preText = !hasData(c) ? "No prerequisite data" : pre.length ? "Needs " + pre.map(g => g.o.map(b => b.map(disp).join(" + ")).join(" / ")).join("; ") : "No prerequisites listed";
       return '<button type="button" class="option" data-goto-course="' + esc(c) + '"><span class="row"><span class="code">' + esc(catalogCode(c)) + '</span><span class="ssn">' + seasonsHTML(c) + "</span></span>" +
         '<span style="font-weight:600">' + esc(titleOf(c)) + "</span>" +
-        '<span class="note">' + esc(preText) + (state.taken.has(c) ? " · ✓ taken" : "") + (HIDDEN.has(c) ? " · not shown on the map (rarely taken)" : "") + "</span></button>";
+        '<span class="note">' + esc(preText) + (state.taken.has(c) ? " · ✓ taken" : state.doing.has(c) ? " · taking now" : "") + (HIDDEN.has(c) ? " · not shown on the map (rarely taken)" : "") + "</span></button>";
     }).join("") + "</div>");
     return '<div class="stack">' + parts.join("") + "</div>";
   }
@@ -1571,19 +1740,23 @@ h3 .ln.needs { background: var(--surface); }
   // upper-division elective. Sections claim satisfied requirement lines in catalogue order;
   // Specialization prefers lines that can't be electives, and Electives take what's left.
   const SECTION_SHORT = { intro: "Intro", science: "Science", computing: "Computing", specialization: "Specialization", capstone: "Capstone", electives: "Electives", research: "Research" };
-  const slotSatisfied = id => state.waived.has(id) || R.slots[id].courses.some(c => state.taken.has(c) || CREDIT.has(c));
+  // Courses you're taking now count, so the panel shows where you'll be at the end of term.
+  const slotSatisfied = id => state.waived.has(id) || R.slots[id].courses.some(earned);
+  const slotDoing = id => !state.waived.has(id) && !R.slots[id].courses.some(c => state.taken.has(c) || CREDIT.has(c)) && R.slots[id].courses.some(c => state.doing.has(c));
   // Met only through AP credit: unlocks later courses, but some sections don't accept it
   // (AP Calc BC 5 skips MATH 126 without satisfying a Specialization course).
-  const creditOnly = id => !state.waived.has(id) && !R.slots[id].courses.some(c => state.taken.has(c)) && R.slots[id].courses.some(c => CREDIT.has(c));
+  const creditOnly = id => !state.waived.has(id) && !R.slots[id].courses.some(takenOrDoing) && R.slots[id].courses.some(c => CREDIT.has(c));
   // Study-abroad placeholders, e.g. "abroad:electives:1", ticked from the requirements panel.
   const abroadIds = sec => Array.from({ length: sec.abroadPlaceholders || 0 }, (_, i) => "abroad:" + sec.id + ":" + (i + 1));
   const isAbroad = id => id.startsWith("abroad:");
   const slotUnits = id => {
     if (isAbroad(id)) return R.sections.find(s => s.id === id.split(":")[1]).abroadUnits || 4;
     const s = R.slots[id];
-    const c = s.courses.find(x => state.taken.has(x) || CREDIT.has(x)) || s.courses[0];
-    return parseFloat(unitsOf(c)) || 0;
+    const c = s.courses.find(takenOrDoing) || s.courses.find(x => CREDIT.has(x)) || s.courses[0];
+    return earnedUnits(c);
   };
+  // The course behind a counted line whose units you can edit (QBIO 490 and 499 run 1–8 units).
+  const variableCourse = id => { const s = !isAbroad(id) && R.slots[id]; const c = s && s.courses.find(takenOrDoing); return c && unitRange(c) ? c : null; };
   function allocate() {
     const usedBy = new Map(), counted = {}, info = {};
     const claim = (sec, id) => { usedBy.set(id, sec.id); counted[sec.id].push(id); };
@@ -1642,10 +1815,12 @@ h3 .ln.needs { background: var(--surface); }
       } else {
         const isTaken = s.courses.some(c => state.taken.has(c));
         const isCredit = !isTaken && s.courses.some(c => CREDIT.has(c));
-        cls = isTaken ? " done" : isCredit ? " done credit" : " waived";
+        const isDoing = slotDoing(id);
+        cls = isTaken ? " done" : isCredit ? " done credit" : isDoing ? " done doing" : " waived";
+        if (isDoing) where = "in progress";
       }
     }
-    const tip = s.courses.map(disp).join(" / ") + (!where ? "" : where === "extra" ? " (not needed here)"
+    const tip = s.courses.map(disp).join(" / ") + (!where ? "" : where === "in progress" ? " (taking it now)" : where === "extra" ? " (not needed here)"
       : where.startsWith("AP") ? " (AP credit skips the course but doesn't satisfy this requirement)" : " (counted " + where + ")");
     return '<button type="button" class="pill cat-' + slotCat(id) + cls + '" ' + target + ' title="' + esc(tip) + '">' + esc(slotName(id)) +
       (where ? '<span class="where">' + esc(where) + "</span>" : "") + "</button>";
@@ -1675,26 +1850,49 @@ h3 .ln.needs { background: var(--surface); }
 
   function homeView() {
     const parts = [];
-    const doneSlot = id => state.waived.has(id) || R.slots[id].courses.some(c => state.taken.has(c) || CREDIT.has(c));
+    const doneSlot = slotSatisfied;
 
-    // What can I take next?
+    // What can I take next? Split by what still has to happen before you register.
     const visible = new Set(G ? [...G.nodes.values()].filter(n => n.kind === "slot").flatMap(n => n.courses) : []);
-    if (state.taken.size || CREDIT.size || state.waived.size) {
-      const ready = [...visible].filter(c => statusOf(c) === "ready" && !doneSlot(courseSlot[c]))
+    if (state.taken.size || state.doing.size || CREDIT.size || state.waived.size) {
+      const open = [...visible].filter(c => canTake(statusOf(c)) && !doneSlot(courseSlot[c]))
         .sort((a, b) => (G.nodes.get(G.nodeOf.get(a)).tier - G.nodes.get(G.nodeOf.get(b)).tier) || a.localeCompare(b));
-      parts.push('<div class="stack" style="gap:8px"><h3>You can take next</h3>' +
-        (ready.length ? '<div class="pills">' + ready.map(c => '<button type="button" class="pill cat-' + slotCat(courseSlot[c]) + '" data-goto-course="' + esc(c) + '">' + esc(disp(c)) + "</button>").join("") + "</div>"
-          : '<p class="meta">Nothing new has opened up among the courses shown.</p>') + "</div>");
+      const nextPill = (c, where) => '<button type="button" class="pill cat-' + slotCat(courseSlot[c]) + '" data-goto-course="' + esc(c) + '">' + esc(disp(c)) +
+        (where ? '<span class="where">' + esc(where) + "</span>" : "") + "</button>";
+      const opts = g => g.o.map(b => b.map(disp).join(" + ")).join(" or ");
+      const inTerm = open.filter(c => !offTerm(c)), later = open.filter(offTerm);
+      const groups = [
+        ["", inTerm.filter(c => statusOf(c) === "ready").map(c => nextPill(c))],
+        ["With a corequisite, taken before or alongside", inTerm.filter(c => statusOf(c) === "coreq").map(c => nextPill(c, "with " + conditionsOf(c).coreq.map(opts).join("; ")))],
+        ["Once an approval or restriction is checked", inTerm.filter(c => statusOf(c) === "check").map(c => {
+          const k = conditionsOf(c);
+          return nextPill(c, k.approvals.length ? slotName(k.approvals[0]) + " waiver" : "restricted");
+        })],
+        ["Open, but not offered in " + termWord(), later.map(c => nextPill(c, [3, 1, 2].filter(s => offeredIn(c, s)).map(s => D.seasons[s]).join(" & ")))],
+      ].filter(([, pills]) => pills.length);
+      parts.push('<div class="stack" style="gap:8px"><h3>You can take next' + (state.term ? " · " + esc(termWord()) : "") + "</h3>" +
+        (groups.length ? groups.map(([label, pills], i) => (label ? '<p class="note"' + (i ? ' style="margin-top:4px"' : "") + ">" + esc(label) + "</p>" : "") + '<div class="pills">' + pills.join("") + "</div>").join("")
+          : '<p class="meta">Nothing new has opened up among the courses shown.</p>') +
+        (state.doing.size ? '<p class="note">Counts what you\'re taking now as passed.</p>' : "") + "</div>");
     } else {
-      parts.push('<p class="hint">Click a course to see what it needs and what it opens up. Tick the circle next to courses you have taken, add any AP credit below, and mark advisor waivers from a course\'s details to see what you can take next. Everything is saved in this browser only.</p>');
+      parts.push('<p class="hint">Click a course to see what it needs and what it opens up. Tick the circle next to courses you have taken (a course\'s details also let you mark one you\'re taking now), add any AP credit below, and mark advisor waivers to see what you can take next. Everything is saved in this browser only.</p>');
     }
     parts.push(creditSection());
 
-    parts.push("<h3 style=\"margin-bottom:-8px\">Major requirements · " + esc(R.catalogue.replace("USC Catalogue ", "")) + " catalogue</h3>");
+    const year = R.catalogue.replace("USC Catalogue ", "");
+    parts.push('<div class="stack" style="gap:4px;margin-bottom:-8px"><h3>Major requirements · ' + esc(year) + " catalogue</h3>" +
+      '<p class="note">You follow the requirements of the catalogue year on your STARS report, usually the year you started at USC. If yours isn\'t ' + esc(year) + ", some of these may differ, so check with your advisor.</p></div>");
     const alloc = allocate();
     const pills = (ids, sec) => '<div class="pills">' + ids.map(id => pill(id, sec.id, alloc)).join("") + "</div>";
+    // Unit fields for counted variable-unit courses (QBIO 490, QBIO 499).
+    const unitFields = ids => {
+      const cs = ids.map(variableCourse).filter(Boolean);
+      return cs.length ? '<div class="unit-rows">' + cs.map(c => unitsField(c, disp(c) + " units")).join("") + '<p class="note">' + (cs.length > 1 ? "These run for a variable number of units. If you take one more than once, enter the total."
+        : "It runs for a variable number of units. If you take it more than once, enter the total.") + "</p></div>" : "";
+    };
     R.sections.forEach(sec => {
       const mine = alloc.counted[sec.id];
+      const inProgress = mine.filter(id => !isAbroad(id) && slotDoing(id)).length;
       let prog = "", done = false, body = sec.text ? '<p class="rule">' + esc(sec.text) + "</p>" : "";
       if (sec.rule === "all") {
         done = mine.length === sec.slots.length;
@@ -1715,14 +1913,23 @@ h3 .ln.needs { background: var(--surface); }
         if (state.electives) body += pills(sec.slots, sec);
         else body += (mine.some(id => !isAbroad(id)) ? pills(mine.filter(id => !isAbroad(id)), sec) : "") +
           '<button type="button" class="btn" data-show-electives>Show all ' + sec.slots.length + " elective options on the map</button>";
+        body += unitFields(mine);
       } else if (sec.rule === "choose") {
         done = mine.length >= sec.choose;
         prog = Math.min(mine.length, sec.choose) + " / " + sec.choose;
         body += pills(sec.slots, sec);
+      } else if (sec.rule === "research") {
+        const units = mine.reduce((s, id) => s + slotUnits(id), 0);
+        const need = parseFloat(sec.units) || 0;
+        done = units >= need;
+        prog = units + " / " + need + " units";
+        body += pills(sec.slots, sec) + unitFields(mine);
       } else {
         prog = sec.units + " units";
         body += pills(sec.slots, sec);
       }
+      if (inProgress) prog += " · " + inProgress + " in progress";
+      done = done && !inProgress;
       if (sec.abroadPlaceholders) body += '<div class="pills">' + abroadIds(sec).map(id => abroadPill(id, sec, alloc)).join("") + "</div>";
       if (sec.note) body += '<p class="note">' + esc(sec.note) + "</p>";
       const open = !state.collapsed.has(sec.id);
@@ -1737,6 +1944,7 @@ h3 .ln.needs { background: var(--surface); }
     const missing = Object.keys(R.courses).filter(c => !hasData(c)).map(disp);
     parts.push('<div class="about"><h3 id="how" style="margin:6px 0 0">How to read the map</h3>' +
       "<p><strong>Columns</strong> show the earliest you could take each course, one step after its prerequisites. Black double lines lead into the course you pick from what it needs; gold lines lead out to what it opens up. When a prerequisite can be met several ways, the column follows the fastest one; arrows show those fastest routes, and selecting a course also lights up its slower alternatives (such as MATH 407 for QBIO 475).</p>" +
+      "<p><strong>Can take now</strong> (a solid gold ring) means every prerequisite is met. A dashed ring means you can take it once something else is sorted: a corequisite taken before or alongside it, a waived requirement that the department still has to accept as a prerequisite, or a restriction such as class standing or permission. The course's details say which. Courses you're taking now count as passed, so the map shows what opens up next term, and \"Planning for\" greys out courses that don't run in the term you pick.</p>" +
       "<p><strong>Boxes with several codes</strong> are one requirement line from the catalogue (for example Physics I: PHYS 135a, 151, 161 or 171). If its options open up at different steps, the requirement appears once per step, with a note pointing to the other step. Once you tick or get AP credit for one option, the others are hidden.</p>" +
       "<p><strong>AP credit and waivers</strong> move the courses they cover into an \"AP and waived\" column before the first one, and everything that depends on them shifts left. Ticking a course as taken only hides the other options of its requirement, unless you untick \"What I've taken\" above the map: that hides the courses you've taken and shifts everything else left, so the map starts from where you are now.</p>" +
       (HIDDEN.size ? "<p><strong>Left off the map:</strong> " + esc([...HIDDEN].map(disp).join(", ")) + ", which QBIO students rarely take. They still count for their requirements.</p>" : "") +
@@ -1770,10 +1978,10 @@ h3 .ln.needs { background: var(--surface); }
   const clearWrap = document.getElementById("clear-wrap");
   let confirmClear = false;
   function renderClear() {
-    const n = state.taken.size + state.waived.size + state.abroad.size;
+    const n = state.taken.size + state.doing.size + state.waived.size + state.abroad.size;
     if (!n) { clearWrap.innerHTML = ""; confirmClear = false; return; }
     clearWrap.innerHTML = confirmClear
-      ? "Clear " + n + ' taken, waived and study-abroad marks? <button type="button" class="btn danger" data-clear-yes>Clear</button><button type="button" class="btn" data-clear-no>Keep</button>'
+      ? "Clear " + n + ' taken, in-progress, waived and study-abroad marks? <button type="button" class="btn danger" data-clear-yes>Clear</button><button type="button" class="btn" data-clear-no>Keep</button>'
       : '<button type="button" class="link" data-clear>Clear my marks (' + n + ")</button>";
   }
   clearWrap.addEventListener("click", ev => {
@@ -1781,7 +1989,10 @@ h3 .ln.needs { background: var(--surface); }
     if (!b) return;
     if (b.hasAttribute("data-clear")) confirmClear = true;
     if (b.hasAttribute("data-clear-no")) confirmClear = false;
-    if (b.hasAttribute("data-clear-yes")) { state.taken.clear(); state.waived.clear(); state.abroad.clear(); confirmClear = false; render(); return; }
+    if (b.hasAttribute("data-clear-yes")) {
+      [state.taken, state.doing, state.waived, state.cleared, state.abroad].forEach(s => s.clear());
+      state.units = {}; confirmClear = false; render(); return;
+    }
     refresh();
   });
 
@@ -1821,9 +2032,14 @@ h3 .ln.needs { background: var(--surface); }
     });
   }
 
+  // Taken and taking-now are exclusive; ticking a course you're taking marks it taken.
   function toggleTaken(code) {
-    if (state.taken.has(code)) state.taken.delete(code); else state.taken.add(code);
+    if (state.taken.has(code)) state.taken.delete(code); else { state.taken.add(code); state.doing.delete(code); }
     render(); // the other options of a requirement are hidden once one is taken
+  }
+  function toggleDoing(code) {
+    if (state.doing.has(code)) state.doing.delete(code); else { state.doing.add(code); state.taken.delete(code); }
+    render();
   }
 
   nodesEl.addEventListener("click", ev => {
@@ -1854,6 +2070,7 @@ h3 .ln.needs { background: var(--surface); }
     else if (b.dataset.gotoCourse) select({ kind: "course", id: b.dataset.gotoCourse }, true);
     else if (b.dataset.gotoSlot) select({ kind: "slot", id: b.dataset.gotoSlot }, true);
     else if (b.dataset.tick) toggleTaken(b.dataset.tick);
+    else if (b.dataset.doing) toggleDoing(b.dataset.doing);
     else if (b.dataset.abroad) {
       const k = b.dataset.abroad;
       if (state.abroad.has(k)) state.abroad.delete(k); else state.abroad.add(k);
@@ -1861,13 +2078,26 @@ h3 .ln.needs { background: var(--surface); }
     }
     else if (b.dataset.waive) {
       const k = b.dataset.waive;
-      if (state.waived.has(k)) state.waived.delete(k); else state.waived.add(k);
+      if (state.waived.has(k)) { state.waived.delete(k); state.cleared.delete(k); } else state.waived.add(k);
       render();
     }
     else if (b.hasAttribute("data-show-electives")) { optElectives.checked = true; setElectives(true); }
   });
   panel.addEventListener("change", ev => {
-    const sel = ev.target.closest("select[data-exam]");
+    const t = ev.target;
+    if (t.dataset.clearKey) {
+      if (t.checked) state.cleared.add(t.dataset.clearKey); else state.cleared.delete(t.dataset.clearKey);
+      refresh();
+      return;
+    }
+    if (t.dataset.units) {
+      const c = t.dataset.units, r = unitRange(c), v = Math.round(+t.value);
+      if (t.value === "" || !Number.isFinite(v) || v <= r[0]) delete state.units[c];
+      else state.units[c] = Math.min(v, MAX_UNITS);
+      refresh();
+      return;
+    }
+    const sel = t.closest("select[data-exam]");
     if (!sel) return;
     if (sel.value) state.credit[sel.dataset.exam] = sel.value;
     else delete state.credit[sel.dataset.exam];
@@ -1953,6 +2183,9 @@ h3 .ln.needs { background: var(--surface); }
   const optTaken = document.getElementById("opt-taken");
   optTaken.checked = state.showTaken;
   optTaken.addEventListener("change", () => { state.showTaken = optTaken.checked; render(); });
+  const optTerm = document.getElementById("opt-term");
+  optTerm.value = state.term;
+  optTerm.addEventListener("change", () => { state.term = optTerm.value; refresh(); });
 
   const searchInput = document.getElementById("search");
   const searchable = [...new Set(Object.keys(R.courses).concat(D.outside))].sort();
@@ -1997,7 +2230,7 @@ h3 .ln.needs { background: var(--surface); }
     return m ? +m[3] + " " + ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][+m[2] - 1] + " " + m[1] : "";
   };
   document.getElementById("title").textContent = "QBIO prerequisites" + (years.length === 2 ? ", " + years[0] + "–" + years[1].slice(2) : "");
-  document.getElementById("subtitle").textContent = "Made by students in QBA, not by USC. Prerequisites from the " + R.catalogue +
+  document.getElementById("subtitle").textContent = "Made by students in QBA, not by USC. Requirements and prerequisites from the " + R.catalogue +
     (niceDate(D.generated) ? ", checked " + niceDate(D.generated) : "") + ". Check with your advisor before you register.";
 
   // Dark mode. With nothing saved the page follows the system; the Research Map reads the same setting.
