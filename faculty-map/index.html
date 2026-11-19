@@ -164,6 +164,8 @@ body:not([data-three]) #scroller.grab { overscroll-behavior: contain; }
 .zoom button { min-width: 32px; height: 30px; padding: 0 9px; background: none; border: 0; }
 .zoom button + button { border-left: 1px solid var(--line); }
 .zoom button:hover { background: var(--sunk); }
+.empty { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 10px; color: var(--muted); font-size: 14px; pointer-events: none; }
+.empty button { pointer-events: auto; }
 .note { position: absolute; left: 24px; bottom: 14px; max-width: 46%; color: var(--muted); font-size: 12.5px; pointer-events: none; }
 
 /* Map marks */
@@ -183,6 +185,9 @@ body:not([data-three]) #scroller.grab { overscroll-behavior: contain; }
 .hit { fill: transparent; }
 .mark > * { fill: var(--hue); stroke: var(--map); stroke-width: 2; }
 .mark.hollow > * { fill: var(--map); stroke: var(--hue); stroke-width: 2.5; }
+/* Only the shape: in Constellation the star is the second child and stays solid */
+.mark.unsized > :first-child { fill: color-mix(in oklab, var(--hue) 35%, var(--map)); stroke: var(--hue); stroke-width: 1.5; stroke-dasharray: 3 2; }
+.mark.hollow.unsized > :first-child { fill: var(--map); stroke-width: 2; }
 /* Your pick wears a gold ring edged in black, and nothing else is louder. People related to it get a thin black ring. */
 .ring { fill: none; stroke: none; stroke-width: 2; }
 .ring.case { stroke-width: 5.5; }
@@ -358,8 +363,10 @@ body[data-sky] #map.spinning .clabel.dim { opacity: .25; }
 .saved-list .links { margin-top: 3px; font-size: 13px; }
 .face { flex: none; width: 96px; height: 120px; object-fit: cover; border-radius: var(--r); background: var(--sunk); }
 /* The figures sit in one sentence, in bold */
-.figures { margin-top: 14px !important; padding-top: 14px; border-top: 1px solid var(--line); font-size: 14px; }
-.figures b { font-weight: 600; }
+.figures, .lab-size { font-size: 14px; }
+.figures { margin-bottom: 8px !important; }
+.lab-size { margin-top: 14px !important; }
+.figures b, .lab-size b { font-weight: 600; }
 .years { position: relative; margin: 0; }   /* keeps its hidden table inside the rail's scrolling */
 .years svg { display: block; width: 100%; height: auto; overflow: visible; }
 .ybase { stroke: var(--edge); }
@@ -398,6 +405,7 @@ div.student { padding-left: 21px; }
 .sizes { display: flex; align-items: center; gap: 10px; }
 .sizes svg { flex: none; }
 .sizes circle { fill: none; stroke: var(--muted); stroke-width: 1.5; }
+.sizes circle.unsized { stroke-dasharray: 3 2; }
 .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--hue); flex: none; }
 .swatch.hollow { background: none; border: 2.5px solid var(--hue); }
 .tag { display: inline-flex; align-items: center; gap: 7px; background: none; border: 0; padding: 0; margin-top: 6px; color: var(--muted); font-size: 13px; text-align: left; }
@@ -428,10 +436,6 @@ div.student { padding-left: 21px; }
 .solid:hover { filter: brightness(.96); }
 .me .sub { margin-top: 6px; font-size: 12.5px; }
 .me-msg { font-size: 12.5px; }
-.meter { height: 4px; margin-top: 3px; background: var(--sunk); overflow: hidden; }
-.meter i { display: block; height: 100%; background: var(--hue); }
-.match-top { display: flex; justify-content: space-between; gap: 8px; }
-.match-top span { color: var(--muted); }
 
 #tip {
   position: fixed; z-index: 4; max-width: 260px; padding: 6px 9px; pointer-events: none; font-size: 12.5px; line-height: 1.35;
@@ -582,6 +586,10 @@ dialog form { text-align: right; margin-top: 12px; }
       <button class="undock" id="random" type="button" aria-label="Randomize: highlight a random faculty member">Randomize</button>
       <button class="undock" id="remove-dot" type="button" hidden>Remove dot</button>
     </div>
+    <div class="empty" id="empty" hidden>
+      <p>Every faculty group is hidden.</p>
+      <button class="ghost" id="show-all" type="button">Show everyone</button>
+    </div>
     <p class="note" id="note">Nearby means similar research, though distances between far-apart groups don't mean much. Bigger marks are bigger labs.</p>
     <div class="zoom" role="group" aria-label="Map controls" id="zoom">
       <button type="button" id="spin" hidden>Pause</button>
@@ -600,6 +608,7 @@ dialog form { text-align: right; margin-top: 12px; }
       <p class="key"><span class="pick"></span>The gold ring is your pick. <span class="dbl"></span>A double line joins it to people they've published with.</p>
       <p class="key" id="saved-key" hidden>★ marks faculty you've saved.</p>
       <p class="key sizes"><svg viewBox="0 0 76 34" width="76" height="34" aria-hidden="true"><circle cx="7" cy="17" r="5.4"/><circle cx="26" cy="17" r="10.7"/><circle cx="59" cy="17" r="15.2"/></svg><span>Bigger marks are bigger labs: about 5, 20 and 40 people. Many sizes are rough estimates.</span></p>
+      <p class="key sizes"><svg viewBox="0 0 76 34" width="76" height="34" aria-hidden="true"><circle class="unsized" cx="7" cy="17" r="6.8"/></svg><span>A dashed mark is a lab we couldn't size, drawn at a typical size.</span></p>
       <p class="foot">Unofficial, made by QBA, USC's Quantitative Biology Association. Papers from <a href="https://openalex.org">OpenAlex</a>, roster and photos from the <a href="https://www.qcb-dornsife.usc.edu/faculty">QCB website</a> and department websites, as of fall 2026.</p>
     </section>
   </aside>
@@ -638,13 +647,13 @@ dialog form { text-align: right; margin-top: 12px; }
   <p><b>Demonstrated:</b> the lab does this work, by at least 3 papers making up at least 4% of its weighted papers, or two separate statements on its website. <b>Firsthand:</b> a student who worked there told us, which papers can't show. <b>Potential:</b> the lab generates data this method could use, or mentions the method once. A microscopy lab has computer vision potential even if it has never published on computer vision.</p>
   <p>This is word matching, so labels can be wrong or missing, and labs that don't name their methods in abstracts look less quantitative than they are. Open a label to see the paper or source behind it, so you can check it yourself. In a spot check, about 9 in 10 labels that came from websites alone were right.</p>
   <h3>Related fields</h3>
-  <p>Expanding adds <span id="about-added"></span> faculty from fields QBIO students also do research in: Biostatistics, Biomedical Engineering, Molecular and Cellular Biosciences, Marine and Environmental Biology, Neurobiology and the Brain and Creativity Institute, plus a few labs students have worked in. That makes <span id="about-wide-papers"></span> papers in all. Everyone's position is recalculated, so QCB faculty move too, and MDS replaces UMAP, which keeps distances between far-apart groups more honest. By field opens on MDS, with t-SNE one click away. <span id="about-wide-counted"></span> of the added labs have sizes counted from their websites. The other <span id="about-wide-unknown"></span> have no count, so their marks stay small, which doesn't mean they have no lab.</p>
+  <p>Expanding adds <span id="about-added"></span> faculty from fields QBIO students also do research in: Biostatistics, Biomedical Engineering, Molecular and Cellular Biosciences, Marine and Environmental Biology, Neurobiology and the Brain and Creativity Institute, plus a few labs students have worked in. That makes <span id="about-wide-papers"></span> papers in all. Everyone's position is recalculated, so QCB faculty move too, and MDS replaces UMAP, which keeps distances between far-apart groups more honest. By field opens on MDS, with t-SNE one click away. <span id="about-wide-counted"></span> of the added labs have sizes counted from their websites. The other <span id="about-wide-unknown"></span> have no count, so their marks are dashed and drawn at a typical size of <span class="typical-lab"></span>.</p>
   <h3>Lines</h3>
   <p>Two people are joined if they share a paper. Each shared paper adds 1 ÷ (authors − 1) to the pair's strength, so a two-author paper counts 1 and a 100-author consortium paper about 0.01.</p>
   <h3>Finding your match</h3>
   <p>The model above is too big to run in your browser, so it has already read about 66,000 research words and phrases, from these papers and from OpenAlex's list of keywords. Each one comes with a score for every faculty member, from how close its meaning is to their papers and how much of their work uses it. Your text is split into the longest terms it can find, so “protein engineering” stays one idea instead of “protein” plus “engineering”. If a phrase isn't on the list, the panel says its words were matched separately. Nothing you type leaves your browser. Given only the title of a paper it hadn't seen, this finds the real author in the top 5 about 93% of the time (88% with related fields added, where there are more people to choose from), but your own words will be vaguer than a title. Your dot sits at the weighted average of your closest matches, which is an estimate: t-SNE and UMAP have no exact way to add a new point. A thrown dot works in reverse, blending the people nearest where it lands.</p>
   <h3>Lab sizes</h3>
-  <p>A mark's area shows the size of the lab. For <span id="about-counted"></span> labs that's everyone the lab's own website lists, including the PI and any undergraduates. Labs differ in who they list and how often they update, so compare these loosely. The other <span id="about-estimated"></span> are estimates: USC co-authors on the person's senior-author papers since 2023, plus anyone QCB lists in the lab, plus the PI. Checked against the labs we could count, these are about right on average, but about a quarter are off by more than a factor of two. <span id="about-unknown"></span> faculty have no count and too few recent USC papers to estimate, so their marks stay small, which doesn't mean they have no lab.</p>
+  <p>A mark's area shows the size of the lab. For <span id="about-counted"></span> labs that's everyone the lab's own website lists, including the PI and any undergraduates. Labs differ in who they list and how often they update, so compare these loosely. The other <span id="about-estimated"></span> are estimates: USC co-authors on the person's senior-author papers since 2023, plus anyone QCB lists in the lab, plus the PI. Checked against the labs we could count, these are about right on average, but about a quarter are off by more than a factor of two. <span id="about-unknown"></span> faculty have no count and too few recent USC papers to estimate, so their marks are dashed and drawn at a typical size of <span class="typical-lab"></span>.</p>
   <h3>Stats</h3>
   <p>The h-index, citations and papers per year come from the same OpenAlex papers as the map. Early work in another field gets filtered out along with other people's papers, so these numbers can run lower than OpenAlex's own profile pages, and usually lower than Google Scholar's.</p>
   <h3>PhD students</h3>
@@ -708,6 +717,7 @@ let saved = new Set(readSaved());
 const isMapView = () => S.view === "tsne" || S.view === "alt";
 const byTechnique = () => S.lens === "technique";
 const shown = (i) => i < WORLD.n && S.groups[P[i].group];
+const anyShown = () => P.some((_, i) => shown(i));   // every group can be filtered out
 const inWorld = (e) => e.a < WORLD.n && e.b < WORLD.n;
 const edgeShown = (e) => S.lines !== "none" && e.s >= +S.lines && shown(e.a) && shown(e.b);
 let edgesOf = [];
@@ -765,7 +775,8 @@ function target() {
 const edgeWidth = (s) => 0.8 + 1.1 * Math.log10(1 + 10 * s);
 
 // A mark's area shows lab size. Labs of about four or fewer share the smallest mark.
-const markR = [], reach = [];
+// A lab we couldn't size gets a typical mark with a dashed edge, so it doesn't read as tiny.
+const markR = [], reach = [], TYPICAL_LAB = 8;
 
 function shape(group, r = 6) {
   if (group === "core") return sv("circle", { r });
@@ -784,7 +795,7 @@ function starPoints(r) {
 
 const nodes = [];
 function addPerson(p, i) {
-  markR[i] = Math.max(4.5, 2.4 * Math.sqrt(p.lab.size));
+  markR[i] = Math.max(4.5, 2.4 * Math.sqrt(p.lab.source ? p.lab.size : TYPICAL_LAB));
   reach[i] = markR[i] * (p.group === "core" ? 1 : 1.25);   // the other shapes stick out further
   const label = sv("text", { class: "lab" }, p.label);
   // Its core scales with the mark, so size still shows the lab.
@@ -829,7 +840,7 @@ function paintNodes() {
   P.forEach((p, i) => {
     if (i >= WORLD.n) return;
     const { g, mark, label, halo } = nodes[i], c = C[p.cluster];
-    mark.setAttribute("class", `mark ${hueClass(p.cluster)}${c.hollow ? " hollow" : ""}`);
+    mark.setAttribute("class", `mark ${hueClass(p.cluster)}${c.hollow ? " hollow" : ""}${p.lab.source ? "" : " unsized"}`);
     halo.setAttribute("fill", `url(#glow-${c.color})`);
     g.setAttribute("aria-label", `${p.name}, ${c.name}${saved.has(p.id) ? ", saved" : ""}`);
     label.textContent = p.label;
@@ -1283,7 +1294,7 @@ function clearHover() { S.hover = null; hideTip(); emphasize(); }
 function personTip(i) {
   const p = P[i];
   return [el("b", {}, p.name), el("span", {}, C[p.cluster].name), el("span", {}, focus(p).join(byTechnique() ? "; " : ", ")),
-    p.lab.source ? el("span", {}, `Lab of ${p.lab.source === "estimate" ? "about " : ""}${p.lab.size}`) : null].filter(Boolean);
+    el("span", {}, p.lab.source ? `Lab of ${p.lab.source === "estimate" ? "about " : ""}${p.lab.size}` : "Lab size unknown")];
 }
 function edgeTip(k) {
   const e = E[k];
@@ -1321,10 +1332,11 @@ function paperItem(x, extra) {
 
 const labSize = (p) => (p.lab.source ? `${p.lab.source === "estimate" ? "~" : ""}${p.lab.size}` : "–");
 
-function statTiles(p) {
+// Counts come last in the panel and say where they're from: they describe the papers
+// on this map, not the person's whole record, and they say little about mentoring.
+function paperCounts(p) {
   const b = (v) => el("b", {}, v);
-  return el("p", { class: "figures" },
-    p.lab.source ? ["Lab of ", b(labSize(p).replace("~", "about ")), ", h-index "] : "h-index ", b(p.h), ", ",
+  return el("p", { class: "figures" }, "h-index ", b(p.h), ", ",
     b(p.n.toLocaleString("en-US")), " papers and ", b(p.cites.toLocaleString("en-US", { notation: "compact", maximumFractionDigits: 1 })), " citations.");
 }
 
@@ -1444,13 +1456,15 @@ function personPanel(i) {
         el("p", { class: "sub" }, `${GROUP_NAMES[p.group]} · ${p.dept}`),
         el("div", { class: "links" }, contactLinks(p)),
         saveButton(i))),
-    statTiles(p),
+    p.lab.source ? el("p", { class: "lab-size" }, "Lab of ", el("b", {}, labSize(p).replace("~", "about "))) : null,
     labNote(p),
-    el("section", { id: "methods" }, el("h3", {}, "Methods"), methodSection(p)),
-    el("h3", {}, "Papers per year"),
-    yearChart(p),
     el("h3", {}, "Research focus"),
     el("div", { class: "chips" }, p.terms.slice(0, 9).map((t) => el("button", { type: "button", class: "chip", onclick: () => setQuery(t), "aria-label": `Search for ${t}` }, t))),
+    el("section", { id: "methods" }, el("h3", {}, "Methods"), methodSection(p)),
+    el("h3", {}, "Recent papers"),
+    el("ul", { class: "papers" }, p.papers.map((x) => paperItem(x))),
+    p.students.length ? el("h3", {}, `QCB PhD students (${p.students.length})`) : null,
+    p.students.length ? el("ul", {}, p.students.map(studentRow)) : null,
     el("h3", {}, `${coauthorName()} (${collaborators.length})`),
     collaborators.length
       ? el("ul", { class: "rows" }, collaborators.map((k) => {
@@ -1461,13 +1475,12 @@ function personPanel(i) {
         }, el("b", {}, P[j].name), el("span", { class: "sub" }, `${plural(e.n, "shared paper")}, ${years(e)}`)));
       }))
       : el("p", { class: "sub" }, `No shared papers with ${S.scope === "all" ? "anyone else on this map" : "other QCB faculty"} in this data.`),
-    p.students.length ? el("h3", {}, `QCB PhD students (${p.students.length})`) : null,
-    p.students.length ? el("ul", {}, p.students.map(studentRow)) : null,
     el("h3", {}, byTechnique() ? "Most similar methods" : "Most similar research"),
     el("ul", { class: "rows" }, p.similar.filter(shown).map((j) => el("li", {}, person(j, byTechnique() ? sharedMethods(i, j) : partners.has(j) ? "Has published with them" : "No shared papers yet")))),
-    el("h3", {}, "Recent papers"),
-    el("ul", { class: "papers" }, p.papers.map((x) => paperItem(x))),
-    el("p", { class: "foot" }, `Based on ${plural(p.n, "paper")} in OpenAlex. Google Scholar's counts usually run higher.`),
+    el("h3", {}, "Papers on this map"),
+    paperCounts(p),
+    yearChart(p),
+    el("p", { class: "foot" }, `Counted from the ${p.n.toLocaleString("en-US")} ${p.n === 1 ? "paper" : "papers"} that place them on this map. Editorials, duplicate preprints and papers far from their usual field are left out, so these run lower than OpenAlex or Google Scholar.`),
   ];
 }
 
@@ -1734,7 +1747,7 @@ function loadMatch() {
     const raw = window[name], bytes = (b) => Uint8Array.from(atob(b), (c) => c.charCodeAt(0));
     const terms = raw.terms.split("|");
     return {
-      terms, n: raw.n, top: raw.top, longest: raw.longest, unit: raw.range / 127, aliases: raw.aliases, breaks: new Set(raw.breaks), skip: new Set(raw.skip),
+      terms, n: raw.n, top: raw.top, longest: raw.longest, unit: raw.range / 127, aliases: raw.aliases, breaks: new Set(raw.breaks), skip: new Set([...raw.skip, ...OPINION_WORDS]),
       index: new Map(terms.map((t, k) => [t.replaceAll("-", " ").split(" ").map(stem).join(" "), k])), rarity: bytes(raw.rarity),
       people: bytes(raw.people), scores: new Int8Array(bytes(raw.scores).buffer), floor: new Int8Array(bytes(raw.floor).buffer),
     };
@@ -1784,8 +1797,14 @@ function splitRun(words) {
   return pieces;
 }
 
+// Said about a topic, not topics themselves, so they're ignored as single words. "dont"
+// and friends are caught first by spelling contractions out ("do not"), apostrophe or not.
+const OPINION_WORDS = ["avoid", "avoiding", "hate", "dislike", "instead", "prefer", "rather", "dont"];
+const CONTRACTION = /\b(do|does|did|is|are|was|were|ca|wo|could|would|should|have|has|had)n['’]?t\b/g;
+
 function readText(text) {
-  const clean = text.toLowerCase().slice(0, 4000).replace(/[a-z0-9-]+/g, (w) => (Object.hasOwn(M.aliases, w) ? M.aliases[w] : w));
+  const clean = text.toLowerCase().slice(0, 4000).replace(CONTRACTION, "$1 not")
+    .replace(/[a-z0-9-]+/g, (w) => (Object.hasOwn(M.aliases, w) ? M.aliases[w] : w));
   const found = new Map(), missing = new Set(), apart = new Set();
   for (const run of runsOf(clean)) {
     const words = splitRun(run).filter(({ n, word }) => n > 1 || !(M.skip.has(word) || M.skip.has(stem(word))));
@@ -1806,6 +1825,7 @@ function rankLinks(value, why) {
 }
 
 function textDot(reading, text) {
+  if (!anyShown()) return null;
   const { found, missing, apart } = reading, rows = new Map(found.map(([, k]) => [k, termRow(k)]));
   const value = new Float64Array(M.n);
   let total = 0;
@@ -1827,7 +1847,8 @@ function spotDot([x, y]) {
   // Weights fall off with distance on the map; widen the reach in empty space so
   // a dot that lands far from anyone still blends its few nearest people.
   // In 3D a dot sits at the front, so people on the far side count as further away.
-  const near = P.map((_, i) => i).filter(shown).map((i) => [i, Math.hypot(pts[i][0] - x, pts[i][1] - y, (1 - pts[i][3]) * scale * 0.5) / scale])
+  if (!anyShown()) return null;
+  const near =P.map((_, i) => i).filter(shown).map((i) => [i, Math.hypot(pts[i][0] - x, pts[i][1] - y, (1 - pts[i][3]) * scale * 0.5) / scale])
     .sort((a, b) => a[1] - b[1]).slice(0, 6);
   const reach = Math.max(0.06, near[0][1] * 1.3), n = WORLD.n, Sim = WORLD.similarity;
   const w = new Float64Array(n);
@@ -1875,8 +1896,8 @@ const linkEls = Array.from({ length: 5 }, (_, n) => {
     onclick: () => { const l = S.you && S.you.links[n]; if (l) select({ kind: "person", i: l.j }); },
     onpointerenter: (ev) => {
       const l = S.you && S.you.links[n];
-      if (l) showTip([el("b", {}, `${Math.round(l.rel * 100)}% of your closest match`),
-        el("span", {}, P[l.j].name), l.terms.length ? el("span", {}, l.terms.join(", ")) : null], ev.clientX, ev.clientY);
+      if (l) showTip([el("b", {}, P[l.j].name), el("span", {}, `Your ${["", "2nd ", "3rd ", "4th ", "5th "][n]}closest match`),
+        l.terms.length ? el("span", {}, l.terms.join(", ")) : null], ev.clientX, ev.clientY);
     },
     onpointermove: (ev) => moveTip(ev.clientX, ev.clientY),
     onpointerleave: hideTip,
@@ -1927,8 +1948,8 @@ function drawYou() {
       line.setAttribute("x2", ex); line.setAttribute("y2", ey);
     }
     parts.line.setAttribute("stroke-width", (0.8 + 1.8 * link.rel).toFixed(2));
-    if (g < 1) return;
-    const text = `${link.terms.length ? `${link.terms[0]} · ` : ""}${Math.round(link.rel * 100)}%`;
+    const text = link.terms[0];   // the shared topic; the line's width already shows the order
+    if (g < 1 || !text) return;
     const w = textWidth(text, `600 11px ${FONT}`) + 6, h = 13;
     // Tuck the label under or over the person's name, so it reads as theirs. If it
     // won't fit, leave it to the panel, which lists the same thing.
@@ -2003,14 +2024,35 @@ function land(point, fresh) {
 
 function clearYou() {
   cancelAnimationFrame(flight);
-  S.you = null;
+  S.you = parked = null;
   drawYou();
   renderDetail();
   emphasize();
   if (isMapView()) placeLabels();
 }
 
+// With every group hidden there's no one to match, so the dot steps off the map
+// and the dot buttons rest until a group comes back.
+let parked = null;
+function syncEmpty() {
+  const none = !anyShown();
+  $("#empty").hidden = !none;
+  dockButton.disabled = $("#random").disabled = none;
+  if (none && S.you) { cancelAnimationFrame(flight); parked = S.you; S.you = null; drawYou(); }
+}
+function unpark() {
+  if (parked && !S.you) S.you = parked;
+  parked = null;
+}
+
 function refreshYou() {
+  if (!anyShown()) return;
+  if (parked && !S.you) {
+    const you = parked;
+    unpark();
+    if (you.kind === "text") { moveDot(false); return; }   // reads the text again, in case the map changed
+    if (you.live && !you.at) { land(you.live, false); return; }   // hidden mid-throw, so it lands where it stopped
+  }
   const you = S.you;
   if (!you) return;
   if (you.kind === "text") {
@@ -2075,7 +2117,7 @@ function glide([x, y], vx, vy) {
   flight = requestAnimationFrame(step);
 }
 function startDrag(ev, handle) {
-  if (!isMapView()) return;
+  if (!isMapView() || !anyShown()) return;
   ev.preventDefault();
   ev.stopPropagation();
   handle.setPointerCapture(ev.pointerId);
@@ -2112,6 +2154,7 @@ function startDrag(ev, handle) {
 }
 // A plain click or Enter on the dock tosses the dot somewhere near the middle.
 function toss() {
+  if (!anyShown()) return;
   const rect = dockButton.getBoundingClientRect(), box = mapSvg.getBoundingClientRect();
   const from = [rect.left + 14 - box.left, rect.top + 17 - box.top];
   const view = [scroller.scrollLeft + scroller.clientWidth / 2, scroller.scrollTop + scroller.clientHeight / 2];
@@ -2129,7 +2172,7 @@ $("#remove-dot").addEventListener("click", () => { clearYou(); dockButton.focus(
 
 const meBox = el("textarea", {
   id: "me", rows: 3, maxlength: 4000,
-  placeholder: "I like coding and want to study how cancer evolves. Last summer I worked with single-cell RNA-seq data.",
+  placeholder: "cancer evolution, single-cell RNA-seq, machine learning",
   onfocus: () => { loadMatch().catch(() => {}); },
 });
 const meMsg = el("span", { class: "me-msg", role: "status" });
@@ -2139,6 +2182,7 @@ const matchForm = el("form", {
   onsubmit: (ev) => {
     ev.preventDefault();
     if (!meBox.value.trim()) { meBox.focus(); return; }
+    if (!anyShown()) { meMsg.textContent = "Every faculty group is hidden, so there's no one to match. Show a group again first."; return; }
     meMsg.textContent = "";
     loadMatch().then(() => {
       if (!M) return;
@@ -2156,19 +2200,30 @@ const matchForm = el("form", {
       flyIn();
     }, showLoadError);
   },
-}, el("label", { for: "me" }, "What are you into?"), meBox,
+}, el("label", { for: "me" }, "Topics and methods you want to explore"), meBox,
 el("div", { class: "me-row" }, el("button", { type: "submit", class: "solid" }, "Place me on the map"), meMsg),
 el("p", { class: "sub" }, "This stays in your browser. Nothing you type is sent anywhere."));
 
-function matchRow(link) {
+// Rows give the order and the shared topics, not a score: a percentage of the top
+// match reads like a compatibility rating, which this isn't.
+function matchRow(link, typed) {
   const p = P[link.j], c = p.cluster;
   return el("li", { class: "with-save" }, el("button", {
     type: "button", class: `row ${hueClass(c)}`, onclick: () => select({ kind: "person", i: link.j }, true),
     onpointerenter: () => { S.hover = { kind: "person", i: link.j }; emphasize(); }, onpointerleave: clearHover,
   },
-  el("span", { class: "match-top" }, el("b", {}, p.name), el("span", {}, `${Math.round(link.rel * 100)}%`)),
-  el("span", { class: "meter" }, el("i", { style: `width:${Math.round(link.rel * 100)}%` })),
-  el("span", { class: "sub" }, link.terms.length ? link.terms.join(", ") : C[c].name)), saveButton(link.j, true));
+  el("b", {}, p.name),
+  el("span", { class: "sub" }, !link.terms.length ? C[c].name
+    : typed ? `In their papers: ${link.terms.join(", ")}` : link.terms.join(", "))), saveButton(link.j, true));
+}
+
+// The matcher reads topics, not sentences, so a "not" or a past tense changes nothing.
+const NOT = /\b(not|no|don[’']?t|never|without|avoid|except|rather than|instead of|hate|dislike)\b/i;
+const PAST = /\b(experience[ds]?|beginner|new to|background in|familiar with|worked (with|on|in)|internship|last (summer|year|semester)|took an? (class|course))\b/i;
+function caveat(text) {
+  if (NOT.test(text)) return "This reads topics, not sentences, so words like “not” or “without” don't leave anything out. To leave a topic out, delete it.";
+  if (PAST.test(text)) return "This reads topics, not sentences, so things you've already done count the same as things you want to explore.";
+  return "";
 }
 
 function youPanel() {
@@ -2185,11 +2240,16 @@ function youPanel() {
       ? el("p", { class: "sub" }, `${you.apart.slice(0, 3).map((t) => `“${t}”`).join(", ")} ${you.apart.length > 1 ? "aren't phrases" : "isn't a phrase"} we know, so the words were matched separately.`) : null,
     typed && !you.apart.length && you.found.length === 1 && !you.found[0][0].includes(" ")
       ? el("p", { class: "sub" }, "That's only one word to go on. Name a few more topics or methods for better matches.") : null,
+    typed && caveat(you.text) ? el("p", { class: "sub" }, caveat(you.text)) : null,
+    typed && byTechnique()
+      ? el("p", { class: "sub" }, "These are the same matches as By field. They come from your topics, so By technique only moves your dot onto the technique map.") : null,
     el("h3", {}, "Closest group"),
     clusterTag(lean),
     el("h3", {}, "Closest faculty"),
-    el("ul", { class: "rows" }, you.links.filter((l) => l.rel > 0).map(matchRow)),
-    el("p", { class: "foot" }, "Percentages compare each person with your closest match. Think of this as a place to start reading, not a recommendation."),
+    el("ol", { class: "rows" }, you.links.filter((l) => l.rel > 0).map((l) => matchRow(l, typed))),
+    el("p", { class: "foot" }, typed
+      ? "Ranked by how strongly their papers use your topics. It knows nothing about openings, mentoring or fit, so treat it as a reading list, not a recommendation."
+      : "Ranked by how close their research is to this spot. It knows nothing about openings, mentoring or fit, so treat it as a reading list, not a recommendation."),
     typed ? matchForm : el("p", { class: "foot" }, "Drag or throw the dot somewhere else to keep exploring."),
     typed ? null : matchForm,
   ];
@@ -2471,6 +2531,7 @@ function moveDot(sameTable) {
   loadMatch().then(() => {
     if (S.you || !M || M.n !== WORLD.n) return;
     S.you = textDot(readText(you.text), you.text);
+    if (!S.you) { parked = you; return; }
     if (!S.sel) renderDetail();
     emphasize();
     if (isMapView()) { placeLabels(); settleDot(); }
@@ -2501,8 +2562,10 @@ function setWorld() {
   if (s && s.kind !== "saved" && (s.kind === "cluster" || (s.kind === "person" ? s.i >= WORLD.n : !inWorld(E[s.k])))) S.sel = null;
   S.hover = null;
   if (S.query) searchWorld();
+  unpark();
   moveDot(sameTable);
   applyFilters();
+  syncEmpty();
   renderDetail();
   if (isMapView()) animateTo(target(), placed);
   else {
@@ -2556,6 +2619,7 @@ addEventListener("storage", (ev) => {   // another tab changed the list
 document.querySelectorAll("[data-group]").forEach((box) => box.addEventListener("change", () => {
   S.groups[box.dataset.group] = box.checked;
   applyFilters();
+  syncEmpty();
   if (S.sel && S.sel.kind === "person" && !shown(S.sel.i)) S.sel = null;
   refreshYou();
   renderDetail();
@@ -2563,6 +2627,11 @@ document.querySelectorAll("[data-group]").forEach((box) => box.addEventListener(
   if (isMapView()) placeLabels();
   if (S.view === "list") drawList();
 }));
+$("#show-all").addEventListener("click", () => {
+  document.querySelectorAll("[data-group]").forEach((box) => { if (!box.checked) box.click(); });
+  scroller.focus({ preventScroll: true });
+  $("#status").textContent = "Showing every group";
+});
 $("#lines").addEventListener("change", (ev) => { S.lines = ev.target.value; applyFilters(); emphasize(); });
 $("#q").addEventListener("input", (ev) => setQuery(ev.target.value));
 $("#zoom-in").addEventListener("click", () => setZoom(S.zoom * 1.5));
@@ -2661,6 +2730,7 @@ $("#about-wide-unknown").textContent = D.meta.wide.unknown;
 $("#about-counted").textContent = D.meta.labSources.website;
 $("#about-estimated").textContent = D.meta.labSources.estimate;
 $("#about-unknown").textContent = D.meta.labSources.none;
+document.querySelectorAll(".typical-lab").forEach((s) => { s.textContent = `${TYPICAL_LAB} people`; });
 $("#about-students").textContent = D.meta.students;
 $("#about-nolab").textContent = D.meta.noLab;
 $("#about-open").addEventListener("click", () => about.showModal());
@@ -2724,7 +2794,7 @@ const TOUR = [
   { at: "#stage", title: "Welcome", before: backToMap,
     body: "Each mark is a USC faculty member, and people who sit close together work on similar things, whatever department they're in. This tour shows you how to read the map and find labs that fit you." },
   { at: "#groups", title: "What the marks mean", before: () => setMore(true),
-    body: "Shape shows someone's role, and these boxes hide or show each group. Color is their research cluster, a bigger mark is a bigger lab, and a line means two people have published together." },
+    body: "Shape shows someone's role, and these boxes hide or show each group. Color is their research cluster, a bigger mark is a bigger lab (dashed if we couldn't size it), and a line means two people have published together." },
   { at: "#stage", title: "Pick someone", before: backToMap,
     body: "Everything about a person opens from their mark. Not sure where to start? Randomize picks someone for you.",
     try: "Try it: click any mark.", done: () => !!S.sel && S.sel.kind === "person", after: "Their details are in the panel now." },
@@ -2743,8 +2813,8 @@ const TOUR = [
     body: "3D uses the same data with one more dimension, so less gets squeezed. Drag to turn it, and Pause stops the spin.",
     try: "Try it: turn on 3D.", done: () => S.three, after: "Marks in front are bigger and stand out more. It stays on until you turn it off." },
   { at: "#me-form", side: "left", title: "Find your place", before: showForm,
-    body: "Describe what you're into in your own words, and you'll land near your closest matches. What you type stays in your browser.",
-    try: "Try it: type a few interests, then press Place me on the map.", done: () => !!S.you && S.you.kind === "text", after: "Your dot is on the map, and the panel lists your closest faculty." },
+    body: "Name a few topics or methods you'd like to explore, and you'll land near the faculty whose papers mention them most. What you type stays in your browser.",
+    try: "Try it: type a few topics, then press Place me on the map.", done: () => !!S.you && S.you.kind === "text", after: "Your dot is on the map, and the panel lists the faculty whose papers best match those topics." },
   { at: "#throw", side: "right", clear: true, title: "Explore with a dot", before: backToMap,
     body: "Not sure what you're into? Drag this dot onto the map and let go to see who works near that spot. Remove dot takes it off again.",
     try: "Try it: drag the dot onto the map.", done: () => !!S.you && S.you.kind === "spot", after: "The panel shows who's nearby. Keep dragging to explore." },
