@@ -10,6 +10,9 @@ An interactive prerequisite map of USC's **Quantitative Biology (BS)**, built fo
 - **"Can take now" has conditions.** A solid gold ring means every prerequisite is met. A dashed ring means you can take the course once something else is sorted: a corequisite taken before or alongside it (PHYS 152 with MATH 226 or 229), a waived requirement that the department still has to accept as a prerequisite, or a restriction such as class standing or instructor permission (BISC 410 and 473). The course's details list what's left, and "You can take next" groups courses the same way.
 - **Mark a course you're taking now** from its details ("Taking it now"). Its circle is half filled, it counts as passed so the map shows what opens up next term, and the requirements panel shows it as "in progress". Ticking its circle marks it as taken.
 - **"Planning for"** in the header picks Fall, Spring or Summer and greys out courses that didn't run in that term during the scanned terms (or, with no history, that the catalogue doesn't list for it). A course's details also flag when the catalogue's "Terms Offered" disagrees with when it actually ran, comparing Fall and Spring only: QBIO 475 is listed for Spring but ran every Fall from 2023 to 2026.
+- **My plan** is a tab in the side panel that lays out your courses term by term. Pick your first term and it sets up eight Fall and Spring terms; a Summer can go between any Spring and the Fall after it. A term holds courses from the map (add them from the plan's search box, or with "Add to …" in a course's details), placeholders for courses you haven't picked yet (WRIT 150 and 340, the GE seminar and categories, language courses, minor courses, free electives), and write-ins with their own units. Items can be moved between terms or removed, and units changed where the course allows it. The plan is saved in the browser with your ticks, and "Clear my marks" clears it too.
+- **"Plan as of"** takes the place of "Planning for" once you have a plan. Pick a term, in the header or by clicking its name in the plan, and the map shows that point: courses planned before it count as passed, courses in the same term count toward corequisites, courses that don't run in that season are greyed out, and the rings and "You can take in …" show what's open. Courses you've marked as taking now but haven't put in the plan count as passed in every term, and the plan offers to put them in the current term. With no plan, the map works as before.
+- **Each term checks itself.** A term flags a prerequisite not done before it, a corequisite not in it or earlier, a course that didn't run in that season, a course already taken or covered by AP credit, a course planned twice, and more than 18 units. The plan's total adds its own units, the courses you've marked taken or in progress outside it, and other units you enter (AP, transfer), against the 128 the degree needs. Major courses that carry a GE category (BISC 120 is GE-D, MATH 125 is GE-F) count toward that GE placeholder.
 - **Untick "Taken"** in the header to hide the courses you've ticked. Everything that depended on them shifts left, so step 1 becomes what you can take now. A hidden course still opens from search or the requirements panel, where you can untick it.
 - Specialization and Upper-Division Electives can also be satisfied with study-abroad credit: click the "Study abroad specialization 1–3" / "Study abroad elective 1–2" placeholders to count them (electives as 4 units each).
 - AP credit unlocks later courses and counts for the foundational requirements (e.g. MATH 125), but not for Specialization or Electives: AP Calc BC 5 skips MATH 126 without satisfying a Specialization course (`"examCredit": false` on those sections).
@@ -28,7 +31,7 @@ It's a static page with no build step and no dependencies beyond two Google Font
 | --- | --- |
 | `index.html` | The whole app: layout, rendering and interaction. |
 | `graph-data.js` | Generated data (`window.QBIO_DATA`). Don't edit by hand. |
-| `data/requirements.json` | The major's requirements, hand-transcribed from the catalogue. |
+| `data/requirements.json` | The major's requirements, hand-transcribed from the catalogue, plus the planner's degree total, term limit and placeholders. |
 | `data/catalogue-courses.json` | Catalogue text for each course (prerequisites, terms offered, descriptions), exported from the browser. |
 | `scripts/catalogue_export.js` | Browser-console script that produces `data/catalogue-courses.json`. |
 | `scripts/catalogue.py` | Parses catalogue prerequisite sentences into AND/OR groups. |
@@ -54,6 +57,8 @@ It's a static page with no build step and no dependencies beyond two Google Font
 
 - **Requirements:** the [USC Catalogue 2026-2027 program page](https://catalogue.usc.edu/preview_program.php?catoid=22&poid=32504). catalogue.usc.edu blocks scripted access with a bot check, so this is transcribed by hand (from a saved PDF of the page).
 - **Prerequisites, corequisites, descriptions, "Terms Offered":** the catalogue's course entries, via `data/catalogue-courses.json`. The catalogue is the authority here. The Schedule of Classes left out some prerequisites, e.g. QBIO 478 and 482 both need QBIO 310, and QBIO 310 needs MATH 125.
+- **GE categories:** the catalogue's course entries ("Satisfies New General Education in Category D"). Only the current GE program's letters are kept.
+- **Planner:** the `planner` block in `data/requirements.json`. The 128-unit degree total and the placeholders follow the [Dornsife QBIO advising sheet](https://dornsife.usc.edu/advising/wp-content/uploads/sites/96/2023/09/Quantitative-Biology-BS.pdf) and [Dornsife's GE requirements](https://dornsife.usc.edu/ge/requirements/). Placeholders count as 4 units each until you change them.
 - **Offering history, restrictions, and fallback prerequisites:** the USC Schedule of Classes JSON API at `classes.usc.edu/api`. The script scans the last 11 terms, including summers, and uses each course's most recent listing. Its prerequisites are used only for courses missing from the catalogue export.
 
 ## Map adjustments
@@ -91,6 +96,9 @@ AP Physics and AP Statistics earn elective and GE credit but aren't on the waive
 - Entry-level prerequisites that most students place out of (MATH 108, CHEM 050) are treated as met.
 - Progress tracking covers the 2026–2027 catalogue only. Study-abroad placeholders count as 4 units each.
 - Restrictions come from the Schedule of Classes as text. Only those that mention permission, approval, consent or class standing make a course show with a dashed ring.
+- The planner counts GE placeholders and the courses that carry a GE category, but doesn't check the finer GE rules, such as which categories one course can satisfy at once. It also doesn't know your class standing, so restrictions like "seniors only" aren't checked per term.
+- The plan covers eight Fall and Spring terms plus any Summers. It can't add a ninth term yet.
+- A term's season check uses the scanned terms (or the catalogue's "Terms Offered" for courses with no history), so a course that runs rarely may be flagged in a season it could still run.
 
 This is an unofficial planning aid. Students should confirm their plan with a QBIO advisor and their STARS report.
 

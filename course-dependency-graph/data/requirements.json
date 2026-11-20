@@ -249,6 +249,32 @@
     "text": "Entry-level prerequisite. Most QBIO students meet it through a placement exam or AP credit (AP Precalculus 4 or 5 waives MATH 108) instead of taking the course. Check your placement results with your advisor."
   },
 
+  "planner": {
+    "degreeUnits": 128,
+    "maxTermUnits": 18,
+    "sources": {
+      "sheet": { "name": "Dornsife advising sheet for the Quantitative Biology BS", "url": "https://dornsife.usc.edu/advising/wp-content/uploads/sites/96/2023/09/Quantitative-Biology-BS.pdf" },
+      "ge": { "name": "Dornsife General Education requirements", "url": "https://dornsife.usc.edu/ge/requirements/" }
+    },
+    "unitsNote": "Most of these are 4-unit courses. Change the units if yours is different.",
+    "placeholders": [
+      { "id": "writ150", "label": "WRIT 150", "units": 4, "count": 1, "source": "sheet", "note": "The advising sheet puts it in the first fall." },
+      { "id": "gesm", "label": "GE seminar (GESM)", "units": 4, "count": 1, "source": "ge", "note": "Required in the first year. It also satisfies one Core Literacy (GE-A to GE-F)." },
+      { "id": "ge-a", "label": "GE-A The Arts", "ge": "A", "units": 4, "count": 1, "source": "ge" },
+      { "id": "ge-b", "label": "GE-B Humanistic Inquiry", "ge": "B", "units": 4, "count": 2, "source": "ge" },
+      { "id": "ge-c", "label": "GE-C Social Analysis", "ge": "C", "units": 4, "count": 2, "source": "ge" },
+      { "id": "ge-d", "label": "GE-D Life Sciences", "ge": "D", "units": 4, "count": 1, "source": "ge" },
+      { "id": "ge-e", "label": "GE-E Physical Sciences", "ge": "E", "units": 4, "count": 1, "source": "ge" },
+      { "id": "ge-f", "label": "GE-F Quantitative Reasoning", "ge": "F", "units": 4, "count": 1, "source": "ge" },
+      { "id": "ge-g", "label": "GE-G Global Perspectives I", "ge": "G", "units": 4, "count": 1, "source": "ge", "note": "One course can satisfy a Global Perspective and one of GE-A, GE-B or GE-C." },
+      { "id": "ge-h", "label": "GE-H Global Perspectives II", "ge": "H", "units": 4, "count": 1, "source": "ge", "note": "One course can satisfy a Global Perspective and one of GE-A, GE-B or GE-C." },
+      { "id": "lang", "label": "Language course", "units": 4, "count": 3, "source": "sheet", "note": "The advising sheet plans Language I to III. Your language placement decides how many you need, so check with your advisor." },
+      { "id": "writ340", "label": "WRIT 340", "units": 4, "count": 1, "source": "sheet", "note": "The advising sheet puts it in the last fall." },
+      { "id": "minor", "label": "Minor course", "units": 4, "note": "For a minor or second major. Check that program's catalogue page for its courses." },
+      { "id": "elective", "label": "Free elective", "units": 4, "source": "sheet", "note": "Any course that brings you to the degree total." }
+    ]
+  },
+
   "examCredit": {
     "source": "https://arr.usc.edu/ap-exam-credit-at-usc/",
     "summary": "USC gives 4 units of elective credit for every AP score of 4 or 5, but AP scores don't earn USC course equivalence. Instead, the department that teaches a course can waive it as a prerequisite, and your major advisor can apply it to a degree requirement.",
