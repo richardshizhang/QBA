@@ -334,6 +334,17 @@ body[data-sky] #map.spinning .clabel.dim { opacity: .25; }
 .chip:hover { text-decoration-color: var(--ink); }
 .chip:not(:last-child)::after { content: ", "; display: inline-block; white-space: pre; text-decoration: none; }
 .chip.flat { cursor: default; text-decoration: none; }
+/* Topics a typed dot was matched on, each with two small text buttons */
+.topics { display: flex; flex-wrap: wrap; gap: 2px 16px; margin-top: 8px; list-style: none; padding: 0; }
+.topics li { display: inline-flex; align-items: baseline; gap: 2px; }
+.topics .term { font: 15px/1.55 var(--font-serif); margin-right: 4px; }
+.topics .leaving .term { color: var(--muted); }
+.topics .not { font: 600 12.5px var(--font-ui); }
+.tact { min-height: 24px; min-width: 24px; padding: 0 3px; background: none; border: 0; border-radius: var(--r); color: var(--muted); font-size: 12.5px; text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 35%, transparent); text-underline-offset: 3px; }
+.tact:hover { color: var(--ink); text-decoration-color: currentColor; }
+.tact.x { font-size: 16px; line-height: 1; text-decoration: none; }
+.sub .tact { min-width: 0; padding: 0; font-size: inherit; }
+.weak { margin-top: 10px; font-size: 13px; }
 .rows li + li { margin-top: 2px; }
 .row {
   display: block; width: calc(100% + 12px); text-align: left; background: none; border: 0; padding: 4px 6px; margin: 0 -6px;
@@ -651,7 +662,7 @@ dialog form { text-align: right; margin-top: 12px; }
   <h3>Lines</h3>
   <p>Two people are joined if they share a paper. Each shared paper adds 1 ÷ (authors − 1) to the pair's strength, so a two-author paper counts 1 and a 100-author consortium paper about 0.01.</p>
   <h3>Finding your match</h3>
-  <p>The model above is too big to run in your browser, so it has already read about 66,000 research words and phrases, from these papers and from OpenAlex's list of keywords. Each one comes with a score for every faculty member, from how close its meaning is to their papers and how much of their work uses it. Your text is split into the longest terms it can find, so “protein engineering” stays one idea instead of “protein” plus “engineering”. If a phrase isn't on the list, the panel says its words were matched separately. Nothing you type leaves your browser. Given only the title of a paper it hadn't seen, this finds the real author in the top 5 about 93% of the time (88% with related fields added, where there are more people to choose from), but your own words will be vaguer than a title. Your dot sits at the weighted average of your closest matches, which is an estimate: t-SNE and UMAP have no exact way to add a new point. A thrown dot works in reverse, blending the people nearest where it lands.</p>
+  <p>The model above is too big to run in your browser, so it has already read about 66,000 research words and phrases, from these papers and from OpenAlex's list of keywords. Each one comes with a score for every faculty member, from how close its meaning is to their papers and how much of their work uses it. Your text is split into the longest terms it can find, so “protein engineering” stays one idea instead of “protein” plus “engineering”. If a phrase isn't on the list, the panel says its words were matched separately. The panel shows the topics it read and the words it didn't use, like ones too general to tell people apart. Leaving a topic out lowers each person by how far above average their papers use it, so people known for it move down the list. When no one stands out by more than about 1.5 standard deviations, or half of what you typed isn't in these papers, the panel says the match is weak. Nothing you type leaves your browser. Given only the title of a paper it hadn't seen, this finds the real author in the top 5 about 93% of the time (88% with related fields added, where there are more people to choose from), but your own words will be vaguer than a title. Your dot sits at the weighted average of your closest matches, which is an estimate: t-SNE and UMAP have no exact way to add a new point. A thrown dot works in reverse, blending the people nearest where it lands.</p>
   <h3>Lab sizes</h3>
   <p>A mark's area shows the size of the lab. For <span id="about-counted"></span> labs that's everyone the lab's own website lists, including the PI and any undergraduates. Labs differ in who they list and how often they update, so compare these loosely. The other <span id="about-estimated"></span> are estimates: USC co-authors on the person's senior-author papers since 2023, plus anyone QCB lists in the lab, plus the PI. Checked against the labs we could count, these are about right on average, but about a quarter are off by more than a factor of two. <span id="about-unknown"></span> faculty have no count and too few recent USC papers to estimate, so their marks are dashed and drawn at a typical size of <span class="typical-lab"></span>.</p>
   <h3>Stats</h3>
@@ -1805,9 +1816,13 @@ const CONTRACTION = /\b(do|does|did|is|are|was|were|ca|wo|could|would|should|hav
 function readText(text) {
   const clean = text.toLowerCase().slice(0, 4000).replace(CONTRACTION, "$1 not")
     .replace(/[a-z0-9-]+/g, (w) => (Object.hasOwn(M.aliases, w) ? M.aliases[w] : w));
-  const found = new Map(), missing = new Set(), apart = new Set();
+  const found = new Map(), missing = new Set(), apart = new Set(), skipped = new Set();
   for (const run of runsOf(clean)) {
-    const words = splitRun(run).filter(({ n, word }) => n > 1 || !(M.skip.has(word) || M.skip.has(stem(word))));
+    const words = [];
+    for (const piece of splitRun(run)) {
+      if (piece.n === 1 && (M.skip.has(piece.word) || M.skip.has(stem(piece.word)))) skipped.add(piece.word);
+      else words.push(piece);
+    }
     words.forEach(({ k, n, from, word }, at) => {
       if (k === undefined) missing.add(word);
       else found.set(M.terms[k], k);
@@ -1815,7 +1830,8 @@ function readText(text) {
       if (next && n === 1 && next.n === 1 && next.from === from + 1 && k !== undefined && next.k !== undefined) apart.add(`${word} ${next.word}`);
     });
   }
-  return { found: [...found], missing: [...missing], apart: [...apart] };
+  // Opinion words are skipped too, but caveat() explains those.
+  return { found: [...found], missing: [...missing], apart: [...apart], skipped: [...skipped].filter((w) => !OPINION_WORDS.includes(w)) };
 }
 
 function rankLinks(value, why) {
@@ -1824,23 +1840,51 @@ function rankLinks(value, why) {
   return order.slice(0, 8).map((j) => ({ j, rel: Math.max(0, value[j]) / best, terms: why(j) }));
 }
 
-function textDot(reading, text) {
+// Topic edits are kept by term, not by index, so they still apply when the text is read
+// again for a different set of people.
+const noEdits = () => ({ removed: new Set(), out: new Set() });
+function textDot(reading, text, edits = noEdits()) {
   if (!anyShown()) return null;
-  const { found, missing, apart } = reading, rows = new Map(found.map(([, k]) => [k, termRow(k)]));
+  const { found, missing, apart, skipped = [] } = reading;
+  let used = found.filter(([t]) => !edits.removed.has(t) && !edits.out.has(t));
+  let left = found.filter(([t]) => edits.out.has(t) && !edits.removed.has(t));
+  if (!used.length) { edits = noEdits(); used = found; left = []; }   // nothing left to match on
+  const rows = new Map([...used, ...left].map(([, k]) => [k, termRow(k)]));
   const value = new Float64Array(M.n);
   let total = 0;
-  for (const [, k] of found) {
+  for (const [, k] of used) {
     total += M.rarity[k];
     for (let i = 0; i < M.n; i++) value[i] += M.rarity[k] * rows.get(k)[i];
   }
   for (let i = 0; i < M.n; i++) value[i] /= total;
-  const why = (j) => found.map(([t, k]) => [t, rows.get(k)[j] * M.rarity[k]]).filter(([, v]) => v > 0)
+  // A topic left out lowers each person by how far above everyone else their papers use it.
+  // People known for it drop down the list, but the list never empties, as it could if
+  // they were dropped outright past some cutoff.
+  for (const [, k] of left) {
+    const row = rows.get(k), base = M.floor[k] * M.unit;
+    for (let i = 0; i < M.n; i++) value[i] -= Math.max(0, row[i] - base);
+  }
+  const why = (j) => used.map(([t, k]) => [t, rows.get(k)[j] * M.rarity[k]]).filter(([, v]) => v > 0)
     .sort((a, b) => b[1] - a[1]).slice(0, 3).map(([t]) => t);
   const links = rankLinks(value, why);
   const w = new Float64Array(M.n), top = value[links[0].j];
   links.slice(0, 5).forEach(({ j }) => { w[j] = Math.exp((value[j] - top) / 0.4); });
-  const terms = found.slice().sort((a, b) => M.rarity[b[1]] - M.rarity[a[1]]).map(([t]) => t);
-  return { kind: "text", text, reading, found, missing, apart, terms, w, links, set: new Set(links.slice(0, 5).map((l) => l.j)) };
+  const terms = used.slice().sort((a, b) => M.rarity[b[1]] - M.rarity[a[1]]).map(([t]) => t);
+  return {
+    kind: "text", text, reading, edits, found, used, left, missing, apart, skipped, terms, w, links,
+    weak: weakness(reading, used, rows, links), set: new Set(links.slice(0, 5).map((l) => l.j)),
+  };
+}
+
+// Calibrated on real queries in both tables. Off-topic words that happen to be in these
+// papers (cooking, jazz, stock market) leave everyone's strongest topic under 1.5 standard
+// deviations above average, and real topics, even vague ones like "genes", clear it.
+// Half or more of the typed words missing means the list rests on whatever was left.
+function weakness(reading, used, rows, links) {
+  const strongest = (j) => Math.max(...used.map(([, k]) => rows.get(k)[j]));
+  if (Math.max(...links.map(({ j }) => strongest(j))) < 1.5) return "chance";
+  const words = reading.found.reduce((n, [t]) => n + t.split(/[ -]/).length, 0);
+  return reading.missing.length >= words ? "part" : "";
 }
 
 function spotDot([x, y]) {
@@ -2056,7 +2100,7 @@ function refreshYou() {
   const you = S.you;
   if (!you) return;
   if (you.kind === "text") {
-    S.you = textDot(you.reading, you.text);
+    S.you = textDot(you.reading, you.text, you.edits);
     if (isMapView()) settleDot();
   } else if (you.at || S.three) {
     const at = you.at;
@@ -2221,9 +2265,76 @@ function matchRow(link, typed) {
 const NOT = /\b(not|no|don[’']?t|never|without|avoid|except|rather than|instead of|hate|dislike)\b/i;
 const PAST = /\b(experience[ds]?|beginner|new to|background in|familiar with|worked (with|on|in)|internship|last (summer|year|semester)|took an? (class|course))\b/i;
 function caveat(text) {
-  if (NOT.test(text)) return "This reads topics, not sentences, so words like “not” or “without” don't leave anything out. To leave a topic out, delete it.";
+  if (NOT.test(text)) return "This reads topics, not sentences, so words like “not” or “without” don't leave anything out. To leave a topic out, press “not this” next to it.";
   if (PAST.test(text)) return "This reads topics, not sentences, so things you've already done count the same as things you want to explore.";
   return "";
+}
+
+// The topics a typed dot was matched on. Each can be left out, which moves people known
+// for it down the list, or removed, which ignores it. Nothing here reaches the address bar.
+let topicHint = "";
+function topicList(you) {
+  const shown = you.found.filter(([t]) => !you.edits.removed.has(t));
+  const removed = you.found.filter(([t]) => you.edits.removed.has(t));
+  const act = (t, what, label, text, cls = "tact") => el("button", {
+    type: "button", class: cls, "data-topic": t, "data-act": what, "aria-label": label, onclick: () => editTopic(t, what),
+  }, text);
+  const hint = topicHint;
+  topicHint = "";
+  return [
+    el("ul", { class: "topics", "aria-label": "Topics it read" }, shown.map(([t]) => {
+      const out = you.edits.out.has(t);
+      return el("li", { class: out ? "leaving" : null },
+        el("span", { class: "term" }, out ? el("span", { class: "not" }, "not ") : null, t),
+        act(t, "out", out ? `Use ${t} again` : `Leave out ${t}`, out ? "use it" : "not this"),
+        act(t, "remove", `Remove ${t}`, "×", "tact x"));
+    })),
+    hint ? el("p", { class: "sub" }, hint) : null,
+    removed.length ? el("p", { class: "sub" }, "Put back: ",
+      removed.flatMap(([t], n) => [n ? ", " : null, act(t, "back", `Put back ${t}`, t)])) : null,
+  ];
+}
+
+function editTopic(term, what) {
+  const you = S.you;
+  if (!you || you.kind !== "text") return;
+  const removed = new Set(you.edits.removed), out = new Set(you.edits.out);
+  if (what === "out") out.has(term) ? out.delete(term) : out.add(term);
+  else if (what === "remove") removed.add(term);
+  else { removed.delete(term); out.delete(term); }
+  const before = you.found.map(([t]) => t).filter((t) => !you.edits.removed.has(t));
+  let focus = [term, what === "back" ? "out" : what];
+  if (!you.found.some(([t]) => !removed.has(t) && !out.has(t))) {
+    topicHint = "Keep at least one topic to match on.";
+    $("#status").textContent = topicHint;
+  } else {
+    if (what === "remove") {   // focus moves on to the next topic, or back to the last one
+      const n = before.indexOf(term), next = before[n + 1] ?? before[n - 1];
+      focus = next ? [next, "remove"] : [term, "back"];
+    }
+    S.you = textDot(you.reading, you.text, { removed, out });
+    if (isMapView()) settleDot();
+    const done = { out: out.has(term) ? `Left out ${term}` : `Using ${term} again`, remove: `Removed ${term}`, back: `Put back ${term}` }[what];
+    $("#status").textContent = `${done}. Closest match: ${P[S.you.links[0].j].name}.`;
+  }
+  const rail = $("#rail"), top = rail.scrollTop;
+  renderDetail();
+  rail.scrollTop = top;
+  emphasize();
+  if (isMapView()) placeLabels();
+  drawYou();
+  detail.querySelector(`[data-topic="${CSS.escape(focus[0])}"][data-act="${focus[1]}"]`)?.focus();
+}
+
+const quoted = (terms) => terms.map((t) => `“${t}”`).join(", ").replace(/, ([^,]*)$/, " and $1");
+function weakNote(you) {
+  if (you.weak === "chance") return `No one here stands out for these topics, so the order below is close to chance.${S.scope === "qcb" ? " Adding related fields brings in more people." : ""}`;
+  return `Only part of what you typed is in these papers, so this list rests on ${you.terms.length > 3 ? "the topics above" : `just ${quoted(you.terms)}`}.`;
+}
+function notUsed(you) {
+  const part = (words, why) => (words.length ? `${words.slice(0, 6).join(", ")}${words.length > 6 ? ` and ${words.length - 6} more` : ""} (${why})` : "");
+  const parts = [part(you.missing, "not in these papers"), part(you.skipped, "too general")].filter(Boolean);
+  return parts.length ? `Not used: ${parts.join("; ")}.` : "";
 }
 
 function youPanel() {
@@ -2231,22 +2342,25 @@ function youPanel() {
   const shares = new Map();
   you.links.forEach((l) => shares.set(P[l.j].cluster, (shares.get(P[l.j].cluster) || 0) + l.rel));
   const lean = [...shares].sort((a, b) => b[1] - a[1])[0][0];
+  const rows = you.links.filter((l) => l.rel > 0);
   return [
     el("h2", { tabindex: -1 }, typed ? "Your closest matches" : "What's around this spot"),
-    el("div", { class: "chips", style: "margin-top:8px" }, you.terms.slice(0, 9).map((t) => el("span", { class: "chip flat" }, t))),
-    typed && you.missing.length
-      ? el("p", { class: "sub" }, `Not in these papers: ${you.missing.slice(0, 8).join(", ")}.`) : null,
+    ...(typed ? topicList(you)
+      : [el("div", { class: "chips", style: "margin-top:8px" }, you.terms.slice(0, 9).map((t) => el("span", { class: "chip flat" }, t)))]),
+    typed && notUsed(you) ? el("p", { class: "sub" }, notUsed(you)) : null,
     typed && you.apart.length && you.found.length <= 3   // in a longer text, words apart are what's expected
       ? el("p", { class: "sub" }, `${you.apart.slice(0, 3).map((t) => `“${t}”`).join(", ")} ${you.apart.length > 1 ? "aren't phrases" : "isn't a phrase"} we know, so the words were matched separately.`) : null,
-    typed && !you.apart.length && you.found.length === 1 && !you.found[0][0].includes(" ")
+    typed && !you.weak && !you.apart.length && you.found.length === 1 && !you.found[0][0].includes(" ")
       ? el("p", { class: "sub" }, "That's only one word to go on. Name a few more topics or methods for better matches.") : null,
     typed && caveat(you.text) ? el("p", { class: "sub" }, caveat(you.text)) : null,
     typed && byTechnique()
       ? el("p", { class: "sub" }, "These are the same matches as By field. They come from your topics, so By technique only moves your dot onto the technique map.") : null,
+    typed && you.weak ? el("p", { class: "weak" }, el("b", {}, "Weak match. "), weakNote(you)) : null,
     el("h3", {}, "Closest group"),
     clusterTag(lean),
     el("h3", {}, "Closest faculty"),
-    el("ol", { class: "rows" }, you.links.filter((l) => l.rel > 0).map((l) => matchRow(l, typed))),
+    rows.length ? el("ol", { class: "rows" }, rows.map((l) => matchRow(l, typed)))
+      : el("p", { class: "sub" }, "Leaving those topics out leaves no one. Use one of them again to see matches."),
     el("p", { class: "foot" }, typed
       ? "Ranked by how strongly their papers use your topics. It knows nothing about openings, mentoring or fit, so treat it as a reading list, not a recommendation."
       : "Ranked by how close their research is to this spot. It knows nothing about openings, mentoring or fit, so treat it as a reading list, not a recommendation."),
@@ -2530,7 +2644,7 @@ function moveDot(sameTable) {
   S.you = null;
   loadMatch().then(() => {
     if (S.you || !M || M.n !== WORLD.n) return;
-    S.you = textDot(readText(you.text), you.text);
+    S.you = textDot(readText(you.text), you.text, you.edits);   // the same topic edits, on the new people
     if (!S.you) { parked = you; return; }
     if (!S.sel) renderDetail();
     emphasize();
@@ -2814,7 +2928,7 @@ const TOUR = [
     try: "Try it: turn on 3D.", done: () => S.three, after: "Marks in front are bigger and stand out more. It stays on until you turn it off." },
   { at: "#me-form", side: "left", title: "Find your place", before: showForm,
     body: "Name a few topics or methods you'd like to explore, and you'll land near the faculty whose papers mention them most. What you type stays in your browser.",
-    try: "Try it: type a few topics, then press Place me on the map.", done: () => !!S.you && S.you.kind === "text", after: "Your dot is on the map, and the panel lists the faculty whose papers best match those topics." },
+    try: "Try it: type a few topics, then press Place me on the map.", done: () => !!S.you && S.you.kind === "text", after: "Your dot is on the map, and the panel lists the faculty whose papers best match those topics. Press “not this” by a topic to leave it out, or × to drop it." },
   { at: "#throw", side: "right", clear: true, title: "Explore with a dot", before: backToMap,
     body: "Not sure what you're into? Drag this dot onto the map and let go to see who works near that spot. Remove dot takes it off again.",
     try: "Try it: drag the dot onto the map.", done: () => !!S.you && S.you.kind === "spot", after: "The panel shows who's nearby. Keep dragging to explore." },
