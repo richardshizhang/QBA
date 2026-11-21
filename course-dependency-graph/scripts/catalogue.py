@@ -35,6 +35,8 @@ FIELD_KEYS = {
     "recommended preparation": "rec", "registration restriction": "restr", "registration restrictions": "restr",
     "restriction": "restr", "restrictions": "restr", "terms offered": "terms", "units": "units",
 }
+# "Satisfies New General Education in Category D: Life Sciences". The old-GE line is dropped too.
+GE_RE = re.compile(r"^Satisfies (New|Old) General Education in Category ([A-H]|[IVX]+)\b")
 UI_LINES = re.compile(r"^(Print-Friendly Page|Add to Portfolio|Back to Top|HELP|Facebook|Tweet|Print|.*opens a new window.*)$", re.I)
 
 
@@ -215,6 +217,11 @@ def parse_course(text):
         again = CODE_RE.match(ln)
         if again and norm_code(*again.groups()) == rec["code"] and ln.endswith(rec["title"]):
             continue  # the course block repeats its title as a heading
+        ge = GE_RE.match(ln)
+        if ge:
+            if ge.group(1) == "New" and ge.group(2) not in rec.setdefault("ge", []):
+                rec["ge"].append(ge.group(2))
+            continue
         fm = FIELD_RE.match(ln)
         if fm:
             key = FIELD_KEYS.get(fm.group(1).lower())

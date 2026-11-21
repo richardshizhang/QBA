@@ -1059,6 +1059,134 @@ window.QBIO_DATA = {
    ],
    "text": "Entry-level prerequisite. Most QBIO students meet it through a placement exam or AP credit (AP Precalculus 4 or 5 waives MATH 108) instead of taking the course. Check your placement results with your advisor."
   },
+  "planner": {
+   "degreeUnits": 128,
+   "maxTermUnits": 18,
+   "sources": {
+    "sheet": {
+     "name": "Dornsife advising sheet for the Quantitative Biology BS",
+     "url": "https://dornsife.usc.edu/advising/wp-content/uploads/sites/96/2023/09/Quantitative-Biology-BS.pdf"
+    },
+    "ge": {
+     "name": "Dornsife General Education requirements",
+     "url": "https://dornsife.usc.edu/ge/requirements/"
+    }
+   },
+   "unitsNote": "Most of these are 4-unit courses. Change the units if yours is different.",
+   "placeholders": [
+    {
+     "id": "writ150",
+     "label": "WRIT 150",
+     "units": 4,
+     "count": 1,
+     "source": "sheet",
+     "note": "The advising sheet puts it in the first fall."
+    },
+    {
+     "id": "gesm",
+     "label": "GE seminar (GESM)",
+     "units": 4,
+     "count": 1,
+     "source": "ge",
+     "note": "Required in the first year. It also satisfies one Core Literacy (GE-A to GE-F)."
+    },
+    {
+     "id": "ge-a",
+     "label": "GE-A The Arts",
+     "ge": "A",
+     "units": 4,
+     "count": 1,
+     "source": "ge"
+    },
+    {
+     "id": "ge-b",
+     "label": "GE-B Humanistic Inquiry",
+     "ge": "B",
+     "units": 4,
+     "count": 2,
+     "source": "ge"
+    },
+    {
+     "id": "ge-c",
+     "label": "GE-C Social Analysis",
+     "ge": "C",
+     "units": 4,
+     "count": 2,
+     "source": "ge"
+    },
+    {
+     "id": "ge-d",
+     "label": "GE-D Life Sciences",
+     "ge": "D",
+     "units": 4,
+     "count": 1,
+     "source": "ge"
+    },
+    {
+     "id": "ge-e",
+     "label": "GE-E Physical Sciences",
+     "ge": "E",
+     "units": 4,
+     "count": 1,
+     "source": "ge"
+    },
+    {
+     "id": "ge-f",
+     "label": "GE-F Quantitative Reasoning",
+     "ge": "F",
+     "units": 4,
+     "count": 1,
+     "source": "ge"
+    },
+    {
+     "id": "ge-g",
+     "label": "GE-G Global Perspectives I",
+     "ge": "G",
+     "units": 4,
+     "count": 1,
+     "source": "ge",
+     "note": "One course can satisfy a Global Perspective and one of GE-A, GE-B or GE-C."
+    },
+    {
+     "id": "ge-h",
+     "label": "GE-H Global Perspectives II",
+     "ge": "H",
+     "units": 4,
+     "count": 1,
+     "source": "ge",
+     "note": "One course can satisfy a Global Perspective and one of GE-A, GE-B or GE-C."
+    },
+    {
+     "id": "lang",
+     "label": "Language course",
+     "units": 4,
+     "count": 3,
+     "source": "sheet",
+     "note": "The advising sheet plans Language I to III. Your language placement decides how many you need, so check with your advisor."
+    },
+    {
+     "id": "writ340",
+     "label": "WRIT 340",
+     "units": 4,
+     "count": 1,
+     "source": "sheet",
+     "note": "The advising sheet puts it in the last fall."
+    },
+    {
+     "id": "minor",
+     "label": "Minor course",
+     "units": 4,
+     "note": "For a minor or second major. Check that program's catalogue page for its courses."
+    },
+    {
+     "id": "elective",
+     "label": "Free elective",
+     "units": 4,
+     "source": "sheet",
+     "note": "Any course that brings you to the degree total."
+    }
+   ]
+  },
   "examCredit": {
    "source": "https://arr.usc.edu/ap-exam-credit-at-usc/",
    "summary": "USC gives 4 units of elective credit for every AP score of 4 or 5, but AP scores don't earn USC course equivalence. Instead, the department that teaches a course can waive it as a prerequisite, and your major advisor can apply it to a degree requirement.",
@@ -1210,10 +1338,13 @@ window.QBIO_DATA = {
    ],
    "t": "General Biology: Organismal Biology and Evolution",
    "u": "4",
-   "d": "In-depth survey of key topics related to advances in our knowledge of the diversity of life and evolution; origin of life; eukaryotes/prokaryotes; ecology. Satisfies New General Education in Category D: Life Sciences Satisfies Old General Education in Category III: Scientific Inquiry",
+   "d": "In-depth survey of key topics related to advances in our knowledge of the diversity of life and evolution; origin of life; eukaryotes/prokaryotes; ecology.",
    "dup": "BISC 112L, BISC 113L, and BISC 121L.",
    "cat": true,
    "cterms": "FaSpSm",
+   "ge": [
+    "D"
+   ],
    "curl": "https://catalogue.usc.edu/preview_course_nopop.php?catoid=22&coid=358309",
    "preSrc": "catalogue",
    "coSrc": "catalogue"
@@ -1242,6 +1373,9 @@ window.QBIO_DATA = {
    "dup": "BISC 112L, BISC 113L, and BISC 120L.",
    "cat": true,
    "cterms": "Fa",
+   "ge": [
+    "D"
+   ],
    "curl": "https://catalogue.usc.edu/preview_course_nopop.php?catoid=22&coid=358310",
    "preSrc": "catalogue",
    "coSrc": "catalogue",
@@ -1264,11 +1398,14 @@ window.QBIO_DATA = {
    ],
    "t": "General Biology: Cell Biology and Physiology",
    "u": "4",
-   "d": "In-depth survey of key topics related to advances in our knowledge of cellular biology and physiology; cell composition/metabolism; gene action; organism structure and function. Satisfies New General Education in Category D: Life Sciences",
+   "d": "In-depth survey of key topics related to advances in our knowledge of cellular biology and physiology; cell composition/metabolism; gene action; organism structure and function.",
    "rec": "high school chemistry; BISC 120Lg or BISC 121Lg",
    "dup": "BISC 110L, BISC 111L, and BISC 221L.",
    "cat": true,
    "cterms": "FaSpSm",
+   "ge": [
+    "D"
+   ],
    "curl": "https://catalogue.usc.edu/preview_course_nopop.php?catoid=22&coid=358316",
    "preSrc": "catalogue",
    "coSrc": "catalogue"
@@ -1313,6 +1450,9 @@ window.QBIO_DATA = {
    "dup": "BISC 110L, BISC 111L, and BISC 220L.",
    "cat": true,
    "cterms": "Sp",
+   "ge": [
+    "D"
+   ],
    "curl": "https://catalogue.usc.edu/preview_course_nopop.php?catoid=22&coid=358317",
    "preSrc": "catalogue",
    "preText": "BISC 120Lg or BISC 121Lg",
@@ -1512,6 +1652,9 @@ window.QBIO_DATA = {
    ],
    "cat": true,
    "cterms": "Fa",
+   "ge": [
+    "D"
+   ],
    "curl": "https://catalogue.usc.edu/preview_course_nopop.php?catoid=22&coid=358325",
    "preSrc": "catalogue",
    "preText": "CHEM 105bL or CHEM 108L or CHEM 115bL",
@@ -2046,6 +2189,9 @@ window.QBIO_DATA = {
    "dup": "CHEM 115aLg\u00a0\u00a0or CHEM 115bL",
    "cat": true,
    "cterms": "FaSpSm",
+   "ge": [
+    "E"
+   ],
    "curl": "https://catalogue.usc.edu/preview_course_nopop.php?catoid=22&coid=358426",
    "preSrc": "catalogue",
    "preText": "Prerequisite to all more advanced courses in chemistry. CHEM 050x or passing of placement test",
@@ -2104,10 +2250,13 @@ window.QBIO_DATA = {
    ],
    "t": "Advanced General Chemistry",
    "u": "4",
-   "d": "Equivalent to CHEM 105aLg\u00a0 -CHEM 105bL\u00a0, but taught at a higher level for exceptionally well-prepared students. Satisfies New General Education in Category E: Physical Sciences Satisfies Old General Education in Category III: Scientific Inquiry",
+   "d": "Equivalent to CHEM 105aLg\u00a0 -CHEM 105bL\u00a0, but taught at a higher level for exceptionally well-prepared students.",
    "dup": "CHEM 105aLg\u00a0\u00a0or CHEM 105bL",
    "cat": true,
    "cterms": "Fa",
+   "ge": [
+    "E"
+   ],
    "curl": "https://catalogue.usc.edu/preview_course_nopop.php?catoid=22&coid=358428",
    "preSrc": "catalogue",
    "coSrc": "catalogue"
@@ -2887,6 +3036,9 @@ window.QBIO_DATA = {
    ],
    "cat": true,
    "cterms": "FaSpSm",
+   "ge": [
+    "F"
+   ],
    "curl": "https://catalogue.usc.edu/preview_course_nopop.php?catoid=22&coid=359953",
    "preSrc": "catalogue",
    "preText": "MATH 108 or math placement exam",
@@ -2922,6 +3074,9 @@ window.QBIO_DATA = {
    ],
    "cat": true,
    "cterms": "FaSpSm",
+   "ge": [
+    "F"
+   ],
    "curl": "https://catalogue.usc.edu/preview_course_nopop.php?catoid=22&coid=359954",
    "preSrc": "catalogue",
    "preText": "MATH 125g",
@@ -3050,6 +3205,9 @@ window.QBIO_DATA = {
    ],
    "cat": true,
    "cterms": "FaSp",
+   "ge": [
+    "F"
+   ],
    "curl": "https://catalogue.usc.edu/preview_course_nopop.php?catoid=22&coid=359960",
    "preSrc": "catalogue",
    "preText": "MATH 126g or MATH 127 or MATH 129",
@@ -3474,6 +3632,9 @@ window.QBIO_DATA = {
    "dup": "PHYS 125.",
    "cat": true,
    "cterms": "FaSpSm",
+   "ge": [
+    "E"
+   ],
    "curl": "https://catalogue.usc.edu/preview_course_nopop.php?catoid=22&coid=360339",
    "preSrc": "catalogue",
    "preText": "Passing of Math Placement Exam or MATH 108 or MATH 125 or MATH 126 or MATH 226",
@@ -3576,6 +3737,9 @@ window.QBIO_DATA = {
    ],
    "cat": true,
    "cterms": "FaSpSm",
+   "ge": [
+    "E"
+   ],
    "curl": "https://catalogue.usc.edu/preview_course_nopop.php?catoid=22&coid=360344",
    "preSrc": "catalogue",
    "preText": "MATH 125g or MATH 126g or MATH 226g or MATH 129 or MATH 229",
@@ -3683,6 +3847,9 @@ window.QBIO_DATA = {
    ],
    "cat": true,
    "cterms": "FaSp",
+   "ge": [
+    "E"
+   ],
    "curl": "https://catalogue.usc.edu/preview_course_nopop.php?catoid=22&coid=360347",
    "preSrc": "catalogue",
    "preText": "MATH 125g",
@@ -3768,6 +3935,9 @@ window.QBIO_DATA = {
     }
    ],
    "cat": true,
+   "ge": [
+    "E"
+   ],
    "curl": "https://catalogue.usc.edu/preview_course_nopop.php?catoid=22&coid=367727",
    "preSrc": "catalogue",
    "preText": "MATH 125g or MATH 126g or MATH 129 or MATH 226g or MATH 229",

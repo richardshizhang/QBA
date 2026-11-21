@@ -184,6 +184,7 @@ def course_record(code, latest, offered, cat=None):
         rec["u"] = rec.get("u") or cat.get("units")
         rec["d"] = cat.get("desc") or rec.get("d")
         rec["cterms"] = cat.get("terms")
+        rec["ge"] = cat.get("ge")
         rec["curl"] = cat.get("url")
         rec["rec"] = cat.get("rec") or rec.get("rec")
         rec["restr"] = cat.get("restr") or rec.get("restr")

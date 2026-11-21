@@ -48,6 +48,8 @@ try {
   --c-research: #6a8d2f;
   --c-electives: #9c5aa8;
   --c-outside: #5d6066;
+  --bad: #c0262d;   /* a plan order problem: a prerequisite planned in the same or a later term */
+  --warn: #b25e00;  /* worth checking: a prerequisite not in the plan, or a season it does not run */
   --font-ui: "Libre Franklin", "Franklin Gothic Medium", Arial, sans-serif;
   --font-serif: "Source Serif 4", Georgia, serif;
   --r: 3px;
@@ -58,7 +60,7 @@ try {
     --line: #2c2e33; --edge: #5a5d63; --wire: #4a4d52; --gold-case: transparent; --half-edge: var(--gold); --tint: #3b3211;
     --dim-bg: #131416; --dim-line: #222428; --waived: #6f7277;
     --c-core: #5aa5d6; --c-computing: #9a84dc; --c-specialization: #3fb8a8; --c-capstone: #e58a62;
-    --c-research: #8fb24a; --c-electives: #b877c4; --c-outside: #a3a5a9;
+    --c-research: #8fb24a; --c-electives: #b877c4; --c-outside: #a3a5a9; --bad: #ff6b6b; --warn: #f0a33a;
     color-scheme: dark;
   }
 }
@@ -67,7 +69,7 @@ try {
   --line: #2c2e33; --edge: #5a5d63; --wire: #4a4d52; --gold-case: transparent; --half-edge: var(--gold); --tint: #3b3211;
   --dim-bg: #131416; --dim-line: #222428; --waived: #6f7277;
   --c-core: #5aa5d6; --c-computing: #9a84dc; --c-specialization: #3fb8a8; --c-capstone: #e58a62;
-  --c-research: #8fb24a; --c-electives: #b877c4; --c-outside: #a3a5a9;
+  --c-research: #8fb24a; --c-electives: #b877c4; --c-outside: #a3a5a9; --bad: #ff6b6b; --warn: #f0a33a;
   color-scheme: dark;
 }
 
@@ -604,6 +606,144 @@ h3 .ln.needs { background: var(--surface); }
 .about strong { color: var(--ink); font-weight: 600; }
 .about h3 { color: var(--ink); scroll-margin-top: 12px; }
 
+/* ---------- My plan ---------- */
+/* Planned before the term the map shows: a gold dot in a plain ring (taken is a full gold disc) */
+.chip[data-status="planned"] .tick::before { border: 1.5px solid var(--half-edge); background: radial-gradient(circle, var(--gold) 0 3.3px, var(--surface) 3.9px); }
+.lg-tick.planned { border: 1.5px solid var(--half-edge); background: radial-gradient(circle, var(--gold) 0 2.8px, transparent 3.4px); box-shadow: none; }
+.status.planned::before { border: 1.5px solid var(--half-edge); background: radial-gradient(circle, var(--gold) 0 2.8px, var(--surface) 3.4px); }
+.pill.planned { font-weight: 400; }
+.pill.planned::before { width: 11px; height: 11px; border: 1.5px solid var(--half-edge); background: radial-gradient(circle, var(--gold) 0 2.2px, var(--surface) 2.8px); }
+.plan-start { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13.5px; }
+.plan-start select, .plan-add input, .bhead input { height: 34px; box-sizing: border-box; padding: 0 8px; border: 1px solid var(--edge); border-radius: var(--r); background: var(--surface); font-size: 13.5px; }
+.plan-total { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; }
+.plan-total b { font: 600 24px/1.1 var(--font-serif); }
+.plan-total .of { color: var(--muted); font-size: 13px; }
+.tx { flex: none; width: 24px; height: 24px; padding: 0; border: 0; border-radius: var(--r); background: none; color: var(--muted); font-size: 16px; line-height: 1; cursor: pointer; }
+.tx:hover { background: var(--sunk); color: var(--ink); }
+.tx:disabled { visibility: hidden; }
+.plan-add { display: flex; flex-direction: column; gap: 8px; padding-top: 8px; border-top: 1px solid var(--line); }
+.plan-add form { display: flex; gap: 6px; }
+.plan-add form input { flex: 1 1 auto; min-width: 0; height: 32px; font-size: 13px; }
+.plan-add form input.u { flex: 0 0 52px; }
+.plan-add form .btn { height: 32px; flex: none; }
+.inline-link { padding: 0; border: 0; background: none; color: var(--ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+
+/* Map / Plan switch, next to the title */
+.brandrow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; }
+.modes { display: inline-flex; padding: 2px; border: 1px solid var(--edge); border-radius: 4px; background: var(--surface); }
+.modes button { min-width: 64px; height: 30px; padding: 0 14px; border: 0; border-radius: 2px; background: none; color: var(--muted); font-size: 13.5px; font-weight: 600; cursor: pointer; }
+.modes button:hover { color: var(--ink); }
+.modes button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.nowtag { display: inline-block; padding: 1px 5px; border-radius: 2px; background: var(--gold); color: var(--on-gold); box-shadow: inset 0 0 0 1px var(--gold-case); font-size: 10.5px; line-height: 1.35; font-weight: 700; letter-spacing: 0.02em; vertical-align: 1px; }
+
+/* "Showing Fall 2026": the plan term the map is counting from, first in the bar */
+.stepper { display: inline-flex; align-items: center; gap: 4px; padding-right: 16px; border-right: 1px solid var(--line); }
+.stepper .lead { margin-right: 4px; }
+.stepper select { height: 30px; padding: 0 6px; border: 1px solid var(--ink); border-radius: var(--r); background: var(--surface); font-size: 14px; font-weight: 600; }
+.stepper .step { width: 28px; height: 30px; padding: 0; border: 1px solid var(--edge); border-radius: var(--r); background: var(--surface); font-size: 16px; line-height: 1; cursor: pointer; }
+.stepper .step:hover { border-color: var(--ink); }
+.stepper .step:disabled { opacity: 0.35; cursor: default; border-color: var(--edge); }
+.stepper .nowtag { margin-left: 4px; }
+
+/* Plan mode: the board takes the map's place, and the side panel only opens for course details */
+#board { display: none; }
+.app.plan { grid-template-columns: minmax(0, 1fr); }
+.app.plan.focused { grid-template-columns: minmax(0, 1fr) minmax(300px, 400px); }
+.app.plan:not(.focused) #panel { display: none; }
+.app.plan .showbar, .app.plan #viewport, .app.plan .foot { display: none; }
+.app.plan #board { flex: 1; min-height: 0; display: flex; flex-direction: column; margin: 0 24px; border-top: 1px solid var(--line); }
+.bhead { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 28px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.bhead h2 { margin: 0; font: 600 20px/1.2 var(--font-serif); }
+.bhead .meta { color: var(--muted); font-size: 12.5px; }
+.bhead .units input { width: 64px; height: 30px; }
+.bhead .reset { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; }
+.bnotes { display: flex; flex-direction: column; gap: 4px; padding: 8px 0 0; }
+.bnotes:empty { display: none; }
+.bbody { flex: 1; min-height: 0; display: grid; grid-template-columns: 252px minmax(0, 1fr); }
+.bstart { max-width: 62ch; padding: 24px 0; display: flex; flex-direction: column; gap: 14px; }
+.bstart h2 { margin: 0; font: 600 24px/1.2 var(--font-serif); }
+.bfoot { padding: 8px 0 12px; border-top: 1px solid var(--line); }
+
+/* What the plan still leaves out, as chips to click into the selected term */
+.tray { min-height: 0; overflow: auto; padding: 12px 16px 16px 0; border-right: 1px solid var(--line); }
+.tray > summary { display: flex; flex-direction: column; gap: 2px; list-style: none; cursor: pointer; }
+.tray > summary::-webkit-details-marker { display: none; }
+.tray > summary b { font-size: 14px; }
+.tray > summary b::before { content: "▾"; display: inline-block; width: 1em; color: var(--muted); }
+.tray:not([open]) > summary b::before { transform: rotate(-90deg); }
+.tray .to { font-size: 12px; color: var(--muted); padding-left: 1.15em; }
+.tgroup { display: flex; flex-direction: column; gap: 5px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.tgroup:last-child { border-bottom: 0; }
+.tgroup h4 { margin: 0; font-size: 12.5px; font-weight: 600; display: flex; justify-content: space-between; gap: 8px; }
+.tgroup h4 span { font-weight: 400; color: var(--muted); white-space: nowrap; }
+.tgroup .sub { font-size: 11.5px; color: var(--muted); }
+.tchips { display: flex; flex-wrap: wrap; gap: 4px; }
+.tchip { display: inline-flex; align-items: center; gap: 5px; min-height: 26px; padding: 0 7px; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); font-size: 12px; font-weight: 600; cursor: pointer; }
+.tchip::before { content: ""; flex: none; box-sizing: border-box; width: 8px; height: 8px; border-radius: 50%; background: var(--cat, var(--wire)); }
+.tchip.ph::before { background: none; border: 1.5px dashed var(--wire); }
+.tchip.open { border-color: var(--ink); }
+.tchip.locked { color: var(--muted); font-weight: 500; }
+.tchip:hover { border-color: var(--ink); background: var(--tint); }
+.tchip .n { font-weight: 400; color: var(--muted); }
+.tray .all-done { font-size: 12.5px; color: var(--muted); padding-top: 10px; }
+
+/* Semester columns */
+.cols { min-width: 0; min-height: 0; overflow: auto; overscroll-behavior: contain; }
+.cols-inner { position: relative; display: flex; align-items: stretch; gap: 10px; width: max-content; min-height: 100%; box-sizing: border-box; padding: 12px 12px 16px; }
+.pcol { flex: none; width: 224px; box-sizing: border-box; display: flex; flex-direction: column; gap: 6px; padding: 8px; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); }
+.pcol.done-col { width: 168px; background: var(--sunk); border-color: var(--sunk); }
+.pcol.sel { border-color: var(--gold); box-shadow: inset 0 0 0 1.5px var(--gold), 0 0 0 1px var(--gold-case); }
+.pcol.drop { background: var(--tint); }
+.chead { display: flex; align-items: center; gap: 6px; min-height: 26px; }
+.chead .tname { padding: 0; border: 0; background: none; font-size: 14px; font-weight: 700; text-align: left; cursor: pointer; }
+.chead .tname:hover { text-decoration: underline; text-underline-offset: 3px; }
+.pcol.sel .chead .tname { cursor: default; text-decoration: none; }
+.chead .tunits { margin-left: auto; font-size: 12px; color: var(--muted); white-space: nowrap; }
+.chead .tunits.over { color: var(--bad); font-weight: 700; }
+.pcol .here { margin: -4px 0 0; font-size: 11.5px; color: var(--muted); }
+.pcol .empty { font-size: 12px; color: var(--faint); }
+.addhere { min-height: 30px; border: 1px dashed var(--edge); border-radius: var(--r); background: none; color: var(--muted); font-size: 12.5px; cursor: pointer; }
+.addhere:hover { border-color: var(--ink); color: var(--ink); }
+.cflag { margin: 0; padding-left: 7px; border-left: 2px solid var(--bad); font-size: 11.5px; line-height: 1.4; }
+.sumgap { flex: none; display: flex; align-items: center; }
+.sumgap button { writing-mode: vertical-rl; transform: rotate(180deg); padding: 10px 3px; border: 1px dashed var(--edge); border-radius: var(--r); background: none; color: var(--muted); font-size: 11.5px; cursor: pointer; }
+.sumgap button:hover { border-color: var(--ink); color: var(--ink); }
+.unsummer { align-self: flex-start; padding: 0; border: 0; background: none; color: var(--muted); font-size: 12px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.dlist { display: flex; flex-direction: column; gap: 3px; font-size: 12.5px; }
+.dlist .cref { font-size: 12.5px; }
+.dlist .tag { margin-left: 4px; font-size: 10.5px; color: var(--muted); }
+
+/* A course card */
+.pcard { position: relative; display: flex; flex-direction: column; gap: 2px; padding: 5px 4px 6px 9px; border: 1px solid var(--line); border-left: 3px solid var(--cat, var(--wire)); border-radius: var(--r); background: var(--surface); cursor: grab; }
+.pcard.ph { border-style: dashed; border-left-style: dashed; }
+.pcard.dragging { opacity: 0.4; }
+.pcard.bad { border-color: var(--bad); border-left-color: var(--bad); box-shadow: inset 0 0 0 1px var(--bad); }
+.pcard.warn { border-right-color: var(--warn); border-top-color: var(--warn); border-bottom-color: var(--warn); }
+.pcard.hl-pre { box-shadow: 0 0 0 1.5px var(--bg), 0 0 0 2.5px var(--ink); }
+.pcard.hl-post { background: var(--tint); }
+.pcard.hl-self { box-shadow: 0 0 0 2px var(--gold), 0 0 0 3px var(--gold-case); }
+.pcard .top { display: flex; align-items: center; gap: 2px; min-height: 24px; }
+.pcard .top .cref, .pcard .top .phname { margin-right: auto; font-size: 13px; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.pcard .phname { font-weight: 600; white-space: nowrap; }
+.pcard .tu { flex: none; min-width: 18px; margin-right: 2px; text-align: right; font-size: 12px; color: var(--muted); }
+.pcard input.tu { width: 44px; height: 24px; box-sizing: border-box; padding: 0 3px; border: 1px solid var(--edge); border-radius: var(--r); background: var(--surface); color: var(--ink); }
+.pcard .ttl { font-size: 11.5px; line-height: 1.3; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.pcard .iss { margin: 3px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 3px; }
+.pcard .iss li { padding-left: 7px; border-left: 2px solid var(--warn); font-size: 11.5px; line-height: 1.35; }
+.pcard .iss li.bad { border-left-color: var(--bad); font-weight: 600; }
+.pcard .iss li .k { color: var(--warn); font-weight: 700; }
+.pcard .iss li.bad .k { color: var(--bad); }
+
+/* Prerequisite arrows over the board */
+#board-arrows { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none; }
+.parrow { fill: none; stroke-width: 2; }
+.parrow.bad { stroke: var(--bad); stroke-width: 2.2; }
+.parrow.pre { stroke: var(--ink); stroke-width: 1.6; }
+.parrow.post { stroke: var(--gold); stroke-width: 2.4; }
+.mk-bad { fill: var(--bad); }
+.mk-pre { fill: var(--ink); }
+.mk-post { fill: var(--gold); }
+
 @media (max-width: 860px) {
   html, body { height: auto; }
   .app { display: block; }
@@ -617,6 +757,17 @@ h3 .ln.needs { background: var(--surface); }
   #panel { border-left: 0; border-top: 1px solid var(--line); padding-inline: max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px)); }
   .search { flex: 1 1 100%; }
   .toggle { min-height: 32px; }
+  .tx { width: 34px; height: 34px; }
+  .app.plan #board { margin: 0 16px; }
+  .bbody { display: block; }
+  .tray { overflow: visible; padding: 10px 0; border-right: 0; border-bottom: 1px solid var(--line); }
+  .cols { overflow: visible; }
+  .cols-inner { flex-direction: column; width: auto; padding: 12px 0 16px; }
+  .pcol, .pcol.done-col { width: auto; }
+  .sumgap button { writing-mode: horizontal-tb; transform: none; width: 100%; padding: 6px; }
+  #board-arrows { display: none; }
+  .stepper { padding-right: 0; border-right: 0; flex-basis: 100%; }
+  .pcard .tx { width: 30px; height: 30px; }
   .banner { gap: 14px; overflow-x: auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
   .banner .jump { display: none; }
 }
@@ -640,7 +791,13 @@ h3 .ln.needs { background: var(--surface); }
   <section class="canvas" aria-label="Prerequisite map">
     <header class="titlebar">
       <div class="brand">
-        <h1 id="title">QBIO prerequisites</h1>
+        <div class="brandrow">
+          <h1 id="title">QBIO prerequisites</h1>
+          <div class="modes" role="group" aria-label="View">
+            <button type="button" data-mode="map" aria-pressed="true">Map</button>
+            <button type="button" data-mode="plan" aria-pressed="false">Plan</button>
+          </div>
+        </div>
         <p id="subtitle">Made by students in QBA, not by USC. Check with your advisor before you register.</p>
       </div>
       <div class="search">
@@ -649,12 +806,19 @@ h3 .ln.needs { background: var(--surface); }
       </div>
     </header>
     <div class="showbar">
+      <span class="stepper" id="plan-term-wrap" hidden title="The map counts what your plan puts before this term as passed, and shows what's open in it">
+        <label class="lead" for="opt-plan">Showing</label>
+        <button type="button" class="step" id="plan-prev" aria-label="Earlier term">‹</button>
+        <select id="opt-plan"></select>
+        <button type="button" class="step" id="plan-next" aria-label="Later term">›</button>
+        <span class="nowtag" id="plan-now" hidden>Now</span>
+      </span>
       <span class="lead">Show</span>
       <label class="toggle"><input id="opt-electives" type="checkbox"> Electives <span class="n" id="elective-count"></span></label>
       <label class="toggle"><input id="opt-outside" type="checkbox"> Prerequisites from outside the major</label>
       <label class="toggle" id="credit-toggle" hidden><input id="opt-credit" type="checkbox"> AP and waived <span class="n" id="credit-count"></span></label>
       <label class="toggle" id="taken-toggle" hidden title="Untick to hide courses you've taken and shift the rest left"><input id="opt-taken" type="checkbox"> What I've taken <span class="n" id="taken-count"></span></label>
-      <label class="toggle term" title="Grey out courses that don't run in that term">Planning for <select id="opt-term"><option value="">any term</option><option value="3">Fall</option><option value="1">Spring</option><option value="2">Summer</option></select></label>
+      <label class="toggle term" id="term-wrap" title="Grey out courses that don't run in that term">Planning for <select id="opt-term"><option value="">any term</option><option value="3">Fall</option><option value="1">Spring</option><option value="2">Summer</option></select></label>
       <span class="clear-wrap" id="clear-wrap"></span>
     </div>
     <div id="viewport">
@@ -681,7 +845,8 @@ h3 .ln.needs { background: var(--surface); }
           <div class="row"><b>Your marks</b>
             <span><i class="lg-tick on"></i>Taken or AP credit</span>
             <span><i class="lg-tick doing"></i>Taking now</span>
-            <span><i class="lg-tick"></i>Can take now</span>
+            <span id="key-planned" hidden><i class="lg-tick planned"></i><span id="key-planned-text"></span></span>
+            <span><i class="lg-tick"></i><span id="key-can">Can take now</span></span>
             <span><i class="lg-tick cond"></i>Can take, with a corequisite or check</span>
             <span><i class="lg-tick waived"></i>Waived</span>
             <span id="key-offterm" hidden><i class="lg-off">Aa</i>Not offered in <b id="key-term" style="font-weight:600;margin-left:-2px"></b></span>
@@ -702,6 +867,7 @@ h3 .ln.needs { background: var(--surface); }
         <button type="button" id="zoom-fit" class="fit">Fit</button>
       </div>
     </div>
+    <section id="board" aria-label="Semester plan"></section>
   </section>
   <aside id="panel" aria-live="polite"></aside>
 </main>
@@ -787,13 +953,77 @@ h3 .ln.needs { background: var(--surface); }
   const unitRange = code => { const m = String(unitsOf(code)).match(/^(\d+)\s*-\s*(\d+)$/); return m ? [+m[1], +m[2]] : null; };
   const MAX_UNITS = 16; // a repeatable course (QBIO 490) can total more than one term's maximum
 
+  // ---------- plan ----------
+  // A semester-by-semester plan: eight Fall and Spring terms from a start term, plus any Summers
+  // added between them. Term codes are year*10 + season (1 Spring, 2 Summer, 3 Fall), so they sort
+  // in time order. Items are courses from the map, placeholders from requirements.json (GE, WRIT,
+  // minor, electives) or write-ins. The term picked in the plan drives the map: courses planned
+  // before it count as passed, courses in it count toward corequisites, and its season greys out
+  // courses that don't run then.
+  const PLANNER = R.planner || { degreeUnits: 128, maxTermUnits: 18, placeholders: [], sources: {} };
+  const PH = new Map((PLANNER.placeholders || []).map(p => [p.id, p]));
+  const PLAN_LEN = 8;
+  const nextRegular = t => t % 10 === 1 ? t + 2 : (Math.floor(t / 10) + 1) * 10 + 1;
+  const regularTerms = start => { const out = [start]; while (out.length < PLAN_LEN) out.push(nextRegular(out[out.length - 1])); return out; };
+  const summerFits = (regular, t) => Number.isInteger(t) && t % 10 === 2 && regular.includes(t - 1) && regular.includes(t + 1);
+  const planTerms = () => state.plan ? regularTerms(state.plan.start).concat(state.plan.summers).sort((a, b) => a - b) : [];
+  const phUnits = id => (PH.get(id) && PH.get(id).units) || 4;
+  const itemUnits = it => it.units !== undefined ? it.units
+    : it.kind === "course" ? (unitRange(it.code) ? unitRange(it.code)[0] : parseFloat(unitsOf(it.code)) || 0)
+    : it.kind === "ph" ? phUnits(it.ph) : 4;
+  // What the map counts as of a plan term. With no plan, nothing changes.
+  const NO_PLAN = { term: null, before: new Set(), same: new Set(), placed: new Set() };
+  let planCtx = NO_PLAN;
+  function ctxFor(t) {
+    const ctx = { term: t, before: new Set(), same: new Set(), placed: new Set() };
+    state.plan.items.forEach(it => {
+      if (it.kind !== "course") return;
+      ctx.placed.add(it.code);
+      if (it.term < t) ctx.before.add(it.code);
+      else if (it.term === t) ctx.same.add(it.code);
+    });
+    return ctx;
+  }
+  function setPlanCtx() { planCtx = state.plan && state.planTerm ? ctxFor(state.planTerm) : NO_PLAN; }
+  function withTerm(t, fn) {
+    const prev = planCtx;
+    planCtx = ctxFor(t);
+    try { return fn(); } finally { planCtx = prev; }
+  }
+  // A saved plan is checked piece by piece; anything that doesn't fit is dropped.
+  function loadPlan(p) {
+    if (!p || typeof p !== "object") return null;
+    const base = Math.floor(D.terms[0] / 10), start = p.start;
+    if (!Number.isInteger(start) || ![1, 3].includes(start % 10) || Math.abs(Math.floor(start / 10) - base) > 10) return null;
+    const regular = regularTerms(start);
+    const summers = [...new Set(Array.isArray(p.summers) ? p.summers : [])].filter(t => summerFits(regular, t)).sort((a, b) => a - b);
+    const terms = new Set(regular.concat(summers));
+    const items = [];
+    (Array.isArray(p.items) ? p.items : []).forEach(it => {
+      if (!it || typeof it !== "object" || !terms.has(it.term)) return;
+      const units = typeof it.units === "number" && it.units >= 0 && it.units <= 30 ? Math.round(it.units * 2) / 2 : undefined;
+      let out = null;
+      if (it.kind === "course" && typeof it.code === "string" && known(it.code)) out = { kind: "course", code: it.code };
+      else if (it.kind === "ph" && PH.has(it.ph)) out = { kind: "ph", ph: it.ph };
+      else if (it.kind === "write" && typeof it.label === "string" && it.label.trim()) out = { kind: "write", label: it.label.trim().slice(0, 80) };
+      if (!out) return;
+      out.term = it.term;
+      if (units !== undefined) out.units = units;
+      else if (out.kind === "write") out.units = 4;
+      items.push(out);
+    });
+    items.forEach((it, i) => { it.id = i + 1; });
+    const prior = typeof p.prior === "number" && p.prior >= 0 && p.prior <= 200 ? Math.round(p.prior) : 0;
+    return { start, summers, items, prior };
+  }
+
   // ---------- state ----------
   const STORE = "qbio-course-map:v1";
   // waived: requirement lines (slot ids) or outside-the-major courses an advisor has waived.
   // cleared: waived requirement lines a department has also accepted as a prerequisite.
   // doing: courses you're taking this term. units: what you earned in variable-unit courses.
   // term: the season you're planning for ("3" Fall, "1" Spring, "2" Summer), or "" for any.
-  const state = { taken: new Set(), doing: new Set(), waived: new Set(), cleared: new Set(), abroad: new Set(), credit: {}, units: {}, term: "", creditOpen: null, collapsed: new Set(), electives: false, outside: true, showCredit: true, showTaken: true, zoom: 1, focus: null };
+  const state = { taken: new Set(), doing: new Set(), waived: new Set(), cleared: new Set(), abroad: new Set(), credit: {}, units: {}, term: "", creditOpen: null, collapsed: new Set(), electives: false, outside: true, showCredit: true, showTaken: true, zoom: 1, focus: null, plan: null, planTerm: null, mode: "map" };
   try {
     const saved = JSON.parse(localStorage.getItem(STORE) || "null");
     if (saved) {
@@ -818,9 +1048,20 @@ h3 .ln.needs { background: var(--surface); }
       });
     }
   } catch (e) { /* storage unavailable: start fresh */ }
+  // The plan loads on its own, so a damaged plan can't take your other marks with it.
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORE) || "null");
+    if (saved && saved.plan) {
+      state.plan = loadPlan(saved.plan);
+      const ts = planTerms();
+      if (state.plan) state.planTerm = ts.includes(saved.planTerm) ? saved.planTerm : ts[0];
+    }
+    // The plan used to be a tab of the side panel ("view"); it is a full-page mode now.
+    if (saved && (saved.mode === "plan" || saved.view === "plan")) state.mode = "plan";
+  } catch (e) { state.plan = null; state.planTerm = null; }
   function save() {
     try {
-      localStorage.setItem(STORE, JSON.stringify({ taken: [...state.taken], doing: [...state.doing], waived: [...state.waived], cleared: [...state.cleared], units: state.units, term: state.term, credit: state.credit, electives: state.electives, outside: state.outside, showCredit: state.showCredit, showTaken: state.showTaken, collapsed: [...state.collapsed], abroad: [...state.abroad] }));
+      localStorage.setItem(STORE, JSON.stringify({ taken: [...state.taken], doing: [...state.doing], waived: [...state.waived], cleared: [...state.cleared], units: state.units, term: state.term, credit: state.credit, electives: state.electives, outside: state.outside, showCredit: state.showCredit, showTaken: state.showTaken, collapsed: [...state.collapsed], abroad: [...state.abroad], plan: state.plan, planTerm: state.planTerm, mode: state.mode }));
     } catch (e) { /* ignore */ }
   }
 
@@ -843,8 +1084,11 @@ h3 .ln.needs { background: var(--surface); }
   // of a prerequisite is a separate decision. Waiving an outside-the-major course (CSCI 102) is a
   // prerequisite waiver already, so it always counts.
   const clearedKey = k => !R.slots[k] || state.cleared.has(k);
-  // Courses you're taking now count as done for planning next term (assuming you pass).
-  const earned = code => state.taken.has(code) || state.doing.has(code) || CREDIT.has(code);
+  // Courses you're taking now count as done for planning next term (assuming you pass). A course
+  // in your plan counts from the term after the one it's planned in, instead.
+  const doingNow = code => state.doing.has(code) && !planCtx.placed.has(code);
+  const plannedBefore = code => planCtx.before.has(code);
+  const earned = code => state.taken.has(code) || CREDIT.has(code) || (planCtx.placed.has(code) ? plannedBefore(code) : state.doing.has(code));
   const done = code => PLACEMENT.has(code) || earned(code) || (isWaived(code) && clearedKey(waiveKey(code)));
   // Prerequisites that would be met if every waiver is accepted.
   const assumed = code => done(code) || isWaived(code);
@@ -859,20 +1103,23 @@ h3 .ln.needs { background: var(--surface); }
     if (!pre.every(g => groupMet(g, assumed))) return { state: "locked", approvals: [], coreq: [], permission: false };
     const approvals = [...new Set(pre.concat(co).filter(g => !groupMet(g) && groupMet(g, assumed))
       .flatMap(g => g.o.flat().filter(x => isWaived(x) && !clearedKey(waiveKey(x))).map(waiveKey)))];
-    const coreq = co.filter(g => !groupMet(g, assumed));
+    const coreq = missingCoreq(code);
     const permission = needsPermission(code);
     return { state: approvals.length || permission ? "check" : coreq.length ? "coreq" : "ready", approvals, coreq, permission };
   }
+  // A corequisite is met by something done, or by a course planned for the same term.
+  const missingCoreq = code => groupsOf(code, "co").filter(g => !groupMet(g, c => assumed(c) || planCtx.same.has(c)));
   function statusOf(code) {
     if (state.taken.has(code)) return "taken";
-    if (state.doing.has(code)) return "doing";
+    if (planCtx.placed.has(code)) { if (plannedBefore(code)) return "planned"; }
+    else if (state.doing.has(code)) return "doing";
     if (CREDIT.has(code)) return "credit";
     if (isWaived(code)) return "waived";
     if (!hasData(code)) return "unknown";
     return conditionsOf(code).state;
   }
   const canTake = st => st === "ready" || st === "coreq" || st === "check";
-  const isDone = st => st === "taken" || st === "doing" || st === "credit" || st === "waived";
+  const isDone = st => st === "taken" || st === "doing" || st === "planned" || st === "credit" || st === "waived";
 
   // Planning for a season: a course counts as offered then if it ran that season in the scanned
   // terms, or, with no history, if the catalogue lists that season.
@@ -882,14 +1129,28 @@ h3 .ln.needs { background: var(--surface); }
     const cat = catalogueSeasons(code);
     return cat.length ? cat.includes(s) : true;
   };
-  const offTerm = code => !!state.term && hasData(code) && !offeredIn(code, +state.term);
-  const termWord = () => D.seasons[+state.term];
+  // With a plan, the season comes from the plan term the map is showing.
+  const seasonNow = () => planCtx.term ? String(planCtx.term % 10) : state.term;
+  const offTerm = code => !!seasonNow() && hasData(code) && !offeredIn(code, +seasonNow());
+  const termWord = () => D.seasons[+seasonNow()];
+  // "between Fall 2023 and Spring 2027 it ran only in Fall": why a course is flagged for a season.
+  function offTail(code) {
+    const rec = C[code] || {};
+    const ran = [3, 1, 2].filter(s => (rec.off || []).some(t => t % 10 === s)).map(s => D.seasons[s]);
+    return ran.length ? ": between " + scanned() + " it ran only in " + andList(ran)
+      : ": the catalogue lists it for " + andList(catalogueSeasons(code).map(s => D.seasons[s])) + " only";
+  }
 
-  // Units: a variable-unit course counts what you entered, else its minimum.
+  // Units: a variable-unit course counts what you entered, else its minimum. One in your plan
+  // counts the units planned for it before the term the map is showing.
   const earnedUnits = code => {
     const r = unitRange(code);
+    if (r && !state.taken.has(code) && planCtx.placed.has(code))
+      return state.plan.items.filter(it => it.kind === "course" && it.code === code && it.term < planCtx.term).reduce((s, it) => s + itemUnits(it), 0);
     return r ? (state.units[code] || r[0]) : parseFloat(unitsOf(code)) || 0;
   };
+  // Counts toward a requirement as of the term the map is showing (credit is counted separately).
+  const countedCourse = c => state.taken.has(c) || (planCtx.placed.has(c) ? plannedBefore(c) : state.doing.has(c));
 
   // ---------- graph ----------
   // Each course sits at its earliest step: one after the slowest prerequisite group it needs,
@@ -1315,6 +1576,7 @@ h3 .ln.needs { background: var(--surface); }
   }
 
   function render() {
+    setPlanCtx();
     G = buildGraph();
     const { w, h, L, T0 } = G_SIZE;
     stage.style.width = w + "px";
@@ -1360,6 +1622,8 @@ h3 .ln.needs { background: var(--surface); }
   }
 
   function refresh() {
+    setPlanCtx();
+    const asOf = planCtx.term ? termName(planCtx.term) : "";
     nodesEl.querySelectorAll(".chip").forEach(ch => {
       const code = ch.dataset.code, st = statusOf(code);
       ch.dataset.status = st;
@@ -1369,12 +1633,13 @@ h3 .ln.needs { background: var(--surface); }
       tick.setAttribute("aria-label", st === "credit" ? disp(code) + " waived by " + CREDIT.get(code).join(" and ")
         : st === "waived" ? disp(code) + ": requirement waived"
         : st === "doing" ? disp(code) + ": taking now. Mark as taken"
+        : st === "planned" ? disp(code) + ": in your plan before " + asOf + ". Mark as taken"
         : (st === "taken" ? "Unmark " : "Mark ") + disp(code) + " as taken");
     });
     // Once anything is marked, emphasise the frontier: courses you can take now (in the term
     // you're planning for), and the arrows from what you've done into them. With nothing marked
     // all of step 1 would light up.
-    const anyMarks = state.taken.size + state.doing.size + CREDIT.size + state.waived.size > 0;
+    const anyMarks = state.taken.size + state.doing.size + CREDIT.size + state.waived.size > 0 || !!planCtx.term;
     const doneCourse = c => earned(c) || isWaived(c);
     const open = c => canTake(statusOf(c)) && !offTerm(c);
     stage.classList.toggle("marks", anyMarks);
@@ -1394,9 +1659,26 @@ h3 .ln.needs { background: var(--surface); }
     const takenMarks = state.taken.size + state.doing.size;
     document.getElementById("taken-toggle").hidden = !takenMarks && state.showTaken;
     document.getElementById("taken-count").textContent = "(" + takenMarks + ")";
-    document.getElementById("key-offterm").hidden = !state.term;
-    document.getElementById("key-term").textContent = state.term ? termWord() : "";
+    document.getElementById("key-offterm").hidden = !seasonNow();
+    document.getElementById("key-term").textContent = seasonNow() ? termWord() : "";
+    // With a plan, the "Showing" stepper takes the place of "Planning for".
+    document.getElementById("term-wrap").hidden = !!state.plan;
+    document.getElementById("plan-term-wrap").hidden = !state.plan;
+    if (state.plan) {
+      const ts = planTerms(), now = currentTerm(), i = ts.indexOf(state.planTerm);
+      const opts = ts.map(t => '<option value="' + t + '">' + termName(t) + (t === now ? " (now)" : "") + "</option>").join("");
+      if (optPlan.innerHTML !== opts) optPlan.innerHTML = opts;
+      optPlan.value = String(state.planTerm);
+      document.getElementById("plan-prev").disabled = i <= 0;
+      document.getElementById("plan-next").disabled = i >= ts.length - 1;
+      document.getElementById("plan-now").hidden = state.planTerm !== now;
+    }
+    document.getElementById("key-planned").hidden = !planCtx.term;
+    document.getElementById("key-planned-text").textContent = planCtx.term ? "Planned before " + asOf : "";
+    document.getElementById("key-can").textContent = planCtx.term ? "Can take in " + asOf : "Can take now";
     highlight();
+    applyMode();
+    renderBoard();
     renderPanel();
     renderClear();
     save();
@@ -1562,20 +1844,40 @@ h3 .ln.needs { background: var(--surface); }
       '" step="1" value="' + earnedUnits(code) + '" data-units="' + esc(code) + '"></label>';
   }
 
+  // Back to whichever tab you came from.
+  // In plan mode the panel only holds course details, so "back" closes it.
+  const backButton = () => '<button type="button" class="back" data-home>← ' + (state.mode === "plan" ? "Back to plan" : "All requirements") + "</button>";
+  const planItems = code => state.plan ? state.plan.items.filter(it => it.kind === "course" && it.code === code).sort((a, b) => a.term - b.term) : [];
+  // GE categories a course also satisfies, by their placeholder names ("GE-D Life Sciences").
+  const geLabels = code => ((C[code] && C[code].ge) || []).map(l => { const p = [...PH.values()].find(x => x.ge === l); return p ? p.label : "GE-" + l; });
+  // Add to, move to or take out of the plan term the map is showing.
+  function planButton(code, st) {
+    if (!state.plan || st === "taken" || st === "credit") return "";
+    const T = state.planTerm, items = planItems(code);
+    if (items.some(it => it.term === T))
+      return '<button type="button" class="waive" data-plan-out="' + esc(code) + '" aria-pressed="true" title="Take it out of ' + esc(termName(T)) + '">✓ In ' + esc(termName(T)) + "</button>";
+    const move = items.length && !unitRange(code);
+    return '<button type="button" class="waive" data-plan-add="' + esc(code) + '" aria-pressed="false"' + (move ? ' title="Now in ' + esc(termName(items[0].term)) + '"' : "") + ">" +
+      (move ? "Move to " : "Add to ") + esc(termName(T)) + "</button>";
+  }
+
   function courseView(code) {
     const rec = C[code] || {};
     const st = statusOf(code);
     const pre = groupsOf(code), co = groupsOf(code, "co");
     const parts = [];
-    parts.push('<button type="button" class="back" data-home>← All requirements</button>');
+    parts.push(backButton());
     const tags = roleTags(code);
+    const ge = geLabels(code);
     parts.push("<div class=\"stack\" style=\"gap:8px\">" + (tags.length ? '<div class="kicker">' + tags.join("") + "</div>" : "") +
       '<div class="bigcode">' + esc(catalogCode(code)) + (unitsOf(code) ? " · " + esc(unitsOf(code)) + " units" : "") + "</div>" +
-      "<h2>" + esc(titleOf(code) || disp(code)) + "</h2></div>");
+      "<h2>" + esc(titleOf(code) || disp(code)) + "</h2>" +
+      (ge.length ? '<p class="meta">Also counts for ' + esc(andList(ge)) + ".</p>" : "") + "</div>");
     if (known(code) && !PLACEMENT.has(code)) {
       parts.push('<div class="actions"><button type="button" class="take" data-tick="' + esc(code) + '" aria-pressed="' + (st === "taken") + '">' + (st === "taken" ? "Taken ✓" : "Mark as taken") + "</button>" +
         '<button type="button" class="waive" data-doing="' + esc(code) + '" aria-pressed="' + (st === "doing") + '">' + (st === "doing" ? "✓ Taking now" : "Taking it now") + "</button>" +
-        (courseSlot[code] || OUTSIDE.has(code) ? waiveButton(waiveKey(code)) : "") + "</div>");
+        (courseSlot[code] || OUTSIDE.has(code) ? waiveButton(waiveKey(code)) : "") + planButton(code, st) +
+        (state.mode === "plan" && G && G.nodeOf.get(code) ? '<button type="button" class="waive" data-mode="map">See it on the map</button>' : "") + "</div>");
     }
 
     if (PLACEMENT.has(code)) {
@@ -1586,24 +1888,33 @@ h3 .ln.needs { background: var(--surface); }
       parts.push('<p class="status done">Marked as taken.</p>');
     } else if (st === "doing") {
       parts.push('<p class="status doing">Taking it now. Courses that need it show as open for next term, assuming you pass.</p>');
+    } else if (st === "planned") {
+      const when = planItems(code).filter(it => it.term < planCtx.term).map(it => termName(it.term));
+      parts.push('<p class="status planned">In your plan for ' + esc(andList(when)) + ", before " + esc(termName(planCtx.term)) + ", so it counts as passed.</p>");
     } else if (st === "credit") {
       parts.push('<p class="status done">Waived by ' + esc(CREDIT.get(code).join(" and ")) + ". For the major, it counts once your advisor applies the substitution on STARS.</p>");
     } else if (st === "waived") {
       parts.push('<p class="status waived">' + waivedText(waiveKey(code)) + "</p>" + clearBox(waiveKey(code)));
     } else if (st === "locked") {
       const left = pre.filter(g => !groupMet(g, assumed)).length;
-      parts.push('<p class="status">' + left + " prerequisite" + (left > 1 ? "s" : "") + " still missing. Mark courses as taken to track this.</p>");
+      parts.push('<p class="status">' + left + " prerequisite" + (left > 1 ? "s" : "") + " still missing" + (planCtx.term
+        ? " before " + esc(termName(planCtx.term)) + ". Put them in an earlier term of your plan, or mark them as taken.</p>"
+        : ". Mark courses as taken to track this.</p>"));
     } else {
       const cond = conditionsOf(code);
       // Leaning on a course you're taking now means "next term, once you pass it".
-      const viaDoing = pre.some(g => !groupMet(g, c => assumed(c) && !state.doing.has(c)));
-      const after = viaDoing ? ", counting what you're taking now" : "";
+      const viaDoing = pre.some(g => !groupMet(g, c => assumed(c) && !doingNow(c)));
+      const viaPlan = !!planCtx.term && pre.some(g => !groupMet(g, c => assumed(c) && !plannedBefore(c)));
+      const after = viaPlan ? ", counting your plan" + (viaDoing ? " and what you're taking now" : "")
+        : viaDoing ? ", counting what you're taking now" : "";
+      const when = planCtx.term ? " in " + termName(planCtx.term) : viaDoing ? " next term" : " now";
       if (st === "ready") {
-        parts.push('<p class="status ready">' + (pre.length ? "You can take this" + (viaDoing ? " next term" : " now") + ": every prerequisite is met" + after + "." : "No prerequisites listed.") + "</p>");
+        parts.push('<p class="status ready">' + (pre.length ? "You can take this" + when + ": every prerequisite is met" + after + "." : "No prerequisites listed.") + "</p>");
       } else {
         const items = [];
         cond.coreq.forEach(g => items.push('<li><span class="mark">+</span><span>Take ' +
-          g.o.map(b => b.map(crefHTML).join(' <span class="and">and</span> ')).join(" or ") + " before or alongside it (a corequisite).</span></li>"));
+          g.o.map(b => b.map(crefHTML).join(' <span class="and">and</span> ')).join(" or ") + " before or alongside it (a corequisite)" +
+          (planCtx.term ? ": put it in " + esc(termName(planCtx.term)) + " or earlier in your plan" : "") + ".</span></li>"));
         cond.approvals.forEach(k => {
           const multi = R.slots[k].courses.length > 1;
           const ref = '<button type="button" class="cref" ' + (multi ? 'data-goto-slot="' : 'data-goto-course="') + esc(multi ? k : R.slots[k].courses[0]) + '">' + esc(slotName(k)) + "</button>";
@@ -1616,9 +1927,7 @@ h3 .ln.needs { background: var(--surface); }
       }
     }
     if (hasData(code) && !isDone(st) && offTerm(code)) {
-      const ran = [3, 1, 2].filter(s => (rec.off || []).some(t => t % 10 === s)).map(s => D.seasons[s]);
-      parts.push('<p class="flag">Not offered in ' + termWord() + (ran.length ? ": between " + scanned() + " it ran only in " + andList(ran)
-        : ": the catalogue lists it for " + andList(catalogueSeasons(code).map(s => D.seasons[s])) + " only") + ".</p>");
+      parts.push('<p class="flag">Not offered in ' + termWord() + offTail(code) + ".</p>");
     }
     if (unitRange(code) && (st === "taken" || st === "doing")) {
       const r = unitRange(code);
@@ -1719,7 +2028,7 @@ h3 .ln.needs { background: var(--surface); }
   function slotView(id) {
     const s = R.slots[id];
     const tags = roleTags(s.courses[0]);
-    const parts = ['<button type="button" class="back" data-home>← All requirements</button>',
+    const parts = [backButton(),
       '<div class="stack" style="gap:8px"><div class="kicker">' + tags.join("") + "</div><h2>" + esc(slotName(id)) + "</h2>" +
       '<p class="meta">Take one of these ' + s.courses.length + " options. They count the same for the major.</p></div>",
       '<div class="actions">' + waiveButton(id) + "</div>"];
@@ -1729,7 +2038,7 @@ h3 .ln.needs { background: var(--surface); }
       const preText = !hasData(c) ? "No prerequisite data" : pre.length ? "Needs " + pre.map(g => g.o.map(b => b.map(disp).join(" + ")).join(" / ")).join("; ") : "No prerequisites listed";
       return '<button type="button" class="option" data-goto-course="' + esc(c) + '"><span class="row"><span class="code">' + esc(catalogCode(c)) + '</span><span class="ssn">' + seasonsHTML(c) + "</span></span>" +
         '<span style="font-weight:600">' + esc(titleOf(c)) + "</span>" +
-        '<span class="note">' + esc(preText) + (state.taken.has(c) ? " · ✓ taken" : state.doing.has(c) ? " · taking now" : "") + (HIDDEN.has(c) ? " · not shown on the map (rarely taken)" : "") + "</span></button>";
+        '<span class="note">' + esc(preText) + (state.taken.has(c) ? " · ✓ taken" : doingNow(c) ? " · taking now" : planItems(c).length ? " · in your plan for " + andList(planItems(c).map(it => termName(it.term))) : "") + (HIDDEN.has(c) ? " · not shown on the map (rarely taken)" : "") + "</span></button>";
     }).join("") + "</div>");
     return '<div class="stack">' + parts.join("") + "</div>";
   }
@@ -1742,21 +2051,22 @@ h3 .ln.needs { background: var(--surface); }
   const SECTION_SHORT = { intro: "Intro", science: "Science", computing: "Computing", specialization: "Specialization", capstone: "Capstone", electives: "Electives", research: "Research" };
   // Courses you're taking now count, so the panel shows where you'll be at the end of term.
   const slotSatisfied = id => state.waived.has(id) || R.slots[id].courses.some(earned);
-  const slotDoing = id => !state.waived.has(id) && !R.slots[id].courses.some(c => state.taken.has(c) || CREDIT.has(c)) && R.slots[id].courses.some(c => state.doing.has(c));
+  const slotDoing = id => !state.waived.has(id) && !R.slots[id].courses.some(c => state.taken.has(c) || CREDIT.has(c)) && R.slots[id].courses.some(doingNow);
+  const slotPlanned = id => !state.waived.has(id) && !R.slots[id].courses.some(c => state.taken.has(c) || CREDIT.has(c) || doingNow(c)) && R.slots[id].courses.some(plannedBefore);
   // Met only through AP credit: unlocks later courses, but some sections don't accept it
   // (AP Calc BC 5 skips MATH 126 without satisfying a Specialization course).
-  const creditOnly = id => !state.waived.has(id) && !R.slots[id].courses.some(takenOrDoing) && R.slots[id].courses.some(c => CREDIT.has(c));
+  const creditOnly = id => !state.waived.has(id) && !R.slots[id].courses.some(countedCourse) && R.slots[id].courses.some(c => CREDIT.has(c));
   // Study-abroad placeholders, e.g. "abroad:electives:1", ticked from the requirements panel.
   const abroadIds = sec => Array.from({ length: sec.abroadPlaceholders || 0 }, (_, i) => "abroad:" + sec.id + ":" + (i + 1));
   const isAbroad = id => id.startsWith("abroad:");
   const slotUnits = id => {
     if (isAbroad(id)) return R.sections.find(s => s.id === id.split(":")[1]).abroadUnits || 4;
     const s = R.slots[id];
-    const c = s.courses.find(takenOrDoing) || s.courses.find(x => CREDIT.has(x)) || s.courses[0];
+    const c = s.courses.find(countedCourse) || s.courses.find(x => CREDIT.has(x)) || s.courses[0];
     return earnedUnits(c);
   };
   // The course behind a counted line whose units you can edit (QBIO 490 and 499 run 1–8 units).
-  const variableCourse = id => { const s = !isAbroad(id) && R.slots[id]; const c = s && s.courses.find(takenOrDoing); return c && unitRange(c) ? c : null; };
+  const variableCourse = id => { const s = !isAbroad(id) && R.slots[id]; const c = s && s.courses.find(x => state.taken.has(x) || doingNow(x)); return c && unitRange(c) ? c : null; };
   function allocate() {
     const usedBy = new Map(), counted = {}, info = {};
     const claim = (sec, id) => { usedBy.set(id, sec.id); counted[sec.id].push(id); };
@@ -1815,12 +2125,12 @@ h3 .ln.needs { background: var(--surface); }
       } else {
         const isTaken = s.courses.some(c => state.taken.has(c));
         const isCredit = !isTaken && s.courses.some(c => CREDIT.has(c));
-        const isDoing = slotDoing(id);
-        cls = isTaken ? " done" : isCredit ? " done credit" : isDoing ? " done doing" : " waived";
-        if (isDoing) where = "in progress";
+        const isDoing = slotDoing(id), isPlanned = !isDoing && slotPlanned(id);
+        cls = isTaken ? " done" : isCredit ? " done credit" : isDoing ? " done doing" : isPlanned ? " done planned" : " waived";
+        if (isDoing) where = "in progress"; else if (isPlanned) where = "planned";
       }
     }
-    const tip = s.courses.map(disp).join(" / ") + (!where ? "" : where === "in progress" ? " (taking it now)" : where === "extra" ? " (not needed here)"
+    const tip = s.courses.map(disp).join(" / ") + (!where ? "" : where === "in progress" ? " (taking it now)" : where === "planned" ? " (in your plan)" : where === "extra" ? " (not needed here)"
       : where.startsWith("AP") ? " (AP credit skips the course but doesn't satisfy this requirement)" : " (counted " + where + ")");
     return '<button type="button" class="pill cat-' + slotCat(id) + cls + '" ' + target + ' title="' + esc(tip) + '">' + esc(slotName(id)) +
       (where ? '<span class="where">' + esc(where) + "</span>" : "") + "</button>";
@@ -1854,7 +2164,7 @@ h3 .ln.needs { background: var(--surface); }
 
     // What can I take next? Split by what still has to happen before you register.
     const visible = new Set(G ? [...G.nodes.values()].filter(n => n.kind === "slot").flatMap(n => n.courses) : []);
-    if (state.taken.size || state.doing.size || CREDIT.size || state.waived.size) {
+    if (state.taken.size || state.doing.size || CREDIT.size || state.waived.size || planCtx.term) {
       const open = [...visible].filter(c => canTake(statusOf(c)) && !doneSlot(courseSlot[c]))
         .sort((a, b) => (G.nodes.get(G.nodeOf.get(a)).tier - G.nodes.get(G.nodeOf.get(b)).tier) || a.localeCompare(b));
       const nextPill = (c, where) => '<button type="button" class="pill cat-' + slotCat(courseSlot[c]) + '" data-goto-course="' + esc(c) + '">' + esc(disp(c)) +
@@ -1870,10 +2180,10 @@ h3 .ln.needs { background: var(--surface); }
         })],
         ["Open, but not offered in " + termWord(), later.map(c => nextPill(c, [3, 1, 2].filter(s => offeredIn(c, s)).map(s => D.seasons[s]).join(" & ")))],
       ].filter(([, pills]) => pills.length);
-      parts.push('<div class="stack" style="gap:8px"><h3>You can take next' + (state.term ? " · " + esc(termWord()) : "") + "</h3>" +
+      parts.push('<div class="stack" style="gap:8px"><h3>' + (planCtx.term ? "You can take in " + esc(termName(planCtx.term)) : "You can take next" + (state.term ? " · " + esc(termWord()) : "")) + "</h3>" +
         (groups.length ? groups.map(([label, pills], i) => (label ? '<p class="note"' + (i ? ' style="margin-top:4px"' : "") + ">" + esc(label) + "</p>" : "") + '<div class="pills">' + pills.join("") + "</div>").join("")
           : '<p class="meta">Nothing new has opened up among the courses shown.</p>') +
-        (state.doing.size ? '<p class="note">Counts what you\'re taking now as passed.</p>' : "") + "</div>");
+        (planCtx.term ? '<p class="note">Counts the courses your plan puts before ' + esc(termName(planCtx.term)) + " as passed" + ([...state.doing].some(doingNow) ? ", and what you're taking now" : "") + ".</p>" : state.doing.size ? '<p class="note">Counts what you\'re taking now as passed.</p>' : "") + "</div>");
     } else {
       parts.push('<p class="hint">Click a course to see what it needs and what it opens up. Tick the circle next to courses you have taken (a course\'s details also let you mark one you\'re taking now), add any AP credit below, and mark advisor waivers to see what you can take next. Everything is saved in this browser only.</p>');
     }
@@ -1893,6 +2203,7 @@ h3 .ln.needs { background: var(--surface); }
     R.sections.forEach(sec => {
       const mine = alloc.counted[sec.id];
       const inProgress = mine.filter(id => !isAbroad(id) && slotDoing(id)).length;
+      const planned = mine.filter(id => !isAbroad(id) && slotPlanned(id)).length;
       let prog = "", done = false, body = sec.text ? '<p class="rule">' + esc(sec.text) + "</p>" : "";
       if (sec.rule === "all") {
         done = mine.length === sec.slots.length;
@@ -1929,7 +2240,8 @@ h3 .ln.needs { background: var(--surface); }
         body += pills(sec.slots, sec);
       }
       if (inProgress) prog += " · " + inProgress + " in progress";
-      done = done && !inProgress;
+      if (planned) prog += " · " + planned + " planned";
+      done = done && !inProgress && !planned;
       if (sec.abroadPlaceholders) body += '<div class="pills">' + abroadIds(sec).map(id => abroadPill(id, sec, alloc)).join("") + "</div>";
       if (sec.note) body += '<p class="note">' + esc(sec.note) + "</p>";
       const open = !state.collapsed.has(sec.id);
@@ -1944,7 +2256,7 @@ h3 .ln.needs { background: var(--surface); }
     const missing = Object.keys(R.courses).filter(c => !hasData(c)).map(disp);
     parts.push('<div class="about"><h3 id="how" style="margin:6px 0 0">How to read the map</h3>' +
       "<p><strong>Columns</strong> show the earliest you could take each course, one step after its prerequisites. Black double lines lead into the course you pick from what it needs; gold lines lead out to what it opens up. When a prerequisite can be met several ways, the column follows the fastest one; arrows show those fastest routes, and selecting a course also lights up its slower alternatives (such as MATH 407 for QBIO 475).</p>" +
-      "<p><strong>Can take now</strong> (a solid gold ring) means every prerequisite is met. A dashed ring means you can take it once something else is sorted: a corequisite taken before or alongside it, a waived requirement that the department still has to accept as a prerequisite, or a restriction such as class standing or permission. The course's details say which. Courses you're taking now count as passed, so the map shows what opens up next term, and \"Planning for\" greys out courses that don't run in the term you pick.</p>" +
+      "<p><strong>Can take now</strong> (a solid gold ring) means every prerequisite is met. A dashed ring means you can take it once something else is sorted: a corequisite taken before or alongside it, a waived requirement that the department still has to accept as a prerequisite, or a restriction such as class standing or permission. The course's details say which. Courses you're taking now count as passed, so the map shows what opens up next term, and \"Planning for\" greys out courses that don't run in the term you pick. Switch to <strong>Plan</strong> at the top to lay out your semesters as columns. Once you have a plan, \"Showing\" takes the place of \"Planning for\": step it through your terms and the map counts the courses planned before that term as passed, counts courses in the same term toward corequisites, and greys out courses that don't run that season.</p>" +
       "<p><strong>Boxes with several codes</strong> are one requirement line from the catalogue (for example Physics I: PHYS 135a, 151, 161 or 171). If its options open up at different steps, the requirement appears once per step, with a note pointing to the other step. Once you tick or get AP credit for one option, the others are hidden.</p>" +
       "<p><strong>AP credit and waivers</strong> move the courses they cover into an \"AP and waived\" column before the first one, and everything that depends on them shifts left. Ticking a course as taken only hides the other options of its requirement, unless you untick \"What I've taken\" above the map: that hides the courses you've taken and shifts everything else left, so the map starts from where you are now.</p>" +
       (HIDDEN.size ? "<p><strong>Left off the map:</strong> " + esc([...HIDDEN].map(disp).join(", ")) + ", which QBIO students rarely take. They still count for their requirements.</p>" : "") +
@@ -1962,14 +2274,419 @@ h3 .ln.needs { background: var(--surface); }
     return '<div class="stack">' + parts.join("") + "</div>";
   }
 
+  // ---------- Plan board ----------
+  // Plan mode swaps the map for a board of semester columns. The selected column is the term new
+  // courses go into, and the term the map counts from when you switch back to it.
+  const fmtU = u => String(Math.round(u * 2) / 2);
+  const bundleText = b => b.map(disp).join(" + ");
+  const groupText = g => g.o.length === 1 ? bundleText(g.o[0]) : (g.n > 1 ? g.n + " of " : "") + g.o.map(bundleText).join(" or ");
+  const termUnits = t => state.plan.items.filter(it => it.term === t).reduce((s, it) => s + itemUnits(it), 0);
+  const nextItemId = () => state.plan.items.reduce((m, it) => Math.max(m, it.id), 0) + 1;
+  const findItem = id => state.plan && state.plan.items.find(it => it.id === id);
+  const placedCourses = () => new Set(state.plan.items.filter(it => it.kind === "course").map(it => it.code));
+  // The term you're in by the calendar: January to May is Spring, June and July Summer, the rest Fall.
+  const currentTerm = () => { const d = new Date(), m = d.getMonth(); return d.getFullYear() * 10 + (m < 5 ? 1 : m < 7 ? 2 : 3); };
+  const phFor = letter => [...PH.values()].find(p => p.ge === letter);
+  const catOf = code => courseSlot[code] ? slotCat(courseSlot[code]) : "outside";
+  let planMsg = "", confirmReset = false, trayOpen = null, boardFirst = true, focusAdd = false;
+  // Prerequisite links between cards: "ok" ones show on hover, "bad" ones (out of order) always.
+  let boardLinks = { ok: [], bad: [] }, hoverItem = null;
+
+  // A fixed-unit course is in the plan once, so adding it again moves it. A variable-unit course
+  // (QBIO 490) can be planned in several terms.
+  function addCourse(code, t) {
+    const items = planItems(code);
+    if (items.length && !unitRange(code)) {
+      const from = items[0].term;
+      items[0].term = t;
+      return from === t ? "" : "Moved " + disp(code) + " from " + termName(from) + ".";
+    }
+    state.plan.items.push({ kind: "course", code, term: t, id: nextItemId() });
+    return "";
+  }
+
+  // How many of each placeholder the plan has. Courses that carry a GE category (BISC 120 is
+  // GE-D) count toward it, whether planned, taken or in progress.
+  function phCounts() {
+    const n = new Map(), fromCourses = [];
+    const add = id => n.set(id, (n.get(id) || 0) + 1);
+    state.plan.items.forEach(it => { if (it.kind === "ph") add(it.ph); });
+    new Set([...placedCourses(), ...state.taken, ...state.doing]).forEach(c => ((C[c] && C[c].ge) || []).forEach(l => {
+      const p = phFor(l);
+      if (p) { add(p.id); fromCourses.push(disp(c) + " (GE-" + l + ")"); }
+    }));
+    return { n, fromCourses };
+  }
+
+  // What's wrong with a course where it sits. "bad" means the plan's own order is wrong (a
+  // prerequisite planned for the same or a later term); "warn" means something to check (a
+  // prerequisite that isn't planned at all, a course that doesn't run that season).
+  function itemIssues(it, t, its) {
+    const list = [];
+    if (it.kind !== "course") return { level: "", list };
+    const c = it.code;
+    withTerm(t, () => {
+      if (state.taken.has(c)) { list.push({ text: "Already marked as taken" }); return; }
+      if (CREDIT.has(c)) { list.push({ text: "Already covered by " + CREDIT.get(c).join(" and ") }); return; }
+      if (!unitRange(c)) {
+        const here = its.filter(x => x.kind === "course" && x.code === c), elsewhere = planItems(c).filter(x => x.term !== t);
+        if (here.length > 1 && here[0] === it) list.push({ text: "In this term twice" });
+        else if (here.length === 1 && elsewhere.length) list.push({ text: "Also planned for " + termName(elsewhere[0].term) });
+      }
+      const placed = planCtx.placed;
+      const late = (g, sameOk) => {
+        // Bundles that would be met if the courses planned too late moved earlier.
+        const fix = g.o.filter(b => b.every(x => assumed(x) || placed.has(x) || (sameOk && planCtx.same.has(x))));
+        return fix.length >= g.n ? [...new Set(fix.flat().filter(x => !assumed(x) && !(sameOk && planCtx.same.has(x))))] : null;
+      };
+      const linkBad = codes => codes.forEach(x => planItems(x).forEach(a => boardLinks.bad.push({ from: a.id, to: it.id })));
+      groupsOf(c).filter(g => !groupMet(g, assumed)).forEach(g => {
+        const codes = late(g, false);
+        if (codes && codes.length) {
+          const when = planItems(codes[0])[0].term;
+          list.push({ bad: true, text: "Needs " + andList(codes.map(disp)) + " first, but " + (codes.length > 1 ? "they're" : "it's") + " planned " + (when === t ? "for the same term" : "for " + termName(when)) });
+          linkBad(codes);
+        } else list.push({ text: "Needs " + groupText(g) + " before " + termName(t), title: "Not in your plan or marked as taken" });
+      });
+      missingCoreq(c).forEach(g => {
+        const codes = late(g, true);
+        if (codes && codes.length) {
+          list.push({ bad: true, text: "Corequisite " + andList(codes.map(disp)) + " is planned later, for " + termName(planItems(codes[0])[0].term) + ". Take it before or alongside" });
+          linkBad(codes);
+        } else list.push({ text: "Needs " + groupText(g) + " before or alongside it (a corequisite)" });
+      });
+      if (hasData(c) && !offeredIn(c, t % 10)) list.push({ text: "Not usually offered in " + D.seasons[t % 10], title: disp(c) + offTail(c) });
+    });
+    return { level: list.some(x => x.bad) ? "bad" : list.length ? "warn" : "", list };
+  }
+
+  // The links a card's hover draws: every planned prerequisite or corequisite that comes before it.
+  function okLinks() {
+    const out = [], items = state.plan.items.filter(it => it.kind === "course");
+    items.forEach(b => {
+      groupsOf(b.code).concat(groupsOf(b.code, "co")).forEach(g => new Set(g.o.flat()).forEach(x => {
+        const a = planItems(x).filter(a => a.term <= b.term && a !== b)[0];
+        if (a) out.push({ from: a.id, to: b.id });
+      }));
+    });
+    return out;
+  }
+
+  function startHTML() {
+    const base = Math.floor((D.terms.find(t => t % 10 === 3) || D.terms[0]) / 10), opts = [];
+    for (let y = base - 4; y <= base + 1; y++) opts.push(y * 10 + 1, y * 10 + 3);
+    const now = currentTerm(), pick = opts.filter(t => t <= now && t % 10 === 3).pop() || base * 10 + 3;
+    return '<div class="bstart"><h2>Plan your semesters</h2>' +
+      '<p class="hint">Lay out your courses term by term on a board of semester columns. A panel on the left lists what the major and GE still need; click one to add it to the term you pick. Cards turn red when a prerequisite is planned for the same or a later term, and amber when one isn\'t planned at all or the course doesn\'t run that season.</p>' +
+      '<div class="plan-start"><label for="plan-start">Your first term at USC</label><select id="plan-start">' +
+      opts.map(t => '<option value="' + t + '"' + (t === pick ? " selected" : "") + ">" + termName(t) + "</option>").join("") + "</select>" +
+      '<button type="button" class="take" data-plan-start>Start a plan</button></div>' +
+      '<p class="note">The plan has eight Fall and Spring terms from there, and you can add a Summer between any two. It is saved in this browser only.</p></div>';
+  }
+
+  function addBox(t) {
+    const T = termName(t);
+    return '<div class="plan-add">' +
+      '<form data-plan-form="course"><input id="plan-course" list="course-list" autocomplete="off" placeholder="Course code or title" aria-label="Course to add to ' + esc(T) + '"><button type="submit" class="btn">Add</button></form>' +
+      (planMsg ? '<p class="note" role="status">' + esc(planMsg) + "</p>" : "") +
+      '<form data-plan-form="write"><input id="plan-write-label" maxlength="80" autocomplete="off" placeholder="Or write one in" aria-label="Course to write in">' +
+      '<input id="plan-write-units" class="u" type="number" inputmode="decimal" min="0" max="30" step="0.5" value="4" aria-label="Units"><button type="submit" class="btn">Add</button></form></div>';
+  }
+
+  function cardHTML(it, terms, iss) {
+    const ph = it.kind === "ph" && PH.get(it.ph);
+    const label = it.kind === "course" ? disp(it.code) : ph ? ph.label : it.label;
+    const r = it.kind === "course" && unitRange(it.code);
+    const fixed = it.kind === "course" && !r && parseFloat(unitsOf(it.code)) > 0;
+    const units = fixed ? '<span class="tu" title="Units">' + fmtU(itemUnits(it)) + "</span>"
+      : '<input class="tu" id="plan-u-' + it.id + '" type="number" inputmode="decimal" min="' + (r ? r[0] : 0) + '" max="' + (r ? r[1] : 30) + '" step="' + (r ? 1 : 0.5) +
+        '" value="' + fmtU(itemUnits(it)) + '" data-plan-units="' + it.id + '" aria-label="Units for ' + esc(label) + '">';
+    const i = terms.indexOf(it.term), prev = terms[i - 1], next = terms[i + 1];
+    const shift = (to, d, ch) => '<button type="button" class="tx" id="plan-s-' + it.id + (d < 0 ? "-l" : "-r") + '" data-plan-shift="' + it.id + ":" + d + '"' +
+      (to ? ' aria-label="Move ' + esc(label) + " to " + termName(to) + '" title="Move to ' + termName(to) + '"' : " disabled") + ">" + ch + "</button>";
+    const name = it.kind === "course"
+      ? '<button type="button" class="cref" data-goto-course="' + esc(it.code) + '" title="Details for ' + esc(disp(it.code)) + '">' + esc(disp(it.code)) + "</button>"
+      : '<span class="phname" title="' + esc(label + (ph && ph.note ? ". " + ph.note : "")) + '">' + esc(label) + "</span>";
+    const sub = it.kind === "course" ? titleOf(it.code) : ph ? "Placeholder" : "Written in";
+    return '<article class="pcard' + (it.kind === "course" ? " cat-" + catOf(it.code) : " ph") + (iss.level ? " " + iss.level : "") + '" draggable="true" data-item="' + it.id + '">' +
+      '<div class="top">' + name + units + shift(prev, -1, "‹") + shift(next, 1, "›") +
+      '<button type="button" class="tx" data-plan-remove="' + it.id + '" aria-label="Remove ' + esc(label) + " from " + termName(it.term) + '" title="Remove">×</button></div>' +
+      (sub ? '<div class="ttl">' + esc(sub) + "</div>" : "") +
+      (iss.list.length ? '<ul class="iss">' + iss.list.map(x => "<li" + (x.bad ? ' class="bad"' : "") + (x.title ? ' title="' + esc(x.title) + '"' : "") + ">" + esc(x.text) + "</li>").join("") + "</ul>" : "") +
+      "</article>";
+  }
+
+  // What the plan still leaves out of the major and GE, counting every planned course as done.
+  // Each course is a chip that adds it to the selected term; its ring says whether it's open then.
+  function trayHTML() {
+    const T = state.planTerm, groups = [];
+    withTerm(99999, () => {
+      const alloc = allocate();
+      const lineCourses = id => { const cs = R.slots[id].courses.filter(c => !HIDDEN.has(c)); return cs.length ? cs : R.slots[id].courses; };
+      const lines = ids => ids.map(id => ({ id, courses: lineCourses(id) }));
+      R.sections.forEach(sec => {
+        const mine = alloc.counted[sec.id];
+        const unmet = (sec.slots || []).filter(id => !slotSatisfied(id));
+        if (sec.rule === "all") {
+          if (unmet.length) groups.push({ title: sec.title, left: unmet.length + " to go", lines: lines(unmet) });
+        } else if (sec.rule === "track") {
+          const info = alloc.info[sec.id];
+          if (info.met >= info.of) return;
+          if (!info.met) {
+            groups.push({ title: sec.title, left: "pick a track", tracks: sec.tracks.map(tr => ({ name: tr.name, lines: lines(tr.lines.filter(l => !l.some(slotSatisfied)).flat()) })) });
+          } else {
+            const tr = sec.tracks[info.track];
+            groups.push({ title: sec.title, left: tr.name + " · " + (info.of - info.met) + " to go", lines: lines(tr.lines.filter(l => !l.some(slotSatisfied)).flat()) });
+          }
+        } else if (sec.rule === "choose" && sec.minUnits) {
+          const units = mine.reduce((s, id) => s + slotUnits(id), 0), need = Math.max(sec.minUnits - units, 0), more = Math.max(sec.choose - mine.length, 0);
+          if (need || more) groups.push({ title: sec.title, left: need ? fmtU(need) + " more units" : more + " more", electives: true });
+        } else if (sec.rule === "choose") {
+          const more = sec.choose - mine.length;
+          if (more > 0) groups.push({ title: sec.title, left: "pick " + more + " more", flat: true, lines: lines(unmet) });
+        } else if (sec.rule === "research") {
+          const units = mine.reduce((s, id) => s + slotUnits(id), 0), need = (parseFloat(sec.units) || 0) - units;
+          if (need > 0) groups.push({ title: sec.title, left: fmtU(need) + " more units", flat: true, lines: lines(sec.slots) });
+        }
+      });
+    });
+    // Open or not is judged in the selected term.
+    const chip = c => withTerm(T, () => {
+      const st = statusOf(c), open = canTake(st) && !offTerm(c);
+      const why = open ? "Open in " + termName(T) : canTake(st) ? "Not usually offered in " + D.seasons[T % 10] : "Prerequisites not met before " + termName(T);
+      return '<button type="button" class="tchip cat-' + catOf(c) + (open ? " open" : " locked") + '" data-plan-add="' + esc(c) + '" draggable="true" data-drag="course:' + esc(c) + '" title="' + esc(disp(c) + " " + titleOf(c) + ". " + why) + '">' + esc(disp(c)) + "</button>";
+    });
+    const lineHTML = (ls, flat) => flat
+      ? '<div class="tchips">' + [...new Set(ls.flatMap(l => l.courses))].map(chip).join("") + "</div>"
+      : ls.map(l => l.courses.length > 1 ? '<div class="sub">' + esc(slotName(l.id)) + ", one of</div>" + '<div class="tchips">' + l.courses.map(chip).join("") + "</div>" : "").join("") +
+        (ls.some(l => l.courses.length === 1) ? '<div class="tchips">' + ls.filter(l => l.courses.length === 1).map(l => chip(l.courses[0])).join("") + "</div>" : "");
+    const body = groups.map(g => '<div class="tgroup"><h4>' + esc(g.title) + "<span>" + esc(g.left) + "</span></h4>" +
+      (g.tracks ? g.tracks.map(tr => '<div class="sub">' + esc(tr.name) + "</div>" + lineHTML(tr.lines, true)).join("")
+        : g.electives ? '<button type="button" class="inline-link" data-show-electives style="font-size:12.5px;align-self:flex-start">Pick electives on the map</button>'
+        : lineHTML(g.lines, g.flat)) + "</div>");
+    // GE and the advising sheet's other courses, as placeholders.
+    const { n } = phCounts();
+    const phChip = (p, left) => '<button type="button" class="tchip ph" data-plan-ph="' + esc(p.id) + '" draggable="true" data-drag="ph:' + esc(p.id) + '"' +
+      (p.note ? ' title="' + esc(p.note) + '"' : "") + ">" + esc(p.label) + (left > 1 ? ' <span class="n">×' + left + "</span>" : "") + "</button>";
+    const need = [...PH.values()].filter(p => p.count && (n.get(p.id) || 0) < p.count);
+    if (need.length) body.push('<div class="tgroup"><h4>GE and writing<span>' + need.reduce((s, p) => s + p.count - (n.get(p.id) || 0), 0) + " to go</span></h4>" +
+      '<div class="tchips">' + need.map(p => phChip(p, p.count - (n.get(p.id) || 0))).join("") + "</div></div>");
+    const also = [...PH.values()].filter(p => !p.count);
+    if (also.length) body.push('<div class="tgroup"><h4>Also</h4><div class="tchips">' + also.map(p => phChip(p, 0)).join("") + "</div></div>");
+    const open = trayOpen !== null ? trayOpen : !window.matchMedia("(max-width: 860px)").matches;
+    return '<details class="tray" id="plan-tray"' + (open ? " open" : "") + '><summary><b>Still needed</b><span class="to">Click to add to ' + esc(termName(T)) + "</span></summary>" +
+      (groups.length ? "" : '<p class="all-done">Every major requirement is in your plan or done.</p>') + body.join("") + "</details>";
+  }
+
+  function boardHTML() {
+    const P = state.plan;
+    if (!P) return startHTML();
+    const terms = planTerms(), T = state.planTerm, maxU = PLANNER.maxTermUnits || 18, degree = PLANNER.degreeUnits || 128, now = currentTerm();
+    const placed = placedCourses();
+    const plannedU = P.items.reduce((s, it) => s + itemUnits(it), 0);
+    const outside = [...state.taken, ...state.doing].filter(c => !placed.has(c));
+    const outsideU = outside.reduce((s, c) => s + earnedUnits(c), 0);
+    const total = plannedU + outsideU + P.prior, short = degree - total;
+    const doingOut = [...state.doing].filter(c => !placed.has(c)), many = doingOut.length > 1;
+    const target = terms.includes(now) ? now : null;
+    const src = PLANNER.sources || {};
+    const link = x => x && x.url ? '<a href="' + esc(x.url) + '" target="_blank" rel="noopener">' + esc(x.name) + "</a>" : "";
+    const k = P.items.length;
+    const head = '<div class="bhead"><div><h2>My plan</h2><p class="meta">' + termName(terms[0]) + " to " + termName(terms[terms.length - 1]) + "</p></div>" +
+      '<div class="plan-total" title="' + esc(fmtU(plannedU) + " in your plan" + (outside.length ? ", " + fmtU(outsideU) + " from courses marked taken or in progress outside it" : "") + (P.prior ? ", " + P.prior + " other units" : "")) + '"><b>' + fmtU(total) + '</b><span class="of">of ' + degree + " units</span>" +
+      '<span class="note">' + (short > 0 ? fmtU(short) + " short" : "meets the total ✓") + "</span></div>" +
+      '<label class="units meta" for="plan-prior">AP and transfer units <input id="plan-prior" type="number" inputmode="numeric" min="0" max="200" step="1" value="' + P.prior + '"></label>' +
+      '<span class="reset">' + (confirmReset
+        ? "Delete this plan" + (k ? " and its " + k + (k === 1 ? " item" : " items") : "") + '? <button type="button" class="btn danger" data-plan-reset-yes>Delete plan</button><button type="button" class="btn" data-plan-reset-no>Keep</button>'
+        : '<button type="button" class="btn" data-plan-reset>Clear plan</button>') + "</span></div>";
+    const notes = (doingOut.length ? '<p class="note">You\'re taking ' + esc(andList(doingOut.map(disp))) + " now, and " + (many ? "they aren't" : "it isn't") + " in your plan, so " + (many ? "they count" : "it counts") + " as passed in every term." +
+      (target ? ' <button type="button" class="inline-link" data-plan-doing="' + target + '">Put ' + (many ? "them" : "it") + " in " + termName(target) + "</button>" : "") + "</p>" : "");
+
+    // Done before the plan: taken, AP credit, and courses in progress that aren't in it.
+    const doneRows = [...state.taken].map(c => [c, ""]).concat([...CREDIT.keys()].filter(c => !state.taken.has(c)).map(c => [c, "AP"]), doingOut.map(c => [c, "now"]));
+    const doneCol = '<section class="pcol done-col" aria-label="Done before the plan"><div class="chead"><b style="font-size:13px">Done</b><span class="tunits">' + fmtU(outsideU + P.prior) + " u</span></div>" +
+      (doneRows.length ? '<div class="dlist">' + doneRows.map(([c, tag]) => '<div><button type="button" class="cref" data-goto-course="' + esc(c) + '">' + esc(disp(c)) + "</button>" + (tag ? '<span class="tag">' + tag + "</span>" : "") + "</div>").join("") + "</div>"
+        : '<p class="empty">Courses you mark as taken on the map show here.</p>') + "</section>";
+
+    boardLinks = { ok: okLinks(), bad: [] };
+    const cols = terms.map((t, i) => {
+      const its = P.items.filter(it => it.term === t), u = termUnits(t), sel = t === T;
+      let html = '<section class="pcol' + (sel ? " sel" : "") + '" data-drop-term="' + t + '" aria-label="' + termName(t) + (sel ? ", selected" : "") + '">' +
+        '<div class="chead"><button type="button" class="tname" id="plan-t-' + t + '" data-plan-term="' + t + '"' + (sel ? ' aria-current="true"' : ' title="Add to this term, and show it on the map"') + ">" + termName(t) + "</button>" +
+        (t === now ? '<span class="nowtag">Now</span>' : "") + '<span class="tunits' + (u > maxU ? " over" : "") + '">' + fmtU(u) + " / " + maxU + " u</span></div>" +
+        (sel ? '<p class="here">Adding here</p>' : "") +
+        its.map(it => cardHTML(it, terms, itemIssues(it, t, its))).join("") +
+        (!its.length && !sel ? '<p class="empty">Nothing planned yet</p>' : "") +
+        (u > maxU ? '<p class="cflag">More than ' + maxU + " units. Check with your advisor.</p>" : "") +
+        (sel ? addBox(t) : '<button type="button" class="addhere" data-plan-term="' + t + '" data-add-here>+ Add here</button>') +
+        (t % 10 === 2 && !its.length ? '<button type="button" class="unsummer" data-plan-unsummer="' + t + '">Remove this Summer</button>' : "") + "</section>";
+      // A Summer can go between a Spring and the Fall after it.
+      if (t % 10 === 1 && terms[i + 1] === t + 2) html += '<div class="sumgap"><button type="button" data-plan-summer="' + (t + 1) + '" title="Add Summer ' + Math.floor(t / 10) + '">+ Summer ' + Math.floor(t / 10) + "</button></div>";
+      return html;
+    }).join("");
+    const foot = '<div class="bfoot"><p class="note">Placeholders follow the ' + link(src.sheet) + " and the " + link(src.ge) + ". " + esc(PLANNER.unitsNote || "") +
+      " Hover a course to draw arrows to what it needs and what it opens up (gold). Drag cards between terms, or use ‹ ›.</p></div>";
+    return head + '<div class="bnotes">' + notes + "</div>" +
+      '<div class="bbody">' + trayHTML() + '<div class="cols"><div class="cols-inner">' + doneCol + cols + '<svg id="board-arrows" aria-hidden="true"></svg></div></div></div>' + foot;
+  }
+
+  const board = document.getElementById("board");
+  const appEl = document.querySelector(".app");
+  function renderBoard() {
+    if (state.mode !== "plan") { if (board.innerHTML) board.innerHTML = ""; boardFirst = true; return; }
+    const colsEl = board.querySelector(".cols"), trayEl = board.querySelector(".tray");
+    const keepL = colsEl ? colsEl.scrollLeft : 0, keepT = colsEl ? colsEl.scrollTop : 0, keepTray = trayEl ? trayEl.scrollTop : 0;
+    const active = board.contains(document.activeElement) ? document.activeElement.id : "";
+    board.innerHTML = boardHTML();
+    planMsg = "";
+    const cols = board.querySelector(".cols"), tray = board.querySelector(".tray");
+    if (cols) { cols.scrollLeft = keepL; cols.scrollTop = keepT; }
+    if (tray) tray.scrollTop = keepTray;
+    const sel = board.querySelector(".pcol.sel");
+    if (boardFirst && cols && sel && cols.scrollWidth > cols.clientWidth) cols.scrollLeft = Math.max(0, sel.offsetLeft - 190);
+    boardFirst = false;
+    const again = focusAdd ? document.getElementById("plan-course") : active && document.getElementById(active);
+    if (again) {
+      again.focus({ preventScroll: !focusAdd });
+      // The add box sits in the selected column; keep it in view.
+      if (focusAdd && sel && cols && (sel.offsetLeft < cols.scrollLeft || sel.offsetLeft + sel.offsetWidth > cols.scrollLeft + cols.clientWidth)) cols.scrollLeft = Math.max(0, sel.offsetLeft - 190);
+    }
+    focusAdd = false;
+    requestAnimationFrame(drawArrows);
+  }
+
+  // Arrows between cards, drawn over the columns.
+  function drawArrows() {
+    const svgEl = document.getElementById("board-arrows"), inner = board.querySelector(".cols-inner");
+    if (!svgEl || !inner) return;
+    inner.querySelectorAll(".pcard").forEach(el => el.classList.remove("hl-pre", "hl-post", "hl-self"));
+    const lines = boardLinks.bad.map(l => ({ from: l.from, to: l.to, cls: "bad" }));
+    const badKey = new Set(lines.map(l => l.from + ">" + l.to));
+    if (hoverItem !== null) {
+      const self = inner.querySelector('[data-item="' + hoverItem + '"]');
+      if (self) self.classList.add("hl-self");
+      boardLinks.ok.concat(boardLinks.bad).forEach(l => {
+        const other = l.to === hoverItem ? l.from : l.from === hoverItem ? l.to : null;
+        if (other === null) return;
+        const el = inner.querySelector('[data-item="' + other + '"]');
+        if (el) el.classList.add(l.to === hoverItem ? "hl-pre" : "hl-post");
+        if (!badKey.has(l.from + ">" + l.to)) lines.push({ from: l.from, to: l.to, cls: l.to === hoverItem ? "pre" : "post" });
+      });
+    }
+    if (getComputedStyle(svgEl).display === "none") return;
+    const w = inner.scrollWidth, h = inner.scrollHeight, base = inner.getBoundingClientRect();
+    svgEl.setAttribute("width", w);
+    svgEl.setAttribute("height", h);
+    svgEl.setAttribute("viewBox", "0 0 " + w + " " + h);
+    const box = id => {
+      const el = inner.querySelector('[data-item="' + id + '"]');
+      if (!el) return null;
+      const r = el.getBoundingClientRect();
+      return { l: r.left - base.left, r: r.right - base.left, y: r.top - base.top + Math.min(14, r.height / 2) };
+    };
+    const marker = cls => '<marker id="mk-' + cls + '" viewBox="0 0 8 8" refX="7.5" refY="4" markerWidth="7" markerHeight="7" orient="auto" markerUnits="userSpaceOnUse"><path class="mk-' + cls + '" d="M0,0.5 L8,4 L0,7.5 z"/></marker>';
+    let s = "<defs>" + marker("bad") + marker("pre") + marker("post") + "</defs>";
+    lines.forEach(l => {
+      const a = box(l.from), b = box(l.to);
+      if (!a || !b) return;
+      let d;
+      if (Math.abs(a.l - b.l) < 4) {
+        // Same column: loop out to the left.
+        d = "M" + a.l + " " + a.y + " C" + (a.l - 30) + " " + a.y + " " + (b.l - 30) + " " + b.y + " " + (b.l - 1) + " " + b.y;
+      } else if (a.r <= b.l) {
+        const dx = Math.max(24, (b.l - a.r) / 2);
+        d = "M" + a.r + " " + a.y + " C" + (a.r + dx) + " " + a.y + " " + (b.l - dx) + " " + b.y + " " + (b.l - 1) + " " + b.y;
+      } else {
+        // A prerequisite planned later than the course: the arrow runs backwards.
+        const dx = Math.max(24, (a.l - b.r) / 2);
+        d = "M" + a.l + " " + a.y + " C" + (a.l - dx) + " " + a.y + " " + (b.r + dx) + " " + b.y + " " + (b.r + 1) + " " + b.y;
+      }
+      s += '<path class="parrow ' + l.cls + '" marker-end="url(#mk-' + l.cls + ')" d="' + d + '"/>';
+    });
+    svgEl.innerHTML = s;
+  }
+  function setHover(id) {
+    if (id === hoverItem) return;
+    hoverItem = id;
+    drawArrows();
+  }
+
+  function applyMode() {
+    const plan = state.mode === "plan";
+    appEl.classList.toggle("plan", plan);
+    appEl.classList.toggle("focused", !!state.focus);
+    document.querySelectorAll(".modes [data-mode]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.mode === state.mode)));
+  }
+
+  // Plan buttons, on the board and in the course panel. Moving a course between terms changes
+  // the map, so those re-render.
+  function planClick(b) {
+    const d = b.dataset, P = state.plan;
+    if (b.hasAttribute("data-plan-start")) {
+      state.plan = loadPlan({ start: +document.getElementById("plan-start").value, summers: [], items: [], prior: 0 });
+      const ts = planTerms();
+      state.planTerm = state.plan ? (ts.includes(currentTerm()) ? currentTerm() : ts[0]) : null;
+      boardFirst = true;
+      render();
+      return true;
+    }
+    if (!P) return false;
+    if (d.planTerm) { state.planTerm = +d.planTerm; focusAdd = b.hasAttribute("data-add-here"); render(); return true; }
+    if (d.planAdd) { planMsg = addCourse(d.planAdd, state.planTerm); render(); return true; }
+    if (d.planOut) { P.items = P.items.filter(it => !(it.kind === "course" && it.code === d.planOut && it.term === state.planTerm)); render(); return true; }
+    if (d.planPh && PH.has(d.planPh)) { P.items.push({ kind: "ph", ph: d.planPh, term: state.planTerm, id: nextItemId() }); refresh(); return true; }
+    if (d.planShift) {
+      const [id, dir] = d.planShift.split(":").map(Number), it = findItem(id), ts = planTerms();
+      const to = it && ts[ts.indexOf(it.term) + dir];
+      if (to) it.term = to;
+      if (it && it.kind === "course") render(); else refresh();
+      return true;
+    }
+    if (d.planRemove) {
+      const it = findItem(+d.planRemove);
+      P.items = P.items.filter(x => x !== it);
+      if (hoverItem === +d.planRemove) hoverItem = null;
+      if (it && it.kind === "course") render(); else refresh();
+      return true;
+    }
+    if (d.planSummer) {
+      const t = +d.planSummer;
+      if (summerFits(regularTerms(P.start), t) && !P.summers.includes(t)) { P.summers.push(t); P.summers.sort((a, b) => a - b); }
+      state.planTerm = t;
+      render();
+      return true;
+    }
+    if (d.planUnsummer) {
+      const t = +d.planUnsummer;
+      P.summers = P.summers.filter(x => x !== t);
+      P.items = P.items.filter(it => it.term !== t);
+      if (state.planTerm === t) state.planTerm = t - 1;
+      render();
+      return true;
+    }
+    if (d.planDoing) {
+      const t = +d.planDoing, placed = placedCourses();
+      if (planTerms().includes(t)) [...state.doing].filter(c => !placed.has(c)).forEach(c => addCourse(c, t));
+      render();
+      return true;
+    }
+    if (b.hasAttribute("data-plan-reset")) { confirmReset = true; refresh(); return true; }
+    if (b.hasAttribute("data-plan-reset-no")) { confirmReset = false; refresh(); return true; }
+    if (b.hasAttribute("data-plan-reset-yes")) { state.plan = null; state.planTerm = null; confirmReset = false; hoverItem = null; render(); return true; }
+    return false;
+  }
+
   function renderPanel() {
     const keep = panel.scrollTop;
     const f = state.focus;
     const active = panel.contains(document.activeElement) ? document.activeElement.id : "";
-    panel.innerHTML = !f ? homeView() : f.kind === "slot" ? slotView(f.id) : courseView(f.id);
-    if (panel.dataset.view === (f ? f.kind + f.id : "home")) panel.scrollTop = keep;
+    // In plan mode the panel is hidden until a course is picked, so there's no home view to build.
+    panel.innerHTML = !f ? (state.mode === "plan" ? "" : homeView())
+      : f.kind === "slot" ? slotView(f.id) : courseView(f.id);
+    const key = f ? f.kind + f.id : state.mode;
+    if (panel.dataset.view === key) panel.scrollTop = keep;
     else panel.scrollTop = 0;
-    panel.dataset.view = f ? f.kind + f.id : "home";
+    panel.dataset.view = key;
     const again = active && document.getElementById(active);
     if (again) again.focus({ preventScroll: true });
   }
@@ -1981,7 +2698,7 @@ h3 .ln.needs { background: var(--surface); }
     const n = state.taken.size + state.doing.size + state.waived.size + state.abroad.size;
     if (!n) { clearWrap.innerHTML = ""; confirmClear = false; return; }
     clearWrap.innerHTML = confirmClear
-      ? "Clear " + n + ' taken, in-progress, waived and study-abroad marks? <button type="button" class="btn danger" data-clear-yes>Clear</button><button type="button" class="btn" data-clear-no>Keep</button>'
+      ? "Clear " + n + ' taken, in-progress, waived and study-abroad marks? Your plan stays. <button type="button" class="btn danger" data-clear-yes>Clear</button><button type="button" class="btn" data-clear-no>Keep</button>'
       : '<button type="button" class="link" data-clear>Clear my marks (' + n + ")</button>";
   }
   clearWrap.addEventListener("click", ev => {
@@ -2063,11 +2780,13 @@ h3 .ln.needs { background: var(--surface); }
     if (head) { const s = head.dataset.slot; select(state.focus && state.focus.kind === "slot" && state.focus.id === s ? null : { kind: "slot", id: s }, false); }
   });
 
-  panel.addEventListener("click", ev => {
+  // The panel and the plan board share these handlers.
+  function onClick(ev) {
     const b = ev.target.closest("button, a");
-    if (!b || b.tagName === "A") return;
+    if (!b || b.tagName === "A" || b.hasAttribute("data-mode")) return;
+    if (planClick(b)) return;
     if (b.hasAttribute("data-home")) select(null);
-    else if (b.dataset.gotoCourse) select({ kind: "course", id: b.dataset.gotoCourse }, true);
+    else if (b.dataset.gotoCourse) select({ kind: "course", id: b.dataset.gotoCourse }, state.mode === "map");
     else if (b.dataset.gotoSlot) select({ kind: "slot", id: b.dataset.gotoSlot }, true);
     else if (b.dataset.tick) toggleTaken(b.dataset.tick);
     else if (b.dataset.doing) toggleDoing(b.dataset.doing);
@@ -2081,9 +2800,12 @@ h3 .ln.needs { background: var(--surface); }
       if (state.waived.has(k)) { state.waived.delete(k); state.cleared.delete(k); } else state.waived.add(k);
       render();
     }
-    else if (b.hasAttribute("data-show-electives")) { optElectives.checked = true; setElectives(true); }
-  });
-  panel.addEventListener("change", ev => {
+    else if (b.hasAttribute("data-show-electives")) {
+      if (state.mode === "plan") setMode("map");
+      optElectives.checked = true; setElectives(true);
+    }
+  }
+  function onChange(ev) {
     const t = ev.target;
     if (t.dataset.clearKey) {
       if (t.checked) state.cleared.add(t.dataset.clearKey); else state.cleared.delete(t.dataset.clearKey);
@@ -2097,12 +2819,130 @@ h3 .ln.needs { background: var(--surface); }
       refresh();
       return;
     }
+    if (t.dataset.planUnits) {
+      const it = findItem(+t.dataset.planUnits), v = parseFloat(t.value);
+      if (it) {
+        const r = it.kind === "course" && unitRange(it.code);
+        if (t.value === "" || !Number.isFinite(v)) { if (it.kind === "write") it.units = 4; else delete it.units; }
+        else it.units = Math.min(r ? r[1] : 30, Math.max(r ? r[0] : 0, Math.round(v * 2) / 2));
+      }
+      refresh();
+      return;
+    }
+    if (t.id === "plan-prior" && state.plan) {
+      const v = Math.round(+t.value);
+      state.plan.prior = Number.isFinite(v) ? Math.min(200, Math.max(0, v)) : 0;
+      refresh();
+      return;
+    }
     const sel = t.closest("select[data-exam]");
     if (!sel) return;
     if (sel.value) state.credit[sel.dataset.exam] = sel.value;
     else delete state.credit[sel.dataset.exam];
     computeCredit();
     render(); // credited courses move before step 1, so the layout changes
+  }
+  // The plan's add-a-course and write-in forms.
+  function onSubmit(ev) {
+    ev.preventDefault();
+    const form = ev.target, kind = form.dataset.planForm, P = state.plan;
+    if (!P || !kind) return;
+    if (kind === "course") {
+      const text = form.querySelector("input").value.trim(), c = text ? findCourse(text) : null;
+      if (!c || !known(c)) { planMsg = text ? "No course matches \u201c" + text + "\u201d. Check the code, or write it in below." : ""; refresh(); return; }
+      planMsg = addCourse(c, state.planTerm) || "Added " + disp(c) + ".";
+      render();
+    } else if (kind === "write") {
+      const label = document.getElementById("plan-write-label").value.trim().slice(0, 80);
+      if (!label) return;
+      const v = parseFloat(document.getElementById("plan-write-units").value);
+      P.items.push({ kind: "write", label, units: Number.isFinite(v) ? Math.min(30, Math.max(0, Math.round(v * 2) / 2)) : 4, term: state.planTerm, id: nextItemId() });
+      refresh();
+    }
+  }
+  // Picking a suggestion from the list adds it straight away, as the map's search does.
+  function onInput(ev) {
+    const t = ev.target;
+    if (t.id === "plan-course" && t.value.includes(" · ") && findCourse(t.value)) t.form.requestSubmit();
+  }
+  [panel, board].forEach(el => {
+    el.addEventListener("click", onClick);
+    el.addEventListener("change", onChange);
+    el.addEventListener("submit", onSubmit);
+    el.addEventListener("input", onInput);
+  });
+  // The tray stays open or shut as you left it. Toggle events don't bubble.
+  board.addEventListener("toggle", ev => { if (ev.target.id === "plan-tray") trayOpen = ev.target.open; }, true);
+
+  // Hovering or focusing a card draws its prerequisite links.
+  const cardAt = ev => { const c = ev.target.closest && ev.target.closest(".pcard"); return c ? +c.dataset.item : null; };
+  board.addEventListener("pointerover", ev => { if (ev.pointerType !== "touch") setHover(cardAt(ev)); });
+  board.addEventListener("pointerleave", () => setHover(null));
+  board.addEventListener("focusin", ev => setHover(cardAt(ev)));
+  window.addEventListener("resize", () => { if (state.mode === "plan") requestAnimationFrame(drawArrows); });
+
+  // Drag a card to another term, or a chip from the tray onto a term.
+  let dragVal = null;
+  board.addEventListener("dragstart", ev => {
+    const card = ev.target.closest && ev.target.closest(".pcard, [data-drag]");
+    if (!card) return;
+    dragVal = card.dataset.item ? "item:" + card.dataset.item : card.dataset.drag;
+    ev.dataTransfer.effectAllowed = "move";
+    ev.dataTransfer.setData("text/plain", dragVal);
+    card.classList.add("dragging");
+  });
+  board.addEventListener("dragover", ev => {
+    const col = dragVal && ev.target.closest("[data-drop-term]");
+    if (!col) return;
+    ev.preventDefault();
+    ev.dataTransfer.dropEffect = "move";
+    board.querySelectorAll(".pcol.drop").forEach(c => { if (c !== col) c.classList.remove("drop"); });
+    col.classList.add("drop");
+  });
+  board.addEventListener("dragleave", ev => {
+    const col = ev.target.closest("[data-drop-term]");
+    if (col && !col.contains(ev.relatedTarget)) col.classList.remove("drop");
+  });
+  board.addEventListener("drop", ev => {
+    const col = dragVal && ev.target.closest("[data-drop-term]"), P = state.plan;
+    if (!col || !P) return;
+    ev.preventDefault();
+    const t = +col.dataset.dropTerm, [kind, v] = [dragVal.slice(0, dragVal.indexOf(":")), dragVal.slice(dragVal.indexOf(":") + 1)];
+    dragVal = null;
+    if (kind === "item") { const it = findItem(+v); if (it) it.term = t; }
+    else if (kind === "course" && known(v)) planMsg = addCourse(v, t);
+    else if (kind === "ph" && PH.has(v)) P.items.push({ kind: "ph", ph: v, term: t, id: nextItemId() });
+    render();
+  });
+  board.addEventListener("dragend", () => {
+    dragVal = null;
+    board.querySelectorAll(".dragging, .drop").forEach(el => el.classList.remove("dragging", "drop"));
+  });
+
+  // ---------- map / plan switch ----------
+  let fitted = false;
+  // The map's first zoom needs its width, which is 0 while the plan is showing.
+  function fitOnce() {
+    if (fitted || !viewport.clientWidth) return;
+    fitted = true;
+    if (viewport.clientWidth < G_SIZE.w) setZoom(Math.max(0.7, Math.min(1, viewport.clientWidth / G_SIZE.w)));
+  }
+  function setMode(m) {
+    if (state.mode === m) return;
+    state.mode = m;
+    confirmReset = false;
+    hoverItem = null;
+    refresh();
+    window.scrollTo(0, 0);
+    if (m === "map") {
+      fitOnce();
+      const f = state.focus;
+      if (f && f.kind === "course") requestAnimationFrame(() => revealNode(G.nodeOf.get(f.id)));
+    }
+  }
+  document.addEventListener("click", ev => {
+    const b = ev.target.closest("[data-mode]");
+    if (b) setMode(b.dataset.mode);
   });
   // <details> toggle events don't bubble, so listen in the capture phase.
   panel.addEventListener("toggle", ev => {
@@ -2186,6 +3026,14 @@ h3 .ln.needs { background: var(--surface); }
   const optTerm = document.getElementById("opt-term");
   optTerm.value = state.term;
   optTerm.addEventListener("change", () => { state.term = optTerm.value; refresh(); });
+  const optPlan = document.getElementById("opt-plan");
+  optPlan.addEventListener("change", () => { state.planTerm = +optPlan.value; render(); });
+  function stepPlan(d) {
+    const ts = planTerms(), t = ts[ts.indexOf(state.planTerm) + d];
+    if (t) { state.planTerm = t; render(); }
+  }
+  document.getElementById("plan-prev").addEventListener("click", () => stepPlan(-1));
+  document.getElementById("plan-next").addEventListener("click", () => stepPlan(1));
 
   const searchInput = document.getElementById("search");
   const searchable = [...new Set(Object.keys(R.courses).concat(D.outside))].sort();
@@ -2249,6 +3097,7 @@ h3 .ln.needs { background: var(--surface); }
 
   // "How to use it" and "About the data" live at the foot of the requirements panel.
   document.querySelectorAll("[data-jump]").forEach(b => b.addEventListener("click", () => {
+    if (state.mode !== "map") setMode("map");
     if (state.focus) select(null);
     const target = document.getElementById(b.dataset.jump);
     if (target) target.scrollIntoView({ behavior: reduceMotion() ? "auto" : "smooth", block: "start" });
@@ -2257,7 +3106,7 @@ h3 .ln.needs { background: var(--surface); }
   if (window.matchMedia("(max-width: 860px)").matches) document.getElementById("key").open = false;
 
   render();
-  if (viewport.clientWidth < G_SIZE.w) setZoom(Math.max(0.7, Math.min(1, viewport.clientWidth / G_SIZE.w)));
+  fitOnce();
   const fromHash = parseCode(decodeURIComponent(location.hash.slice(1)));
   if (fromHash && known(fromHash)) select({ kind: "course", id: fromHash }, true);
   window.addEventListener("resize", () => applyZoom());
