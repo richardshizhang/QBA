@@ -1,0 +1,498 @@
+{
+ "_about": [
+  "Hand decisions for scripts/fetch_grants.py: which NIH RePORTER PI profiles (nih), NSF lead-PI ids (nsf_pi),",
+  "NSF co-PI emails (nsf_co) and single NSF awards (nsf_awards) belong to each QCB faculty member.",
+  "first and last add name spellings to search under. check marks a person to look at again.",
+  "nih_skip lists NIH core projects to leave out: someone else's grants that RePORTER files under a kept profile.",
+  "Everything the searches find that isn't listed here was rejected as a namesake on the reviewed date,",
+  "except NSF identities carrying the person's faculty.json email, which are kept automatically."
+ ],
+ "reviewed": "2026-11-20",
+ "people": {
+  "helen-berman": {
+   "nih": [
+    1863385
+   ],
+   "nsf_pi": [
+    "000040270"
+   ],
+   "nsf_co": [
+    "berman@rcsb.rutgers.edu"
+   ],
+   "note": "All NIH grants are from Rutgers (PDB, FY1985–2015, many P41 subprojects); none at USC. NSF: all at Rutgers and earlier, before USC. Two awards now show Stephen Burley or Brinda Vallat as PI after she retired from Rutgers, but keep her piId."
+  },
+  "peter-calabrese": {
+   "nih": [
+    10479989
+   ],
+   "nsf_pi": [
+    "269693945"
+   ],
+   "nsf_co": [],
+   "note": "NSF: one 2001 individual postdoctoral fellowship (the awardee is listed as himself)."
+  },
+  "mark-chaisson": {
+   "nih": [
+    12570721
+   ],
+   "nsf_pi": [
+    "270030671"
+   ],
+   "nsf_co": []
+  },
+  "liang-chen": {
+   "nih": [
+    9049911
+   ],
+   "nsf_pi": [],
+   "nsf_co": [],
+   "note": "Kept Liang Chen at USC; LIANGJING Chen and QiLiang Chen are other people (RePORTER matches first names loosely). NSF: the only Liang Chen lead PI is at Nebraska, a namesake."
+  },
+  "tsu-pei-chiu": {
+   "first": [
+    "Tsupei"
+   ],
+   "nih": [],
+   "nsf_pi": [],
+   "nsf_co": [],
+   "note": "No NIH, NSF, OpenAlex or ORCID grants found."
+  },
+  "michael-edge": {
+   "first": [
+    "Doc"
+   ],
+   "nih": [
+    15288832
+   ],
+   "nsf_pi": [],
+   "nsf_co": []
+  },
+  "geoffrey-fudenberg": {
+   "nih": [
+    9583561
+   ],
+   "nsf_pi": [],
+   "nsf_co": [],
+   "note": "No active grant found: his NIGMS R35 (R35GM143116) ended 2026-05-31 and RePORTER lists nothing newer. A renewal may not be listed yet.",
+   "check": true
+  },
+  "vsevolod-katritch": {
+   "first": [
+    "Seva"
+   ],
+   "nih": [
+    7027821
+   ],
+   "nsf_pi": [],
+   "nsf_co": []
+  },
+  "steve-kay": {
+   "first": [
+    "Steven",
+    "Stephen"
+   ],
+   "nih": [
+    1876731
+   ],
+   "nsf_pi": [
+    "000185296"
+   ],
+   "nsf_co": [
+    "stevek@scripps.edu",
+    "stevekay@usc.edu"
+   ],
+   "nsf_awards": [
+    "1158254"
+   ],
+   "note": "One 2012 Scripps NSF award moved to a new PI and id; kept by hand from OpenAlex."
+  },
+  "adam-maclean": {
+   "nih": [
+    14896432
+   ],
+   "nsf_pi": [
+    "270043324"
+   ],
+   "nsf_co": []
+  },
+  "jazlyn-mooney": {
+   "nih": [
+    12652752
+   ],
+   "nsf_pi": [
+    "270035169"
+   ],
+   "nsf_co": [],
+   "note": "NSF: one 2021 individual postdoctoral fellowship."
+  },
+  "remo-rohs": {
+   "nih": [
+    10803025
+   ],
+   "nsf_pi": [
+    "269885281"
+   ],
+   "nsf_co": []
+  },
+  "andrew-smith": {
+   "nih": [
+    9475565
+   ],
+   "nsf_pi": [],
+   "nsf_co": [],
+   "note": "14 NIH profiles named Andrew Smith; kept Andrew David Smith at USC. All NSF Andrew Smiths are other people. NSF: seven Andrew Smiths, none at USC or with his email."
+  },
+  "fengzhu-sun": {
+   "nih": [
+    2091713
+   ],
+   "nsf_pi": [
+    "000264386"
+   ],
+   "nsf_co": [
+    "fsun@usc.edu"
+   ]
+  },
+  "andrew-mcmahon": {
+   "nih": [
+    1862596
+   ],
+   "nsf_pi": [],
+   "nsf_co": [],
+   "note": "No active grant found: his last USC R01 (R01DK126925) ended 2026-05-31 and RePORTER lists nothing newer. A renewal or new grant may not be listed yet.",
+   "check": true
+  },
+  "simon-tavare": {
+   "last": [
+    "Tavare"
+   ],
+   "nih": [
+    2429478
+   ],
+   "nsf_pi": [
+    "000169421",
+    "270032712"
+   ],
+   "nsf_co": [
+    "stavare@usc.edu"
+   ],
+   "note": "NSF: piId 270032712 is his 2020 Columbia award (same person, new id when he moved); 'Tavaré' with the accent returns nothing, so the search uses 'Tavare'."
+  },
+  "michael-waterman": {
+   "nih": [
+    1965101
+   ],
+   "nsf_pi": [
+    "000116781"
+   ],
+   "nsf_co": [
+    "msw@usc.edu"
+   ],
+   "note": "Michael R Waterman (Vanderbilt, biochemistry) is a namesake."
+  },
+  "don-b-arnold": {
+   "first": [
+    "Donald"
+   ],
+   "nih": [
+    6712304
+   ],
+   "nsf_pi": [],
+   "nsf_co": [],
+   "note": "Donald Hayes Arnold (Vanderbilt) is a namesake."
+  },
+  "charleston-chiang": {
+   "nih": [
+    8505272
+   ],
+   "nsf_pi": [],
+   "nsf_co": [],
+   "note": "NSF: the USC rows under 'Chiang' are Cindy Chiang (linguistics) and others; none are his."
+  },
+  "rosa-di-felice": {
+   "last": [
+    "DiFelice",
+    "Felice"
+   ],
+   "nih": [],
+   "nsf_pi": [],
+   "nsf_co": [],
+   "note": "No NIH, NSF, OpenAlex or ORCID grants found (NSF search tried 'Di Felice', 'DiFelice' and 'Felice'). NSF: 'Di Felice' returns nothing and 'Felice' returns 32 awards, none hers."
+  },
+  "arun-durvasula": {
+   "nih": [
+    15615575
+   ],
+   "nsf_pi": [],
+   "nsf_co": []
+  },
+  "stacey-finley": {
+   "nih": [
+    10296807
+   ],
+   "nsf_pi": [
+    "269949226"
+   ],
+   "nsf_co": []
+  },
+  "peter-foster": {
+   "nih": [],
+   "nsf_pi": [],
+   "nsf_co": [],
+   "note": "No NIH, NSF, OpenAlex or ORCID grants found; NSF's USC Fosters are Ian Foster on ISI awards."
+  },
+  "scott-fraser": {
+   "nih": [
+    1920651,
+    3412628,
+    3412627
+   ],
+   "nsf_pi": [
+    "000118460"
+   ],
+   "nsf_co": [
+    "sfraser@provost.usc.edu"
+   ],
+   "note": "Two tiny 1990s duplicate NIH profiles are the same person; kept all three. NSF: emails on 1980s UC Irvine awards show his current USC address, so the match is safe. A Fraser at Monterey Peninsula College is a namesake."
+  },
+  "krishna-garikipati": {
+   "first": [
+    "Krishnakumar"
+   ],
+   "nih": [],
+   "nsf_pi": [
+    "000262092"
+   ],
+   "nsf_co": [
+    "garikipa@usc.edu"
+   ],
+   "note": "NSF lists him as Krishnakumar, so a 'Krishna Garikipati' search finds nothing; the script searches by surname."
+  },
+  "steven-gazal": {
+   "nih": [
+    14444240
+   ],
+   "nsf_pi": [],
+   "nsf_co": []
+  },
+  "christoph-haselwandter": {
+   "nih": [],
+   "nsf_pi": [
+    "269889433"
+   ],
+   "nsf_co": [
+    "cah77@usc.edu"
+   ]
+  },
+  "andrei-irimia": {
+   "nih": [
+    10530401
+   ],
+   "nsf_pi": [],
+   "nsf_co": []
+  },
+  "eva-kanso": {
+   "nih": [
+    11674326
+   ],
+   "nsf_pi": [
+    "269771792",
+    "000152488"
+   ],
+   "nsf_co": [
+    "kanso@usc.edu"
+   ],
+   "note": "NIH grant is multi-PI with the University of Iowa. NSF gave her two lead-PI ids; both carry kanso@usc.edu."
+  },
+  "judith-kribelbauer": {
+   "last": [
+    "Kribelbauer-Swietek"
+   ],
+   "nih": [
+    80496036
+   ],
+   "nsf_pi": [],
+   "nsf_co": [],
+   "note": "NIH lists her as Judith Kribelbauer-Swietek."
+  },
+  "jerry-s-h-lee": {
+   "first": [
+    "Jerry S"
+   ],
+   "nih": [],
+   "nsf_pi": [],
+   "nsf_co": [],
+   "note": "No grants found: the NIH Jerry Lees are Loma Linda and other namesakes, and NSF, OpenAlex and ORCID have none."
+  },
+  "naomi-levine": {
+   "nih": [],
+   "nsf_pi": [
+    "269916347"
+   ],
+   "nsf_co": [
+    "n.levine@usc.edu"
+   ]
+  },
+  "sheng-li": {
+   "nih": [
+    12243946
+   ],
+   "nsf_pi": [],
+   "nsf_co": [],
+   "note": "15 NIH profiles named Sheng Li; kept the Jackson Lab → USC one (epigenomics). 7845608 (UTHealth Houston, rehabilitation) and the rest are other people. NSF: the Sheng Li at Virginia and Sheng-San Li (Florida) are namesakes; no NSF awards for him."
+  },
+  "ruishan-liu": {
+   "nih": [],
+   "nsf_pi": [],
+   "nsf_co": [
+    "ruishanl@usc.edu"
+   ]
+  },
+  "yan-liu": {
+   "nih": [],
+   "nsf_pi": [
+    "269867875"
+   ],
+   "nsf_co": [
+    "yanliu.cs@usc.edu"
+   ],
+   "note": "No NIH grants. RePORTER's loose first-name match returns Zhaoyang Liu (USC), who is someone else. NSF: the ASU and Illinois Yan Lius are namesakes."
+  },
+  "nicholas-mancuso": {
+   "first": [
+    "Nick"
+   ],
+   "nih": [
+    14130117
+   ],
+   "nsf_pi": [],
+   "nsf_co": []
+  },
+  "aiichiro-nakano": {
+   "nih": [],
+   "nsf_pi": [
+    "000174407"
+   ],
+   "nsf_co": [
+    "anakano@usc.edu"
+   ]
+  },
+  "paul-newton": {
+   "nih": [],
+   "nsf_pi": [
+    "000146689"
+   ],
+   "nsf_co": [
+    "newton@usc.edu"
+   ],
+   "note": "Paul A Newton (UC Berkeley, 1986–87 NIH) is a namesake."
+  },
+  "meisam-razaviyayn": {
+   "nih": [
+    15943922
+   ],
+   "nsf_pi": [
+    "269983325"
+   ],
+   "nsf_co": [
+    "razaviya@usc.edu"
+   ]
+  },
+  "bodour-salhia": {
+   "nih": [
+    9176624
+   ],
+   "nsf_pi": [],
+   "nsf_co": [
+    "salhia@usc.edu"
+   ]
+  },
+  "julia-schwartzman": {
+   "nih": [
+    11917761
+   ],
+   "nsf_pi": [],
+   "nsf_co": [],
+   "note": "One 2017 NIH fellowship at Mass Eye and Ear, before USC."
+  },
+  "chang-shu": {
+   "first": [
+    "April"
+   ],
+   "nih": [
+    14363184
+   ],
+   "nsf_pi": [],
+   "nsf_co": [],
+   "note": "Kept Chang Shu at USC Preventive Medicine (autism, R01MH143902)."
+  },
+  "rory-spence": {
+   "nih": [],
+   "nsf_pi": [],
+   "nsf_co": [],
+   "note": "No NIH, NSF, OpenAlex or ORCID grants found."
+  },
+  "paul-thomas": {
+   "nih": [
+    8818058
+   ],
+   "nsf_pi": [
+    "269899430"
+   ],
+   "nsf_co": [
+    "pdthomas@usc.edu"
+   ],
+   "note": "8 NIH profiles; kept Paul D. Thomas (PANTHER, USC)."
+  },
+  "paul-thompson": {
+   "nih": [
+    6111760
+   ],
+   "nsf_pi": [
+    "269693312"
+   ],
+   "nsf_co": [],
+   "nih_skip": [
+    "P20RR017698"
+   ],
+   "note": "9 NIH profiles; kept Paul M. Thompson (UCLA → USC, ENIGMA). Many grants are center subprojects. P20RR017698 (2008–11, University of South Carolina, peptide-based borono-lectins) is Paul R. Thompson, a chemist, filed under the same RePORTER profile, so it's left out. NSF: kept only Paul M Thompson (thompson@ini.usc.edu); Paul B Thompson (Michigan State), Dartmouth and Florida Paul Thompsons are namesakes."
+  },
+  "arthur-toga": {
+   "nih": [
+    6855806
+   ],
+   "nsf_pi": [
+    "000171992"
+   ],
+   "nsf_co": [
+    "toga@loni.usc.edu"
+   ],
+   "note": "Kept Arthur W. Toga (UCLA → USC). 81 of his NIH records are center subprojects, collapsed into their parent grants."
+  },
+  "peter-yingxiao-wang": {
+   "first": [
+    "Yingxiao"
+   ],
+   "nih": [
+    8661093
+   ],
+   "nsf_pi": [
+    "269793423"
+   ],
+   "nsf_co": [
+    "ywang283@usc.edu"
+   ]
+  },
+  "arieh-warshel": {
+   "nih": [
+    1864711
+   ],
+   "nsf_pi": [
+    "000197820",
+    "000159775"
+   ],
+   "nsf_co": [],
+   "note": "NSF: the older id 000159775 (USC 1983–85) has no email but is the same USC chemistry PI."
+  }
+ }
+}

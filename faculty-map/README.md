@@ -64,6 +64,7 @@ Emeriti are included. The adjunct member (UCLA) is left out.
 | `scripts/build_methods.py` | Describes each lab by how it works rather than what it studies, at one level per method: demonstrated by its papers or website, potential from the data it generates, or firsthand. Writes `data/features/methods-features.npz`, `methods-report.md` and `data/lab-methods.json`. |
 | `scripts/combined.py` | Merges the QCB and extended rosters and paper sets for the `--extended` build steps, regrouping duplicates across the two. |
 | `scripts/openalex.py` | Shared OpenAlex API access (key, budget, retries). |
+| `scripts/fetch_grants.py` | Downloads the QCB faculty's NIH and NSF grants into `data/grants.json` and writes the match check `data/grants-review.md`. Who is who comes from `data/grant-ids.json`. Raw responses are cached for the day in `data/raw/grants/`. |
 | `analysis.ipynb` | Dimensionality reduction, clustering and the collaboration overlay. Exports the chosen layouts and tree to `data/layout.json`. Set the representation only in the cell that builds `X`: everything after it reads `X`, `S` and `D` from there, and changing `REP` anywhere else only changes plot titles. |
 | `data/faculty.json` | Generated roster. Don't edit by hand; rerun the scraper. |
 | `data/openalex-authors.json` | Faculty → OpenAlex author IDs. Entries with `"status": "verified"` were checked by hand and survive reruns. `openalex` lists every profile that belongs to the person, since OpenAlex often splits one career across several profiles. `dois` lists papers for anyone OpenAlex never linked to a profile. |
@@ -97,6 +98,9 @@ Emeriti are included. The adjunct member (UCLA) is left out.
 | `data/lab-sizes.json` | Member count per lab with its source page and dates, or `null` and a `status` saying why there's no count. Counts only: names stay out of this public repo. |
 | `data/lab-size-overrides.json` | Hand-checked counts: `{"person-id": {"members": 12}}`. These replace the automatic count on every run. |
 | `data/lab-size-report.md` | All labs by size, with how many are counted and checked. |
+| `data/grant-ids.json` | Hand-checked grant identities: `{"person-id": {"nih": [profile ids], "nsf_pi": [lead-PI ids], "nsf_co": [co-PI emails], "nsf_awards": [award ids], "nih_skip": [core projects]}}`, plus extra spellings to search (`first`, `last`) and a `note`. `nih_skip` leaves out a namesake's grant that RePORTER files under a kept profile. Both sources match names loosely and have namesakes, so nothing is kept by name alone. A co-PI with the faculty email on file, or a lead PI showing it, is kept without an entry. |
+| `data/grants.json` | Each QCB faculty member's NIH and NSF grants: source, funder, mechanism, title, role, institution when it isn't USC, dates and link. No dollar amounts, and no other people's names or emails. |
+| `data/grants-review.md` | Every NIH profile and NSF identity the name searches found for each person, kept or not, with flags for any that appeared after the last review. |
 | `data/raw/` | Cached pages, author-search responses and the names behind lab counts (gitignored). |
 
 ## Running
@@ -108,6 +112,7 @@ python3 scripts/scrape_faculty.py
 python3 scripts/resolve_authors.py
 python3 scripts/fetch_papers.py
 python3 scripts/build_edges.py
+python3 scripts/fetch_grants.py
 python3 -m venv --system-site-packages .venv
 .venv/bin/python -m pip install adapters
 .venv/bin/python scripts/build_features.py

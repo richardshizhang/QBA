@@ -355,6 +355,10 @@ body[data-sky] #map.spinning .clabel.dim { opacity: .25; }
 .row .sub { display: block; font-size: 12.5px; }
 .papers li { margin-top: 7px; font-size: 13px; line-height: 1.35; }
 .papers .sub { display: block; font-size: 12.5px; }
+.past { margin-top: 10px; }
+.past > summary { width: fit-content; min-height: 24px; cursor: pointer; color: var(--muted); font-size: 13px; }
+.past > summary:hover { color: var(--ink); }
+.past > .papers { padding-left: 15px; }
 .who { display: flex; gap: 14px; align-items: flex-start; }
 .who > div { min-width: 0; }
 .save {
@@ -573,6 +577,7 @@ dialog form { text-align: right; margin-top: 12px; }
         <label><input type="checkbox" data-group="emeritus" checked><svg viewBox="-8 -8 16 16" aria-hidden="true"><polygon points="0,-7.5 7.5,6 -7.5,6"/></svg>Emeritus</label>
         <label id="related-filter" hidden><input type="checkbox" data-group="related" checked><svg viewBox="-8 -8 16 16" aria-hidden="true"><polygon points="0,-7.5 7.5,0 0,7.5 -7.5,0"/></svg>Related fields</label>
       </fieldset>
+      <label id="funded-filter"><input type="checkbox" id="funded">Active NIH or NSF grant</label>
       <label>Lines
         <select id="lines">
           <option value="0">All collaborations</option>
@@ -667,6 +672,8 @@ dialog form { text-align: right; margin-top: 12px; }
   <p>A mark's area shows the size of the lab. For <span id="about-counted"></span> labs that's everyone the lab's own website lists, including the PI and any undergraduates. Labs differ in who they list and how often they update, so compare these loosely. The other <span id="about-estimated"></span> are estimates: USC co-authors on the person's senior-author papers since 2023, plus anyone QCB lists in the lab, plus the PI. Checked against the labs we could count, these are about right on average, but about a quarter are off by more than a factor of two. <span id="about-unknown"></span> faculty have no count and too few recent USC papers to estimate, so their marks are dashed and drawn at a typical size of <span class="typical-lab"></span>.</p>
   <h3>Stats</h3>
   <p>The h-index, citations and papers per year come from the same OpenAlex papers as the map. Early work in another field gets filtered out along with other people's papers, so these numbers can run lower than OpenAlex's own profile pages, and usually lower than Google Scholar's.</p>
+  <h3>Grants</h3>
+  <p>Grants come from NIH RePORTER and NSF's award search, checked on <span id="about-grants-date"></span>. Both are searched by name, so each person's NIH and NSF records were matched by hand, leaving out other people with the same name. A grant is one NIH project, with its yearly renewals and any projects inside a larger center grant counted once, or one NSF award. It counts as active until its end date. When a grant was awarded to another institution, such as one from before someone came to USC or one led from another university, it says which. Foundation, Department of Defense and subaward funding aren't in these sources, so a lab can have more funding than is listed. Dollar amounts are left out, because a multi-PI or center grant's total says little about one lab. Grants are listed for the QCB faculty only, not for related fields.</p>
   <h3>PhD students</h3>
   <p>The QCB website lists <span id="about-students"></span> PhD students in labs. <span id="about-nolab"></span> more haven't joined a lab yet, and students from other programs aren't listed, so a lab can have more students than you see here. Common names make papers hard to match, so a student's OpenAlex profile only counts if it appears on a paper by their advisor or has been checked by hand, and only papers listing USC or a QCB faculty co-author are shown. Some students will have papers that aren't found.</p>
   <h3>Saved faculty</h3>
@@ -678,7 +685,7 @@ dialog form { text-align: right; margin-top: 12px; }
   <form method="dialog"><button class="ghost">Close</button></form>
 </dialog>
 
-<script src="map-data.js?v=26efaa3dcc"></script>
+<script src="map-data.js?v=a487ee33fb"></script>
 <script>
 (() => {
 "use strict";
@@ -712,7 +719,7 @@ const sv = (tag, attrs, ...kids) => build(document.createElementNS(NS, tag), att
 
 const S = {
   view: "tsne", picked: null, sel: null, hover: null, query: "", matches: null, scope: "qcb", lens: "field", method: null,
-  groups: { core: true, joint: true, emeritus: true, related: true }, lines: "0", zoom: 1,
+  groups: { core: true, joint: true, emeritus: true, related: true }, funded: false, lines: "0", zoom: 1,
   three: false, sky: false, spin: !reducedMotion.matches, yaw: 0, pitch: 0.2, fling: 0,
 };
 // Saved faculty, by id so they survive a rebuild of the data. Storage can fail, as in a
@@ -727,7 +734,12 @@ function readSaved() {
 let saved = new Set(readSaved());
 const isMapView = () => S.view === "tsne" || S.view === "alt";
 const byTechnique = () => S.lens === "technique";
-const shown = (i) => i < WORLD.n && S.groups[P[i].group];
+// A grant is active through its end date, judged by today's date where the page is read.
+const TODAY = new Date().toLocaleDateString("en-CA");
+const activeGrant = (g) => (g.e || "") >= TODAY;
+const funded = (p) => Boolean(p.grants && p.grants.some(activeGrant));
+// Grants are only checked for QCB faculty, so the grant filter applies to the QCB map only.
+const shown = (i) => i < WORLD.n && S.groups[P[i].group] && (!S.funded || S.scope !== "qcb" || funded(P[i]));
 const anyShown = () => P.some((_, i) => shown(i));   // every group can be filtered out
 const inWorld = (e) => e.a < WORLD.n && e.b < WORLD.n;
 const edgeShown = (e) => S.lines !== "none" && e.s >= +S.lines && shown(e.a) && shown(e.b);
@@ -1453,6 +1465,34 @@ const contactLinks = (p) => [
   p.profile ? el("a", { href: p.profile, target: "_blank", rel: "noopener" }, "Faculty profile") : null,
 ];
 
+const GRANT_ROLES = {
+  PI: "PI", "multi-PI": "one of several PIs", "co-PI": "co-PI", fellowship: "fellowship",
+  "center project": "leads a project in a center grant",
+};
+
+function grantItem(g) {
+  const role = g.r === "center project" && g.c > 1 ? `leads ${g.c} projects in a center grant` : GRANT_ROLES[g.r] || g.r;
+  const end = g.e ? Number(g.e.slice(0, 4)) : null;
+  const span = g.a && end && g.a !== end ? `${g.a}–${end}` : `${g.a || end || ""}`;
+  const what = [g.s, g.f, g.k === "fellowship" ? null : g.k].filter(Boolean).join(" ");
+  const bits = [what, role, span, g.o ? `awarded to ${g.o}` : null].filter(Boolean).join(" · ");
+  return el("li", {}, el("a", { href: g.u, target: "_blank", rel: "noopener" }, g.t), el("span", { class: "sub" }, bits));
+}
+
+function grantSection(p) {
+  const now = p.grants.filter(activeGrant), past = p.grants.filter((g) => !activeGrant(g));
+  const checked = new Date(`${D.meta.grants.fetched}T12:00`).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+  return [
+    now.length
+      ? [el("p", { class: "sub" }, `${plural(now.length, "active grant")}`), el("ul", { class: "papers" }, now.map(grantItem))]
+      : el("p", { class: "sub" }, p.grants.length ? "No active NIH or NSF grant found." : "No NIH or NSF grants found."),
+    past.length
+      ? el("details", { class: "past" }, el("summary", {}, `Past grants (${past.length})`), el("ul", { class: "papers" }, past.map(grantItem)))
+      : null,
+    el("p", { class: "foot" }, `Federal grants from NIH and NSF only. Foundation, DoD and subaward funding is not listed. Checked ${checked}.`),
+  ].flat();
+}
+
 function personPanel(i) {
   const p = P[i];
   const collaborators = edgesOf[i].filter((k) => shown(other(E[k], i)));
@@ -1474,6 +1514,7 @@ function personPanel(i) {
     el("section", { id: "methods" }, el("h3", {}, "Methods"), methodSection(p)),
     el("h3", {}, "Recent papers"),
     el("ul", { class: "papers" }, p.papers.map((x) => paperItem(x))),
+    p.grants ? el("section", { id: "funding" }, el("h3", {}, "Funding"), grantSection(p)) : null,
     p.students.length ? el("h3", {}, `QCB PhD students (${p.students.length})`) : null,
     p.students.length ? el("ul", {}, p.students.map(studentRow)) : null,
     el("h3", {}, `${coauthorName()} (${collaborators.length})`),
@@ -1528,11 +1569,13 @@ function clusterPanel(ci) {
 
 function resultsPanel() {
   const results = S.results.filter((r) => shown(r.i));
+  const hidden = S.results.filter((r) => r.i < WORLD.n && !shown(r.i)).length;
   return [
     el("h2", { tabindex: -1 }, `${plural(results.length, "match").replace("matchs", "matches")} for “${S.query.trim()}”`),
     results.length
       ? el("ul", { class: "rows" }, results.map((r) => el("li", {}, person(r.i, r.why || C[P[r.i].cluster].name))))
-      : el("p", { class: "sub" }, "Nobody's top research terms match. Try a broader word."),
+      : hidden ? null : el("p", { class: "sub" }, "Nobody's top research terms match. Try a broader word."),
+    hidden ? el("p", { class: "sub" }, `${plural(hidden, "match").replace("matchs", "matches")} hidden by the filters under More options.`) : null,
   ];
 }
 
@@ -1619,6 +1662,7 @@ function openSaved(i) {
   const { group } = P[i];
   if (i >= WORLD.n) { $("#expand").checked = true; setWorld(); }
   if (!S.groups[group]) { $(`[data-group="${group}"]`).click(); }
+  if (!shown(i) && S.funded) $("#funded").click();
   select({ kind: "person", i, from: "saved" }, true);
 }
 
@@ -2081,6 +2125,8 @@ let parked = null;
 function syncEmpty() {
   const none = !anyShown();
   $("#empty").hidden = !none;
+  const groupsOn = P.some((p, i) => i < WORLD.n && S.groups[p.group]);
+  $("#empty p").textContent = groupsOn ? "No one in the groups shown has an active NIH or NSF grant." : "Every faculty group is hidden.";
   dockButton.disabled = $("#random").disabled = none;
   if (none && S.you) { cancelAnimationFrame(flight); parked = S.you; S.you = null; drawYou(); }
 }
@@ -2669,11 +2715,12 @@ function setWorld() {
   if (isMapView()) { S.view = openingView(); $(`input[value="${S.view}"]`).checked = true; }
   showNote();
   $("#related-filter").hidden = scope !== "all";
+  $("#funded-filter").hidden = scope !== "qcb";
   $("#legend-title").textContent = byTechnique() ? "Technique clusters" : "Research clusters";
   scroller.setAttribute("aria-label", `Map of faculty by ${byTechnique() ? "methods" : "research similarity"}. Use the List view for a table of the same information.`);
   // Clusters are different on every map, and a person or a line may not be on this one.
   const s = S.sel;
-  if (s && s.kind !== "saved" && (s.kind === "cluster" || (s.kind === "person" ? s.i >= WORLD.n : !inWorld(E[s.k])))) S.sel = null;
+  if (s && s.kind !== "saved" && (s.kind === "cluster" || (s.kind === "person" ? !shown(s.i) : !inWorld(E[s.k])))) S.sel = null;
   S.hover = null;
   if (S.query) searchWorld();
   unpark();
@@ -2730,8 +2777,7 @@ $("#saved-open").addEventListener("click", () => select(S.sel && S.sel.kind === 
 addEventListener("storage", (ev) => {   // another tab changed the list
   if (ev.key === SAVE_KEY) { saved = new Set(readSaved()); savedChanged(); }
 });
-document.querySelectorAll("[data-group]").forEach((box) => box.addEventListener("change", () => {
-  S.groups[box.dataset.group] = box.checked;
+function filtersChanged() {
   applyFilters();
   syncEmpty();
   if (S.sel && S.sel.kind === "person" && !shown(S.sel.i)) S.sel = null;
@@ -2740,8 +2786,18 @@ document.querySelectorAll("[data-group]").forEach((box) => box.addEventListener(
   emphasize();
   if (isMapView()) placeLabels();
   if (S.view === "list") drawList();
+}
+document.querySelectorAll("[data-group]").forEach((box) => box.addEventListener("change", () => {
+  S.groups[box.dataset.group] = box.checked;
+  filtersChanged();
 }));
+$("#funded").addEventListener("change", (ev) => {
+  S.funded = ev.target.checked;
+  filtersChanged();
+  $("#status").textContent = S.funded ? `Showing ${P.filter((_, i) => shown(i)).length} faculty with an active NIH or NSF grant` : "Showing faculty with or without grants";
+});
 $("#show-all").addEventListener("click", () => {
+  if (S.funded) $("#funded").click();
   document.querySelectorAll("[data-group]").forEach((box) => { if (!box.checked) box.click(); });
   scroller.focus({ preventScroll: true });
   $("#status").textContent = "Showing every group";
@@ -2846,6 +2902,7 @@ $("#about-estimated").textContent = D.meta.labSources.estimate;
 $("#about-unknown").textContent = D.meta.labSources.none;
 document.querySelectorAll(".typical-lab").forEach((s) => { s.textContent = `${TYPICAL_LAB} people`; });
 $("#about-students").textContent = D.meta.students;
+$("#about-grants-date").textContent = new Date(`${D.meta.grants.fetched}T12:00`).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
 $("#about-nolab").textContent = D.meta.noLab;
 $("#about-open").addEventListener("click", () => about.showModal());
 
