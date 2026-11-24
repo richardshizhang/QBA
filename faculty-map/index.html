@@ -193,11 +193,28 @@ body[data-view="tree"] #scroller::after { content: ""; display: block; height: v
 .bar-more { display: flex; gap: 6px; }
 .bar-more .dock, .bar-more .undock { height: auto; min-height: 44px; box-shadow: 0 2px 10px rgb(0 0 0 / .1); }
 
-/* The intro: the map grows out of one dot, then asks why you came */
-.cap { position: absolute; left: 50%; top: 18px; z-index: 2; transform: translateX(-50%); width: min(560px, calc(100% - 32px)); text-align: center; pointer-events: none; }
-.cap .l1 { display: block; font: 600 21px/1.25 var(--font-serif); text-wrap: balance; }
-.cap .l2 { display: block; margin-top: 4px; color: var(--muted); opacity: 0; transition: opacity .45s; }
-.cap .l2.on { opacity: 1; }
+/* The intro: the map grows out of one dot, a short tour of what it shows, then asks why you came */
+.tour {
+  position: absolute; left: 50%; bottom: 22px; z-index: 5; width: min(520px, calc(100% - 28px)); padding: 14px 18px 12px;
+  display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--edge); border-radius: var(--r);
+  box-shadow: 0 6px 24px rgb(0 0 0 / .16); transform: translateX(-50%);
+}
+.tour-t { font: 600 19px/1.25 var(--font-serif); text-wrap: balance; }
+.tour-l { margin-top: 5px; color: var(--muted); font-size: 14px; line-height: 1.45; text-wrap: pretty; transition: opacity .45s; }
+.tour-l.wait { opacity: 0; }
+.tour-row { display: flex; align-items: center; gap: 12px; margin-top: auto; padding-top: 12px; }
+.tour-dots { display: flex; align-items: center; gap: 5px; margin: 0 auto 0 0; padding: 0; list-style: none; }
+.tour-dots li { position: relative; width: 6px; height: 6px; overflow: hidden; border-radius: 3px; background: var(--edge); transition: width .3s; }
+.tour-dots li.done { background: var(--muted); }
+.tour-dots li.on { width: 24px; }
+.tour-dots i { position: absolute; inset: 0; background: var(--ink); transform: scaleX(0); transform-origin: left; }
+.tour-go { display: flex; gap: 6px; }
+.tour-go button { height: 34px; padding: 0 14px; }
+.tour-spot { outline: 3px solid var(--gold); outline-offset: 0; box-shadow: 0 0 0 4.5px var(--gold-case); }
+@media (prefers-reduced-motion: no-preference) {
+  .tour-spot { animation: spot 1.8s ease-in-out infinite; }
+  @keyframes spot { 50% { outline-offset: 3px; box-shadow: 0 0 0 7.5px var(--gold-case); } }
+}
 .choice {
   position: absolute; left: 50%; bottom: 22px; z-index: 5; width: min(430px, calc(100% - 28px)); padding: 16px 18px; text-align: center;
   background: var(--surface); border: 1px solid var(--edge); border-radius: var(--r); box-shadow: 0 6px 24px rgb(0 0 0 / .16);
@@ -209,8 +226,14 @@ body[data-view="tree"] #scroller::after { content: ""; display: block; height: v
 .choice-row button { height: 38px; padding: 0 16px; }
 .choice .sub { margin-top: 10px; }
 .skip-intro { position: absolute; right: 24px; top: 14px; z-index: 5; }
-#map.blooming .lab, #map.blooming .clabel, #map.blooming .edge, #map.blooming .ehit { opacity: 0; transition: none; }
-#map.blooming { pointer-events: none; }
+/* During the tour the map only listens for a click, which moves on a step */
+body[data-touring] :is(#map, #tree, #list) { pointer-events: none; }
+body[data-touring] #scroller { cursor: pointer; }
+body[data-touring] #scroller.grab { cursor: grab; }
+#map[data-tour="bloom"] :is(.lab, .clabel, .edge, .ehit) { opacity: 0; transition: none; }
+#map[data-tour="groups"] :is(.lab, .edge, .ehit), #map[data-tour="lines"] .lab { opacity: 0; }
+#map[data-tour] :is(.lab, .clabel) { transition: opacity .6s; }
+body[data-touring] #map.arriving .node.related { animation-duration: 1.2s; }
 .seed { fill: var(--gold); stroke: var(--gold-case); stroke-width: 1.5; }
 .seed-t { font-size: 13px; font-weight: 700; fill: var(--on-gold); text-anchor: middle; dominant-baseline: central; }
 .blob { opacity: .55; }
@@ -263,8 +286,6 @@ body[data-view="tree"] #scroller::after { content: ""; display: block; height: v
 .mark > * { fill: var(--hue); stroke: var(--map); stroke-width: 2; }
 .mark.hollow > * { fill: var(--map); stroke: var(--hue); stroke-width: 2.5; }
 /* Only the shape: in Constellation the star is the second child and stays solid */
-.mark.unsized > :first-child { fill: color-mix(in oklab, var(--hue) 35%, var(--map)); stroke: var(--hue); stroke-width: 1.5; stroke-dasharray: 3 2; }
-.mark.hollow.unsized > :first-child { fill: var(--map); stroke-width: 2; }
 /* Your pick wears a gold ring edged in black, and nothing else is louder. People related to it get a thin black ring. */
 .ring { fill: none; stroke: none; stroke-width: 2; }
 .ring.case { stroke-width: 5.5; }
@@ -496,7 +517,6 @@ div.student { padding-left: 21px; }
 .sizes { display: flex; align-items: center; gap: 10px; }
 .sizes svg { flex: none; }
 .sizes circle { fill: none; stroke: var(--muted); stroke-width: 1.5; }
-.sizes circle.unsized { stroke-dasharray: 3 2; }
 .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--hue); flex: none; }
 .swatch.hollow { background: none; border: 2.5px solid var(--hue); }
 .tag { display: inline-flex; align-items: center; gap: 7px; background: none; border: 0; padding: 0; margin-top: 6px; color: var(--muted); font-size: 13px; text-align: left; }
@@ -543,7 +563,7 @@ dialog p { margin-top: 2px; }
 dialog form { text-align: right; margin-top: 12px; }
 
 @media (prefers-reduced-motion: reduce) {
-  .choice, .choice.on, .drawer, .drawer.on, #rail, .cap .l2 { transition: none !important; }
+  .choice, .choice.on, .drawer, .drawer.on, #rail, .tour-l, .tour-dots li, #map[data-tour] :is(.lab, .clabel) { transition: none !important; }
 }
 
 @media (max-width: 860px) {
@@ -577,7 +597,9 @@ dialog form { text-align: right; margin-top: 12px; }
   .bar-more .dock, .bar-more .undock { flex: 1 1 auto; justify-content: center; min-height: 36px; padding: 0 10px; white-space: nowrap; }
   .ask { padding: 11px 13px; }
   .ask h2 { font-size: 17px; }
-  .cap .l1 { font-size: 18px; }
+  .tour { padding: 12px 14px 10px; }
+  .tour-t { font-size: 17px; }
+  .tour-l { font-size: 13.5px; }
   .skip-intro, .zoom { right: 16px; }
   .hint { width: 220px; }
   .drawer { position: fixed; inset: 0; z-index: 20; width: auto; padding: 14px 16px 24px; border-left: 0; box-shadow: none; }
@@ -660,7 +682,17 @@ dialog form { text-align: right; margin-top: 12px; }
         </div>
       </div>
     </form>
-    <div class="cap" id="cap" hidden><span class="l1" id="cap-1"></span><span class="l2" id="cap-2">Each dot is a person. Nearby means similar research.</span></div>
+    <div class="tour" id="tour" role="group" aria-label="Intro" hidden>
+      <div aria-live="polite"><span class="sr" id="tour-n"></span><p class="tour-t" id="tour-t"></p><p class="tour-l" id="tour-l"></p></div>
+      <div class="tour-row">
+        <ol class="tour-dots" id="tour-dots" aria-hidden="true"></ol>
+        <button class="link" id="tour-pause" type="button">Pause</button>
+        <div class="tour-go">
+          <button class="ghost" id="tour-back" type="button">Back</button>
+          <button class="solid" id="tour-next" type="button">Next</button>
+        </div>
+      </div>
+    </div>
     <div class="choice" id="choice" role="group" aria-labelledby="choice-title" hidden>
       <h2 id="choice-title" tabindex="-1">What brings you here?</h2>
       <div class="choice-row">
@@ -693,8 +725,7 @@ dialog form { text-align: right; margin-top: 12px; }
       <p class="key">Lines join people who have published together; thicker means a closer collaboration. Papers with many authors count for little.</p>
       <p class="key"><span class="pick"></span>The gold ring is your pick. <span class="dbl"></span>A double line joins it to people they've published with.</p>
       <p class="key" id="saved-key" hidden>★ marks faculty you've saved.</p>
-      <p class="key sizes"><svg viewBox="0 0 76 34" width="76" height="34" aria-hidden="true"><circle cx="7" cy="17" r="5.4"/><circle cx="26" cy="17" r="10.7"/><circle cx="59" cy="17" r="15.2"/></svg><span>Bigger marks are bigger labs: about 5, 20 and 40 people. Many sizes are rough estimates.</span></p>
-      <p class="key sizes"><svg viewBox="0 0 76 34" width="76" height="34" aria-hidden="true"><circle class="unsized" cx="7" cy="17" r="6.8"/></svg><span>A dashed mark is a lab we couldn't size, drawn at a typical size.</span></p>
+      <p class="key sizes"><svg viewBox="0 0 76 34" width="76" height="34" aria-hidden="true"><circle cx="7" cy="17" r="5.4"/><circle cx="26" cy="17" r="10.7"/><circle cx="59" cy="17" r="15.2"/></svg><span>Bigger marks are bigger labs: about 5, 20 and 40 people. Many sizes are rough estimates, and labs we couldn't size get a typical mark.</span></p>
       <p class="foot">Unofficial, made by QBA, USC's Quantitative Biology Association. Papers from <a href="https://openalex.org">OpenAlex</a>, roster and photos from the <a href="https://www.qcb-dornsife.usc.edu/faculty">QCB website</a> and department websites, as of fall 2026.</p>
     </section>
   </aside>
@@ -764,13 +795,13 @@ dialog form { text-align: right; margin-top: 12px; }
   <p><b>Demonstrated:</b> the lab does this work, by at least 3 papers making up at least 4% of its weighted papers, or two separate statements on its website. <b>Firsthand:</b> a student who worked there told us, which papers can't show. <b>Potential:</b> the lab generates data this method could use, or mentions the method once. A microscopy lab has computer vision potential even if it has never published on computer vision.</p>
   <p>This is word matching, so labels can be wrong or missing, and labs that don't name their methods in abstracts look less quantitative than they are. Open a label to see the paper or source behind it, so you can check it yourself. In a spot check, about 9 in 10 labels that came from websites alone were right.</p>
   <h3>Related fields</h3>
-  <p>Expanding adds <span id="about-added"></span> faculty from fields QBIO students also do research in: Biostatistics, Biomedical Engineering, Molecular and Cellular Biosciences, Marine and Environmental Biology, Neurobiology and the Brain and Creativity Institute, plus a few labs students have worked in. That makes <span id="about-wide-papers"></span> papers in all. Everyone's position is recalculated, so QCB faculty move too, and MDS replaces UMAP, which keeps distances between far-apart groups more honest. By field opens on MDS, with t-SNE one click away. <span id="about-wide-counted"></span> of the added labs have sizes counted from their websites. The other <span id="about-wide-unknown"></span> have no count, so their marks are dashed and drawn at a typical size of <span class="typical-lab"></span>.</p>
+  <p>Expanding adds <span id="about-added"></span> faculty from fields QBIO students also do research in: Biostatistics, Biomedical Engineering, Molecular and Cellular Biosciences, Marine and Environmental Biology, Neurobiology and the Brain and Creativity Institute, plus a few labs students have worked in. That makes <span id="about-wide-papers"></span> papers in all. Everyone's position is recalculated, so QCB faculty move too, and MDS replaces UMAP, which keeps distances between far-apart groups more honest. By field opens on MDS, with t-SNE one click away. <span id="about-wide-counted"></span> of the added labs have sizes counted from their websites. The other <span id="about-wide-unknown"></span> have no count, so their marks are drawn at a typical size of <span class="typical-lab"></span>.</p>
   <h3>Lines</h3>
   <p>Two people are joined if they share a paper. Each shared paper adds 1 ÷ (authors − 1) to the pair's strength, so a two-author paper counts 1 and a 100-author consortium paper about 0.01.</p>
   <h3>Finding your match</h3>
   <p>The model above is too big to run in your browser, so it has already read about 66,000 research words and phrases, from these papers and from OpenAlex's list of keywords. Each one comes with a score for every faculty member, from how close its meaning is to their papers and how much of their work uses it. Your text is split into the longest terms it can find, so “protein engineering” stays one idea instead of “protein” plus “engineering”. If a phrase isn't on the list, the panel says its words were matched separately. The panel shows the topics it read and the words it didn't use, like ones too general to tell people apart. Leaving a topic out lowers each person by how far above average their papers use it, so people known for it move down the list. When no one stands out by more than about 1.5 standard deviations, or half of what you typed isn't in these papers, the panel says the match is weak. Nothing you type leaves your browser. Given only the title of a paper it hadn't seen, this finds the real author in the top 5 about 93% of the time (88% with related fields added, where there are more people to choose from), but your own words will be vaguer than a title. Your dot sits at the weighted average of your closest matches, which is an estimate: t-SNE and UMAP have no exact way to add a new point. A thrown dot works in reverse, blending the people nearest where it lands.</p>
   <h3>Lab sizes</h3>
-  <p>A mark's area shows the size of the lab. For <span id="about-counted"></span> labs that's everyone the lab's own website lists, including the PI and any undergraduates. Labs differ in who they list and how often they update, so compare these loosely. The other <span id="about-estimated"></span> are estimates: USC co-authors on the person's senior-author papers since 2023, plus anyone QCB lists in the lab, plus the PI. Checked against the labs we could count, these are about right on average, but about a quarter are off by more than a factor of two. <span id="about-unknown"></span> faculty have no count and too few recent USC papers to estimate, so their marks are dashed and drawn at a typical size of <span class="typical-lab"></span>.</p>
+  <p>A mark's area shows the size of the lab. For <span id="about-counted"></span> labs that's everyone the lab's own website lists, including the PI and any undergraduates. Labs differ in who they list and how often they update, so compare these loosely. The other <span id="about-estimated"></span> are estimates: USC co-authors on the person's senior-author papers since 2023, plus anyone QCB lists in the lab, plus the PI. Checked against the labs we could count, these are about right on average, but about a quarter are off by more than a factor of two. <span id="about-unknown"></span> faculty have no count and too few recent USC papers to estimate, so their marks are drawn at a typical size of <span class="typical-lab"></span>.</p>
   <h3>Stats</h3>
   <p>The h-index, citations and papers per year come from the same OpenAlex papers as the map. Early work in another field gets filtered out along with other people's papers, so these numbers can run lower than OpenAlex's own profile pages, and usually lower than Google Scholar's.</p>
   <h3>Grants</h3>
@@ -872,7 +903,9 @@ const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
 /* ---------- Map ---------- */
 
 let W = 0, H_ = 0, ox = 0, oy = 0, scale = 1, pts = [], band = 0;
-let intro = null;   // the opening bloom, while it plays
+let intro = null;   // the opening tour, then its question, while either shows
+const touring = () => !!intro && !intro.done;
+let grow = null;   // while the tour draws the lines in, how far along each one is
 // What this browser has been shown already: the intro and each hint appear once.
 const SEEN_KEY = "qcb-map-seen";
 const seen = (() => {
@@ -915,7 +948,7 @@ function target() {
 const edgeWidth = (s) => 0.8 + 1.1 * Math.log10(1 + 10 * s);
 
 // A mark's area shows lab size. Labs of about four or fewer share the smallest mark.
-// A lab we couldn't size gets a typical mark with a dashed edge, so it doesn't read as tiny.
+// A lab we couldn't size gets a typical mark, so it doesn't read as tiny.
 const markR = [], reach = [], TYPICAL_LAB = 8;
 
 function shape(group, r = 6) {
@@ -980,7 +1013,7 @@ function paintNodes() {
   P.forEach((p, i) => {
     if (i >= WORLD.n) return;
     const { g, mark, label, halo } = nodes[i], c = C[p.cluster];
-    mark.setAttribute("class", `mark ${hueClass(p.cluster)}${c.hollow ? " hollow" : ""}${p.lab.source ? "" : " unsized"}`);
+    mark.setAttribute("class", `mark ${hueClass(p.cluster)}${c.hollow ? " hollow" : ""}`);
     halo.setAttribute("fill", `url(#glow-${c.color})`);
     g.setAttribute("aria-label", `${p.name}, ${c.name}${saved.has(p.id) ? ", saved" : ""}`);
     label.textContent = p.label;
@@ -1031,8 +1064,8 @@ function measureBand() {
   const stage = $("#stage"), top = stage.getBoundingClientRect().top, h = stage.clientHeight;
   const room = (node) => Math.max(12, Math.round(h - (node.getBoundingClientRect().top - top)) + 10);
   if (intro) {
-    band = Math.round($("#cap").getBoundingClientRect().bottom - top) + 14;
-    foot = room($("#choice"));
+    band = 52;   // room for Skip intro
+    foot = Math.max(...[$("#tour"), $("#choice")].map((node) => (node.offsetHeight ? room(node) : 12)));
   } else {
     band = isMapView() ? 52 : 16;
     foot = $("#bar").hidden ? 12 : room($(".bar-line"));
@@ -1067,8 +1100,14 @@ function drawPoints() {
     nodes[i].hit.setAttribute("cy", y);
   });
   if (!skyShown()) E.forEach((e, k) => {
-    const [x1, y1, , d1] = pts[e.a], [x2, y2, , d2] = pts[e.b];
+    let [x1, y1, , d1] = pts[e.a], [x2, y2, , d2] = pts[e.b];
     edgeEls[k].line.setAttribute("opacity", (0.2 + 0.4 * (d1 + d2)).toFixed(2));
+    const g = grow ? grow[k] ?? 1 : 1;
+    if (g < 1) {   // the tour grows each line out from its end nearer the middle
+      if (grow.flip[k]) [x1, y1, x2, y2] = [x2, y2, x1, y1];
+      x2 = x1 + (x2 - x1) * g;
+      y2 = y1 + (y2 - y1) * g;
+    }
     for (const line of spinning ? [edgeEls[k].line, edgeEls[k].core] : [edgeEls[k].line, edgeEls[k].core, edgeEls[k].hit]) {
       line.setAttribute("x1", x1); line.setAttribute("y1", y1);
       line.setAttribute("x2", x2); line.setAttribute("y2", y2);
@@ -1191,7 +1230,7 @@ function placeLabels() {
   const taken = marksAndLabels = [];
   if (S.zoom === 1 || S.three) {   // names keep clear of the controls floating over the map
     const box = mapSvg.getBoundingClientRect();
-    document.querySelectorAll(".bar-line, .bar-msg, .ask, .zoom, .hint, .cap, .choice, .skip-intro").forEach((c) => {
+    document.querySelectorAll(".bar-line, .bar-msg, .ask, .zoom, .hint, .tour, .choice, .skip-intro").forEach((c) => {
       const r = c.getBoundingClientRect();
       if (r.width) taken.push({ x: r.left - box.left, y: r.top - box.top, w: r.width, h: r.height });
     });
@@ -1274,7 +1313,7 @@ function animateTo(next, placed = next.length) {
   goal = null;
   if (reducedMotion.matches || !pts.length) { pts = next; drawPoints(); placeLabels(); settleDot(); return; }
   goal = next;
-  const from = next.map((q, i) => (i < placed ? pts[i] : q).slice()), start = performance.now(), ms = 650;
+  const from = next.map((q, i) => (i < placed ? pts[i] : q).slice()), start = performance.now(), ms = touring() ? 1200 : 650;   // the tour lets you watch
   pts = from;
   mapSvg.classList.add("moving");
   mapSvg.classList.toggle("arriving", placed < WORLD.n);
@@ -1751,7 +1790,7 @@ function select(item, moveFocus) {
   S.hover = null;
   if (item) S.ask = false;
   sheetFull = !!item && !item.stay;   // on a phone a pick opens the sheet, and Randomize keeps the map in view
-  if (item && intro) finishIntro();
+  if (item && intro) finishIntro(true);   // keeping what the tour shows
   if (item) { touch(); hideHint(); }
   hideTip();
   renderDetail(moveFocus);
@@ -1945,8 +1984,8 @@ Typed text sets the blend from word matches. A thrown dot sets it from where it 
 let M = null;   // the table for the people on the map, loaded the first time someone uses it
 const MATCH_FILES = { qcb: [`match-data.js${VERSION}`, "QCB_MATCH"], all: [`match-data-extended.js${VERSION}`, "QCB_MATCH_EXTENDED"] };
 const matchTables = {};
-function loadMatch() {
-  const scope = S.scope, [src, name] = MATCH_FILES[scope];
+function loadMatch(scope = S.scope) {
+  const [src, name] = MATCH_FILES[scope];
   matchTables[scope] = matchTables[scope] || new Promise((ok, fail) => {
     document.head.append(el("script", { src, onload: ok, onerror: fail }));
   }).then(() => {
@@ -2312,12 +2351,14 @@ function refreshYou() {
   drawYou();
 }
 
-// A text dot flies in from the dock along a short arc.
+// A text dot flies in from the dock along a short arc, or from wherever `from` says.
 let flight = 0;
-function flyIn() {
+function flyIn(from) {
   const you = S.you;
-  const rect = $("#throw").getBoundingClientRect(), box = mapSvg.getBoundingClientRect();
-  const from = [rect.left + 12 - box.left, rect.top + 17 - box.top];
+  if (!from) {
+    const rect = $("#throw").getBoundingClientRect(), box = mapSvg.getBoundingClientRect();
+    from = [rect.left + 12 - box.left, rect.top + 17 - box.top];
+  }
   you.at = null;
   settleDot();
   const to = S.three ? blended() : toPx(you.at.xy);
@@ -2716,7 +2757,7 @@ function setView(view) {
   mapSvg.toggleAttribute("hidden", !map);   // SVG elements have no .hidden property
   treeSvg.toggleAttribute("hidden", view !== "tree");
   listBox.hidden = view !== "list";
-  $("#zoom").hidden = !map;
+  $("#zoom").hidden = !map || !!intro;
   $("#three-row").hidden = !map;
   $("#sky-row").hidden = !map || !S.three;
   paintSky();
@@ -2746,8 +2787,8 @@ function setView(view) {
 const SPIN = 2 * Math.PI / 45000;   // a turn every 45 seconds, in radians per millisecond
 const keepPitch = (a) => Math.max(-1.3, Math.min(1.3, a));
 let spinFrame = 0, spinClock = 0, spinTidied = 0, turn = null, facing = 0;
-// Anything someone is reading or pointing at holds the globe still.
-const spinHeld = () => !S.spin || !!(S.sel || S.you || S.hover);
+// Anything someone is reading or pointing at holds the globe still. The tour spins it unless paused.
+const spinHeld = () => (touring() ? !!intro.paused || reducedMotion.matches : !S.spin || !!(S.sel || S.you || S.hover));
 
 function tidyGlobe() {
   if (!skyShown() || !mapSvg.classList.contains("spinning")) stackNodes();   // moving a star restarts its twinkle
@@ -2763,7 +2804,7 @@ function spinStep(now) {
   spinClock = now;
   if (!spinFrame || turn || mapSvg.classList.contains("moving")) return;
   S.fling = Math.abs(S.fling) < 2e-5 ? 0 : S.fling * Math.exp(-dt / 350);
-  const speed = (spinHeld() ? 0 : SPIN) + S.fling, wasSpinning = mapSvg.classList.contains("spinning");
+  const speed = (spinHeld() ? 0 : SPIN * (touring() ? 3 : 1)) + S.fling, wasSpinning = mapSvg.classList.contains("spinning");
   mapSvg.classList.toggle("spinning", !!speed);
   if (!speed) {
     if (wasSpinning) { drawPoints(); tidyGlobe(); }   // the lines' tap areas catch up
@@ -3020,7 +3061,10 @@ function loadExtended() {
     indexEdges();
     fitPeople();
     paintSaved();
-    if (isMapView()) settle();
+    // Everyone needs a place now, even mid-tween or off the map, or the new lines have no ends.
+    cancelAnimationFrame(tween);
+    mapSvg.classList.remove("moving", "arriving");
+    if (isMapView()) settle(); else pts = target();
     stackNodes();
     applyFilters();
   }, (err) => { loadExtended.ready = null; throw err; });
@@ -3327,109 +3371,400 @@ function touch() {
 
 /* ---------- Intro ----------
 
-A first visit opens on a small gold QCB that blooms into its research groups and then
-into its people, then asks what brought them here. Returning visitors, and anyone who
-prefers less motion, go straight to the map. Replay intro brings it back.
+A first visit opens on a short tour. A small gold QCB blooms into its research areas and
+its people, then each step shows one more thing on the same map: the areas, the lines
+between coauthors, a person, the four layouts, the globe, the related fields, techniques
+and the gold dot. It moves on by itself, or with Next, a click on the map or the arrow keys,
+and ends by asking what brought them here. Returning visitors go straight to the map, and so
+does anyone who prefers less motion, though Replay intro gives them the same steps, still.
+Constellation is only for fun, so it stays out of the tour.
 */
 
 const introLayer = sv("g", { "aria-hidden": "true" });
 mapSvg.append(introLayer);
-const BLOOM = 3000;
 const easeOut = (t) => 1 - (1 - t) ** 3;
 const easeOutBack = (t) => 1 + 2.7 * (t - 1) ** 3 + 1.7 * (t - 1) ** 2;
 const unit = (v) => Math.max(0, Math.min(1, v));
+const BLOOM = 6200;   // when the last person has landed
+const DEMO = "single-cell RNA-seq";
+const qcbN = () => worlds["qcb/field"].n;
+// Whether a click that ended the tour was on something in the panel, so what it shows can stay.
+const fromRail = (keep) => keep === true || (keep instanceof Element && $("#rail").contains(keep));
 
-function introCaption(t) {
-  const scope = S.scope === "all" ? "QCB and related fields" : "QCB";
-  const line = t < 350 ? "" : t < 1100 ? `${scope} has ${WORLD.n} faculty`
-    : `${scope} has ${WORLD.n} faculty in ${plural(C.length, byTechnique() ? "technique group" : "research group")}`;
-  if ($("#cap-1").textContent !== line) $("#cap-1").textContent = line;
-  $("#cap-2").classList.toggle("on", t >= 2000);
+function drawBloom(t) {
+  if (!intro.geo) {   // worked out again after a resize
+    const home = target(), everyone = P.map((_, i) => i).filter(shown);
+    const mid = [W / 2, (band + H_ - foot) / 2];
+    // Each group blooms from its middle, nearest people first.
+    const middle = C.map((_, ci) => {
+      const own = everyone.filter((i) => P[i].cluster === ci);
+      return own.length ? [0, 1].map((n) => own.reduce((sum, i) => sum + home[i][n], 0) / own.length) : mid;
+    });
+    const rank = [];
+    C.forEach((_, ci) => everyone.filter((i) => P[i].cluster === ci)
+      .sort((a, b) => Math.hypot(home[a][0] - middle[ci][0], home[a][1] - middle[ci][1]) - Math.hypot(home[b][0] - middle[ci][0], home[b][1] - middle[ci][1]))
+      .forEach((i, r) => { rank[i] = Math.min(r, 18); }));
+    const seed = sv("g", {}, sv("circle", { class: "seed", r: 22 }), sv("text", { class: "seed-t" }, "QCB"));
+    const blobs = C.map((c, ci) => sv("g", { class: `blob ${hueClass(ci)}` }, sv("circle", { r: 0 })));
+    introLayer.replaceChildren(...blobs, seed);
+    intro.geo = { home, everyone, mid, middle, rank, seed, blobs, at: -1 };
+  }
+  const g = intro.geo;
+  t = Math.min(t, BLOOM);
+  if (t === g.at) return;
+  g.at = t;
+  const { home, everyone, mid, middle, rank, seed, blobs } = g;
+  const s = t < 700 ? easeOutBack(t / 700) : t < 1400 ? 1 : t < 2200 ? 1 - easeOut((t - 1400) / 800) : 0;
+  seed.style.display = s > 0.001 ? "" : "none";
+  seed.setAttribute("transform", `translate(${mid[0].toFixed(1)} ${mid[1].toFixed(1)}) scale(${Math.max(0, s).toFixed(3)})`);
+  blobs.forEach((b, ci) => {
+    const on = t >= 1400 && t <= 5200, m = easeOut(unit((t - 1400) / 1600)), size = everyone.filter((i) => P[i].cluster === ci).length;
+    b.style.display = on ? "" : "none";
+    if (!on) return;
+    const r = (8 + 3.2 * Math.sqrt(size)) * easeOut(unit((t - 1400) / 800)) * (1 - easeOut(unit((t - 4000) / 1200)));
+    b.setAttribute("transform", `translate(${(mid[0] + (middle[ci][0] - mid[0]) * m).toFixed(1)} ${(mid[1] + (middle[ci][1] - mid[1]) * m).toFixed(1)})`);
+    b.firstChild.setAttribute("r", Math.max(0, r).toFixed(1));
+  });
+  pts = home.map((q, i) => {
+    if (rank[i] === undefined) return q;
+    const p = easeOut(unit((t - 3600 - rank[i] * 56) / 1400)), from = middle[P[i].cluster];
+    return [from[0] + (q[0] - from[0]) * p, from[1] + (q[1] - from[1]) * p, p, 1];
+  });
+  drawPoints();
+  if (t === BLOOM) { introLayer.replaceChildren(); placeLabels(); }
 }
 
-function playIntro(byHand) {
+// The lines grow outward in a wave from the middle of the map.
+function startLines() {
+  const at = target(), mid = [ox + scale / 2, oy + scale / 2], far = Math.max(1, ...at.slice(0, WORLD.n).map((q) => Math.hypot(q[0] - mid[0], q[1] - mid[1])));
+  grow = new Float32Array(E.length);
+  grow.flip = new Uint8Array(E.length);
+  intro.delay = E.map((e) => {
+    const da = Math.hypot(at[e.a][0] - mid[0], at[e.a][1] - mid[1]), db = Math.hypot(at[e.b][0] - mid[0], at[e.b][1] - mid[1]);
+    return Math.min(da, db) / far * 2200;
+  });
+  E.forEach((e, k) => {
+    const da = Math.hypot(at[e.a][0] - mid[0], at[e.a][1] - mid[1]), db = Math.hypot(at[e.b][0] - mid[0], at[e.b][1] - mid[1]);
+    grow.flip[k] = db < da ? 1 : 0;
+  });
+  drawPoints();
+}
+function drawLines(t) {
+  if (!grow) return;
+  let busy = false;
+  for (let k = 0; k < grow.length; k++) {
+    grow[k] = easeOut(unit((t - 500 - intro.delay[k]) / 800));
+    if (grow[k] < 1) busy = true;
+  }
+  if (!busy) grow = null;
+  drawPoints();
+}
+function stopLines() {
+  if (!grow) return;
+  grow = null;
+  drawPoints();
+}
+
+// Someone to show: the QCB person with the most PhD students and coauthors.
+function tourPerson() {
+  let who = -1, best = -1;
+  for (let i = 0; i < qcbN(); i++) {
+    if (!shown(i)) continue;
+    const score = P[i].students.length + E.filter((e) => inWorld(e) && (e.a === i || e.b === i)).length;
+    if (score > best) { best = score; who = i; }
+  }
+  return who;
+}
+
+// Each step: which pill it fills (`scene`), how long it shows, the map it wants and what it says.
+// A step's title and line can change over its time `t`; `lineAt` is when the line fades in.
+const LAYOUT = { scene: 4, ms: 5000, title: () => "See the map in different ways", spot: () => moreBtn };
+const STEPS = [
+  {
+    id: "bloom", scene: 0, ms: 9500, lineAt: 4600,
+    title: (t) => (t < 500 ? "" : t < 2400 ? `QCB has ${qcbN()} faculty` : `QCB has ${qcbN()} faculty in ${plural(worlds["qcb/field"].clusters.length, "research area")}`),
+    line: () => "Each mark is a person. People close together publish on similar things.",
+    enter() { intro.geo = null; },
+    draw: drawBloom,
+    leave() { introLayer.replaceChildren(); intro.geo = null; settle(); },
+  },
+  {
+    id: "groups", scene: 1, ms: 7500,
+    title: () => "Colors are research areas",
+    line: () => "Bigger marks are bigger labs. Circles are core QCB faculty, squares have joint appointments and triangles are emeritus.",
+  },
+  {
+    id: "lines", scene: 2, ms: 8000,
+    title: () => "Lines join people who publish together",
+    line: () => "Thicker lines mean more papers together. Papers with many authors count for less.",
+    enter() {
+      startLines();
+      loadExtended().then(() => { if (touring() && STEPS[intro.step].world?.expand) tourWorld(STEPS[intro.step].world); },
+        () => { if (intro) { intro.noExtended = true; paintDots(); } });
+    },
+    draw: drawLines,
+    leave: stopLines,
+  },
+  {
+    id: "person", scene: 3, ms: 7500, skip: () => intro.who < 0,
+    title: () => "Pick anyone to see their work",
+    line: () => `Picking someone opens their papers, lab, grants and PhD students. The small dots around ${P[intro.who].name} are those students.`,
+    enter() {
+      S.sel = { kind: "person", i: intro.who };
+      S.hover = null;
+      renderDetail();
+      emphasize();
+      drawPoints();
+      placeLabels();
+    },
+    leave(keep) {
+      if (fromRail(keep) || !S.sel || S.sel.i !== intro.who) return;
+      S.sel = null;
+      renderDetail();
+      emphasize();
+      drawPoints();
+      placeLabels();
+    },
+  },
+  { ...LAYOUT, id: "tsne", world: { view: "tsne" }, line: () => "This is t-SNE, the first layout. It keeps close neighbors close, but the distances between far-apart groups don't mean much." },
+  { ...LAYOUT, id: "alt", world: { view: "alt" }, line: () => `${worlds["qcb/field"].views[1][1]} flattens the same papers another way. People who are neighbors on both maps are the most alike.` },
+  { ...LAYOUT, id: "tree", world: { view: "tree" }, line: () => "The tree joins the most alike people first, then groups of groups." },
+  { ...LAYOUT, id: "list", world: { view: "list" }, line: () => "The list puts everyone in one table. All four are in Map settings." },
+  {
+    id: "globe", scene: 5, ms: 8000, world: { view: "tsne", three: true }, spot: () => moreBtn,
+    title: () => "Or turn the map into a globe",
+    line: () => "In 3D less gets squeezed flat, and marks in front are bigger. Drag to turn it.",
+    enter() { loadMatch("qcb").catch(() => {}); },   // ready for the last step
+  },
+  {
+    id: "related", scene: 6, ms: 8500, world: { expand: true }, skip: () => !!intro.noExtended,
+    spot: () => (stacked.matches ? moreBtn : $("#expand-row")),
+    title: () => "Many QBIO students find research in related departments",
+    line: () => `Add related fields brings in ${D.meta.wide.added} more faculty, from biostatistics, cell biology and biomedical engineering to marine biology and neurobiology. Diamonds mark them.`,
+  },
+  {
+    id: "technique", scene: 7, ms: 8500, world: { expand: true, lens: "technique" }, spot: () => $("#lens-seg"),
+    title: () => "Quantitative skills work in any department",
+    line: () => "By technique groups people by the methods in their papers, like single-cell analysis or spatial statistics, so you can find labs anywhere that use what you know.",
+  },
+  {
+    id: "find", scene: 8, ms: 9500, skip: () => !anyShown(),
+    title: () => "Type what you want to work on",
+    line: () => `A gold dot lands among the faculty whose papers use your words, like this one for “${DEMO}”, with lines to the closest matches.`,
+    enter() {
+      const step = intro.step;
+      loadMatch("qcb").then(() => {
+        if (!touring() || intro.step !== step || S.you || !M || M.n !== WORLD.n || !isMapView()) return;
+        const reading = readText(DEMO);
+        if (!reading.found.length) return;
+        S.you = intro.demo = textDot(reading, DEMO);
+        if (!S.you) return;
+        emphasize();
+        placeLabels();
+        const card = $("#tour").getBoundingClientRect(), box = mapSvg.getBoundingClientRect();
+        flyIn([card.left + card.width / 2 - box.left, card.top - box.top]);
+      }, () => {});
+    },
+    leave(keep) {
+      if (S.you && S.you === intro.demo && !fromRail(keep)) clearYou();
+      intro.demo = null;
+    },
+  },
+];
+const lastStep = () => STEPS.findLastIndex((st) => !st.skip?.());
+
+// Puts the map the way a step wants it, through the same controls someone would use.
+function tourWorld({ expand = false, lens = "field", view, three = false } = {}) {
+  if (expand && !worlds["all/field"]) expand = false;   // until the related fields load
+  if (S.three && !three) { $("#three").checked = false; setThree(false); }
+  const radio = $(`input[name="lens"][value="${lens}"]`);
+  if ($("#expand").checked !== expand || !radio.checked) {
+    $("#expand").checked = expand;
+    radio.checked = true;
+    setWorld();
+  }
+  const v = view || openingView();
+  if (S.view !== v) { $(`input[name="view"][value="${v}"]`).checked = true; setView(v); }
+  if (three && !S.three) { $("#three").checked = true; setThree(true); }
+}
+// Back to the map someone had before the tour. Whatever they clicked to leave it stays as they set it.
+function tourHome(keep) {
+  if (keep === true) return;
+  const inside = (sel) => keep instanceof Element && !!keep.closest(sel);
+  const settings = inside("#more-open");
+  if (S.three && !settings) { $("#three").checked = false; setThree(false); }
+  const expand = inside("#expand-row") ? $("#expand").checked : intro.home.expand && !!worlds["all/field"];
+  const lens = inside("#lens-seg") ? S.lens : intro.home.lens;
+  const key = `${expand ? "all" : "qcb"}/${lens}`;
+  if (worlds[key] && key !== `${S.scope}/${S.lens}`) {
+    $("#expand").checked = expand;
+    $(`input[name="lens"][value="${lens}"]`).checked = true;
+    setWorld();
+  }
+  if (!settings && S.view !== openingView()) { $(`input[name="view"][value="${openingView()}"]`).checked = true; setView(openingView()); }
+}
+
+function spotlight(node) {
+  document.querySelectorAll(".tour-spot").forEach((n) => n.classList.remove("tour-spot"));
+  node?.classList.add("tour-spot");
+}
+const sceneCount = () => STEPS[STEPS.length - 1].scene + 1;
+const sceneSkipped = (s) => STEPS.every((st) => st.scene !== s || st.skip?.());
+function paintDots() {
+  const lis = [...$("#tour-dots").children], scene = STEPS[intro.step]?.scene ?? 0;
+  lis.forEach((li, s) => {
+    li.classList.toggle("on", s === scene);
+    li.classList.toggle("done", s < scene);
+    li.hidden = sceneSkipped(s);
+    li.firstChild.style.transform = "";
+  });
+  const shownScenes = lis.map((_, s) => s).filter((s) => !sceneSkipped(s));
+  $("#tour-n").textContent = `Step ${shownScenes.indexOf(scene) + 1} of ${shownScenes.length}. `;
+}
+function paintTour(t) {
+  const st = STEPS[intro.step], title = st.title(t), line = st.line(t), l = $("#tour-l");
+  if ($("#tour-t").textContent !== title) $("#tour-t").textContent = title;
+  if (l.textContent !== line) l.textContent = line;
+  l.classList.toggle("wait", t < (st.lineAt || 0));
+}
+// The card keeps the height of its longest step, so the buttons don't jump about.
+function fitTourCard() {
+  const card = $("#tour"), title = $("#tour-t"), line = $("#tour-l");
+  card.style.minHeight = "";
+  const tallest = Math.max(...STEPS.map((st) => {
+    title.textContent = st.title(Infinity);
+    line.textContent = st.line(Infinity);
+    return card.offsetHeight;
+  }));
+  card.style.minHeight = `${tallest}px`;
+  if (intro && intro.step >= 0) paintTour(stepTime());
+}
+
+// The clock is the current pill filling up. When it's full the tour moves on. Pause holds the
+// clock, but what the step draws carries on, so a paused step still shows its whole picture.
+const stepTime = () => (intro.clock ? performance.now() - intro.began : Infinity);   // without motion, each step's last picture
+function runClock() {
+  const st = STEPS[intro.step], pill = $("#tour-dots").children[st.scene].firstChild;
+  const same = STEPS.filter((s) => s.scene === st.scene && !s.skip?.());
+  const total = same.reduce((sum, s) => sum + s.ms, 0), before = same.slice(0, same.indexOf(st)).reduce((sum, s) => sum + s.ms, 0);
+  const from = `scaleX(${(before / total).toFixed(3)})`, to = `scaleX(${((before + st.ms) / total).toFixed(3)})`;
+  if (reducedMotion.matches) { pill.style.transform = to; intro.clock = null; return; }   // it waits for Next
+  intro.began = performance.now();
+  const clock = intro.clock = pill.animate([{ transform: from }, { transform: to }], { duration: st.ms, fill: "forwards" });
+  if (intro.paused || document.hidden) clock.pause();
+  clock.finished.then(() => { if (touring() && intro.clock === clock) goTo(intro.step + 1); }, () => {});
+}
+function tick() {
+  if (!touring()) return;
+  const st = STEPS[intro.step], t = stepTime();
+  st.draw?.(t);
+  paintTour(t);
+  if (intro.clock) intro.frame = requestAnimationFrame(tick);
+}
+
+function leaveStep(keep) {
+  if (!intro || intro.step < 0) return;
+  cancelAnimationFrame(intro.frame);
+  if (intro.clock) { const clock = intro.clock; intro.clock = null; clock.cancel(); }
+  STEPS[intro.step].leave?.(keep);
+}
+function goTo(n) {
+  if (!touring()) return;
+  const dir = n < intro.step ? -1 : 1;
+  while (n >= 0 && n < STEPS.length && STEPS[n].skip?.()) n += dir;
+  if (n < 0) return;
+  if (n >= STEPS.length) { introDone(); return; }
+  leaveStep();
+  intro.step = n;
+  const st = STEPS[n];
+  tourWorld(st.world);
+  st.enter?.();
+  mapSvg.dataset.tour = st.id;
+  paintDots();
+  spotlight(st.spot?.());
+  const back = $("#tour-back");
+  if (n === 0 && document.activeElement === back) $("#tour-next").focus({ preventScroll: true });
+  back.disabled = n === 0;
+  $("#tour-next").textContent = n === lastStep() ? "Finish" : "Next";
+  runClock();
+  tick();
+}
+function setPaused(on) {
+  intro.paused = on;
+  const button = $("#tour-pause");
+  button.textContent = on ? "Play" : "Pause";
+  button.setAttribute("aria-label", on ? "Play the tour" : "Pause the tour");
+  if (intro.clock) intro.clock[on || document.hidden ? "pause" : "play"]();
+}
+
+function playIntro(byHand, home = { expand: $("#expand").checked, lens: S.lens }) {
   cancelAnimationFrame(tween);
   goal = null;
   hideHint();
   closeSugg();
-  intro = { byHand, frame: 0 };
-  $("#cap").hidden = $("#choice").hidden = $("#skip-intro").hidden = false;
+  intro = { byHand, step: -1, home, paused: false, clock: null, frame: 0, who: -1 };
+  $("#tour").hidden = $("#choice").hidden = $("#skip-intro").hidden = false;
   $("#choice").classList.remove("on");
   $("#bar").hidden = $("#zoom").hidden = true;
-  mapSvg.classList.add("blooming");
+  document.body.toggleAttribute("data-touring", true);
+  $("#tour-pause").hidden = reducedMotion.matches;
+  setPaused(false);
+  $("#tour-dots").replaceChildren(...Array.from({ length: sceneCount() }, () => el("li", {}, el("i"))));
   syncAsk();
   syncSheet();
+  tourWorld();
+  intro.who = tourPerson();
+  fitTourCard();
   measureBand();
   sizeMap();
-  const home = target(), everyone = P.map((_, i) => i).filter(shown);
-  const mid = [W / 2, (band + H_ - foot) / 2];
-  // Each group blooms from its middle, nearest people first.
-  const middle = C.map((_, ci) => {
-    const own = everyone.filter((i) => P[i].cluster === ci);
-    return own.length ? [0, 1].map((n) => own.reduce((sum, i) => sum + home[i][n], 0) / own.length) : mid;
-  });
-  const rank = [];
-  C.forEach((_, ci) => everyone.filter((i) => P[i].cluster === ci)
-    .sort((a, b) => Math.hypot(home[a][0] - middle[ci][0], home[a][1] - middle[ci][1]) - Math.hypot(home[b][0] - middle[ci][0], home[b][1] - middle[ci][1]))
-    .forEach((i, r) => { rank[i] = Math.min(r, 18); }));
-  const seed = sv("g", {}, sv("circle", { class: "seed", r: 22 }), sv("text", { class: "seed-t" }, "QCB"));
-  const blobs = C.map((c, ci) => sv("g", { class: `blob ${hueClass(ci)}` }, sv("circle", { r: 0 })));
-  introLayer.replaceChildren(...blobs, seed);
-  intro.draw = (t) => {
-    const s = t < 350 ? easeOutBack(t / 350) : t < 700 ? 1 : t < 1100 ? 1 - easeOut((t - 700) / 400) : 0;
-    seed.style.display = s > 0.001 ? "" : "none";
-    seed.setAttribute("transform", `translate(${mid[0].toFixed(1)} ${mid[1].toFixed(1)}) scale(${Math.max(0, s).toFixed(3)})`);
-    blobs.forEach((b, ci) => {
-      const on = t >= 700 && t <= 2600, m = easeOut(unit((t - 700) / 800)), size = everyone.filter((i) => P[i].cluster === ci).length;
-      b.style.display = on ? "" : "none";
-      if (!on) return;
-      const r = (8 + 3.2 * Math.sqrt(size)) * easeOut(unit((t - 700) / 400)) * (1 - easeOut(unit((t - 2000) / 600)));
-      b.setAttribute("transform", `translate(${(mid[0] + (middle[ci][0] - mid[0]) * m).toFixed(1)} ${(mid[1] + (middle[ci][1] - mid[1]) * m).toFixed(1)})`);
-      b.firstChild.setAttribute("r", Math.max(0, r).toFixed(1));
-    });
-    pts = home.map((q, i) => {
-      if (rank[i] === undefined) return q;
-      const p = easeOut(unit((t - 1800 - rank[i] * 28) / 700)), from = middle[P[i].cluster];
-      return [from[0] + (q[0] - from[0]) * p, from[1] + (q[1] - from[1]) * p, p, 1];
-    });
-    drawPoints();
-    introCaption(t);
-  };
-  if (reducedMotion.matches) { introDone(); return; }
-  const start = performance.now();
-  const step = (now) => {
-    if (!intro) return;
-    const t = now - start;
-    intro.draw(Math.min(t, BLOOM));
-    if (t < BLOOM) intro.frame = requestAnimationFrame(step); else introDone();
-  };
-  intro.frame = requestAnimationFrame(step);
+  // A first visit without motion goes straight to the question. Replay intro gives the steps, still.
+  if (reducedMotion.matches && !byHand) { introDone(); return; }
+  goTo(0);
+  if (byHand) $("#tour-next").focus({ preventScroll: true });
 }
 
-// The bloom is over, or skipped: everyone in place, and the question.
+// The tour is over, or skipped: the map as it was, and the question.
 function introDone() {
-  if (!intro || intro.done) return;
-  cancelAnimationFrame(intro.frame);
+  if (!touring()) return;
+  const inCard = $("#tour").contains(document.activeElement);
+  leaveStep();
   intro.done = true;
   markSeen("intro");   // they've seen it, whether or not they answer
-  intro.draw(BLOOM);
+  tourHome();
   introLayer.replaceChildren();
-  mapSvg.classList.remove("blooming");
-  $("#skip-intro").hidden = true;
+  delete mapSvg.dataset.tour;
+  document.body.toggleAttribute("data-touring", false);
+  spotlight(null);
+  $("#tour").hidden = $("#skip-intro").hidden = true;
   $("#choice").classList.add("on");
-  placeLabels();
-  if (intro.byHand) $("#go-find").focus({ preventScroll: true });
+  refitIntro();
+  if (intro.byHand || inCard) $("#go-find").focus({ preventScroll: true });
+}
+// The question is a different height from the tour card, so the map makes room for it.
+function refitIntro() {
+  const was = [scale, ox, oy].join();
+  measureBand();
+  if (!isMapView()) return;
+  sizeMap();
+  if ([scale, ox, oy].join() !== was) animateTo(target());
+  else if (!goal) placeLabels();
 }
 
-// Leaves the intro for the map, keeping whatever someone picked meanwhile.
-function finishIntro() {
+// Leaves the intro for the map. Whatever someone picked to get there stays.
+function finishIntro(keep) {
   if (!intro) return;
-  cancelAnimationFrame(intro.frame);
+  if (!intro.done) {
+    leaveStep(keep);
+    intro.done = true;
+    tourHome(keep);
+    delete mapSvg.dataset.tour;
+    document.body.toggleAttribute("data-touring", false);
+    spotlight(null);
+  }
   intro = null;
   markSeen("intro");
   introLayer.replaceChildren();
-  mapSvg.classList.remove("blooming");
-  $("#cap").hidden = $("#choice").hidden = $("#skip-intro").hidden = true;
+  $("#tour").hidden = $("#choice").hidden = $("#skip-intro").hidden = true;
   $("#choice").classList.remove("on");
   $("#bar").hidden = false;
   $("#zoom").hidden = !isMapView();
@@ -3440,6 +3775,8 @@ function finishIntro() {
 }
 
 function replayIntro() {
+  if (intro) finishIntro();
+  const home = { expand: $("#expand").checked, lens: S.lens };
   if (drawerOpen()) setDrawer(false, false);
   backToMap();
   setQuery("");
@@ -3448,8 +3785,25 @@ function replayIntro() {
   S.ask = false;
   if (S.three) { $("#three").checked = false; setThree(false); }
   if (S.zoom > 1) setZoom(1);
-  playIntro(true);
+  playIntro(true, home);
 }
+
+$("#tour-next").addEventListener("click", () => goTo(intro.step + 1));
+$("#tour-back").addEventListener("click", () => goTo(intro.step - 1));
+$("#tour-pause").addEventListener("click", () => setPaused(!intro.paused));
+// A click on the map moves on a step. A drag turns the globe instead, and its click never arrives.
+scroller.addEventListener("click", () => { if (touring()) goTo(intro.step + 1); });
+document.addEventListener("keydown", (ev) => {
+  if (!touring() || (ev.key !== "ArrowRight" && ev.key !== "ArrowLeft") || ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey) return;
+  if (ev.target instanceof Element && ev.target.closest("input, select, textarea, [contenteditable]")) return;
+  ev.preventDefault();
+  ev.stopPropagation();   // not the globe's arrow keys too
+  goTo(intro.step + (ev.key === "ArrowRight" ? 1 : -1));
+}, true);
+document.addEventListener("visibilitychange", () => {
+  if (!touring() || !intro.clock) return;
+  if (document.hidden) intro.clock.pause(); else if (!intro.paused) intro.clock.play();
+});
 
 $("#go-find").addEventListener("click", () => {
   finishIntro();
@@ -3464,9 +3818,10 @@ $("#go-look").addEventListener("click", () => {
 });
 $("#skip-intro").addEventListener("click", () => { if (intro) intro.byHand = true; introDone(); });
 $("#intro-open").addEventListener("click", replayIntro);
-// Using the page around the map during the intro ends it there and then.
+// Using a control around the map during the intro ends it there and then, keeping what that control does.
+const CONTROL = "a, button, input, select, textarea, label, summary, [role='button'], [role='option'], [tabindex]";
 for (const type of ["click", "change"]) document.addEventListener(type, (ev) => {
-  if (intro && !ev.target.closest("#stage") && !ev.target.closest("#intro-open")) finishIntro();
+  if (intro && !ev.target.closest("#stage") && !ev.target.closest("#intro-open") && ev.target.closest(CONTROL)) finishIntro(ev.target);
 }, true);
 
 /* ---------- Phone sheet ----------
@@ -3505,7 +3860,15 @@ stacked.addEventListener("change", () => {
 });
 
 const resized = new ResizeObserver(() => {
-  if (intro && !intro.done) return;   // the bloom keeps its own layout, and leaving it refits the map
+  if (touring()) {   // the bloom works out its layout again; later steps settle like the map
+    fitTourCard();
+    measureBand();
+    sizeMap();
+    if (STEPS[intro.step]?.id === "bloom") intro.geo = null;
+    else if (isMapView()) { cancelAnimationFrame(tween); mapSvg.classList.remove("moving"); settle(); }
+    else if (S.view === "tree") drawTree();
+    return;
+  }
   measureBand();
   if (S.sky) drawSky();
   if (isMapView()) { cancelAnimationFrame(tween); mapSvg.classList.remove("moving"); settle(); }
