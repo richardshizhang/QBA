@@ -3278,6 +3278,7 @@ function setDrawer(open, refocus = true) {
   for (const node of [$(".left"), $("#rail"), $(".banner")]) node.inert = open && stacked.matches;
   if (open) { hideHint(); touch(); $("#more-title").focus({ preventScroll: true }); }
   else if (refocus) moreBtn.focus({ preventScroll: true });
+  syncClock();   // the tour waits while Map settings is open
 }
 moreBtn.addEventListener("click", () => setDrawer(!drawerOpen()));
 $("#more-close").addEventListener("click", () => setDrawer(false));
@@ -3506,7 +3507,7 @@ const STEPS = [
     leave: stopLines,
   },
   {
-    id: "person", scene: 3, ms: 7500, skip: () => intro.who < 0,
+    id: "person", scene: 3, ms: 7500, skip: () => intro.who < 0 || !shown(intro.who),
     title: () => "Pick anyone to see their work",
     line: () => `Picking someone opens their papers, lab, grants and PhD students. The small dots around ${P[intro.who].name} are those students.`,
     enter() {
@@ -3591,7 +3592,7 @@ function tourWorld({ expand = false, lens = "field", view, three = false } = {})
 function tourHome(keep) {
   if (keep === true) return;
   const inside = (sel) => keep instanceof Element && !!keep.closest(sel);
-  const settings = inside("#more-open");
+  const settings = inside("#more-open, #more");
   if (S.three && !settings) { $("#three").checked = false; setThree(false); }
   const expand = inside("#expand-row") ? $("#expand").checked : intro.home.expand && !!worlds["all/field"];
   const lens = inside("#lens-seg") ? S.lens : intro.home.lens;
@@ -3643,6 +3644,15 @@ function fitTourCard() {
 // The clock is the current pill filling up. When it's full the tour moves on. Pause holds the
 // clock, but what the step draws carries on, so a paused step still shows its whole picture.
 const stepTime = () => (intro.clock ? performance.now() - intro.began : Infinity);   // without motion, each step's last picture
+// The clock waits for Pause, for Map settings being open and for a hidden tab.
+const held = () => intro.paused || drawerOpen() || document.hidden;
+function syncClock() { if (touring() && intro.clock) intro.clock[held() ? "pause" : "play"](); }
+// A change in Map settings mid-step finishes the step's picture at once, so its animation doesn't fight the change.
+function finishPicture() {
+  if (!intro.clock || intro.began === -Infinity) return;
+  intro.began = -Infinity;
+  STEPS[intro.step].draw?.(Infinity);
+}
 function runClock() {
   const st = STEPS[intro.step], pill = $("#tour-dots").children[st.scene].firstChild;
   const same = STEPS.filter((s) => s.scene === st.scene && !s.skip?.());
@@ -3651,7 +3661,7 @@ function runClock() {
   if (reducedMotion.matches) { pill.style.transform = to; intro.clock = null; return; }   // it waits for Next
   intro.began = performance.now();
   const clock = intro.clock = pill.animate([{ transform: from }, { transform: to }], { duration: st.ms, fill: "forwards" });
-  if (intro.paused || document.hidden) clock.pause();
+  if (held()) clock.pause();
   clock.finished.then(() => { if (touring() && intro.clock === clock) goTo(intro.step + 1); }, () => {});
 }
 function tick() {
@@ -3694,7 +3704,7 @@ function setPaused(on) {
   const button = $("#tour-pause");
   button.textContent = on ? "Play" : "Pause";
   button.setAttribute("aria-label", on ? "Play the tour" : "Pause the tour");
-  if (intro.clock) intro.clock[on || document.hidden ? "pause" : "play"]();
+  syncClock();
 }
 
 function playIntro(byHand, home = { expand: $("#expand").checked, lens: S.lens }) {
@@ -3795,15 +3805,12 @@ $("#tour-pause").addEventListener("click", () => setPaused(!intro.paused));
 scroller.addEventListener("click", () => { if (touring()) goTo(intro.step + 1); });
 document.addEventListener("keydown", (ev) => {
   if (!touring() || (ev.key !== "ArrowRight" && ev.key !== "ArrowLeft") || ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey) return;
-  if (ev.target instanceof Element && ev.target.closest("input, select, textarea, [contenteditable]")) return;
+  if (ev.target instanceof Element && ev.target.closest("input, select, textarea, [contenteditable], #more")) return;
   ev.preventDefault();
   ev.stopPropagation();   // not the globe's arrow keys too
   goTo(intro.step + (ev.key === "ArrowRight" ? 1 : -1));
 }, true);
-document.addEventListener("visibilitychange", () => {
-  if (!touring() || !intro.clock) return;
-  if (document.hidden) intro.clock.pause(); else if (!intro.paused) intro.clock.play();
-});
+document.addEventListener("visibilitychange", syncClock);
 
 $("#go-find").addEventListener("click", () => {
   finishIntro();
@@ -3819,9 +3826,17 @@ $("#go-look").addEventListener("click", () => {
 $("#skip-intro").addEventListener("click", () => { if (intro) intro.byHand = true; introDone(); });
 $("#intro-open").addEventListener("click", replayIntro);
 // Using a control around the map during the intro ends it there and then, keeping what that control does.
+// Map settings and Dark mode don't: the tour waits while Map settings is open, and what's changed
+// there shows at once. Constellation still ends it, since it stays out of the tour.
 const CONTROL = "a, button, input, select, textarea, label, summary, [role='button'], [role='option'], [tabindex]";
 for (const type of ["click", "change"]) document.addEventListener(type, (ev) => {
-  if (intro && !ev.target.closest("#stage") && !ev.target.closest("#intro-open") && ev.target.closest(CONTROL)) finishIntro(ev.target);
+  const t = ev.target;
+  if (!intro || !(t instanceof Element) || t.closest("#stage, #intro-open, #more-open, label:has(> #dark)")) return;
+  if (t.closest("#more") && !t.closest("#sky-row .switch")) {
+    if (type === "change" && touring()) finishPicture();
+    return;
+  }
+  if (t.closest(CONTROL)) finishIntro(t);
 }, true);
 
 /* ---------- Phone sheet ----------
