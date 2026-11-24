@@ -103,23 +103,16 @@ button { cursor: pointer; }
 .banner .aside { display: flex; align-items: center; gap: 20px; margin-left: auto; }
 .link { min-height: 24px; padding: 0; background: none; border: 0; }
 
-/* Title, search and toolbar */
+/* Title and toolbar */
 .left { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
 .titlebar { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px 24px; padding: 18px 24px 14px; }
 .brand { flex: 1 1 420px; min-width: 0; }
 .brand h1 { font: 600 28px/1.15 var(--font-serif); letter-spacing: -0.01em; text-wrap: balance; }
 .brand p { margin-top: 5px; max-width: 78ch; color: var(--muted); font-size: 13px; }
-.find { flex: 0 1 280px; }
-.find input {
-  width: 100%; height: 34px; padding: 0 10px; background: var(--surface);
-  border: 1px solid var(--edge); border-radius: var(--r);
-}
-.toolbar, .morebar {
+.toolbar {
   display: flex; flex-wrap: wrap; align-items: center; gap: 4px 24px; margin: 0 24px; padding: 4px 0;
-  border-top: 1px solid var(--line); font-size: 13.5px;
+  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); font-size: 13.5px;
 }
-.toolbar { border-bottom: 1px solid var(--line); }
-.morebar { border-top: 0; border-bottom: 1px solid var(--line); padding: 6px 0; }
 /* Text tabs: the one in use is underlined */
 .seg { display: inline-flex; gap: 18px; }
 .seg label { position: relative; }
@@ -135,8 +128,7 @@ button { cursor: pointer; }
 #expand-msg { color: var(--muted); font-size: 12.5px; }
 #expand-msg:empty { display: none; }
 #more-open { margin-left: auto; }
-#more-open::after { content: " ▾"; color: var(--muted); }
-#more-open[aria-expanded="true"]::after { content: " ▴"; }
+#more-open[aria-expanded="true"] { border-color: var(--ink); background: var(--sunk); }
 .filters { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; }
 .filters label { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; cursor: pointer; }
 .filters input { width: 15px; height: 15px; margin: 0; accent-color: var(--ink); }
@@ -145,7 +137,7 @@ button { cursor: pointer; }
 .ghost { height: 30px; padding: 0 10px; background: var(--surface); border: 1px solid var(--edge); border-radius: var(--r); white-space: nowrap; }
 .ghost:hover { border-color: var(--ink); }
 
-main { display: grid; grid-template-columns: minmax(0, 1fr) 400px; min-height: 0; }
+main { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 400px; min-height: 0; }
 #stage { position: relative; flex: 1; min-width: 0; min-height: 0; background: var(--bg); --map: var(--bg); }
 #scroller {
   position: absolute; inset: 0; overflow: auto;
@@ -157,8 +149,9 @@ body:not([data-three]) #scroller.grab { overscroll-behavior: contain; }
 #scroller.grabbing { cursor: grabbing; user-select: none; }
 #map, #tree { display: block; }
 #tree { margin-top: var(--band); }
+body[data-view="tree"] #scroller::after { content: ""; display: block; height: var(--bar, 0px); }
 .zoom {
-  position: absolute; right: 24px; bottom: 14px; display: flex; background: var(--surface);
+  position: absolute; right: 24px; top: 14px; z-index: 3; display: flex; background: var(--surface);
   border: 1px solid var(--edge); border-radius: var(--r); overflow: hidden;
 }
 .zoom button { min-width: 32px; height: 30px; padding: 0 9px; background: none; border: 0; }
@@ -166,7 +159,91 @@ body:not([data-three]) #scroller.grab { overscroll-behavior: contain; }
 .zoom button:hover { background: var(--sunk); }
 .empty { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 10px; color: var(--muted); font-size: 14px; pointer-events: none; }
 .empty button { pointer-events: auto; }
-.note { position: absolute; left: 24px; bottom: 14px; max-width: 46%; color: var(--muted); font-size: 12.5px; pointer-events: none; }
+
+/* The one box along the bottom of the map: type a topic or a name, or throw a dot */
+.bar {
+  position: absolute; left: 50%; bottom: 14px; z-index: 4; transform: translateX(-50%); width: min(660px, calc(100% - 28px));
+  display: flex; flex-direction: column; gap: 6px; pointer-events: none;
+}
+.bar > * { pointer-events: auto; }
+.ask, #sugg, .bar-msg { background: var(--surface); border: 1px solid var(--edge); border-radius: var(--r); box-shadow: 0 4px 16px rgb(0 0 0 / .12); }
+.ask { padding: 13px 15px; }
+.ask h2 { font: 600 18px/1.25 var(--font-serif); }
+.ask .sub { margin-top: 2px; }
+.ask .ex { margin-top: 8px; font-size: 13.5px; }
+.ask .sub.last { margin-top: 8px; }
+.ask .link, .hint .link { text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 35%, transparent); text-underline-offset: 3px; }
+.ask .link:hover, .hint .link:hover { text-decoration-color: currentColor; }
+#sugg { max-height: 40dvh; overflow: auto; padding: 4px; }
+#sugg li { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 7px 10px; border-radius: var(--r); cursor: pointer; }
+#sugg li:hover, #sugg li[aria-selected="true"] { background: var(--sunk); }
+#sugg .d { margin-left: 6px; color: var(--muted); font-size: 12.5px; }
+#sugg .k { flex: none; color: var(--muted); font-size: 12px; }
+#sugg li:not([aria-selected="true"]) .k { visibility: hidden; }
+.bar-msg { padding: 7px 11px; font-size: 13px; }
+.bar-msg:empty { display: none; }
+.bar-line { display: flex; gap: 6px; align-items: stretch; }
+.bar-row {
+  flex: 1; min-width: 0; display: flex; gap: 6px; align-items: center; padding: 4px;
+  background: var(--surface); border: 1px solid var(--edge); border-radius: var(--r); box-shadow: 0 2px 10px rgb(0 0 0 / .1);
+}
+.bar-row:focus-within { border-color: var(--ink); outline: 2px solid var(--focus); outline-offset: 1px; }
+.bar-row input { flex: 1; min-width: 0; height: 34px; padding: 0 8px; background: transparent; border: 0; outline: none; font-size: 14.5px; }
+.bar-row input::placeholder { color: var(--muted); opacity: 1; }
+.bar-more { display: flex; gap: 6px; }
+.bar-more .dock, .bar-more .undock { height: auto; min-height: 44px; box-shadow: 0 2px 10px rgb(0 0 0 / .1); }
+
+/* The intro: the map grows out of one dot, then asks why you came */
+.cap { position: absolute; left: 50%; top: 18px; z-index: 2; transform: translateX(-50%); width: min(560px, calc(100% - 32px)); text-align: center; pointer-events: none; }
+.cap .l1 { display: block; font: 600 21px/1.25 var(--font-serif); text-wrap: balance; }
+.cap .l2 { display: block; margin-top: 4px; color: var(--muted); opacity: 0; transition: opacity .45s; }
+.cap .l2.on { opacity: 1; }
+.choice {
+  position: absolute; left: 50%; bottom: 22px; z-index: 5; width: min(430px, calc(100% - 28px)); padding: 16px 18px; text-align: center;
+  background: var(--surface); border: 1px solid var(--edge); border-radius: var(--r); box-shadow: 0 6px 24px rgb(0 0 0 / .16);
+  opacity: 0; visibility: hidden; transform: translate(-50%, 10px); transition: opacity .35s, transform .35s, visibility 0s .35s;
+}
+.choice.on { opacity: 1; visibility: visible; transform: translate(-50%, 0); transition: opacity .35s, transform .35s, visibility 0s; }
+.choice h2 { font: 600 19px/1.25 var(--font-serif); outline: none; }
+.choice-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 12px; }
+.choice-row button { height: 38px; padding: 0 16px; }
+.choice .sub { margin-top: 10px; }
+.skip-intro { position: absolute; right: 24px; top: 14px; z-index: 5; }
+#map.blooming .lab, #map.blooming .clabel, #map.blooming .edge, #map.blooming .ehit { opacity: 0; transition: none; }
+#map.blooming { pointer-events: none; }
+.seed { fill: var(--gold); stroke: var(--gold-case); stroke-width: 1.5; }
+.seed-t { font-size: 13px; font-weight: 700; fill: var(--on-gold); text-anchor: middle; dominant-baseline: central; }
+.blob { opacity: .55; }
+.blob circle { fill: var(--hue); }
+.hint-ring { fill: none; stroke: var(--ink); stroke-width: 2; stroke-dasharray: 3 3; }
+
+/* One-time hints, in ink */
+.hint {
+  position: absolute; z-index: 5; width: 248px; padding: 10px 12px; background: var(--ink); color: var(--bg);
+  border-radius: var(--r); box-shadow: 0 4px 16px rgb(0 0 0 / .2); font-size: 13px; line-height: 1.4;
+}
+.hint .link { margin-top: 6px; color: inherit; font-weight: 600; }
+.hint .link:focus-visible { outline-color: var(--bg); }
+
+/* Map settings: a panel that slides over the details */
+.drawer {
+  position: absolute; top: 0; right: 0; bottom: 0; z-index: 8; width: 320px; max-width: 100%; overflow: auto; padding: 14px 20px 24px;
+  background: var(--surface); border-left: 1px solid var(--edge); box-shadow: -6px 0 24px rgb(0 0 0 / .12); font-size: 13.5px;
+  transform: translateX(100%); visibility: hidden; transition: transform .3s ease, visibility 0s .3s;
+}
+.drawer.on { transform: none; visibility: visible; transition: transform .3s ease, visibility 0s; }
+.drawer-h { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.drawer h2 { font: 600 20px/1.2 var(--font-serif); outline: none; }
+.dset { margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--line); }
+.dset h3 { margin-bottom: 4px; font-size: 13px; font-weight: 600; }
+.dset .sub { margin-top: 2px; font-size: 12.5px; }
+.drawer .filters { flex-direction: column; align-items: flex-start; gap: 0; }
+.drawer .switch { display: flex; width: fit-content; min-height: 32px; }
+.drawer .seg + .switch { margin-top: 8px; }
+.fun { margin-top: 18px; padding: 10px 12px; background: var(--sunk); border-radius: var(--r); }
+.fun h3 { font-size: 13px; font-weight: 600; }
+.fun .sub { font-size: 12.5px; }
+.sheet-h { display: none; }
 
 /* Map marks */
 .edge { stroke: var(--wire); stroke-opacity: .8; stroke-linecap: round; transition: stroke-opacity .15s; }
@@ -259,7 +336,6 @@ body[data-sky] #map.spinning .clabel.dim { opacity: .25; }
 }
 
 /* The student's dot. It's you, so it's gold. */
-.dots { position: absolute; left: 24px; top: 14px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
 .dock {
   display: inline-flex; align-items: center; gap: 8px; height: 32px;
   padding: 0 12px 0 10px; background: var(--surface); border: 1px solid var(--edge); border-radius: var(--r);
@@ -308,7 +384,7 @@ body[data-sky] #map.spinning .clabel.dim { opacity: .25; }
 .tbar { stroke: var(--hue); stroke-width: 3; stroke-linecap: round; }
 
 /* List */
-#list { padding: calc(var(--band) + 4px) 24px 56px; }
+#list { padding: calc(var(--band) + 4px) 24px calc(var(--bar, 0px) + 24px); }
 #list table { width: 100%; border-collapse: collapse; font-size: 13px; }
 #list th { text-align: left; color: var(--muted); font-weight: 600; font-size: 12.5px; padding: 4px 10px 4px 0; border-bottom: 1px solid var(--ink); }
 #list th.num, #list td.num { text-align: right; }
@@ -438,19 +514,16 @@ div.student { padding-left: 21px; }
 .key .pick { display: inline-block; vertical-align: -2px; width: 12px; height: 12px; margin: 0 6px 0 2px; border-radius: 50%; border: 2.5px solid var(--gold); box-shadow: 0 0 0 1px var(--gold-case), inset 0 0 0 1px var(--gold-case); }
 .foot { margin-top: 14px; color: var(--muted); font-size: 12.5px; }
 
-/* Find your place: set off by hairlines, not a box */
-.me { margin-top: 16px; padding: 14px 0 16px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-.me label { display: block; font-weight: 600; margin-bottom: 6px; }
-.me textarea {
-  display: block; width: 100%; padding: 7px 9px; resize: vertical; min-height: 74px; background: var(--surface);
-  border: 1px solid var(--edge); border-radius: var(--r); font: inherit; line-height: 1.35;
-}
 .me-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 8px; }
 /* The main button is gold */
 .solid { height: 34px; padding: 0 14px; background: var(--gold); color: var(--on-gold); border: 1px solid var(--gold-case); border-radius: var(--r); font-weight: 600; }
 .solid:hover { filter: brightness(.96); }
-.me .sub { margin-top: 6px; font-size: 12.5px; }
 .me-msg { font-size: 12.5px; }
+.welcome { margin-top: 10px; }
+.tipbox { margin-top: 16px; padding: 10px 12px; background: var(--sunk); border-radius: var(--r); font-size: 13px; }
+.tipbox h3 { margin: 0 0 4px !important; }
+.tipbox li { margin-top: 3px; padding-left: 12px; text-indent: -12px; }
+.tipbox li::before { content: "–  "; color: var(--muted); }
 
 #tip {
   position: fixed; z-index: 4; max-width: 260px; padding: 6px 9px; pointer-events: none; font-size: 12.5px; line-height: 1.35;
@@ -469,56 +542,57 @@ dialog h3 { font-size: 14px; font-weight: 600; margin: 14px 0 2px; }
 dialog p { margin-top: 2px; }
 dialog form { text-align: right; margin-top: 12px; }
 
-/* Tutorial */
-#tour {
-  position: fixed; inset: auto; width: 330px; margin: 0; padding: 14px 16px; color: var(--ink);
-  background: var(--surface); border: 1px solid var(--edge); border-radius: var(--r); box-shadow: 0 6px 24px rgb(0 0 0 / .22);
-}
-#tour h2 { font: 600 19px/1.25 var(--font-serif); outline: none; }
-.tour-count { color: var(--muted); font-size: 12.5px; }
-.tour-body { margin-top: 4px; }
-.tour-try { margin-top: 8px; font-size: 13px; font-weight: 600; }
-.tour-try.done { font-weight: 400; color: var(--muted); }
-.tour-nav { display: flex; align-items: center; gap: 6px; margin-top: 12px; }
-.tour-nav .ghost:first-child { margin-right: auto; padding: 0 4px; border: 0; background: none; color: var(--muted); }
-#tour-spot {
-  position: fixed; z-index: 3; pointer-events: none; border-radius: var(--r);
-  box-shadow: 0 0 0 3px var(--gold), 0 0 0 4px var(--gold-case), 0 0 0 100vmax rgb(0 0 0 / .32);
-}
-#tour-spot.clear { box-shadow: 0 0 0 3px var(--gold), 0 0 0 4px var(--gold-case), 0 0 0 100vmax transparent; }
-@media (prefers-reduced-motion: no-preference) {
-  #tour-spot { transition: left .2s, top .2s, width .2s, height .2s, box-shadow .2s; }
+@media (prefers-reduced-motion: reduce) {
+  .choice, .choice.on, .drawer, .drawer.on, #rail, .cap .l2 { transition: none !important; }
 }
 
 @media (max-width: 860px) {
-  body { display: block; height: auto; }
-  .banner { flex-wrap: wrap; gap: 0 18px; padding: 0 16px; }
+  .banner { flex-wrap: wrap; gap: 0 18px; padding: 0 16px; min-width: 0; }
   .banner .home, .banner nav a { min-height: 44px; }
   .sep { display: none; }
-  .banner .aside { width: 100%; margin: 0; gap: 13px; min-height: 36px; border-top: 1px solid var(--line); overflow-x: auto; }
-  .titlebar { padding: 16px 16px 12px; }
-  .brand h1 { font-size: 24px; }
-  .find { flex: 1 1 100%; }
-  .toolbar, .morebar { margin: 0 16px; gap: 2px 18px; }
-  main { display: block; }
-  #stage { flex: none; height: calc(min(112vw, 72dvh) + 72px); }
-  /* Tree and list grow with the page, so there's only one thing to scroll. */
-  body[data-view="tree"] #stage, body[data-view="list"] #stage { height: auto; }
-  body[data-view="tree"] #scroller, body[data-view="list"] #scroller { position: static; overflow: visible; }
-  #rail { border-left: 0; border-top: 1px solid var(--line); overflow: visible; padding: 18px 16px 28px; }
-  .note { display: none; }
-  .dots { left: 16px; top: 10px; }
-  .zoom { right: 16px; }
+  .banner .aside { width: 100%; min-width: 0; margin: 0; gap: 13px; min-height: 36px; border-top: 1px solid var(--line); overflow-x: auto; }
+  .titlebar { padding: 12px 16px 10px; }
+  .brand h1 { font-size: 22px; }
+  .brand p { font-size: 12.5px; }
+  .toolbar { margin: 0 16px; gap: 2px 18px; }
+  /* The details become a sheet over the bottom of the map. --peek is how much of it shows. */
+  main { display: flex; flex-direction: column; overflow: hidden; overflow: clip; --peek: 52px; }
+  .left { flex: 1; }
+  #rail {
+    position: absolute; left: 0; right: 0; bottom: 0; z-index: 6; height: 72%; padding: 0 16px 28px; overscroll-behavior: contain;
+    border: 0; border-top: 1px solid var(--edge); border-radius: 14px 14px 0 0; box-shadow: 0 -6px 24px rgb(0 0 0 / .14);
+    transform: translateY(calc(100% - var(--peek))); transition: transform .32s ease, visibility 0s;
+  }
+  #rail[data-sheet="full"] { transform: none; }
+  #rail[data-sheet="closed"] { transform: translateY(100%); visibility: hidden; transition: transform .32s ease, visibility 0s .32s; }
+  .sheet-h {
+    position: sticky; top: 0; z-index: 1; display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: calc(100% + 32px); height: 40px; margin: 0 -16px 6px; padding: 0; background: var(--surface); border: 0;
+    border-radius: 14px 14px 0 0; color: var(--muted); font-size: 13px;
+  }
+  .sheet-h::before { content: ""; width: 36px; height: 4px; border-radius: 2px; background: var(--edge); }
+  .bar { bottom: calc(var(--peek) + 10px); }
+  .bar-line { flex-wrap: wrap; }
+  .bar-row, .bar-more { flex-basis: 100%; }
+  .bar-more .dock, .bar-more .undock { flex: 1 1 auto; justify-content: center; min-height: 36px; padding: 0 10px; white-space: nowrap; }
+  .ask { padding: 11px 13px; }
+  .ask h2 { font-size: 17px; }
+  .cap .l1 { font-size: 18px; }
+  .skip-intro, .zoom { right: 16px; }
+  .hint { width: 220px; }
+  .drawer { position: fixed; inset: 0; z-index: 20; width: auto; padding: 14px 16px 24px; border-left: 0; box-shadow: none; }
   #list { padding-left: 16px; padding-right: 16px; }
-  #tour { left: 8px; right: 8px; bottom: 8px; width: auto; max-height: 46dvh; overflow: auto; }
 }
 @media (max-width: 560px) {
   #list th:nth-child(3), #list td:nth-child(3), #list th:nth-child(4), #list td:nth-child(4) { display: none; }
   #list th[colspan] { display: table-cell; }
 }
+@media (max-width: 420px) {
+  .banner .aside { gap: 10px; font-size: 12.5px; }
+}
 @media (forced-colors: active) {
   .mark > *, .clabel .sw, .share i { forced-color-adjust: none; }
-  #tour-spot { outline: 3px solid Highlight; }
+  .hint { border: 1px solid CanvasText; }
 }
 </style>
 </head>
@@ -532,7 +606,7 @@ dialog form { text-align: right; margin-top: 12px; }
   </nav>
   <div class="aside">
     <button class="link" id="saved-open" type="button">Saved<span id="saved-count"></span></button>
-    <button class="link" id="tour-open" type="button">Tutorial</button>
+    <button class="link" id="intro-open" type="button">Replay intro</button>
     <button class="link" id="about-open" type="button">How this was made</button>
     <label class="switch check"><input type="checkbox" id="dark" role="switch">Dark mode</label>
   </div>
@@ -544,20 +618,8 @@ dialog form { text-align: right; margin-top: 12px; }
       <h1>Who works on what in QCB</h1>
       <p>USC Quantitative and Computational Biology faculty, placed by what their papers are about. Made by students in QBA, not by USC, from OpenAlex papers as of fall 2026.</p>
     </div>
-    <search class="find">
-      <label class="sr" for="q">Search people or research topics</label>
-      <input id="q" type="search" placeholder="Search people or topics" autocomplete="off">
-    </search>
   </header>
   <div class="toolbar" id="toolbar">
-    <fieldset class="seg" id="views">
-      <legend class="sr">View</legend>
-      <label><input type="radio" name="view" value="tsne" checked><span>t-SNE</span></label>
-      <label><input type="radio" name="view" value="alt"><span id="alt-name">UMAP</span></label>
-      <label><input type="radio" name="view" value="tree"><span>Tree</span></label>
-      <label><input type="radio" name="view" value="list"><span>List</span></label>
-    </fieldset>
-    <span class="sep" aria-hidden="true"></span>
     <fieldset class="seg" id="lens-seg">
       <legend class="sr">Arrange faculty</legend>
       <label><input type="radio" name="lens" value="field" checked><span>By field</span></label>
@@ -566,28 +628,7 @@ dialog form { text-align: right; margin-top: 12px; }
     <span class="sep" aria-hidden="true"></span>
     <label class="switch" id="expand-row"><input type="checkbox" id="expand" role="switch">Add related fields</label>
     <span id="expand-msg" role="status"></span>
-    <button class="ghost" id="more-open" type="button" aria-expanded="false" aria-controls="more">More options</button>
-  </div>
-  <div class="morebar" id="more" hidden>
-    <div class="filters">
-      <fieldset class="filters" id="groups">
-        <legend class="sr">Show faculty groups</legend>
-        <label><input type="checkbox" data-group="core" checked><svg viewBox="-8 -8 16 16" aria-hidden="true"><circle r="7"/></svg>Core</label>
-        <label><input type="checkbox" data-group="joint" checked><svg viewBox="-8 -8 16 16" aria-hidden="true"><rect x="-6.5" y="-6.5" width="13" height="13" rx="2"/></svg>Joint</label>
-        <label><input type="checkbox" data-group="emeritus" checked><svg viewBox="-8 -8 16 16" aria-hidden="true"><polygon points="0,-7.5 7.5,6 -7.5,6"/></svg>Emeritus</label>
-        <label id="related-filter" hidden><input type="checkbox" data-group="related" checked><svg viewBox="-8 -8 16 16" aria-hidden="true"><polygon points="0,-7.5 7.5,0 0,7.5 -7.5,0"/></svg>Related fields</label>
-      </fieldset>
-      <label id="funded-filter"><input type="checkbox" id="funded">Active NIH or NSF grant</label>
-      <label>Lines
-        <select id="lines">
-          <option value="0">All collaborations</option>
-          <option value="0.5">Closest only</option>
-          <option value="none">Hide</option>
-        </select>
-      </label>
-    </div>
-    <label class="switch" id="three-row"><input type="checkbox" id="three" role="switch">3D</label>
-    <label class="switch" id="sky-row" hidden><input type="checkbox" id="constellation" role="switch">Constellation</label>
+    <button class="ghost" id="more-open" type="button" aria-expanded="false" aria-controls="more">Map settings</button>
   </div>
   <section id="stage" aria-label="Research map">
     <canvas id="sky" aria-hidden="true"></canvas>
@@ -597,16 +638,43 @@ dialog form { text-align: right; margin-top: 12px; }
       <svg id="tree" role="group" aria-label="Tree of faculty by research similarity" hidden></svg>
       <div id="list" hidden></div>
     </div>
-    <div class="dots">
-      <button class="dock" id="throw" type="button" aria-label="Throw a dot onto the map to see who works near that spot"><span class="ball"></span>Throw a dot</button>
-      <button class="undock" id="random" type="button" aria-label="Randomize: highlight a random faculty member">Randomize</button>
-      <button class="undock" id="remove-dot" type="button" hidden>Remove dot</button>
+    <form class="bar" id="bar" role="search" aria-label="Find faculty" novalidate>
+      <div class="ask" id="ask" hidden>
+        <h2 id="ask-title">What do you want to work on?</h2>
+        <p class="sub">A topic, a method or a professor's name.</p>
+        <p class="ex">Try <button type="button" class="link" data-ex="cancer evolution, single-cell RNA-seq">cancer evolution, single-cell RNA-seq</button>, <button type="button" class="link" data-ex="protein design">protein design</button> or <button type="button" class="link" data-ex="Adam MacLean">Adam MacLean</button>.</p>
+        <p class="sub last">Not sure yet? <button type="button" class="link" id="ask-throw">Throw a dot</button> and see who's nearby.</p>
+      </div>
+      <ul id="sugg" role="listbox" aria-label="Suggestions" hidden></ul>
+      <p class="bar-msg" id="bar-msg" role="status"></p>
+      <div class="bar-line">
+        <div class="bar-row">
+          <label class="sr" for="q">A topic, a method or a professor's name</label>
+          <input id="q" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="sugg" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" maxlength="4000" placeholder="Type a topic, a method or a name">
+          <button class="solid" id="find" type="submit">Find</button>
+        </div>
+        <div class="bar-more">
+          <button class="dock" id="throw" type="button" aria-label="Throw a dot onto the map to see who works near that spot"><span class="ball"></span>Throw a dot</button>
+          <button class="undock" id="random" type="button" aria-label="Randomize: highlight a random faculty member">Randomize</button>
+          <button class="undock" id="remove-dot" type="button" hidden>Remove dot</button>
+        </div>
+      </div>
+    </form>
+    <div class="cap" id="cap" hidden><span class="l1" id="cap-1"></span><span class="l2" id="cap-2">Each dot is a person. Nearby means similar research.</span></div>
+    <div class="choice" id="choice" role="group" aria-labelledby="choice-title" hidden>
+      <h2 id="choice-title" tabindex="-1">What brings you here?</h2>
+      <div class="choice-row">
+        <button class="solid" id="go-find" type="button">Find faculty to contact</button>
+        <button class="ghost" id="go-look" type="button">Look around</button>
+      </div>
+      <p class="sub">Either way, the whole map is one click away.</p>
     </div>
+    <button class="ghost skip-intro" id="skip-intro" type="button" hidden>Skip intro</button>
+    <div class="hint" id="hint" hidden><p id="hint-text"></p><button type="button" class="link" id="hint-ok">Got it</button></div>
     <div class="empty" id="empty" hidden>
       <p>Every faculty group is hidden.</p>
       <button class="ghost" id="show-all" type="button">Show everyone</button>
     </div>
-    <p class="note" id="note">Nearby means similar research, though distances between far-apart groups don't mean much. Bigger marks are bigger labs.</p>
     <div class="zoom" role="group" aria-label="Map controls" id="zoom">
       <button type="button" id="spin" hidden>Pause</button>
       <button type="button" id="zoom-out" aria-label="Zoom out">−</button>
@@ -615,9 +683,11 @@ dialog form { text-align: right; margin-top: 12px; }
     </div>
   </section>
   </div>
-  <aside id="rail" tabindex="-1" aria-label="Details">
+  <aside id="rail" tabindex="-1" aria-label="Details" data-sheet="closed">
+    <button class="sheet-h" id="sheet-h" type="button" aria-controls="rail">Show more</button>
     <div id="detail"></div>
     <section id="legend" aria-label="Research clusters">
+      <p class="key" id="note">Nearby means similar research, though distances between far-apart groups don't mean much. Bigger marks are bigger labs.</p>
       <h2 id="legend-title">Research clusters</h2>
       <ul class="legend-list" id="legend-list"></ul>
       <p class="key">Lines join people who have published together; thicker means a closer collaboration. Papers with many authors count for little.</p>
@@ -628,20 +698,51 @@ dialog form { text-align: right; margin-top: 12px; }
       <p class="foot">Unofficial, made by QBA, USC's Quantitative Biology Association. Papers from <a href="https://openalex.org">OpenAlex</a>, roster and photos from the <a href="https://www.qcb-dornsife.usc.edu/faculty">QCB website</a> and department websites, as of fall 2026.</p>
     </section>
   </aside>
+  <section class="drawer" id="more" aria-labelledby="more-title">
+    <div class="drawer-h">
+      <h2 id="more-title" tabindex="-1">Map settings</h2>
+      <button class="ghost" id="more-close" type="button">Close</button>
+    </div>
+    <div class="dset">
+      <h3>Layout</h3>
+      <fieldset class="seg" id="views">
+        <legend class="sr">Layout</legend>
+        <label><input type="radio" name="view" value="tsne" checked><span>t-SNE</span></label>
+        <label><input type="radio" name="view" value="alt"><span id="alt-name">UMAP</span></label>
+        <label><input type="radio" name="view" value="tree"><span>Tree</span></label>
+        <label><input type="radio" name="view" value="list"><span>List</span></label>
+      </fieldset>
+      <label class="switch" id="three-row"><input type="checkbox" id="three" role="switch">3D</label>
+      <div id="expand-slot"></div>
+    </div>
+    <div class="dset">
+      <h3>Show</h3>
+      <fieldset class="filters" id="groups">
+        <legend class="sr">Show faculty groups</legend>
+        <label><input type="checkbox" data-group="core" checked><svg viewBox="-8 -8 16 16" aria-hidden="true"><circle r="7"/></svg>Core</label>
+        <label><input type="checkbox" data-group="joint" checked><svg viewBox="-8 -8 16 16" aria-hidden="true"><rect x="-6.5" y="-6.5" width="13" height="13" rx="2"/></svg>Joint</label>
+        <label><input type="checkbox" data-group="emeritus" checked><svg viewBox="-8 -8 16 16" aria-hidden="true"><polygon points="0,-7.5 7.5,6 -7.5,6"/></svg>Emeritus</label>
+        <label id="related-filter" hidden><input type="checkbox" data-group="related" checked><svg viewBox="-8 -8 16 16" aria-hidden="true"><polygon points="0,-7.5 7.5,0 0,7.5 -7.5,0"/></svg>Related fields</label>
+      </fieldset>
+      <div class="filters"><label id="funded-filter"><input type="checkbox" id="funded">Only labs with an active NIH or NSF grant</label></div>
+    </div>
+    <div class="dset filters">
+      <h3><label for="lines">Lines</label></h3>
+      <select id="lines">
+        <option value="0">All collaborations</option>
+        <option value="0.5">Closest only</option>
+        <option value="none">Hide</option>
+      </select>
+      <p class="sub">Lines join people who have published together.</p>
+    </div>
+    <div class="fun" id="sky-row" hidden>
+      <h3>Just for fun</h3>
+      <label class="switch"><input type="checkbox" id="constellation" role="switch">Constellation</label>
+      <p class="sub">The 3D map as a night sky.</p>
+    </div>
+  </section>
 </main>
 <div id="tip" hidden></div>
-<div id="tour-spot" hidden></div>
-<div id="tour" popover="manual" role="dialog" aria-labelledby="tour-title" hidden>
-  <p class="tour-count" id="tour-count"></p>
-  <h2 id="tour-title" tabindex="-1"></h2>
-  <p class="tour-body" id="tour-body"></p>
-  <p class="tour-try" id="tour-try" role="status"></p>
-  <div class="tour-nav">
-    <button class="ghost" id="tour-end" type="button">End tutorial</button>
-    <button class="ghost" id="tour-back" type="button">Back</button>
-    <button class="solid" id="tour-next" type="button">Next</button>
-  </div>
-</div>
 <p class="sr" id="status" role="status"></p>
 
 <dialog id="about" closedby="any" aria-labelledby="about-title">
@@ -721,6 +822,7 @@ const S = {
   view: "tsne", picked: null, sel: null, hover: null, query: "", matches: null, scope: "qcb", lens: "field", method: null,
   groups: { core: true, joint: true, emeritus: true, related: true }, funded: false, lines: "0", zoom: 1,
   three: false, sky: false, spin: !reducedMotion.matches, yaw: 0, pitch: 0.2, fling: 0,
+  ask: false,   // the bar is asking what you want to work on
 };
 // Saved faculty, by id so they survive a rebuild of the data. Storage can fail, as in a
 // private window, and then the list lasts until the page closes.
@@ -770,6 +872,21 @@ const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
 /* ---------- Map ---------- */
 
 let W = 0, H_ = 0, ox = 0, oy = 0, scale = 1, pts = [], band = 0;
+let intro = null;   // the opening bloom, while it plays
+// What this browser has been shown already: the intro and each hint appear once.
+const SEEN_KEY = "qcb-map-seen";
+const seen = (() => {
+  const none = { intro: false, idle: false, dot: false };
+  try { return Object.assign(none, JSON.parse(localStorage.getItem(SEEN_KEY)) || {}); } catch { return none; }
+})();
+function markSeen(key) {
+  seen[key] = true;
+  try { localStorage.setItem(SEEN_KEY, JSON.stringify(seen)); } catch { /* it lasts until the page closes */ }
+}
+const returning = seen.intro;
+let sheetFull = false;   // on a phone, whether the details sheet is pulled all the way up
+let peekShown = -1;   // the sheet height the map was last fitted around
+let hintKey = null, hintAt = null, idleTimer = 0, touched = false;   // the one-time hints
 const globeLayer = sv("g", { "aria-hidden": "true" }), edgeLayer = sv("g"), hitLayer = sv("g"), nodeLayer = sv("g"), clusterLayer = sv("g"), linkLayer = sv("g"), orbitLayer = sv("g"), youLayer = sv("g");
 mapSvg.append(globeLayer, edgeLayer, clusterLayer, linkLayer, hitLayer, nodeLayer, orbitLayer, youLayer);
 // A soft glow in each cluster's hue, for the stars in Constellation.
@@ -905,11 +1022,26 @@ function drawClusterLabels() {
 }
 drawClusterLabels();
 
-// The toggles float over the top of the stage, so everything drawn there starts below them.
+// Controls float over the stage, so the map keeps clear of them: the band at the top is room for
+// the zoom buttons, or the intro's caption, and the foot at the bottom is room for the bar, or the
+// intro's question, which on a phone sits above the peek of the details sheet. The bar's own
+// question and suggestions float over the map without moving it.
+let foot = 12;
 function measureBand() {
-  band = 52;   // room for the buttons at the top left of the stage; the toggles are in the toolbar now
-  $("#stage").style.setProperty("--band", `${band}px`);
+  const stage = $("#stage"), top = stage.getBoundingClientRect().top, h = stage.clientHeight;
+  const room = (node) => Math.max(12, Math.round(h - (node.getBoundingClientRect().top - top)) + 10);
+  if (intro) {
+    band = Math.round($("#cap").getBoundingClientRect().bottom - top) + 14;
+    foot = room($("#choice"));
+  } else {
+    band = isMapView() ? 52 : 16;
+    foot = $("#bar").hidden ? 12 : room($(".bar-line"));
+  }
+  stage.style.setProperty("--band", `${band}px`);
+  stage.style.setProperty("--bar", `${foot}px`);
 }
+// The lowest point a dot can sit, above the bar unless the map is zoomed and scrolls under it.
+const floor = () => H_ - (S.zoom > 1 && !S.three ? 12 : foot);
 
 function sizeMap() {
   const w = scroller.clientWidth, h = scroller.clientHeight;
@@ -920,10 +1052,10 @@ function sizeMap() {
   mapSvg.setAttribute("width", W);
   mapSvg.setAttribute("height", H_);
   mapSvg.setAttribute("viewBox", `0 0 ${W} ${H_}`);
-  const padX = w < 560 ? 22 : 74, padY = 34, top = Math.max(padY, band);
-  scale = Math.max(40, Math.min(W - 2 * padX, H_ - top - padY));
+  const padX = w < 560 ? 22 : 74, padY = 34, top = Math.max(padY, band), bottom = Math.max(padY, foot + 8);
+  scale = Math.max(40, Math.min(W - 2 * padX, H_ - top - bottom));
   ox = (W - scale) / 2;
-  oy = top + (H_ - top - padY - scale) / 2;
+  oy = top + (H_ - top - bottom - scale) / 2;
 }
 
 function drawPoints() {
@@ -1059,9 +1191,9 @@ function placeLabels() {
   const taken = marksAndLabels = [];
   if (S.zoom === 1 || S.three) {   // names keep clear of the controls floating over the map
     const box = mapSvg.getBoundingClientRect();
-    document.querySelectorAll(".lens, .dots").forEach((c) => {
+    document.querySelectorAll(".bar-line, .bar-msg, .ask, .zoom, .hint, .cap, .choice, .skip-intro").forEach((c) => {
       const r = c.getBoundingClientRect();
-      taken.push({ x: r.left - box.left, y: r.top - box.top, w: r.width, h: r.height });
+      if (r.width) taken.push({ x: r.left - box.left, y: r.top - box.top, w: r.width, h: r.height });
     });
   }
   P.forEach((p, i) => { if (shown(i) && pts[i][3] > 0.3) { const [x, y, size] = pts[i], r = reach[i] * size + 2; taken.push({ x: x - r, y: y - r, w: 2 * r, h: 2 * r }); } });
@@ -1124,12 +1256,14 @@ function placeLabels() {
     }
   }
   drawOrbit();
+  placeHint();   // a hint follows its dot, clear of the names just placed
 }
 
-let tween = 0;
+let tween = 0, goal = null;   // goal: where a tween is taking everyone
 function settle() {
   sizeMap();
   pts = target();
+  goal = null;
   drawPoints();
   placeLabels();
   settleDot();
@@ -1137,7 +1271,9 @@ function settle() {
 // People numbered from `placed` on are joining the map, so they appear where they belong.
 function animateTo(next, placed = next.length) {
   cancelAnimationFrame(tween);
+  goal = null;
   if (reducedMotion.matches || !pts.length) { pts = next; drawPoints(); placeLabels(); settleDot(); return; }
+  goal = next;
   const from = next.map((q, i) => (i < placed ? pts[i] : q).slice()), start = performance.now(), ms = 650;
   pts = from;
   mapSvg.classList.add("moving");
@@ -1147,13 +1283,14 @@ function animateTo(next, placed = next.length) {
     pts = from.map((q, i) => q.map((v, n) => v + (next[i][n] - v) * e));
     drawPoints();
     if (t < 1) tween = requestAnimationFrame(step);
-    else { placeLabels(); mapSvg.classList.remove("moving", "arriving"); settleDot(); }
+    else { goal = null; placeLabels(); mapSvg.classList.remove("moving", "arriving"); settleDot(); }
   };
   tween = requestAnimationFrame(step);
 }
 
 function setZoom(z) {
   const zoom = Math.max(1, Math.min(4, z));
+  hideHint();
   const fx = (scroller.scrollLeft + scroller.clientWidth / 2) / (W || 1);
   const fy = (scroller.scrollTop + scroller.clientHeight / 2) / (H_ || 1);
   S.zoom = zoom;
@@ -1161,7 +1298,6 @@ function setZoom(z) {
   scroller.scrollLeft = fx * W - scroller.clientWidth / 2;
   scroller.scrollTop = fy * H_ - scroller.clientHeight / 2;
   scroller.classList.toggle("grab", zoom > 1 || S.three);
-  $("#note").hidden = zoom > 1;
   $("#zoom-out").disabled = zoom === 1;
   $("#zoom-in").disabled = zoom === 4;
 }
@@ -1575,7 +1711,8 @@ function resultsPanel() {
     results.length
       ? el("ul", { class: "rows" }, results.map((r) => el("li", {}, person(r.i, r.why || C[P[r.i].cluster].name))))
       : hidden ? null : el("p", { class: "sub" }, "Nobody's top research terms match. Try a broader word."),
-    hidden ? el("p", { class: "sub" }, `${plural(hidden, "match").replace("matchs", "matches")} hidden by the filters under More options.`) : null,
+    hidden ? el("p", { class: "sub" }, `${plural(hidden, "match").replace("matchs", "matches")} hidden by the filters in Map settings.`) : null,
+    el("p", { class: "foot" }, "These names use the words you typed. Press Enter, or Find, to see who's closest to your topic, even if their papers word it differently."),
   ];
 }
 
@@ -1586,8 +1723,11 @@ function introPanel() {
       ? "Each mark is a faculty member. People who sit close together use similar quantitative and computational methods, whatever they study."
       : "Each mark is a faculty member. People who sit close together publish on similar things, whatever department they're in."),
     el("p", { class: "sub" }, `${WORLD.n} faculty · ${WORLD.papers.toLocaleString("en-US")} papers · ${WORLD.edges} collaborations`),
-    el("p", { class: "sub" }, "Pick a person or a cluster, or search for a topic you're curious about."),
-    matchForm,
+    returning && saved.size
+      ? el("p", { class: "welcome" }, `Welcome back. You've saved ${plural(saved.size, "faculty member").replace("faculty members", "faculty")}. `,
+        el("button", { type: "button", class: "link", onclick: () => select({ kind: "saved" }, true) }, "Open your list"))
+      : null,
+    el("p", { class: "sub" }, `Pick a person or a cluster, or type a topic in the box ${stacked.matches ? "above" : "below the map"}.`),
   ];
 }
 
@@ -1601,18 +1741,23 @@ function renderDetail(moveFocus) {
           : clusterPanel(s.c);
   detail.replaceChildren(...kids.filter(Boolean));
   $("#rail").scrollTop = 0;
+  syncAsk();
+  syncSheet();
   if (moveFocus) detail.querySelector("h2").focus();
 }
 
 function select(item, moveFocus) {
   S.sel = item;
   S.hover = null;
+  if (item) S.ask = false;
+  sheetFull = !!item && !item.stay;   // on a phone a pick opens the sheet, and Randomize keeps the map in view
+  if (item && intro) finishIntro();
+  if (item) { touch(); hideHint(); }
   hideTip();
   renderDetail(moveFocus);
   emphasize();
   if (isMapView()) placeLabels();
   if (S.three && isMapView() && item && item.kind === "person") faceFront(item.i);
-  if (item && stacked.matches && !item.stay) $("#rail").scrollIntoView({ behavior: reducedMotion.matches ? "auto" : "smooth" });
 }
 
 /* ---------- Saved faculty ---------- */
@@ -1698,7 +1843,12 @@ function savedPanel() {
       : el("p", { class: "sub" }, "Nobody yet. Open someone's details and press Save, or use the star beside your matches."),
     people.length ? el("ul", { class: "saved-list" }, people.map(savedRow)) : null,
     people.length ? el("div", { class: "me-row" }, el("button", { type: "button", class: "solid", onclick: copy }, "Copy list"), done) : null,
+    el("div", { class: "tipbox" }, el("h3", {}, "Before you email"), el("ul", {},
+      el("li", {}, "Read one of their recent papers and say what drew you to it."),
+      el("li", {}, "Ask whether they take undergraduates in their lab."),
+      el("li", {}, "Say you're in QBIO, your year, and any courses or skills that fit."))),
     el("p", { class: "foot" }, "This map can't tell you who's taking students. A lab's website is the best place to check, or ask them."),
+    el("p", {}, el("button", { type: "button", class: "link", onclick: () => { select(null); $("#q").focus(); } }, "Keep exploring the map →")),
   ];
 }
 
@@ -1777,6 +1927,7 @@ function setQuery(text) {
   S.query = text;
   searchWorld();
   S.sel = null;
+  sheetFull = false;
   renderDetail();
   emphasize();
   if (isMapView()) placeLabels();
@@ -1995,9 +2146,9 @@ const linkEls = Array.from({ length: 5 }, (_, n) => {
   return { line, hit, tag, grow: 1 };
 });
 
-function blended() {
+function blended(at = pts) {
   let x = 0, y = 0, t = 0;
-  S.you.w.forEach((v, i) => { if (v) { x += v * pts[i][0]; y += v * pts[i][1]; t += v; } });
+  S.you.w.forEach((v, i) => { if (v) { x += v * at[i][0]; y += v * at[i][1]; t += v; } });
   return [x / t, y / t];
 }
 function dotPoint() {
@@ -2060,9 +2211,10 @@ function settleDot() {
   const you = S.you;
   if (!you || !isMapView() || you.live) return;
   if (!you.at && !S.three) {
-    let [x, y] = blended();
+    const at = goal || pts;   // mid-tween, settle where everyone is going, not where they are
+    let [x, y] = blended(at);
     for (let pass = 0; pass < 10; pass++) {
-      pts.forEach(([px, py], i) => {
+      at.forEach(([px, py], i) => {
         if (!shown(i)) return;
         const dx = x - px, dy = y - py, d = Math.hypot(dx, dy) || 1, room = reach[i] + 18;
         if (d < room) { x += (dx || 1) / d * (room - d); y += dy / d * (room - d); }
@@ -2103,7 +2255,7 @@ function showYou(fresh) {
 }
 
 function land(point, fresh) {
-  const x = Math.max(12, Math.min(point[0], W - 12)), y = Math.max(band, Math.min(point[1], H_ - 12));
+  const x = Math.max(12, Math.min(point[0], W - 12)), y = Math.max(band, Math.min(point[1], floor()));
   const you = spotDot([x, y]);
   you.at = { view: S.view, xy: fromPx([x, y]) };
   S.you = you;
@@ -2112,6 +2264,9 @@ function land(point, fresh) {
 
 function clearYou() {
   cancelAnimationFrame(flight);
+  const box = $("#q");
+  if (S.you && S.you.kind === "text" && box.value.trim() === S.you.text.trim()) box.value = "";
+  if (hintKey === "dot") hideHint();
   S.you = parked = null;
   drawYou();
   renderDetail();
@@ -2128,6 +2283,7 @@ function syncEmpty() {
   const groupsOn = P.some((p, i) => i < WORLD.n && S.groups[p.group]);
   $("#empty p").textContent = groupsOn ? "No one in the groups shown has an active NIH or NSF grant." : "Every faculty group is hidden.";
   dockButton.disabled = $("#random").disabled = none;
+  if (!none && $("#bar-msg").dataset.empty) { $("#bar-msg").textContent = ""; delete $("#bar-msg").dataset.empty; }
   if (none && S.you) { cancelAnimationFrame(flight); parked = S.you; S.you = null; drawYou(); }
 }
 function unpark() {
@@ -2197,7 +2353,7 @@ function glide([x, y], vx, vy) {
     vx *= drag;
     vy *= drag;
     if (x < 12 || x > W - 12) { vx *= -0.6; x = Math.max(12, Math.min(x, W - 12)); }
-    if ((y < band && vy < 0) || (y > H_ - 12 && vy > 0)) { vy *= -0.6; y = Math.max(band, Math.min(y, H_ - 12)); }
+    if ((y < band && vy < 0) || (y > floor() && vy > 0)) { vy *= -0.6; y = Math.max(band, Math.min(y, floor())); }
     S.you = Object.assign(spotDot([x, y]), { live: [x, y] });
     emphasize();
     drawYou();
@@ -2260,39 +2416,149 @@ dockButton.addEventListener("pointerdown", (ev) => startDrag(ev, dockButton));
 dockButton.addEventListener("click", (ev) => { if (ev.detail === 0) toss(); });   // keyboard
 $("#remove-dot").addEventListener("click", () => { clearYou(); dockButton.focus(); });
 
-const meBox = el("textarea", {
-  id: "me", rows: 3, maxlength: 4000,
-  placeholder: "cancer evolution, single-cell RNA-seq, machine learning",
-  onfocus: () => { loadMatch().catch(() => {}); },
+/* ---------- The bar ----------
+
+One box under the map. Typing lights up the names and topics it finds, Enter places a dot
+among the people whose papers use those words, and a name in the suggestions opens that
+person. Nothing typed leaves the page or reaches the address bar.
+*/
+
+const q = $("#q"), barMsg = $("#bar-msg"), sugg = $("#sugg");
+function showLoadError() { barMsg.textContent = "Couldn't load the matching data. Try reloading the page."; }
+
+// The question above the box, for someone who said they're here to find faculty.
+function syncAsk() {
+  if (S.you || S.sel || S.query) S.ask = false;
+  const on = S.ask && !intro, card = $("#ask");
+  card.querySelector(".last").hidden = !isMapView();   // a dot needs a map to land on
+  if (card.hidden === !on) return;
+  card.hidden = !on;
+  if (isMapView() && pts.length) placeLabels();
+}
+function dropAsk() {
+  if (!S.ask) return;
+  S.ask = false;
+  syncAsk();
+  syncSheet();
+}
+
+function placeText(text) {
+  if (!anyShown()) {
+    const groupsOn = P.some((p, i) => i < WORLD.n && S.groups[p.group]);
+    barMsg.textContent = groupsOn
+      ? "No one in the groups shown has an active NIH or NSF grant, so there's no one to match. Change that in Map settings first."
+      : "Every faculty group is hidden, so there's no one to match. Show a group again in Map settings first.";
+    barMsg.dataset.empty = "1";
+    return;
+  }
+  barMsg.textContent = "";
+  loadMatch().then(() => {
+    if (!M) return;
+    const reading = readText(text);
+    if (!reading.found.length) { barMsg.textContent = "None of those words appear in these papers. Try naming a topic, like “cancer genomics”."; return; }
+    if (M.n !== WORLD.n) return;   // the map changed while the table loaded
+    backToMap();
+    S.you = textDot(reading, text);
+    S.sel = null;
+    S.ask = false;
+    if (S.query) { S.query = ""; searchWorld(); }   // the words stay in the box, to change and try again
+    sheetFull = false;
+    renderDetail();
+    emphasize();
+    placeLabels();
+    flyIn();
+    $("#status").textContent = `Your dot is on the map. Closest match: ${P[S.you.links[0].j].name}.`;
+    const you = S.you;
+    setTimeout(() => {
+      if (S.you === you && !S.sel && isMapView()) showHint("dot", "This gold dot is you, among the faculty whose papers use your words. Pick a name to see their work.", dotPoint);
+    }, reducedMotion.matches ? 0 : 800);
+  }, showLoadError);
+}
+
+function openPerson(i) {
+  setQuery("");
+  select({ kind: "person", i }, true);
+  reveal(i);
+}
+const tidy = (text) => text.trim().toLowerCase().replace(/\s+/g, " ");
+const exactName = (text) => P.findIndex((p, i) => i < WORLD.n && shown(i) && p.name.toLowerCase() === tidy(text));
+function chooseText(text) {
+  const i = exactName(text);
+  if (i >= 0) openPerson(i); else placeText(text);
+}
+
+// Suggestions: the first always finds your matches, and up to three names follow.
+let opts = [], act = 0;
+function closeSugg() {
+  sugg.hidden = true;
+  opts = [];
+  q.setAttribute("aria-expanded", "false");
+  q.removeAttribute("aria-activedescendant");
+}
+function paintSugg() {
+  [...sugg.children].forEach((li, k) => li.setAttribute("aria-selected", String(k === act)));
+  q.setAttribute("aria-activedescendant", `sugg-${act}`);
+  sugg.children[act]?.scrollIntoView({ block: "nearest" });
+}
+function renderSugg() {
+  const text = q.value.trim();
+  if (text.length < 2) { closeSugg(); return; }
+  const names = search(text).filter((r) => r.score === 1000 && shown(r.i)).slice(0, 3).map((r) => r.i);
+  const exact = exactName(text);
+  opts = [{ kind: "find", text }, ...names.map((i) => ({ kind: "name", i }))];
+  act = Math.max(0, opts.findIndex((o) => o.i === exact));
+  const short = text.length > 60 ? `${text.slice(0, 57)}…` : text;
+  sugg.replaceChildren(...opts.map((o, k) => el("li", {
+    id: `sugg-${k}`, role: "option", onmousedown: (ev) => ev.preventDefault(), onclick: () => choose(k),
+  }, o.kind === "find"
+    ? el("span", {}, `Find your closest matches for “${short}”`)
+    : el("span", {}, P[o.i].name, el("span", { class: "d" }, C[P[o.i].cluster].name)),
+  el("span", { class: "k", "aria-hidden": "true" }, "Enter"))));
+  sugg.hidden = false;
+  q.setAttribute("aria-expanded", "true");
+  paintSugg();
+}
+function choose(k) {
+  const o = opts[k];
+  closeSugg();
+  if (!o) return;
+  if (o.kind === "find") placeText(o.text); else openPerson(o.i);
+}
+
+q.addEventListener("input", () => {
+  barMsg.textContent = "";
+  touch();
+  setQuery(q.value);   // lights up whoever the words name, and lists them
+  renderSugg();
 });
-const meMsg = el("span", { class: "me-msg", role: "status" });
-function showLoadError() { meMsg.textContent = "Couldn't load the matching data. Try reloading the page."; }
-const matchForm = el("form", {
-  id: "me-form", class: "me",
-  onsubmit: (ev) => {
+q.addEventListener("focus", () => {
+  loadMatch().catch(() => {});   // ready by the time they press Enter
+  if (q.value.trim() && !S.you) renderSugg();
+});
+q.addEventListener("blur", () => setTimeout(() => { if (document.activeElement !== q) closeSugg(); }, 120));
+q.addEventListener("keydown", (ev) => {
+  if (ev.key === "ArrowDown" || ev.key === "ArrowUp") {
+    if (!opts.length) { if (ev.key === "ArrowDown" && q.value.trim().length >= 2) { ev.preventDefault(); renderSugg(); } return; }
     ev.preventDefault();
-    if (!meBox.value.trim()) { meBox.focus(); return; }
-    if (!anyShown()) { meMsg.textContent = "Every faculty group is hidden, so there's no one to match. Show a group again first."; return; }
-    meMsg.textContent = "";
-    loadMatch().then(() => {
-      if (!M) return;
-      const reading = readText(meBox.value);
-      if (!reading.found.length) { meMsg.textContent = "None of those words appear in these papers. Try naming a topic, like “cancer genomics”."; return; }
-      if (M.n !== WORLD.n) return;   // the map changed while the table loaded
-      backToMap();
-      S.you = textDot(reading, meBox.value);
-      S.sel = null;
-      if (S.query) setQuery("");
-      renderDetail();
-      emphasize();
-      placeLabels();
-      if (stacked.matches) $("#stage").scrollIntoView({ behavior: reducedMotion.matches ? "auto" : "smooth" });
-      flyIn();
-    }, showLoadError);
-  },
-}, el("label", { for: "me" }, "Topics and methods you want to explore"), meBox,
-el("div", { class: "me-row" }, el("button", { type: "submit", class: "solid" }, "Place me on the map"), meMsg),
-el("p", { class: "sub" }, "This stays in your browser. Nothing you type is sent anywhere."));
+    act = (act + (ev.key === "ArrowDown" ? 1 : -1) + opts.length) % opts.length;
+    paintSugg();
+  } else if (ev.key === "Escape" && !sugg.hidden) {
+    ev.stopPropagation();
+    closeSugg();
+  }
+});
+$("#bar").addEventListener("submit", (ev) => {
+  ev.preventDefault();
+  const text = q.value.trim();
+  if (!text) { q.focus(); return; }
+  if (opts.length) choose(act); else chooseText(text);
+});
+document.querySelectorAll("#ask [data-ex]").forEach((b) => b.addEventListener("click", () => {
+  q.value = b.dataset.ex;
+  chooseText(b.dataset.ex);
+}));
+$("#ask-throw").addEventListener("click", () => { dropAsk(); toss(); });
+dockButton.addEventListener("click", dropAsk);
 
 // Rows give the order and the shared topics, not a score: a percentage of the top
 // match reads like a compatibility rating, which this isn't.
@@ -2410,8 +2676,7 @@ function youPanel() {
     el("p", { class: "foot" }, typed
       ? "Ranked by how strongly their papers use your topics. It knows nothing about openings, mentoring or fit, so treat it as a reading list, not a recommendation."
       : "Ranked by how close their research is to this spot. It knows nothing about openings, mentoring or fit, so treat it as a reading list, not a recommendation."),
-    typed ? matchForm : el("p", { class: "foot" }, "Drag or throw the dot somewhere else to keep exploring."),
-    typed ? null : matchForm,
+    el("p", { class: "foot" }, typed ? "Change the words in the box and press Find to try again." : "Drag or throw the dot somewhere else to keep exploring."),
   ];
 }
 
@@ -2447,6 +2712,7 @@ function setView(view) {
   S.view = view;
   document.body.dataset.view = view;
   const map = isMapView();
+  hideHint();
   mapSvg.toggleAttribute("hidden", !map);   // SVG elements have no .hidden property
   treeSvg.toggleAttribute("hidden", view !== "tree");
   listBox.hidden = view !== "list";
@@ -2454,7 +2720,7 @@ function setView(view) {
   $("#three-row").hidden = !map;
   $("#sky-row").hidden = !map || !S.three;
   paintSky();
-  $("#note").hidden = !map || S.zoom > 1;
+  $("#note").hidden = !map;
   showNote();
   $("#throw").hidden = !map;
   hideTip();
@@ -2471,6 +2737,8 @@ function setView(view) {
   if (map) scroller.classList.toggle("grab", S.zoom > 1 || S.three);
   if (map && S.three) startSpin();
   emphasize();
+  measureBand();
+  syncAsk();
 }
 
 /* ---------- 3D ---------- */
@@ -2562,6 +2830,7 @@ function paintSky() {
 function setSky(on) {
   S.sky = on;
   $("#constellation").checked = on;
+  if (on) { dropAsk(); hideHint(); }   // the sky is for looking, so the guided steps keep out of it
   paintSky();
   if (!on) nodes.forEach(({ label }) => label.removeAttribute("opacity"));
   if (isMapView()) { drawPoints(); placeLabels(); }   // the flat lines missed every turn while the sky was up
@@ -2803,7 +3072,6 @@ $("#show-all").addEventListener("click", () => {
   $("#status").textContent = "Showing every group";
 });
 $("#lines").addEventListener("change", (ev) => { S.lines = ev.target.value; applyFilters(); emphasize(); });
-$("#q").addEventListener("input", (ev) => setQuery(ev.target.value));
 $("#zoom-in").addEventListener("click", () => setZoom(S.zoom * 1.5));
 $("#zoom-out").addEventListener("click", () => setZoom(S.zoom / 1.5));
 $("#zoom-fit").addEventListener("click", () => setZoom(1));
@@ -2822,10 +3090,15 @@ scroller.addEventListener("keydown", (ev) => {
 });
 addEventListener("keydown", (ev) => {
   if (ev.key !== "Escape" || $("#about").open) return;
-  if (tourAt >= 0) endTour();
-  else if (S.sel) select(null);
+  const inRail = $("#rail").contains(document.activeElement);   // the panel is redrawn below; keep focus in it
+  if (drawerOpen()) setDrawer(false);
+  else if (intro && !intro.done) { intro.byHand = true; introDone(); }
+  else if (intro) $("#go-look").click();
+  else if (hintKey) hideHint();
+  else if (S.sel) select(null, inRail);
   else if (S.query) setQuery("");
-  else if (S.you) clearYou();
+  else if (S.you) { clearYou(); if (inRail) detail.querySelector("h2").focus(); }
+  else if (S.ask) dropAsk();
 });
 
 // Clicking empty map clears the selection. A mouse drag pans when zoomed in; touch
@@ -2833,6 +3106,9 @@ addEventListener("keydown", (ev) => {
 // a drag turns the globe, though a touch only turns it sideways so the page can scroll.
 let drag = null, dragged = false;
 scroller.addEventListener("pointerdown", (ev) => {
+  touch();
+  hideHint();
+  dropAsk();
   dragged = false;
   if (!isMapView() || ev.target.closest(".you")) return;
   if (S.three) {
@@ -2944,147 +3220,314 @@ function drawLegend() {
 }
 drawLegend();
 
-/* ---------- Tutorial ----------
+/* ---------- Map settings ----------
 
-A walkthrough of the real page. Each step points at a control and the person can use it
-there and then, so whatever they change stays changed. Next always works, tried or not.
+Everything that changes how the map is drawn sits in one drawer. On a phone it covers the
+page, so the rest of the page is inert while it's open.
 */
 
-const moreBtn = $("#more-open"), moreBar = $("#more");
-function setMore(open) {
-  moreBar.hidden = !open;
+const moreBtn = $("#more-open"), drawer = $("#more");
+const drawerOpen = () => drawer.classList.contains("on");
+function setDrawer(open, refocus = true) {
+  drawer.classList.toggle("on", open);
   moreBtn.setAttribute("aria-expanded", String(open));
+  for (const node of [$(".left"), $("#rail"), $(".banner")]) node.inert = open && stacked.matches;
+  if (open) { hideHint(); touch(); $("#more-title").focus({ preventScroll: true }); }
+  else if (refocus) moreBtn.focus({ preventScroll: true });
 }
-moreBtn.addEventListener("click", () => setMore(moreBar.hidden));
-
-const tour = $("#tour"), tourSpot = $("#tour-spot");
-const SAMPLE = P.findIndex((p) => p.methods.some((r) => r.l === "firsthand"));   // shows all three kinds of method
-const showSample = () => { if (!S.sel || S.sel.kind !== "person") select({ kind: "person", i: SAMPLE }); };
-const showForm = () => { backToMap(); if (S.query) setQuery(""); select(null); };
-const TOUR = [
-  { at: "#stage", title: "Welcome", before: backToMap,
-    body: "Each mark is a USC faculty member, and people who sit close together work on similar things, whatever department they're in. This tour shows you how to read the map and find labs that fit you." },
-  { at: "#groups", title: "What the marks mean", before: () => setMore(true),
-    body: "Shape shows someone's role, and these boxes hide or show each group. Color is their research cluster, a bigger mark is a bigger lab (dashed if we couldn't size it), and a line means two people have published together." },
-  { at: "#stage", title: "Pick someone", before: backToMap,
-    body: "Everything about a person opens from their mark. Not sure where to start? Randomize picks someone for you.",
-    try: "Try it: click any mark.", done: () => !!S.sel && S.sel.kind === "person", after: "Their details are in the panel now." },
-  { at: "#methods", side: "left", scroll: "start", title: "See how a lab works", before: showSample,
-    body: "Demonstrated methods show up in a lab's papers or website. Firsthand ones come from students who worked there. Potential means the lab produces data a method could use.",
-    try: "Try it: open a method.", done: () => !!S.method, after: "You can see the evidence, and every lab with that method stays lit on the map." },
-  { at: "#lens-seg", title: "Field or technique", before: () => select(null),
-    body: "By field groups people by what they study. By technique groups them by how they work, like imaging, statistics or modeling, which helps if you know the kind of work you want to do.",
-    try: "Try it: switch to By technique.", done: byTechnique, after: "Now nearby means similar methods, and the clusters changed to match." },
-  { at: "#expand-row", title: "Related fields",
-    body: `The map opens on the ${worlds["qcb/field"].n} QCB faculty. This adds ${D.meta.wide.added} people from fields QBIO students also work in, like biostatistics and biomedical engineering.`,
-    try: "Try it: turn it on.", done: () => S.scope === "all", after: "The new faculty are diamonds. Everyone's position is recalculated, so people move too." },
-  { at: "#views", title: "Other views",
-    body: "t-SNE, UMAP and MDS are different ways of flattening the same data, so trust what they agree on. Tree shows how clusters nest, and List is a plain table." },
-  { at: "#three-row", title: "Turn it into a globe", before: () => { setMore(true); backToMap(); },
-    body: "3D uses the same data with one more dimension, so less gets squeezed. Drag to turn it, and Pause stops the spin.",
-    try: "Try it: turn on 3D.", done: () => S.three, after: "Marks in front are bigger and stand out more. It stays on until you turn it off." },
-  { at: "#me-form", side: "left", title: "Find your place", before: showForm,
-    body: "Name a few topics or methods you'd like to explore, and you'll land near the faculty whose papers mention them most. What you type stays in your browser.",
-    try: "Try it: type a few topics, then press Place me on the map.", done: () => !!S.you && S.you.kind === "text", after: "Your dot is on the map, and the panel lists the faculty whose papers best match those topics. Press “not this” by a topic to leave it out, or × to drop it." },
-  { at: "#throw", side: "right", clear: true, title: "Explore with a dot", before: backToMap,
-    body: "Not sure what you're into? Drag this dot onto the map and let go to see who works near that spot. Remove dot takes it off again.",
-    try: "Try it: drag the dot onto the map.", done: () => !!S.you && S.you.kind === "spot", after: "The panel shows who's nearby. Keep dragging to explore." },
-  { at: ".who .save", side: "left", title: "Keep a list", before: showSample,
-    body: "Save anyone you might want to contact. Saved, at the top of the page, opens your list with their emails and lab websites, and you can copy it to keep somewhere else.",
-    try: "Try it: press Save.", done: () => saved.size > 0, after: "A star marks them on the map. Your list stays in this browser." },
-  { at: "#q", title: "Search, and you're set",
-    body: "Search finds people, topics and methods. How this was made explains where all of this comes from and how far to trust it. Anything you changed stays as it is." },
-];
-let tourAt = -1, tourFrame = 0, tourTried = null;
-
-function tourTarget(step) {
-  const node = $(step.at);
-  return node && node.getClientRects().length ? node : $("#stage");
+moreBtn.addEventListener("click", () => setDrawer(!drawerOpen()));
+$("#more-close").addEventListener("click", () => setDrawer(false));
+// On a phone the toolbar has room for the lens only, so Related fields moves into the drawer.
+function placeExpand() {
+  const row = $("#expand-row"), msg = $("#expand-msg");
+  if (stacked.matches) $("#expand-slot").append(row, msg);
+  else moreBtn.before(row, msg);
 }
 
-// Pages move under the card as people use them, so this runs every frame while it's open.
-function placeTour(step) {
-  const box = tourTarget(step).getBoundingClientRect(), left = Math.max(2, box.left - 4), top = Math.max(2, box.top - 4);
-  tourSpot.style.left = `${left}px`;
-  tourSpot.style.top = `${top}px`;
-  tourSpot.style.width = `${Math.min(innerWidth - 2, box.right + 4) - left}px`;
-  tourSpot.style.height = `${Math.min(innerHeight - 2, box.bottom + 4) - top}px`;
-  if (stacked.matches) { tour.style.left = tour.style.top = ""; return; }   // a sheet along the bottom
-  const w = tour.offsetWidth, h = tour.offsetHeight, gap = 14;
-  const room = { below: innerHeight - box.bottom - gap - h, above: box.top - gap - h, left: box.left - gap - w, right: innerWidth - box.right - gap - w };
-  const spots = { below: [box.left, box.bottom + gap], above: [box.left, box.top - gap - h], left: [box.left - gap - w, box.top], right: [box.right + gap, box.top] };
-  const side = [step.side, "below", "above", "right", "left"].find((s) => room[s] >= 8);
-  const [x, y] = spots[side] || [innerWidth, innerHeight];
-  tour.style.left = `${Math.max(8, Math.min(x, innerWidth - w - 8))}px`;
-  tour.style.top = `${Math.max(8, Math.min(y, innerHeight - h - 8))}px`;
-}
+/* ---------- Hints ----------
 
-function trackTour() {
-  const step = TOUR[tourAt], tried = !!step.done && step.done();
-  if (tried !== tourTried) {
-    tourTried = tried;
-    const line = $("#tour-try");
-    line.textContent = (tried ? step.after : step.try) || "";
-    line.hidden = !line.textContent;
-    line.classList.toggle("done", tried);
+Two one-time pointers, in ink, next to what they explain: an idle hint on a first visit
+and one beside the first dot someone places. Each shows once per browser.
+*/
+
+const hint = $("#hint");
+function showHint(key, text, at) {
+  if (seen[key] || intro || drawerOpen() || S.sky) return;   // not over Constellation; it waits for the flat map
+  markSeen(key);
+  hintKey = key;
+  hintAt = at;
+  $("#hint-text").textContent = text;
+  hint.hidden = false;
+  placeHint();
+  const status = $("#status");   // the dot hint follows the line saying where the dot landed
+  status.textContent = key === "dot" ? `${status.textContent} ${text}` : text;
+}
+function hideHint() {
+  if (!hintKey) return;
+  hintKey = hintAt = null;
+  hint.hidden = true;
+  if (!intro) introLayer.replaceChildren();
+}
+// Beside the point it's about, on whichever side covers the fewest marks and names.
+function hintSpot(X, Y) {
+  const stage = $("#stage").getBoundingClientRect(), box = mapSvg.getBoundingClientRect();
+  const dx = box.left - stage.left, dy = box.top - stage.top;
+  const hw = hint.offsetWidth, hh = hint.offsetHeight, low = Math.max(band, stage.height - foot - hh - 8);
+  const clamp = (v, a, b) => Math.max(a, Math.min(v, b));
+  let best = null;
+  for (const [x, y] of [[X + 18, Y - 20], [X - 18 - hw, Y - 20], [X - hw / 2, Y + 24], [X - hw / 2, Y - 24 - hh]]) {
+    const at = { x: clamp(x + dx, 8, Math.max(8, stage.width - hw - 8)), y: clamp(y + dy, band, low) };
+    const n = marksAndLabels.filter((t) => hits({ x: at.x - dx, y: at.y - dy, w: hw, h: hh }, t)).length;
+    if (!best || n < best.n) best = { ...at, n };
   }
-  // Once they've done it, the dimming lifts so they can see what changed.
-  tourSpot.classList.toggle("clear", tried || !!step.clear);
-  placeTour(step);
-  tourFrame = requestAnimationFrame(trackTour);
+  return best;
 }
-
-function showStep(n) {
-  cancelAnimationFrame(tourFrame);
-  tourAt = n;
-  tourTried = null;
-  const step = TOUR[n];
-  if (step.before) step.before();
-  $("#tour-count").textContent = `Step ${n + 1} of ${TOUR.length}`;
-  $("#tour-title").textContent = step.title;
-  $("#tour-body").textContent = step.body;
-  $("#tour-back").hidden = n === 0;
-  $("#tour-next").textContent = n === TOUR.length - 1 ? "Finish" : "Next";
-  trackTour();
-  tourTarget(step).scrollIntoView({ block: step.scroll || (stacked.matches ? "center" : "nearest"), behavior: reducedMotion.matches ? "auto" : "smooth" });
-  $("#tour-title").focus({ preventScroll: true });
+function placeHint() {
+  if (!hintKey) return;
+  const [X, Y] = hintAt(), best = hintSpot(X, Y);
+  hint.style.left = `${best.x}px`;
+  hint.style.top = `${best.y}px`;
+  // A ring says which dot the idle hint means. The gold dot needs none.
+  if (hintKey === "idle" && !intro) introLayer.replaceChildren(sv("circle", { class: "hint-ring", cx: X, cy: Y, r: 13 }));
 }
-
-function endTour() {
-  cancelAnimationFrame(tourFrame);
-  tourAt = -1;
-  if (tour.hidePopover) tour.hidePopover();
-  tour.hidden = tourSpot.hidden = true;
-  $("#tour-open").focus();
-}
-
-$("#tour-open").addEventListener("click", () => {
-  if (tourAt < 0) {
-    tour.hidden = tourSpot.hidden = false;
-    if (tour.showPopover) tour.showPopover();
-  }
-  showStep(0);
+$("#hint-ok").addEventListener("click", () => {
+  const key = hintKey;
+  hideHint();
+  if (key === "dot") $(".you")?.focus({ preventScroll: true }) ?? q.focus();
+  else scroller.focus({ preventScroll: true });
 });
-$("#tour-next").addEventListener("click", () => { if (tourAt === TOUR.length - 1) endTour(); else showStep(tourAt + 1); });
-$("#tour-back").addEventListener("click", () => showStep(tourAt - 1));
-$("#tour-end").addEventListener("click", endTour);
+
+// Someone who hasn't touched the map after a moment is told how to find out who a dot is.
+const coarse = matchMedia("(pointer: coarse)");
+function armIdle() {
+  clearTimeout(idleTimer);
+  if (seen.idle || touched) return;
+  idleTimer = setTimeout(() => {
+    if (touched || intro || drawerOpen() || !isMapView() || S.three || S.zoom > 1 || S.sel || S.you || S.query || S.ask) return;
+    const everyone = P.map((_, i) => i).filter(shown);
+    if (!everyone.length) return;
+    // Near the middle, where the hint covers the fewest names.
+    const mid = [ox + scale / 2, oy + scale / 2], away = (i) => Math.hypot(pts[i][0] - mid[0], pts[i][1] - mid[1]);
+    $("#hint-text").textContent = coarse.matches ? "Tap a dot to see who it is." : "Point at a dot to see who it is.";
+    hint.hidden = false;   // measured, unseen, while choosing
+    hint.style.visibility = "hidden";
+    const near = everyone.sort((a, b) => away(a) - away(b)).slice(0, 10);
+    const cover = near.map((i) => hintSpot(pts[i][0], pts[i][1]).n);
+    const i = near[cover.indexOf(Math.min(...cover))];
+    hint.hidden = true;
+    hint.style.visibility = "";
+    showHint("idle", $("#hint-text").textContent, () => pts[i]);
+  }, 2600);
+}
+function touch() {
+  touched = true;
+  clearTimeout(idleTimer);
+  if (hintKey === "idle") hideHint();
+}
+
+/* ---------- Intro ----------
+
+A first visit opens on a small gold QCB that blooms into its research groups and then
+into its people, then asks what brought them here. Returning visitors, and anyone who
+prefers less motion, go straight to the map. Replay intro brings it back.
+*/
+
+const introLayer = sv("g", { "aria-hidden": "true" });
+mapSvg.append(introLayer);
+const BLOOM = 3000;
+const easeOut = (t) => 1 - (1 - t) ** 3;
+const easeOutBack = (t) => 1 + 2.7 * (t - 1) ** 3 + 1.7 * (t - 1) ** 2;
+const unit = (v) => Math.max(0, Math.min(1, v));
+
+function introCaption(t) {
+  const scope = S.scope === "all" ? "QCB and related fields" : "QCB";
+  const line = t < 350 ? "" : t < 1100 ? `${scope} has ${WORLD.n} faculty`
+    : `${scope} has ${WORLD.n} faculty in ${plural(C.length, byTechnique() ? "technique group" : "research group")}`;
+  if ($("#cap-1").textContent !== line) $("#cap-1").textContent = line;
+  $("#cap-2").classList.toggle("on", t >= 2000);
+}
+
+function playIntro(byHand) {
+  cancelAnimationFrame(tween);
+  goal = null;
+  hideHint();
+  closeSugg();
+  intro = { byHand, frame: 0 };
+  $("#cap").hidden = $("#choice").hidden = $("#skip-intro").hidden = false;
+  $("#choice").classList.remove("on");
+  $("#bar").hidden = $("#zoom").hidden = true;
+  mapSvg.classList.add("blooming");
+  syncAsk();
+  syncSheet();
+  measureBand();
+  sizeMap();
+  const home = target(), everyone = P.map((_, i) => i).filter(shown);
+  const mid = [W / 2, (band + H_ - foot) / 2];
+  // Each group blooms from its middle, nearest people first.
+  const middle = C.map((_, ci) => {
+    const own = everyone.filter((i) => P[i].cluster === ci);
+    return own.length ? [0, 1].map((n) => own.reduce((sum, i) => sum + home[i][n], 0) / own.length) : mid;
+  });
+  const rank = [];
+  C.forEach((_, ci) => everyone.filter((i) => P[i].cluster === ci)
+    .sort((a, b) => Math.hypot(home[a][0] - middle[ci][0], home[a][1] - middle[ci][1]) - Math.hypot(home[b][0] - middle[ci][0], home[b][1] - middle[ci][1]))
+    .forEach((i, r) => { rank[i] = Math.min(r, 18); }));
+  const seed = sv("g", {}, sv("circle", { class: "seed", r: 22 }), sv("text", { class: "seed-t" }, "QCB"));
+  const blobs = C.map((c, ci) => sv("g", { class: `blob ${hueClass(ci)}` }, sv("circle", { r: 0 })));
+  introLayer.replaceChildren(...blobs, seed);
+  intro.draw = (t) => {
+    const s = t < 350 ? easeOutBack(t / 350) : t < 700 ? 1 : t < 1100 ? 1 - easeOut((t - 700) / 400) : 0;
+    seed.style.display = s > 0.001 ? "" : "none";
+    seed.setAttribute("transform", `translate(${mid[0].toFixed(1)} ${mid[1].toFixed(1)}) scale(${Math.max(0, s).toFixed(3)})`);
+    blobs.forEach((b, ci) => {
+      const on = t >= 700 && t <= 2600, m = easeOut(unit((t - 700) / 800)), size = everyone.filter((i) => P[i].cluster === ci).length;
+      b.style.display = on ? "" : "none";
+      if (!on) return;
+      const r = (8 + 3.2 * Math.sqrt(size)) * easeOut(unit((t - 700) / 400)) * (1 - easeOut(unit((t - 2000) / 600)));
+      b.setAttribute("transform", `translate(${(mid[0] + (middle[ci][0] - mid[0]) * m).toFixed(1)} ${(mid[1] + (middle[ci][1] - mid[1]) * m).toFixed(1)})`);
+      b.firstChild.setAttribute("r", Math.max(0, r).toFixed(1));
+    });
+    pts = home.map((q, i) => {
+      if (rank[i] === undefined) return q;
+      const p = easeOut(unit((t - 1800 - rank[i] * 28) / 700)), from = middle[P[i].cluster];
+      return [from[0] + (q[0] - from[0]) * p, from[1] + (q[1] - from[1]) * p, p, 1];
+    });
+    drawPoints();
+    introCaption(t);
+  };
+  if (reducedMotion.matches) { introDone(); return; }
+  const start = performance.now();
+  const step = (now) => {
+    if (!intro) return;
+    const t = now - start;
+    intro.draw(Math.min(t, BLOOM));
+    if (t < BLOOM) intro.frame = requestAnimationFrame(step); else introDone();
+  };
+  intro.frame = requestAnimationFrame(step);
+}
+
+// The bloom is over, or skipped: everyone in place, and the question.
+function introDone() {
+  if (!intro || intro.done) return;
+  cancelAnimationFrame(intro.frame);
+  intro.done = true;
+  markSeen("intro");   // they've seen it, whether or not they answer
+  intro.draw(BLOOM);
+  introLayer.replaceChildren();
+  mapSvg.classList.remove("blooming");
+  $("#skip-intro").hidden = true;
+  $("#choice").classList.add("on");
+  placeLabels();
+  if (intro.byHand) $("#go-find").focus({ preventScroll: true });
+}
+
+// Leaves the intro for the map, keeping whatever someone picked meanwhile.
+function finishIntro() {
+  if (!intro) return;
+  cancelAnimationFrame(intro.frame);
+  intro = null;
+  markSeen("intro");
+  introLayer.replaceChildren();
+  mapSvg.classList.remove("blooming");
+  $("#cap").hidden = $("#choice").hidden = $("#skip-intro").hidden = true;
+  $("#choice").classList.remove("on");
+  $("#bar").hidden = false;
+  $("#zoom").hidden = !isMapView();
+  measureBand();
+  if (isMapView()) { sizeMap(); animateTo(target()); }
+  syncAsk();
+  syncSheet();
+}
+
+function replayIntro() {
+  if (drawerOpen()) setDrawer(false, false);
+  backToMap();
+  setQuery("");
+  if (S.you) clearYou();
+  select(null);
+  S.ask = false;
+  if (S.three) { $("#three").checked = false; setThree(false); }
+  if (S.zoom > 1) setZoom(1);
+  playIntro(true);
+}
+
+$("#go-find").addEventListener("click", () => {
+  finishIntro();
+  S.ask = true;
+  renderDetail();
+  q.focus({ preventScroll: true });
+});
+$("#go-look").addEventListener("click", () => {
+  finishIntro();
+  scroller.focus({ preventScroll: true });
+  armIdle();
+});
+$("#skip-intro").addEventListener("click", () => { if (intro) intro.byHand = true; introDone(); });
+$("#intro-open").addEventListener("click", replayIntro);
+// Using the page around the map during the intro ends it there and then.
+for (const type of ["click", "change"]) document.addEventListener(type, (ev) => {
+  if (intro && !ev.target.closest("#stage") && !ev.target.closest("#intro-open")) finishIntro();
+}, true);
+
+/* ---------- Phone sheet ----------
+
+On a phone the details are a sheet over the bottom of the map. It peeks when there's
+something to see, opens all the way for a pick, and closes for the intro and the question.
+*/
+
+function syncSheet() {
+  const rail = $("#rail"), handle = $("#sheet-h");
+  const closed = !!intro || (S.ask && !S.sel && !S.you && !S.query);
+  const base = S.you || S.query ? 132 : 52;
+  const state = closed ? "closed" : sheetFull ? "full" : "peek";
+  const peek = closed ? 0 : state === "full" ? base : S.sel ? 132 : base;
+  rail.dataset.sheet = state;
+  handle.hidden = closed;
+  handle.textContent = state === "full" ? "Show less" : "Show more";
+  handle.setAttribute("aria-expanded", String(state === "full"));
+  if (peek === peekShown) return;
+  peekShown = peek;
+  $("main").style.setProperty("--peek", `${peek}px`);
+  if (!stacked.matches || !pts.length) return;
+  measureBand();
+  if (isMapView() && !intro) { sizeMap(); animateTo(target()); }
+}
+$("#sheet-h").addEventListener("click", () => {
+  sheetFull = $("#rail").dataset.sheet !== "full";
+  syncSheet();
+  if (!sheetFull) $("#rail").scrollTop = 0;
+});
+stacked.addEventListener("change", () => {
+  placeExpand();
+  if (drawerOpen()) setDrawer(true, false);
+  peekShown = -1;
+  syncSheet();
+});
 
 const resized = new ResizeObserver(() => {
+  if (intro && !intro.done) return;   // the bloom keeps its own layout, and leaving it refits the map
   measureBand();
   if (S.sky) drawSky();
   if (isMapView()) { cancelAnimationFrame(tween); mapSvg.classList.remove("moving"); settle(); }
   else if (S.view === "tree") drawTree();
+  placeHint();
 });
 resized.observe(scroller);
 resized.observe($("#toolbar"));
+resized.observe($(".bar-line"));   // not the whole bar: the question and suggestions float over the map
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (isMapView() && pts.length) placeLabels(); });
 
+placeExpand();
 applyFilters();
 paintSaved();
 renderDetail();
 measureBand();
 settle();
 emphasize();
+// A first visit opens on the bloom, or under reduced motion goes straight to its question.
+// Anyone back again gets the map.
+if (!seen.intro) playIntro(false);
+else { markSeen("intro"); armIdle(); }
 })();
 </script>
 </body>
